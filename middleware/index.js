@@ -35,7 +35,3 @@ axios.interceptors.response.use(function (response) {
   }
   return Promise.reject(error)
 })
-
-export default axios.create({
-  baseURL: process.env.baseUrl
-})

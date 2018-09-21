@@ -50,6 +50,10 @@ module.exports = {
     {
       src: '~plugins/public.js',
       ssr: true
+    },
+    {
+      src: '~plugins/axios.js',
+      ssr: true
     }
   ],
 
