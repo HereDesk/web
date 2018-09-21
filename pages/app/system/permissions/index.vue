@@ -71,108 +71,107 @@
 </template>
 
 <script>
-  export default {
-    head () {
-      return {
-        title: 'HDesk - 接口权限管理'
-      }
-    },
+import axios from "axios";
+export default {
+  head() {
+    return {
+      title: "HDesk - 接口权限管理"
+    };
+  },
 
-    data () {
-      return {
-        permissions_list: [],
-        modules: [
-
-        ],
-        PermissionsData: {
-          group: 'test',
-          name: '',
-          code: '',
-          url: '',
-        },
-        group_list: []
-      }
-    },
-
-    computed: {
-    },
-
-    watch: {
-    },
-
-    created () {
-      this.get_group_list()
-      this.getPermissionsList('test')
-    },
-    methods: {
-      get_group_list () {
-        let that = this
-        axios.get('/api/user/group').then(function (rep) {
-          if (rep.data['status'] === 20000) {
-            that.group_list = rep.data['data']
-          } else {
-            that.$notify.error({title: '提示',message: res.data['msg']})
-          }
-        })
+  data() {
+    return {
+      permissions_list: [],
+      modules: [],
+      PermissionsData: {
+        group: "test",
+        name: "",
+        code: "",
+        url: ""
       },
-      select_group (data) {
-        this.PermissionsData.group = data
-        this.getPermissionsList(data)
-      },
-      getPermissionsList (data) {
-        let that = this
-        axios.get('/api/system/permissions/list?group=' + data).then(function (res) {
-          if (res.data['status'] === 20000) {
-            that.permissions_list = res.data['data']
-          } else {
-            that.permissions_list = []
-            that.$notify.error({title: '提示',message: res.data['msg']})
-          }
-        })
-      },
-      SavePermissions () {
-        let that = this
-        axios({
-          method: 'post',
-          url: '/api/system/permissions/create',
-          data: JSON.stringify(that.PermissionsData),
-        }).then(function (res) {
-          if (res.data['status'] === 20000) {
-            $('#add_router').modal('hide')
-            that.getPermissionsList(that.PermissionsData.flag)
-            that.$notify.success({title: '成功',message: res.data['msg']})
-          } else {
-            that.$notify.error({title: '提示',message: res.data['msg']})
-          }
-        })
-      },
-      MangePermissions (event,permissions_id) {
-        var data = {
-          is_allow: null,
-          permissions_id: null,
-          group: null
+      group_list: []
+    };
+  },
+
+  computed: {},
+
+  watch: {},
+
+  created() {
+    this.get_group_list();
+    this.getPermissionsList("test");
+  },
+  methods: {
+    get_group_list() {
+      let that = this;
+      axios.get("/api/user/group").then(function(rep) {
+        if (rep.data["status"] === 20000) {
+          that.group_list = rep.data["data"];
+        } else {
+          that.$notify.error({ title: "提示", message: res.data["msg"] });
         }
-        event.target.checked ? data.is_allow = 1 : data.is_allow = -1
-        data.permissions_id = permissions_id
-        data.group = this.PermissionsData.group
-        let that = this
-        axios({
-          method: 'post',
-          url: '/api/system/permissions/manage',
-          data: JSON.stringify(data),
-        }).then(function (res) {
-          if (res.data['status'] === 20000) {
-            that.getPermissionsList(that.PermissionsData.group)
-            that.$notify.success({title: '成功',message: res.data['msg']})
+      });
+    },
+    select_group(data) {
+      this.PermissionsData.group = data;
+      this.getPermissionsList(data);
+    },
+    getPermissionsList(data) {
+      let that = this;
+      axios
+        .get("/api/system/permissions/list?group=" + data)
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.permissions_list = res.data["data"];
           } else {
-            that.$notify.error({title: '提示',message: res.data['msg']})
+            that.permissions_list = [];
+            that.$notify.error({ title: "提示", message: res.data["msg"] });
           }
-        })
-      }
+        });
+    },
+    SavePermissions() {
+      let that = this;
+      axios({
+        method: "post",
+        url: "/api/system/permissions/create",
+        data: JSON.stringify(that.PermissionsData)
+      }).then(function(res) {
+        if (res.data["status"] === 20000) {
+          $("#add_router").modal("hide");
+          that.getPermissionsList(that.PermissionsData.flag);
+          that.$notify.success({ title: "成功", message: res.data["msg"] });
+        } else {
+          that.$notify.error({ title: "提示", message: res.data["msg"] });
+        }
+      });
+    },
+    MangePermissions(event, permissions_id) {
+      var data = {
+        is_allow: null,
+        permissions_id: null,
+        group: null
+      };
+      event.target.checked ? (data.is_allow = 1) : (data.is_allow = -1);
+      data.permissions_id = permissions_id;
+      data.group = this.PermissionsData.group;
+      let that = this;
+      axios({
+        method: "post",
+        url: "/api/system/permissions/manage",
+        data: JSON.stringify(data)
+      }).then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.getPermissionsList(that.PermissionsData.group);
+          that.$notify.success({ title: "成功", message: res.data["msg"] });
+        } else {
+          that.$notify.error({ title: "提示", message: res.data["msg"] });
+        }
+      });
     }
   }
+};
 </script>
 
 <style>
-  @import '~/static/static/common/css/system.css'
+@import "~/static/static/common/css/system.css";
 </style>
