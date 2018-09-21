@@ -79,132 +79,136 @@
 </template>
 
 <script>
-  import util from '~/assets/js/util.js'
-  import rules from '~/assets/js/rules.js'
+import axios from "axios";
+import util from "~/assets/js/util.js";
+import rules from "~/assets/js/rules.js";
 
-  export default {
-    head () {
-      return {
-        title: 'HDesk - 用户管理'
-      }
-    },
+export default {
+  head() {
+    return {
+      title: "HDesk - 用户管理"
+    };
+  },
 
-    layout: 'head',
-    
-    filters: {
-      date: util.date
-    },
+  layout: "head",
 
-    data () {
-      return {
-        tableData: [],
-        msg: '',
-        bannedData: {
-          user_id: '',
-          code: ''
-        },
-        password: {
-          user_id: '',
-          passwd: '',
-          RepeatPasswd: ''
-        }
-      }
-    },
+  filters: {
+    date: util.date
+  },
 
-    computed: {
-      userRules: function () {
-        return rules.UserMangeRules(this.$store.state.userInfo)
-      } 
-    },
-
-    created () {
-      this.getAllUser()
-    },
-
-    methods: {
-      getAllUser () {
-        let that = this
-        axios.get('/api/user/user_list').then(function (rep) {
-          if (rep.data['status'] === 20000) {
-            that.tableData = rep.data['data']
-          }
-        })
+  data() {
+    return {
+      tableData: [],
+      msg: "",
+      bannedData: {
+        user_id: "",
+        code: ""
       },
-      // getUserId
-      getUserId (event) {
-        this.password.user_id = event.user_id
-      },
-      // 重置密码
-      ResetPassword (event) {
-        if (this.password.passwd === '') {
-          this.$notify.error({
-            title: '提交失败',
-            message: '密码不能为空'
-          })
-          return
-        }
-        if (this.password.passwd !== this.password.RepeatPasswd) {
-          this.$notify.error({
-            title: '提交失败',
-            message: '两次密码输入的不一致'
-          })
-          return
-        }
-        if (this.password.passwd.length < 8 | this.password.passwd.length > 16) {
-          this.$notify.error({
-            title: '提交失败',
-            message: '密码的有效长度为8-16位'
-          })
-          return
-        }
-        
-        let that = this
-        axios({
-          method: 'post',
-          url: '/api/user/reset_passwd',
-          data: JSON.stringify(that.password)
-        }).then(function (rep) {
-          if (rep.data['status'] === 20000) {
-            $("#reset-password").modal('hide')
-            that.$notify.success({
-              title: '成功',
-              message: rep.data['msg']
-            })
-            that.getAllUser()
-          } else {
-            that.$notify.error({
-              title: '失败',
-              message: rep.data['msg']
-            })
-          }
-        })
-      },
-      // 封禁
-      banned (rows, event) {
-        let that = this
-        that.bannedData.user_id = rows.user_id
-        that.bannedData.code = event.target.value
-        axios({
-          method: 'post',
-          url: '/api/user/banned',
-          data: JSON.stringify(that.bannedData)
-        }).then(function (rep) {
-          if (rep.data['status'] === 10060) {
-            that.$notify.success({
-              title: '成功',
-              message: rep.data['msg']
-            })
-            that.getAllUser()
-          } else {
-            that.$notify.error({
-              title: '失败',
-              message: rep.data['msg']
-            })
-          }
-        })
+      password: {
+        user_id: "",
+        passwd: "",
+        RepeatPasswd: ""
       }
+    };
+  },
+
+  computed: {
+    userRules: function() {
+      return rules.UserMangeRules(this.$store.state.userInfo);
+    }
+  },
+
+  created() {
+    this.getAllUser();
+  },
+
+  methods: {
+    getAllUser() {
+      let that = this;
+      axios.get("/api/user/user_list").then(function(rep) {
+        if (rep.data["status"] === 20000) {
+          that.tableData = rep.data["data"];
+        }
+      });
+    },
+    // getUserId
+    getUserId(event) {
+      this.password.user_id = event.user_id;
+    },
+    // 重置密码
+    ResetPassword(event) {
+      if (this.password.passwd === "") {
+        this.$notify.error({
+          title: "提交失败",
+          message: "密码不能为空"
+        });
+        return;
+      }
+      if (this.password.passwd !== this.password.RepeatPasswd) {
+        this.$notify.error({
+          title: "提交失败",
+          message: "两次密码输入的不一致"
+        });
+        return;
+      }
+      if (
+        (this.password.passwd.length < 8) |
+        (this.password.passwd.length > 16)
+      ) {
+        this.$notify.error({
+          title: "提交失败",
+          message: "密码的有效长度为8-16位"
+        });
+        return;
+      }
+
+      let that = this;
+      axios({
+        method: "post",
+        url: "/api/user/reset_passwd",
+        data: JSON.stringify(that.password)
+      }).then(function(rep) {
+        if (rep.data["status"] === 20000) {
+          $("#reset-password").modal("hide");
+          that.$notify.success({
+            title: "成功",
+            message: rep.data["msg"]
+          });
+          that.getAllUser();
+        } else {
+          that.$notify.error({
+            title: "失败",
+            message: rep.data["msg"]
+          });
+        }
+      });
+    },
+    // 封禁
+    banned(rows, event) {
+      let that = this;
+      that.bannedData.user_id = rows.user_id;
+      that.bannedData.code = event.target.value;
+      axios({
+        method: "post",
+        url: "/api/user/banned",
+        data: JSON.stringify(that.bannedData)
+      }).then(function(rep) {
+        if (rep.data["status"] === 10060) {
+          that.$notify.success({
+            title: "成功",
+            message: rep.data["msg"]
+          });
+          that.getAllUser();
+        } else {
+          that.$notify.error({
+            title: "失败",
+            message: rep.data["msg"]
+          });
+        }
+      });
     }
   }
+};
 </script>
 
 <style scoped>

@@ -93,9 +93,6 @@
 import axios from 'axios'
 
 export default {
-
-  layout: 'head',
-
   head () {
     return {
       title: 'HDesk - 缺陷编辑'
@@ -105,7 +102,7 @@ export default {
   validate({ query }) {
     return query.bug_id ? true : false
   },
-
+  layout: 'head',
   data () {
     return {
       fileList: [],

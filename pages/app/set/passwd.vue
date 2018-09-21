@@ -19,78 +19,80 @@
 </template>
 
 <script>
-  export default {
-    head () {
-      return {
-        title: 'HDesk - 修改密码'
-      }
-    },
-    layout: 'head',
-    computed: {
-      isButtonStatus () {
-        if (this.passwdData.oldPassword && this.passwdData.newPassword) {
-          return true
-        } else {
-          return null
-        }
-      }
-    },
-
-    data () {
-      return {
-        msg: '',
-        showModal: false,
-        passwdData: {
-          oldPassword: null,
-          newPassword: null
-        }
-      }
-    },
-    methods: {
-      HandLogout () {
-        window.localStorage.removeItem('token')
-        document.cookie = 'token' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;' + 'path=/'
-        window.location.replace('/')
-      },
-      SubmitPasswd () {
-        const newPassword = this.passwdData.newPassword
-        const oldPassword = this.passwdData.oldPassword
-        if (newPassword.length < 8 | newPassword.length > 16) {
-          this.$notify.error({
-            title: '错误',
-            message: '密码的有效长度为8到16位'
-          })
-          return
-        }
-        if (oldPassword.length === 0) {
-          this.$notify.error({
-            title: '错误',
-            message: '旧密码不能为空！'
-          })
-          return
-        }
-
-        let that = this
-        axios({
-          method: 'post',
-          url: '/api/user/setpasswd',
-          data: JSON.stringify(that.passwdData)
-        }).then(function (rep) {
-          if (rep.data['status'] === 20000) {
-            that.$notify.error({
-              title: '修改成功',
-              message: rep.data['msg']
-            })
-            that.HandLogout()
-          }
-          if (rep.data['status'] !== 20000) {
-            that.$notify.error({
-              title: '修改失败',
-              message: rep.data['msg']
-            })
-          }
-        })
+import axios from "axios";
+export default {
+  head() {
+    return {
+      title: "HDesk - 修改密码"
+    };
+  },
+  layout: "head",
+  computed: {
+    isButtonStatus() {
+      if (this.passwdData.oldPassword && this.passwdData.newPassword) {
+        return true;
+      } else {
+        return null;
       }
     }
+  },
+
+  data() {
+    return {
+      msg: "",
+      showModal: false,
+      passwdData: {
+        oldPassword: null,
+        newPassword: null
+      }
+    };
+  },
+  methods: {
+    HandLogout() {
+      window.localStorage.removeItem("token");
+      document.cookie =
+        "token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/";
+      window.location.replace("/");
+    },
+    SubmitPasswd() {
+      const newPassword = this.passwdData.newPassword;
+      const oldPassword = this.passwdData.oldPassword;
+      if ((newPassword.length < 8) | (newPassword.length > 16)) {
+        this.$notify.error({
+          title: "错误",
+          message: "密码的有效长度为8到16位"
+        });
+        return;
+      }
+      if (oldPassword.length === 0) {
+        this.$notify.error({
+          title: "错误",
+          message: "旧密码不能为空！"
+        });
+        return;
+      }
+
+      let that = this;
+      axios({
+        method: "post",
+        url: "/api/user/setpasswd",
+        data: JSON.stringify(that.passwdData)
+      }).then(function(rep) {
+        if (rep.data["status"] === 20000) {
+          that.$notify.error({
+            title: "修改成功",
+            message: rep.data["msg"]
+          });
+          that.HandLogout();
+        }
+        if (rep.data["status"] !== 20000) {
+          that.$notify.error({
+            title: "修改失败",
+            message: rep.data["msg"]
+          });
+        }
+      });
+    }
   }
+};
 </script>

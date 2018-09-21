@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import util from "~/assets/js/util.js";
 
 export default {

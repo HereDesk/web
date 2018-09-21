@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Pagination from '~/components/Pagination'
 
 export default {

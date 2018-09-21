@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import loading from "~/components/loading";
 
 export default {

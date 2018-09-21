@@ -85,8 +85,8 @@
 </template>
 
 <script>
+import axios from 'axios'
 import tooltip from "~/components/tooltip";
-
 import util from "~/assets/js/util.js";
 import rules from "~/assets/js/rules.js";
 

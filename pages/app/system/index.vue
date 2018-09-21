@@ -19,25 +19,34 @@
 </template>
 
 <script>
-  import loading from '~/components/loading'
-  export default {
-    head () {
-      return {
-        title: 'HDesk - 系统管理'
-      }
-    },
+import axios from "axios";
+import loading from "~/components/loading";
+export default {
+  head() {
+    return {
+      title: "HDesk - 系统管理"
+    };
+  },
 
-    data () {
-      return {
-        LinkData: [
-          {"url":"/app/system/permissions","img":require("~/static/pic/system_perm.png"),"text":"接口权限"},
-          {"url":"/app/system/bug","img":require("~/static/pic/system_bug.png"),"text":"缺陷设置"}
-        ]
-      }
-    }
+  data() {
+    return {
+      LinkData: [
+        {
+          url: "/app/system/permissions",
+          img: require("~/static/pic/system_perm.png"),
+          text: "接口权限"
+        },
+        {
+          url: "/app/system/bug",
+          img: require("~/static/pic/system_bug.png"),
+          text: "缺陷设置"
+        }
+      ]
+    };
   }
+};
 </script>
 
 <style>
-  @import '~/static/static/common/css/system.css'
+@import "~/static/static/common/css/system.css";
 </style>

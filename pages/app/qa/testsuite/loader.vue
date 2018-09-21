@@ -48,189 +48,197 @@
 </template>
 
 <script>
-  import Pagination from '~/components/Pagination'
-  let _ = require('lodash/Array')
+import axios from "axios";
+import Pagination from "~/components/Pagination";
+let _ = require("lodash/Array");
 
-  export default {
-    layout: 'head',
-    components: {
-      Pagination
-    },
-    validate({ query }) {
-      return query.suite_id && query.product_code ? true : false
-    },
+export default {
+  layout: "head",
+  components: {
+    Pagination
+  },
+  validate({ query }) {
+    return query.suite_id && query.product_code ? true : false;
+  },
 
-    data () {
-      return {
-        product_code: this.$route.query.product_code,
-        suite_id: this.$route.query.suite_id,
-        // right
-        RightListData: [],
-        RightQueryBuilder: {
-          suite_id: this.$route.query.suite_id,
-          pageSize: 10,
-          pageNumber: 1
-        },
-        RightTotal: null,
-        // left
-        modules_list: [],
-        selected_mod_id: [],
-        LefteQueryBuilder: {
-          product_code: null,
-          m1_id: null,
-          m2_id: null,
-          pageSize: 10,
-          pageNumber: 1
-        },
-        LeftTotal: null,
-        LeftCheckedNum: 0,
-        TestCaseList: [],
-        LeftCheckedCellData: {
-          suite_id: this.$route.query.suite_id,
-          case_data: []
-        }
-      }
-    },
-
-    watch: {
-      selected_mod_id: {
-        handler: function (val, oldVal) {
-          this.LefteQueryBuilder.m1_id = this.selected_mod_id[0]
-          this.LefteQueryBuilder.m2_id = this.selected_mod_id[1]
-        },
-        deep: true
-      },
-      LefteQueryBuilder: {
-        handler: function (val, oldVal) {
-          this.getLeftData()
-        },
-        deep: true
-      },
+  data() {
+    return {
+      product_code: this.$route.query.product_code,
+      suite_id: this.$route.query.suite_id,
+      // right
+      RightListData: [],
       RightQueryBuilder: {
-        handler: function (val, oldVal) {
-          this.getRightData()
-        },
-        deep: true
+        suite_id: this.$route.query.suite_id,
+        pageSize: 10,
+        pageNumber: 1
+      },
+      RightTotal: null,
+      // left
+      modules_list: [],
+      selected_mod_id: [],
+      LefteQueryBuilder: {
+        product_code: null,
+        m1_id: null,
+        m2_id: null,
+        pageSize: 10,
+        pageNumber: 1
+      },
+      LeftTotal: null,
+      LeftCheckedNum: 0,
+      TestCaseList: [],
+      LeftCheckedCellData: {
+        suite_id: this.$route.query.suite_id,
+        case_data: []
       }
-    },
+    };
+  },
 
-    created () {
-      this.getModule()
-      this.getRightData()
+  watch: {
+    selected_mod_id: {
+      handler: function(val, oldVal) {
+        this.LefteQueryBuilder.m1_id = this.selected_mod_id[0];
+        this.LefteQueryBuilder.m2_id = this.selected_mod_id[1];
+      },
+      deep: true
     },
+    LefteQueryBuilder: {
+      handler: function(val, oldVal) {
+        this.getLeftData();
+      },
+      deep: true
+    },
+    RightQueryBuilder: {
+      handler: function(val, oldVal) {
+        this.getRightData();
+      },
+      deep: true
+    }
+  },
 
-    methods: {
-      getPsPn1:function (ps,pn) {
-        this.LefteQueryBuilder.pageSize = ps
-        this.LefteQueryBuilder.pageNumber = pn
-      },
-      getPsPn2:function (ps,pn) {
-        this.RightQueryBuilder.pageSize = ps
-        this.RightQueryBuilder.pageNumber = pn
-      },
-      getModule (product_code) {
-        let that = this
-        axios.get('/api/pm/get_module?product_code=' + this.product_code)
-          .then(function (res) {
-            if (res.data['status'] === 20000) {
-              that.modules_list = res.data['data']
-            } else {
-              that.Msg = res.data['msg']
-            }
-          }
-        )
-      },
-      getLeftData () {
-        let that = this
-        this.LefteQueryBuilder.product_code = this.product_code
-        axios.get('/api/qa/testcase/valid_list', {params: this.LefteQueryBuilder})
-          .then(function (res) {
-            if (res.data['status'] === 20000) {
-              that.TestCaseList = res.data['data']
-              that.LeftTotal = res.data['total']
-            } else {
-              that.$notify.error({title: '提示',message:res.data['msg']})
-            }
-          }
-        )
-      },
-      getRightData () {
-        let that = this
-        axios.get('/api/qa/testsuite/cell/brief_list',{params: this.RightQueryBuilder}).then(function (res) {
-          if (res.data['status'] === 20000) {
-            that.RightListData = res.data['data']
-            that.RightTotal = res.data['total']
+  created() {
+    this.getModule();
+    this.getRightData();
+  },
+
+  methods: {
+    getPsPn1: function(ps, pn) {
+      this.LefteQueryBuilder.pageSize = ps;
+      this.LefteQueryBuilder.pageNumber = pn;
+    },
+    getPsPn2: function(ps, pn) {
+      this.RightQueryBuilder.pageSize = ps;
+      this.RightQueryBuilder.pageNumber = pn;
+    },
+    getModule(product_code) {
+      let that = this;
+      axios
+        .get("/api/pm/get_module?product_code=" + this.product_code)
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.modules_list = res.data["data"];
           } else {
-            that.$notify.error({title:'提示',message:res.data['msg']})
+            that.Msg = res.data["msg"];
           }
+        });
+    },
+    getLeftData() {
+      let that = this;
+      this.LefteQueryBuilder.product_code = this.product_code;
+      axios
+        .get("/api/qa/testcase/valid_list", { params: this.LefteQueryBuilder })
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.TestCaseList = res.data["data"];
+            that.LeftTotal = res.data["total"];
+          } else {
+            that.$notify.error({ title: "提示", message: res.data["msg"] });
+          }
+        });
+    },
+    getRightData() {
+      let that = this;
+      axios
+        .get("/api/qa/testsuite/cell/brief_list", {
+          params: this.RightQueryBuilder
         })
-      },
-      LeftCheckedTestCaseID (case_id,event) {
-        let checked = event.target.checked
-        var tmp = this.LeftCheckedCellData.case_data
-        if (case_id && checked) {
-          _.indexOf(tmp,case_id) >= 0 ? null : tmp.push(case_id)
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.RightListData = res.data["data"];
+            that.RightTotal = res.data["total"];
+          } else {
+            that.$notify.error({ title: "提示", message: res.data["msg"] });
+          }
+        });
+    },
+    LeftCheckedTestCaseID(case_id, event) {
+      let checked = event.target.checked;
+      var tmp = this.LeftCheckedCellData.case_data;
+      if (case_id && checked) {
+        _.indexOf(tmp, case_id) >= 0 ? null : tmp.push(case_id);
+      } else {
+        _.pull(tmp, case_id);
+      }
+      this.LeftCheckedNum = tmp.length;
+      this.LeftCheckedCellData.case_data = tmp;
+    },
+    SaveLeftChecked() {
+      let that = this;
+      if (this.LeftCheckedCellData.case_data.length === 0) {
+        this.$notify.error({ title: "错误", message: "请选择后再提交" });
+        return;
+      }
+      axios({
+        method: "POST",
+        url: "/api/qa/testsuite/cell/add",
+        data: JSON.stringify(this.LeftCheckedCellData)
+      }).then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.getRightData();
+          that.getLeftData();
+          that.$notify.success({ title: "成功", message: res.data["msg"] });
         } else {
-          _.pull(tmp,case_id)
+          that.$notify.error({ title: "错误", message: res.data["msg"] });
         }
-        this.LeftCheckedNum = tmp.length
-        this.LeftCheckedCellData.case_data = tmp
-      },
-      SaveLeftChecked () {
-        let that = this
-        if (this.LeftCheckedCellData.case_data.length === 0) {
-          this.$notify.error({title:'错误',message:'请选择后再提交'})
-          return
-        }
-        axios({
-          method: 'POST',
-          url: '/api/qa/testsuite/cell/add',
-          data: JSON.stringify(this.LeftCheckedCellData)
-        }).then (function (res) {
-          if (res.data['status'] === 20000) {
-            that.getRightData()
-            that.getLeftData()
-            that.$notify.success({title:'成功',message:res.data['msg']})
-          } else {
-            that.$notify.error({title:'错误',message:res.data['msg']})
-          }
-        })
-      },
-      SaveLeftModulesAll (event) {
-        let that = this
-        if (this.selected_mod_id.length === 0) {
-          this.$notify.warning({title:'提示',message:'请先选择模块'})
-          return
-        }
-        if (this.TestCaseList.length === 0) {
-          this.$notify.warning({title:'提示',message:'您选择的模块下，没有查任何用例哦'})
-          return
-        }
-        var data = {
-          "m1":null,
-          "m2":null,
-          "suite_id":this.$route.query.suite_id
-        }
-        data['m1'] = this.selected_mod_id[0]
-        data['m2'] = this.selected_mod_id[1]
-        axios({
-          method: 'POST',
-          url: '/api/qa/testsuite/cell/add',
-          data: JSON.stringify(data)
-        }).then (function (res) {
-          if (res.data['status'] === 20000) {
-            that.getRightData()
-            that.getLeftData()
-            that.$notify.success({title:'成功',message:res.data['msg']})
-          } else {
-            that.$notify.warning({title:'提示',message:res.data['msg']})
-          }
-        })
+      });
+    },
+    SaveLeftModulesAll(event) {
+      let that = this;
+      if (this.selected_mod_id.length === 0) {
+        this.$notify.warning({ title: "提示", message: "请先选择模块" });
+        return;
       }
+      if (this.TestCaseList.length === 0) {
+        this.$notify.warning({
+          title: "提示",
+          message: "您选择的模块下，没有查任何用例哦"
+        });
+        return;
+      }
+      var data = {
+        m1: null,
+        m2: null,
+        suite_id: this.$route.query.suite_id
+      };
+      data["m1"] = this.selected_mod_id[0];
+      data["m2"] = this.selected_mod_id[1];
+      axios({
+        method: "POST",
+        url: "/api/qa/testsuite/cell/add",
+        data: JSON.stringify(data)
+      }).then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.getRightData();
+          that.getLeftData();
+          that.$notify.success({ title: "成功", message: res.data["msg"] });
+        } else {
+          that.$notify.warning({ title: "提示", message: res.data["msg"] });
+        }
+      });
     }
   }
+};
 </script>
 
 <style>
-  @import '~/static/static/common/css/testsuite.css';
+@import "~/static/static/common/css/testsuite.css";
 </style>

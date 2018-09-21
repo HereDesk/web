@@ -112,6 +112,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import util from "~/assets/js/util.js";
 import chart from "~/assets/js/chart.js";
 

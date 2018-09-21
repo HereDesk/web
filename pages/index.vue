@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {getUserFromLocalStorage} from '~/assets/js/auth'
 
 export default {

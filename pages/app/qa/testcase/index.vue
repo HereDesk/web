@@ -204,6 +204,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import loading from "~/components/loading";
 import Pagination from "~/components/Pagination";
 import util from "~/assets/js/util.js";

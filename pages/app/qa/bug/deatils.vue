@@ -289,19 +289,16 @@ Vue.use(Viewer,{
 })
 
 export default {
-  
   head () {
     return {
       title: 'HDesk - ' + this.BID + '缺陷详情'
     }
   },
-
   validate({ query }) {
     return query.bug_id ? true : false
   },
 
   layout: 'head',
-
   components: {
     BugAssign,
     BugResolve,

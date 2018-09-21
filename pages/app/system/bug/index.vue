@@ -32,41 +32,39 @@
 </template>
 
 <script>
-  export default {
-    head () {
-      return {
-        title: 'HDesk - 缺陷设置'
-      }
-    },
+import axios from "axios";
+export default {
+  head() {
+    return {
+      title: "HDesk - 缺陷设置"
+    };
+  },
 
-    data () {
-      return {
-        NavList: [
-          {"name":"缺陷类型","value":"bug_type"},
-          {"name":"缺陷严重程度","value":"bug_severity"},
-          {"name":"缺陷优先级","value":"bug_priority"}
-        ],
-        selected_value: 'bug_type',
-        DataList: []
-      }
-    },
+  data() {
+    return {
+      NavList: [
+        { name: "缺陷类型", value: "bug_type" },
+        { name: "缺陷严重程度", value: "bug_severity" },
+        { name: "缺陷优先级", value: "bug_priority" }
+      ],
+      selected_value: "bug_type",
+      DataList: []
+    };
+  },
 
-    computed: {
-    },
+  computed: {},
 
-    watch: {
-    },
+  watch: {},
 
-    created () {
-    },
-    methods: {
-      select_data (data) {
-        this.selected_value = data
-      }
+  created() {},
+  methods: {
+    select_data(data) {
+      this.selected_value = data;
     }
   }
+};
 </script>
 
 <style>
-  @import '~/static/static/common/css/system.css'
+@import "~/static/static/common/css/system.css";
 </style>
