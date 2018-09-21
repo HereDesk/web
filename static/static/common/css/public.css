@@ -1,0 +1,731 @@
+/*
+**全局CSS
+*/
+html,body {
+  width: 100%;
+  height: 100%;
+  margin:0;
+  padding: 0;
+  font-family: BlinkMacSystemFont,"Segoe UI","Roboto","Helvetica Neue", Arial, sans-serif,"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#__nuxt {
+  height: 100%;
+}
+
+#__layout {
+  height: 100%;
+}
+
+.no-hint {
+  color : rgb(112, 112, 112) !important;
+  font-size: 1.1rem;
+  font-weight: 300;
+  margin-top:2rem;
+}
+
+/*
+**
+** 以下是关于element-ui部分的自定义 css代码
+**
+*/
+
+/* el-dropdown */
+.bg-edown {
+  display: inline-block;
+  color: #4C4C4C;
+  background-color: #F5F5F5;
+  padding:0.6rem 1.2rem;
+  border-radius: 16px !important;
+}
+
+.el-dropdown {
+  font-size:1rem;
+}
+
+.el-dropdown-menu {
+  min-width: 7rem !important;
+}
+
+.el-dropdown-menu__item {
+  font-size: 0.9rem !important;
+  color: #333 !important;
+}
+
+.el-dropdown-menu__item > a{
+  color: #212121 !important;
+}
+
+.el-dropdown-menu__item span {
+  display: block;
+  text-align: center;
+  width: 100% !important;
+}
+
+.el-dropdown-desc {
+  color: #9E9E9E !important;
+  font-weight: 400;
+  font-size:0.95rem;
+}
+
+/* el-table */
+.el-table__expanded-cell {
+  line-height: 2rem;
+  font-size: 0.93rem;
+  background-color: #efeff4;
+  margin-bottom: -0.5rem;
+}
+
+.el-table th>.cell {
+  font-size: 1.05rem;
+  color: #37373c;
+  font-weight: 400;
+}
+
+.el-table .cell {
+  font-size: 0.95rem;
+  color: #424242;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  margin: 0.4rem 0;
+}
+
+.el-table__empty-block {
+  display: none !important;
+}
+
+.el-upload--picture-card {
+  background-color: #FFF !important;
+}
+
+.disabled .el-upload--picture-card {
+  display: none;
+}
+
+/* el-级联选择器 */
+.el-cascader__label {
+  font-size: 1rem !important;
+  padding-top:0.2rem !important;
+  margin-left: 1rem !important;
+  /*font-weight: 300 !important;*/
+}
+
+#my-cascader .el-input__inner {
+  border:none !important;
+  width: 10rem;
+}
+
+/* el-input */
+.el-input__inner {
+  border: 1px solid #E5E5E5;
+  border-radius: 5px !important;
+  height: 3rem !important;
+  font-size: 1rem !important;
+}
+
+/* eltree */
+.el-tree-node__label {
+  font-size: 0.93rem !important;
+}
+
+.el-tree-node__content {
+  height: 2.5rem !important;
+}
+
+.el-tree__empty-block {
+  display: none !important;
+}
+
+.el-tree-node.is-current > .el-tree-node__content {
+  color: rgb(51, 133, 255) !important;
+}
+
+.el-tree-node__content:hover {
+  color: rgb(51, 133, 255) !important;
+  background-color: #FFF !important;
+}
+
+/*
+**
+** 以下为自定义的的Bootstrap Css部分代码
+** 
+*/
+
+/* Bootstrap navbar */
+.navbar-brand {
+  color: #000 !important;
+  font-size: 1.8rem;
+}
+
+@media (max-width: 414px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}
+
+.nav .nav-item {
+  line-height: 2rem;
+}
+
+.nav-item .nav-link {
+  color: #212121;
+}
+
+.nav-item-active {
+  border-left:3px solid rgb(21, 101, 192) !important;
+  color: rgb(21, 101, 192) !important;
+}
+
+.nav-item-active .nav-link {
+  color: rgb(21, 101, 192) !important;
+}
+
+/* Bootstrap modal */
+.modal-footer {
+  background-color: rgb(244, 245, 246) !important;
+}
+
+.modal-footer-center {
+  justify-content: center;
+}
+
+.modal-header {
+  border-bottom: none !important;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+/* Bootstrap input */
+.form-control {
+  height: 3rem;
+  font-size: 0.95rem;
+}
+
+.form-control::-webkit-input-placeholder{
+  color: #c0c4cc;
+}
+
+/* Bootstrap dropdown */
+.dropdown-menu {
+  min-width: 8.5rem !important;
+  margin-top:1.1rem;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  border:none;
+}
+
+.dropdown-item {
+  line-height: 2rem;
+  font-size: 0.95rem !important;
+  background-color: #FFF !important;
+  color: #212121 !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #007bff !important;
+  text-decoration: none;
+  background-color: #FFF !important;
+}
+
+/*
+**
+**  Public: 以下为公共部分CSS
+**
+*/
+a:link {
+  text-decoration: none;
+}
+
+/* Public: tiitle */
+.bd-title {
+  font-weight: 300; 
+  font-size: 2rem;
+}
+
+/* Public: background */
+.bg-white {
+  background-color: #fff !important;
+  outline: 0 !important;
+}
+
+.bg-F5F5F5 {
+  background-color: #F5F5F5;
+}
+
+.bg-FEBB46 {
+  background-color: #FEBB46;
+}
+
+.bg_FAFAFA {
+  background-color: #FAFAFA !important;
+}
+.white-background {
+  background-color: #FFF !important;
+}
+
+.bg-00BFA5 {
+  background-color: #00BFA5 !important;
+}
+
+/* Public: 隐藏/显示 */
+.hideText {
+  visibility: hidden;
+}
+
+/* Public: border */
+.border {
+  border-radius: 0.25rem;
+  border: 1px solid rgb(204, 204, 204) !important;
+}
+
+.border-right {
+  border-right:1px solid #eee;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #eee;
+}
+
+/* Public: ul and li */
+
+.ul_link li {
+  line-height: 1.5rem;
+	padding-left: 1rem;
+	margin-top:1.5rem;
+	font-size:1rem;
+}
+
+.ul_link li a {
+  color: #2b2b2b !important;
+}
+
+.ul_link li a:hover {
+  color:#007bff !important;
+}
+
+.ul-inline > li{
+  display: inline-block;
+  list-style: none;
+}
+
+.ul-datetime > li{
+  padding: 0 0.5rem;
+  font-size:0.95rem;
+  color: #757575;
+  line-height: 3rem;
+}
+
+li {
+  list-style: none;
+}
+
+/* Public: circle */
+.circle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.circle-default {
+  background-color: #E0E0E0;
+}
+
+.circle-secondary {
+  background-color: #B1BEC6;
+}
+
+.circle-deadly {
+  background-color: #B71C1C;
+}
+
+.circle-urgency {
+  background-color: #F05945;
+}
+
+.circle-warning {
+  background-color: #FEBB46;
+}
+
+.circle-success {
+  background-color: #00BFA5;
+}
+
+/* Public: 中划线 */
+.text-line-through {
+  text-decoration:line-through;
+}
+
+/* Public: text */
+.text-success {
+  color: #00BFA5!important;
+}
+
+.text-secondary {
+  color: #B1BEC6 !important;
+}
+
+.text-deadly {
+  color: #B71C1C !important;
+}
+
+.text-urgency {
+  color: #EF5350 !important;
+}
+
+.text-warning {
+  color: #FEBB46 !important;
+}
+
+.text-red {
+  color: #E53935 !important;
+}
+
+.text-desc {
+  color: #2B2B2B !important;
+}
+
+.text-gray {
+  color: rgb(112, 112, 112);
+}
+
+.text-gray-38 {
+  color: #383838;
+}
+
+.text-black {
+  columns: #242424;;
+}
+
+.text-lg {
+  font-weight: 300;
+  font-size: 1.35rem;
+}
+
+.text-90 {
+  font-size: 0.90rem;
+}
+
+.text-93 {
+  font-size: 0.93rem;
+}
+
+.text-94 {
+  font-size: 0.94rem;
+}
+
+.text-95 {
+  font-size: 0.95rem;
+}
+
+.text-97 {
+  font-size: 0.97rem;
+}
+
+.text-200 {
+  font-size:2rem;
+}
+
+/* Public: text */
+.text-notes {
+  font-size:0.8rem;
+  font-weight: 300;
+  margin-top:1rem;
+  color: #9E9E9E;
+}
+
+/* Public: 行高 */
+.line-height-2 {
+  line-height: 2rem;
+}
+
+.height-5 {
+  min-height: 5rem;
+}
+
+.height-7 {
+  min-height: 7rem;
+}
+
+.height-100 {
+  min-height: 100vh;
+}
+.height-90 {
+  min-height: 90vh;
+}
+
+/* Public: pre */
+pre {
+  display: block;
+  white-space:pre-wrap;  
+  white-space:-moz-pre-wrap;  
+  white-space:-pre-wrap;  
+  white-space:-o-pre-wrap;  
+  word-wrap:break-word;
+}
+
+/* Public: button*/
+
+.btn {
+  background:transparent;
+}
+
+.btn-primary {
+  background-color: #3385FF;
+}
+
+.btn-cancel {
+  background-color: hsl(210, 9%, 96%);
+  outline: none;
+}
+
+.btn-create {
+  font-size:1rem;
+  color:#fff;
+  background-color: #3385FF;
+  border:none;
+  border-radius: 18px;
+  padding: 0.4rem 2rem;
+  outline: none;
+}
+.btn-create:hover {
+  transform: translate3d(0,-2px,0);
+  box-shadow: 0 15px 15px rgba(0,0,0,0.1);
+}
+
+.btn-transparent {
+  background-color: transparent;
+}
+
+.btn-accessories {
+  background-color: transparent;
+  color: rgb(66, 133, 244);;
+}
+
+.btn-submit {
+  background-color: rgb(66, 133, 244);
+  color: #FFF;
+}
+
+.btn-gray {
+  background-color: #F5F5F5;
+  border-color:#BDBDBD;
+  color:rgb(51, 51, 51);
+  padding:5px 1rem;
+  font-size: 0.95rem;
+}
+
+.btn:focus {
+  outline: 0;
+}
+
+/* Public: input */
+input::-webkit-input-placeholder {
+  font-weight: 300;
+  font-size:0.9rem;
+  color: c0c4cc;
+}
+
+input:-moz-placeholder {
+  font-weight: 300;
+  font-size:0.9rem;
+  color: c0c4cc;
+}
+
+input:-ms-input-placeholder {
+  font-weight: 300;
+  font-size:0.9rem;
+  color: c0c4cc;
+}
+
+.input-group-control > .btn-control {
+  font-weight: 300;
+  width: 100%;
+  line-height: 2.5rem;
+  outline: none;
+  border-radius: 1px;
+}
+
+.form-border-bottom {
+  border-radius: 0.25rem;
+  border: 1px solid rgb(204, 204, 204) !important;
+}
+
+.input-control {
+  display: inline-block;
+  padding: 0.5rem;
+  font-size: 14px;
+  line-height: 1.8rem;
+  color: #495057;
+  border: 1px solid #E5E5E5;
+  border-radius: 5px;
+  outline: none;
+  resize:none;
+}
+
+.border-none {
+  border:none !important;
+  outline: 0 !important;
+}
+
+.border-none:focus{
+  outline: 0 !important;
+  border-color:transparent;
+  box-shadow:none;
+}
+
+/* Public: 搜索相关 */
+.search-input-control {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.8rem;
+  color: #495057;
+  border-radius: 3px;
+  border: none;
+  border-bottom: 1px solid #eee;
+  outline: none;
+  resize:none;
+}
+
+.search-input-control::-webkit-input-placeholder {
+  font-weight: 300;
+  font-size:0.88rem;
+}
+
+ /* Public: textarea */
+.label-desc {
+  font-size: 0.8rem;
+  color: #9E9E9E;
+  font-weight: 300;
+}
+
+.textarea-control {
+  display: block;
+  padding: 1rem;
+  width: 100%;
+  font-size: 0.95rem;
+  line-height: 1.7rem;
+  color: #495057;
+  background-image: none;
+  background-clip: padding-box;
+  border: 1px solid #E5E5E5;
+  border-radius: 5px;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  outline: none;
+  resize:none;
+}
+
+textarea::-webkit-input-placeholder {
+  font-weight: 300;
+  font-size: 0.9rem !important;
+  color: #c0c4cc;
+}
+
+/* Public: select */
+.select-control {
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  display: block;
+  width: 100%;
+  background-color: #FFF;
+  padding: 0.375rem 1.5rem;
+  font-size: 0.95rem;
+  height: 2.8rem;
+  color: rgb(128, 128, 128);
+  border-radius: 0.25rem;
+  border: 1px solid #fff;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  outline: none;
+}
+
+/* Public: lable */
+.label-lg {
+  font-size:1.05rem;
+}
+
+.label-right {
+  min-width: 5rem;
+  text-align: right;
+  margin-right: 1rem;
+}
+
+.label-left {
+  min-width: 5rem;
+  text-align: left;
+  margin-right: 1rem;
+}
+
+/*  Public: divider */
+.divider {
+  height: 0;
+  margin: 8px 0;
+  overflow: hidden;
+  border-top: 1px solid rgb(233, 236, 239);
+}
+/*
+** 分页相关
+*/
+.pagination span {
+  margin:0 0.5rem;
+  font-size:1rem;
+  color: #424242;
+}
+
+/* Bug统计页面 */
+#count_date_input input {
+  line-height: 2rem;
+  height: 2rem;
+  text-align: center;
+  border:none;
+  border-radius: 0;
+  border-bottom: 1px solid #E0E0E0;
+  outline: none;
+}
+
+/* Public: 时间日期组件 */
+input::-webkit-datetime-edit-year-field {
+  color: #c0c4cc !important;
+  font-weight: 300;
+}
+input::-webkit-datetime-edit-month-field {
+  color: #c0c4cc !important;
+  font-weight: 300;
+}
+input::-webkit-datetime-edit-day-field {
+  color: #c0c4cc !important;
+  font-weight: 300;
+}
+input::-webkit-datetime-edit-text {
+  color: #c0c4cc;
+  font-weight: 300;
+}
+input::-webkit-inner-spin-button {
+  visibility: hidden;
+}
+
+/* Public 统计： 数据选中 */
+.SelectedType {
+  color: #304FFE !important;
+  background-color: #fff !important;
+}
+
+/* 内容块 */
+.content-block {
+  margin-top:1rem;
+  line-height: 2rem;
+  font-size: 0.94rem;
+  color: #2b2b2b;
+  padding:1rem;
+  background-color: #FAFAFA;
+  border-radius: 5px;
+}
+
+/* 关于图片预览插件v-viewer */
+.viewer-navbar {
+  display: none;
+}

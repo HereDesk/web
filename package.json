@@ -1,0 +1,25 @@
+{
+  "name": "HDesk",
+  "version": "1.0.0",
+  "description": "test manage",
+  "author": "wanwan",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.0.0",
+    "cross-env": "^5.2.0",
+    "echarts": "^4.2.0-rc.1",
+    "element-ui": "^2.4.7",
+    "lodash": "^4.17.11",
+    "nuxt": "^2.0.0",
+    "v-viewer": "^1.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

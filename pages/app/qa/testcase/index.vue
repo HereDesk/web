@@ -1,0 +1,502 @@
+<template>
+  <div id="page-testcase" class="container-fluid">
+    <div class="row">
+      <div id="testcase-modules" class="col-xl-2 col-lg-3 col-md-3 col-sm-12 col-12 pg-modules pt-5">
+        <div>
+          <div class="t-manage-modules mb-3">
+            <p class="pl-4 pt-3" @click="click_all_modules()">全部</p>
+            <nuxt-link :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+              &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/assets/images/edit_1.png">
+            </nuxt-link>
+            <div class="divider"></div>
+          </div>
+          <div class="t-modules-list">
+            <el-tree
+              class="filter-tree"
+              node-key="id"
+              :data="modules_list"
+              :props="defaultProps"
+              @node-click="handle_module()"
+              ref="tree2">
+            </el-tree>
+          </div>
+        </div>
+      </div>
+
+      <div id="testcase-list" class="col-xl-10 col-lg-9 col-md-9 col-sm-12 col-12 pt-5">
+        <div class="container-fluid">
+          <div id="testcase-manage" class="row justify-content-between">
+            <div id="testcase-query">
+              <el-dropdown id="testcase-query-product" class="pt-2 pl-3" trigger="click">
+                <span>
+                  <span class="el-dropdown-desc">产品：</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_product }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for='item in product_list' :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.product_code }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="testcase-query-status" class="pt-2 pl-3" trigger="click">
+                <span>
+                  <span class="el-dropdown-desc">状态：</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_status }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for='item in status_list' :key="item.id" :value="item.status_value">
+                    <span @click="handleCommand(item)">{{ item.status_name }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
+            <div class="pt-2 mobile-action-bar">
+              <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜"><img src="~/assets/images/query.png"></span>
+              <img class="mr-4" src="~/assets/images/jiang.png" title="测试用例统计" @click="myToday()">
+              <img class="mr-4" src="~/assets/images/import-export.png" title="导入导出" data-toggle="modal" data-target="#m-import-export">
+              <nuxt-link :to="{ path: '/app/qa/testcase/add' ,query: { 'product_code': selected_product }}">
+                <button type="btn" class="btn btn-create"> + 创建 </button>
+              </nuxt-link>
+            </div>
+          </div>
+
+          <div class="row ml-2 mr-5 hiddenSearch" :class="{ showSearch: isShowSearch }" style="border-bottom:1px solid #C5CAE9;">
+            <div class="col-md-10 col-10">
+              <input id="bugSearchInput" type="text" class="form-control border-none pt-3" placeholder="请输入ID或标题关键字进行搜索..." v-model.trim="wd" @keyup.enter="goSearch()" autofocus />
+            </div>
+            <div class="col-md-2 col-2 pt-2 text-center">
+              <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
+            </div>
+          </div>
+
+
+          <div id="testcase-data" class="row mt-3">
+            <div class="col">
+              <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
+                <el-table-column label='ID' prop='id' width='60'></el-table-column>
+                <el-table-column label='优先级' sortable width='100'>
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.priority === 'P1'" class="text-deadly">
+                      <span class="circle circle-deadly"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    </span>
+                    <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
+                      <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    </span>
+                    <span v-else class="text-secondary">
+                      <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    </span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='标题' show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <nuxt-link :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}" style="color:#424242;">
+                    {{ scope.row.title }}
+                    </nuxt-link>
+                  </template>
+                </el-table-column>
+                <el-table-column label='评审' width='90'>
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.isReview === 0">-</span>
+                    <span v-if="scope.row.isReview === 1">通过</span>
+                    <span v-if="scope.row.isReview === 2">失败</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='状态' width='60'>
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.status === 1">失效</span>
+                    <span v-else></span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='变更' width='60'>
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.isChange === 1">是</span>
+                    <span v-if="scope.row.isChange === 0">否</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='创建' sortable width='100'>
+                  <template slot-scope="scope">
+                    <span :class="{ 'hideText' : scope.row.case_id === HoverTestcase_id }">
+                      {{ scope.row.creator }}
+                    </span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='' width="40">
+                  <template slot-scope="scope">
+                    <div class="tableOpreate" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                      <button v-if="scope.row.status === 0 && Rules.fall" @click="handleFall(scope.row)">
+                        <img title="失效" src="~/assets/images/vaild.png">
+                      </button>
+                      <button v-if="scope.row.status === 0 && Rules.edit" @click="handleEdit(scope.row)">
+                        <img title="编辑" src="~/assets/images/edit.png">
+                      </button>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+
+          <!-- 翻页 -->
+          <Pagination :total="total" @PsPn="getPsPn"></Pagination>
+
+          <!-- loading -->
+          <div id="page-loading" class="row" v-if='total === null'>
+            <div class="col text-center">
+              <loading></loading>
+            </div>
+          </div>
+
+          <!-- no data -->
+          <div id="page-error" class="row" v-if="total === 0">
+            <div id="page-no-data" class="col text-center">
+              <img :src="img_src" class="mt-5 pt-5">
+              <p class="text-gray no-hint">{{ Msg }}</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- 测试用例统计 -->
+    <div id="modal-my-today" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-5">
+          <div id="test">
+            <div class="modal-body text-center pb-5" v-if="MyTodayData">
+              <h5 class="countdata-title">今日工作</h5>
+              <div class="row mt-5">
+                <div class="col">
+                  <p class="countdata-num" style="color:#20C997;">{{ MyTodayData.create }}</p>
+                  <p class="countdata-desc">我今天创建的测试用例</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content pt-5">
+          <div id="test">
+            <div class="modal-body text-center pb-5" v-if="MyTodayData">
+              <h5 class="countdata-title">测试用例导入导出</h5>
+              <div class="row mt-5">
+                <div class="col">
+                  <p class="countdata-num" style="color:#20C997;">{{ MyTodayData.create }}</p>
+                  <p class="countdata-desc">测试用例</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import loading from "~/components/loading";
+import Pagination from "~/components/Pagination";
+import util from "~/assets/js/util.js";
+import rules from "~/assets/js/rules.js";
+
+export default {
+  head() {
+    return {
+      title: "HDesk - 测试用例"
+    };
+  },
+
+  layout: "head",
+  components: {
+    loading,
+    Pagination
+  },
+  data() {
+    return {
+      // 产品、版本
+      product_list: [],
+      selected_product: null,
+      m2_id: null,
+      m1_id: null,
+      status_list: [
+        { status_name: "正常", status_value: 0 },
+        { status_name: "无效", status_value: 1 }
+      ],
+      selected_status: "正常",
+      // Bug: 表格数据
+      total: null,
+      pageNumber: 1,
+      pageSize: 10,
+      tableData: [],
+      Msg: false,
+      img_src: null,
+      // Bug: 搜索
+      wd: null,
+      isShowSearch: false,
+      // 控制显示
+      HoverTestcase_id: "",
+      // 数据统计
+      MyTodayData: {},
+      // stree
+      filterText: "",
+      modules_list: [],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      }
+    };
+  },
+
+  filters: {
+    date: util.date
+  },
+
+  computed: {
+    // 权限控制
+    Rules: function() {
+      return rules.TestCaseRules(this.$store.state.userInfo);
+    },
+
+    // 查询条件
+    QueryBuilder: function() {
+      var QueryBuilder = {};
+      // QueryBuilder
+      QueryBuilder["pageNumber"] = this.pageNumber;
+      QueryBuilder["pageSize"] = this.pageSize;
+      QueryBuilder["product_code"] = this.selected_product;
+      this.selected_status === "正常"
+        ? (QueryBuilder["status"] = 0)
+        : (QueryBuilder["status"] = 1);
+      this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null;
+      this.wd ? (QueryBuilder["wd"] = this.wd) : null;
+      return QueryBuilder;
+    },
+    // 最后一页
+    LastPage: function() {
+      return Math.ceil(this.total / this.pageSize);
+    },
+    // userinfo group
+    uGroup: function() {
+      return this.$store.state.userInfo.group === "test"
+        ? this.$store.state.userInfo.group
+        : null;
+    }
+  },
+
+  watch: {
+    QueryBuilder: function(val, oldVal) {
+      this.tableData = [];
+      this.wd ? this.goSearch() : this.getLeftData();
+      this.$router.replace({
+        path: "/app/qa/testcase",
+        query: this.QueryBuilder
+      });
+    },
+    product_list: function(val, oldVal) {
+      if ((this.product_list.length > 0) & !this.selected_product) {
+        this.selected_product = this.product_list[0]["product_code"];
+      }
+    },
+    selected_product: function(val, oldVal) {
+      this.getModule();
+    },
+    total: function() {
+      if (this.total === 0) {
+        this.img_src = require("static/pic/happy.png");
+        this.Msg = "没找到数据";
+      }
+    },
+    filterText(val) {
+      this.$refs.tree2.filter(val);
+    }
+  },
+
+  created() {
+    var query = this.$route.query;
+    if (query["product_code"]) {
+      this.selected_product = query["product_code"];
+    }
+    this.getProductRelease();
+  },
+
+  methods: {
+    getPsPn: function(ps, pn) {
+      this.pageSize = ps;
+      this.pageNumber = pn;
+    },
+    // get product info and release info
+    getProductRelease() {
+      let that = this;
+      axios
+        .get("/api/pm/product_release")
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.product_list = res.data["data"];
+          } else {
+            that.Msg = res.data["msg"];
+          }
+        })
+        .catch(function(res) {});
+    },
+
+    // 获取所有模块
+    getModule() {
+      let that = this;
+      axios
+        .get("/api/pm/get_module?product_code=" + this.selected_product)
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.modules_list = res.data["data"];
+          } else {
+            that.Msg = res.data["msg"];
+          }
+        });
+    },
+
+    handle_module(data, node) {
+      this.pageNumber = 1;
+      this.pageSize = 10;
+      var node = this.$refs.tree2.getCurrentNode();
+      var is_parent = this.$refs.tree2.currentNode.node.parent.parent;
+      if (is_parent) {
+        this.m1_id = null;
+        this.m2_id = node["id"];
+      } else {
+        this.m1_id = node["id"];
+        this.m2_id = null;
+      }
+    },
+
+    click_all_modules() {
+      this.m1_id = null;
+      this.m2_id = null;
+    },
+
+    // 下拉相关操作
+    handleCommand(data) {
+      if ("product_code" in data) {
+        this.selected_product = data["product_code"];
+      }
+      if ("status_value" in data) {
+        this.selected_status = data["status_name"];
+      }
+    },
+
+    // TestCase: 数据列表
+    getLeftData() {
+      let that = this;
+      axios
+        .get("/api/qa/testcase/list", { params: this.QueryBuilder })
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.tableData = res.data["data"];
+            that.total = res.data["total"];
+          } else {
+            that.Msg = res.data["msg"];
+          }
+        });
+    },
+
+    // Testcase: 失效操作
+    handleFall(data) {
+      let that = this;
+      let case_id = data.case_id;
+      axios.get("/api/qa/testcase/fall?case_id=" + case_id).then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.getLeftData();
+          that.$notify.success({ title: "成功", message: res.data["msg"] });
+        } else {
+          that.$notify.error({ title: "成功", message: res.data["msg"] });
+        }
+      });
+    },
+
+    // Testcase: 编辑操作
+    handleEdit(data) {
+      let case_id = data.case_id;
+      this.$router.push("/app/qa/testcase/edit?case_id=" + case_id);
+    },
+
+    // Testcase: 评审
+    CaseReview(data) {
+      let that = this;
+      this.review_data.result = data;
+      this.review_data.case_id = this.CaseDetails.case_id;
+      axios({
+        method: "post",
+        url: "/api/qa/testcase/review",
+        data: JSON.stringify(this.review_data)
+      }).then(function(res) {
+        if (res.data["status"] === 20000) {
+          $("#ModalCaseReview").modal("hide");
+          that.$router.go(-1);
+          that.$notify.success({ title: "成功", message: res.data["msg"] });
+        } else {
+          that.$notify.error({ title: "失败", message: res.data["msg"] });
+        }
+      });
+    },
+
+    // Testcase: 搜索
+    clickSearch() {
+      if (this.isShowSearch) {
+        this.isShowSearch = false;
+        this.wd = null;
+        this.getBugList();
+      } else {
+        this.isShowSearch = true;
+      }
+    },
+
+    goSearch() {
+      let that = this;
+      axios
+        .get("/api/qa/testcase/search", { params: this.QueryBuilder })
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.tableData = res.data["data"];
+            that.total = res.data["total"];
+          } else {
+            that.total = 0;
+            that.tableData = [];
+            that.Msg = res.data["msg"];
+          }
+        })
+        .catch(function(error) {});
+    },
+
+    // my today
+    myToday() {
+      $("#modal-my-today").modal("show");
+      let that = this;
+      axios("/api/analyze/testcase/my_today").then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.MyTodayData = res.data["data"];
+        }
+      });
+    },
+
+    // table line hover and leave
+    tableHover(row) {
+      this.HoverTestcase_id = row.case_id;
+    },
+    tableLeave(row) {
+      this.HoverTestcase_id = "";
+    }
+  }
+};
+</script>
+
+<style>
+@import "~/static/static/common/css/test.css";
+</style>
