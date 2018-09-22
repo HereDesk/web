@@ -1,12 +1,12 @@
 <template>
   <div id="bashboard" class='container'>
-    
+  
     <div id="page-head" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
         <el-dropdown class="ml-3">
           <span class="dashboard-product">
-            <span class="el-dropdown-link"> {{ current_product_code || '' }}</span>
+              <span class="el-dropdown-link"> {{ current_product_code || '' }}</span>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for='item in product_list' :key="item.id">
@@ -19,17 +19,21 @@
         <span class="dashboard-username">{{ familyname || '' }}</span>
         <el-dropdown class="ml-3" trigger="click">
           <span id="dashboard-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="~/assets/images/more.png" style="height:24px;width:24px;">
-          </span>
+              <img src="~/assets/images/more.png" style="height:24px;width:24px;">
+            </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><nuxt-link to="/app/help" target="_blank">帮助文档</nuxt-link></el-dropdown-item>
-            <el-dropdown-item divided><nuxt-link to="/app/set/passwd">修改密码</nuxt-link></el-dropdown-item>
+            <el-dropdown-item>
+              <nuxt-link to="/app/help" target="_blank">帮助文档</nuxt-link>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <nuxt-link to="/app/set/passwd">修改密码</nuxt-link>
+            </el-dropdown-item>
             <el-dropdown-item divided><a @click="HandLogout()">退出登录</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
-
+  
     <div id="page-data" v-if="isDisplayBody" style="margin-top:8%;">
       <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 my-3">
@@ -70,7 +74,7 @@
             </div>
           </div>
         </div>
-
+  
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 px-0 text-center my-3" style="height:18rem;">
           <div id="CharBarBugStatus" style="width: 100%;height:100%;"></div>
         </div>
@@ -78,7 +82,7 @@
           <div id="ChartLineBugWeek" style="width: 100%;height:100%;"></div>
         </div>
       </div>
-
+  
       <div id="dashboard-nav" class="row my-5">
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
           <nuxt-link to="/app/qa/bug" class="n-link">
@@ -102,17 +106,17 @@
         </div>
       </div>
     </div>
-
+  
     <div class="text-center mt-5 pt-5" v-else>
       <img :src="img_src" style="height:72px;width:72px;" v-show="img_src">
       <p class="mt-5">{{ product_msg }}</p>
     </div>
-
+  
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import util from "~/assets/js/util.js";
 import chart from "~/assets/js/chart.js";
 
@@ -232,7 +236,9 @@ export default {
       if (this.current_product_code) {
         this.$router.replace({
           path: "/app/dashboard",
-          query: { product_code: this.current_product_code }
+          query: {
+            product_code: this.current_product_code
+          }
         });
         this.getBugDashData();
         this.getBugStatusData();
