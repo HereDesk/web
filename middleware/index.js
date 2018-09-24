@@ -1,8 +1,12 @@
 import axios from 'axios'
-import { getUserFromCookie, getUserFromLocalStorage } from '~/assets/js/auth'
+
+import {
+  getUserFromCookie,
+  getUserFromLocalStorage
+} from '~/assets/js/auth'
 
 axios.defaults.timeout = 100000
-axios.defaults.withCredentials=true
+axios.defaults.withCredentials = true
 
 axios.interceptors.request.use(function (config) {
   var url = config.url

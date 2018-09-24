@@ -64,10 +64,6 @@ module.exports = {
   plugins: [{
       src: '~plugins/public.js',
       ssr: true
-    },
-    {
-      src: '~plugins/axios.js',
-      ssr: true
     }
   ],
 

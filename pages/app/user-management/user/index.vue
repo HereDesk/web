@@ -24,17 +24,17 @@
               <span v-if="scope.row.user_status === 2" class="text-deadly">封禁</span>
             </template>
           </el-table-column>
-          <el-table-column label='建立时间' width="180" show-overflow-tooltip>
+          <el-table-column label='建立时间' width="150" show-overflow-tooltip>
             <template slot-scope="scope">
                <span>{{ scope.row.create_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='更新时间' width="180" show-overflow-tooltip>
+          <el-table-column label='更新时间' width="150" show-overflow-tooltip>
             <template slot-scope="scope">
                <span>{{ scope.row.update_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' width="120" v-if="userRules">
+          <el-table-column label='操作' width="150" v-if="userRules">
             <template slot-scope="scope">
               <span @click="banned(scope.row,$event)" v-if="scope.row.group !== 'admin' & scope.row.user_status === 1">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="2">封禁</button>

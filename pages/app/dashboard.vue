@@ -94,7 +94,7 @@
             <h5><img src="~/assets/images/case.png" class="pr-3">测试用例</h5>
           </nuxt-link>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FFA000">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF7919">
           <nuxt-link to="/app/products" class="n-link">
             <h5><img src="~/assets/images/product.png" class="pr-3">产品管理</h5>
           </nuxt-link>
