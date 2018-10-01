@@ -1,4 +1,11 @@
 export default {
+   txt_deal_with(txt){
+    var reg = /(((https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/ig;
+    var result = txt.replace(reg,function(item){
+      return '<a href="' +item+ '" target="_blank">' +item+ '</a>';
+    });
+    return result;
+  },
   getWeek (str) {
     if (!str) {
       return ''

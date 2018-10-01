@@ -34,6 +34,8 @@
           <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-hangup" v-if="BtnRules.hangup">延期挂起</button>
 
           <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-notes" v-if="BtnRules.notes">备注</button>
+
+          <img src="~/assets/images/return.png" style="float:right;" @click="goBack()">
         </div>
       </div>
 
@@ -41,15 +43,15 @@
         <div id="bug-details-2" class='col-xl-8 col-lg-8 col-md-8'>
           <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">
             <h6 class="bug-details-minor-title"><span class="standline"></span>&nbsp;&nbsp;操作步骤</h6>
-            <pre class="details-block">{{ BugDetails.steps }}</pre>
+            <pre class="details-block" v-html="BugDetails_steps "></pre>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
             <h6 class="bug-details-minor-title"><span class="redline"></span>&nbsp;&nbsp;实际结果</h6>
-            <pre class="details-block">{{ BugDetails.reality_result }}</pre>
+            <pre class="details-block" v-html="reality_result"></pre>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
             <h6 class="bug-details-minor-title"><span class="successline"></span>&nbsp;&nbsp;预期结果</h6>
-            <pre class="details-block">{{ BugDetails.expected_result }}</pre>
+            <pre class="details-block" v-html="expected_result"></pre>
           </div>
 
           <!-- 图片附件 -->
@@ -67,7 +69,7 @@
           <div id="bug-details-3" class="height-7 mb-5" v-if="BugDetails.remark">
             <h6 class="bug-details-minor-title"><span class="grayline"></span>&nbsp;&nbsp;附加信息</h6>
             <div class="dropdown-divider"></div>
-            <pre class="details-block">{{ BugDetails.remark }}</pre>
+            <pre class="details-block" v-html="BugDetails_remark"></pre>
           </div>
           <div id="bug-details-history" class="height-7 mb-5 text-gray-38 text-93">
             <h6 class="bug-details-minor-title"><span class="grayline"></span>&nbsp;&nbsp;活动记录</h6>
@@ -78,7 +80,7 @@
                   {{ index + 1 }}.  {{ item.create_time | date }} :
                   <span class="log-text-user">{{ item.username }}</span>
                   {{ item.desc }}
-                  <pre v-if="item.remark" class="log-text-remark text-90">
+                  <pre class="log-text-remark text-90" v-if="item.remark">
                     {{ item.remark }}
                   </pre>
                 </li>
@@ -349,7 +351,8 @@ export default {
   },
 
   filters: {
-    date: util.date
+    date: util.date,
+    CheckUrl: util.CheckUrl,
   },
 
   watch: {
@@ -377,7 +380,18 @@ export default {
     isShowLoading: function () {
       return JSON.stringify(this.BugDetails) === '{}' ? '1' : null
     },
-
+    expected_result: function () {
+      return util.txt_deal_with(this.BugDetails.expected_result)
+    },
+    BugDetails_remark: function () {
+      return util.txt_deal_with(this.BugDetails.remark)
+    },
+    reality_result: function () {
+      return util.txt_deal_with(this.BugDetails.reality_result)
+    },
+    BugDetails_steps: function () {
+      return util.txt_deal_with(this.BugDetails.steps)
+    }
   },
 
   created () {
@@ -546,6 +560,10 @@ export default {
           that.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
+    },
+
+    goBack () {
+      this.$router.go(-1)
     }
   }
 }

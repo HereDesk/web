@@ -251,6 +251,10 @@
   border-radius: 5px;
 }
 
+.details-block a {
+  color: rgb(41, 115, 183) !important;
+}
+
 /*
 **
 **  以下是关于testcase相关页面的CSS

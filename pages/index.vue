@@ -11,10 +11,10 @@
             <input type="email" id="user_name" name="email" v-model="LoginData.username" class="form-control" maxlength="30" minlength="6" placeholder="电子邮件" />
           </div>
           <div class="input-group input-group-lg passwd" id="input-passwd">
-            <input type="password" id="user_passwd" name="user_passwd" v-model="LoginData.password" class="form-control" maxlength="30" minlength="6" placeholder="输入密码" />
+            <input type="password" id="user_passwd" name="user_passwd" class="form-control" maxlength="30" minlength="6" placeholder="输入密码" v-model="LoginData.password" @keyup.enter="goLogin" />
           </div>
           <div class="login-btn">
-            <button type="button" v-on:click="goLogin" class="btn btn-login btn-lg btn-block" id="user_login_btn">登录</button>
+            <button id="user_login_btn"  class="btn btn-login btn-lg btn-block" type="button" @click="goLogin">登录</button>
           </div>
         </div>
       </div>
