@@ -391,6 +391,10 @@ li {
   color: rgb(112, 112, 112);
 }
 
+.text-007BFF {
+  color: rgb(0, 123, 255) !important;
+}
+
 .text-gray-38 {
   color: #383838;
 }

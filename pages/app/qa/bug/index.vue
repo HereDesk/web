@@ -15,6 +15,8 @@
             <el-tree
               class="filter-tree"
               node-key="id"
+              accordion
+              highlight-current
               :data="modules_list"
               @node-click="handle_module()"
               ref="tree2">
@@ -112,13 +114,13 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12">
+          <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12 pt-2">
             <input v-if="isShowInput === 'other'" type="text" id="bugSearchInput" class="form-control border-none pt-3" :placeholder="placeholder" v-model.trim="wd" @keyup.enter="goSearch(SearchBuilder)" autofocus />
             <input v-if="isShowInput === 'date'" type="date" class="border-none text-90 pt-3" v-model="SearchCriteria.start_date">
             <input v-if="isShowInput === 'date_range'" type="date" class="border-none text-90 pt-3" v-model="SearchCriteria.start_date">
             <input v-if="isShowInput === 'date_range'" type="date" class="border-none text-90 pt-3" v-model="SearchCriteria.end_date">
           </div>
-          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-2  text-center">
+          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-4  text-center">
             <button type="button" class="btn text-90" @click="goSearch(SearchBuilder)">搜索</button>
           </div>
         </div>
@@ -131,7 +133,7 @@
               <el-table-column label='状态' width='100'>
                 <template slot-scope="scope">
                   <span v-if="scope.row.status === 'Closed'" class="text-secondary">
-                    <span class="circle circle-secondary"></span>{{ scope.row.status_name }}
+                    <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
                   <span v-else-if="scope.row.status === 'New'" class="text-urgency">
                     <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
@@ -388,9 +390,10 @@ export default {
         { tvalue: "priority", tname: "优先级" },
         { tvalue: "severity", tname: "严重程度" },
         { tvalue: "bug_type", tname: "缺陷类型" },
-        { tvalue: "creator_user", tname: "按创建人" },
-        { tvalue: "closed_user", tname: "按关闭人" },
-        { tvalue: "fixed_user", tname: "按解决人" },
+        { tvalue: "creator_user", tname: "创建者" },
+        { tvalue: "closed_user", tname: "关闭者" },
+        { tvalue: "fixed_user", tname: "解决者" },
+        { tvalue: "assignedTo_user", tname: "指派谁" },
         { tvalue: "create_time", tname: "创建日期" },
         { tvalue: "closed_time", tname: "关闭日期" },
         { tvalue: "fixed_time", tname: "解决日期" }
@@ -469,9 +472,7 @@ export default {
     QueryBuilder: function() {
       var QueryBuilder = {}
       var tmp_release
-      this.selected_release == "全部"
-        ? (tmp_release = "all")
-        : (tmp_release = this.selected_release)
+      this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
       // QueryBuilder
       QueryBuilder["pageNumber"] = this.pageNumber
       QueryBuilder["pageSize"] = this.pageSize
@@ -535,9 +536,7 @@ export default {
     SearchBuilder: function() {
       var result = {}
       var tmp_release
-      this.selected_release == "全部"
-        ? (tmp_release = "all")
-        : (tmp_release = this.selected_release)
+      this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
       result["pageNumber"] = this.pageNumber
       result["pageSize"] = this.pageSize
       result["product_code"] = this.selected_product
@@ -573,7 +572,7 @@ export default {
   watch: {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
-      this.getBugList()
+      this.wd ? this.goSearch(this.SearchBuilder) : this.getBugList()
       this.$router.replace({ path: "/app/qa/bug", query: this.QueryBuilder })
     },
     product_list: function(val, oldVal) {

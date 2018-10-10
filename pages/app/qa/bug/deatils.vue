@@ -34,8 +34,7 @@
           <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-hangup" v-if="BtnRules.hangup">延期挂起</button>
 
           <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-notes" v-if="BtnRules.notes">备注</button>
-
-          <img src="~/assets/images/return.png" style="float:right;" @click="goBack()">
+          <button type="button" class="btn btn-gray ml-3" @click="goBack()">返回</button>
         </div>
       </div>
 

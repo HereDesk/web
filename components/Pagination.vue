@@ -82,7 +82,6 @@ export default {
   methods: {
     // 翻页
     handleChange (data,event) {
-      console.log(event.target.innerText)
       if (data === 'ps') {
         if (this.pageSize < 50) {
           this.pageNumber = 1
@@ -91,7 +90,6 @@ export default {
       }
       if (data === 'pn') {
         var text = event.target.innerText
-        console.log(text)
         if (text == '>') {
           this.pageNumber = parseInt(this.pageNumber) + 1
         }

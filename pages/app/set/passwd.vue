@@ -11,7 +11,7 @@
         	<input type='password' class='form-control' id='newPassword' name="newPassword" placeholder='新密码不能为纯数字' maxlength='16' minlength="8" required v-model.trim='passwdData.newPassword' />
       	</div>
       	<div class='form-group input-group-control mt-5'>
-        	<input type="submit" class="btn btn-control" @click="SubmitPasswd" v-bind:class="{ 'btn-secondary': !isButtonStatus, 'btn-success': isButtonStatus }" v-bind:disabled="!isButtonStatus">
+        	<input type="submit" class="btn btn-control" @click="SubmitPasswd" v-bind:class="{ 'btn-secondary': !isButtonStatus, 'btn-primary': isButtonStatus }" v-bind:disabled="!isButtonStatus">
       	</div>
       </div>
     </div>
