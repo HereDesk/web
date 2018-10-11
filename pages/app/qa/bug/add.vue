@@ -2,8 +2,10 @@
   <div id="page-bug-add">
     <div id="page-bug-add-title" class="container-fluid">
       <div class='row'>
-        <div class='col text-center page-bug-add-title'>
-          <img src="~assets/images/close_x.png" @click="$router.go(-1)">
+        <div class='col text-center page-pure-title'>
+          <span @click="$router.go(-1)">
+            <v-icon name="times" style="color:#BFBFBF;" scale="2"></v-icon>
+          </span>
           <h3>创建缺陷</h3>
           <div class="dropdown-divider"></div>
         </div>
@@ -63,7 +65,7 @@
               <div class='form-group row'>
                 <label for='bug-reality-result' class="col-sm-2 bug-label">实际结果<span class="text-red">*</span></label>
                 <el-input type="textarea" class="col-sm-8" maxlength="1000"
-                  :autosize="{ minRows: 3}" 
+                  :autosize="{ minRows: 4}" 
                   placeholder="实际结果..."
                   v-model.trim='Bug.reality_result'>
                 </el-input>
@@ -71,17 +73,9 @@
               <div class='form-group row'>
                 <label for='bug-expected-result' class="col-sm-2 bug-label">预期结果</label>
                 <el-input type="textarea" class="col-sm-8" maxlength="1000" 
-                  :autosize="{ minRows: 3}" 
+                  :autosize="{ minRows: 4}" 
                   placeholder="预期结果..." 
                   v-model.trim='Bug.expected_result'>
-                </el-input>
-              </div>
-              <div class='form-group row'>
-                <label for='bug-remark' class="col-sm-2 bug-label">备注</label>
-                <el-input type="textarea" class="col-sm-8" maxlength="1000" 
-                  :autosize="{ minRows: 3}" 
-                  placeholder="请输入备注..." 
-                  v-model.trim='Bug.remark'>
                 </el-input>
               </div>
 
@@ -100,13 +94,23 @@
                   </el-upload>
                 </form>
               </div>
+
+              <div class='form-group row' v-if="isRemarkDisable">
+                <label for='bug-remark' class="col-sm-2 bug-label">备注</label>
+                <el-input type="textarea" class="col-sm-8" maxlength="1000" 
+                  :autosize="{ minRows: 4}" 
+                  placeholder="请输入备注..." 
+                  v-model.trim='Bug.remark'>
+                </el-input>
+              </div>
             </div>
     
             <!-- 提交按钮 -->
             <div class='d-flex justify-content-center my-5'>
-              <button type='button' class='btn btn-transparent' @click="$router.go(-1)">返回</button>
+              <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
               <button type='button' class='btn btn-submit mx-5 px-3' v-bind:disabled="isButtonDisabled" @click='createBug($event)' value="only-once-commit">保存提交</button>
               <button type='button' class='btn btn-accessories' v-bind:disabled="isButtonDisabled" @click='createBug($event)' value="continue-commit">继续添加</button>
+              <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
             </div>
         </div>
       </div>
@@ -132,6 +136,7 @@ export default {
       release_list: [],
       modules_list: [],
       isButtonDisabled: false,
+      isRemarkDisable: false,
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
@@ -143,7 +148,7 @@ export default {
         bug_type: "other",
         assignedTo_id: "",
         title: "",
-        steps: "",
+        steps: "1. \n2. \n",
         reality_result: "",
         expected_result: "",
         remark: "",
@@ -269,6 +274,14 @@ export default {
             that.developer_list = res.data["data"];
           }
         });
+    },
+    isShowRemark () {
+      if (this.isRemarkDisable) {
+        this.isRemarkDisable = false
+        this.CaseData.remark = ''
+      } else {
+        this.isRemarkDisable = true
+      }
     },
     createBug(event) {
       let _this = this;

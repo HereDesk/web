@@ -2,8 +2,10 @@
   <div id="page-testcase-add">
     <div id="page-testcase-add-title" class="container-fluid">
       <div class='row'>
-        <div class='col text-center page-bug-add-title'>
-          <img src="~assets/images/close_x.png" @click="$router.go(-1)">
+        <div class='col text-center page-pure-title'>
+          <span @click="$router.go(-1)">
+            <v-icon name="times" style="color:#BFBFBF;" scale="2"></v-icon>
+          </span>
           <h3>编写测试用例</h3>
           <div class="dropdown-divider"></div>
         </div>
@@ -106,7 +108,7 @@
                 <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
                 <button type='button' class='btn btn-submit mx-5 px-3' v-bind:disabled="isButtonDisabled" @click='addTest' value="only-once-commit">保存提交</button>
                 <button type='button' class='btn btn-accessories' v-bind:disabled="isButtonDisabled" @click='addTest($event)' value="continue-commit">继续添加</button>
-                <button type='button' class='btn btn-transparent' @click="$router.go(-1)">返回</button>
+                <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
               </div>
             </div>
           </form>
