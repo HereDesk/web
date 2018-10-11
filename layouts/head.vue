@@ -14,6 +14,7 @@
           <li class="nav-item dropdown" :class="{ 'nav-active' :  currentRoute.indexOf('/app/qa/bug') >= 0 }">
            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">缺陷</a>
             <div class="dropdown-menu">
+              <nuxt-link class="dropdown-item" to="/app/qa/bug/add">提交BUG</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug">缺陷列表</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug/count">缺陷分析</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug/report">缺陷报告</nuxt-link>
@@ -22,8 +23,9 @@
           <li class="nav-item dropdown" :class="{ 'nav-active' :  currentRoute.indexOf('/app/qa/testcase') >= 0 }">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">测试用例</a>
             <div class="dropdown-menu">
-              <nuxt-link class="dropdown-item" to="/app/qa/testcase">用例管理</nuxt-link>
-              <nuxt-link class="dropdown-item" to="/app/qa/testsuite">用例执行</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/testcase/add">编写用例</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/testcase">管理用例</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/testsuite">执行用例</nuxt-link>
             </div>
           </li>
           <li class="nav-item" :class="{ 'nav-active' :  currentRoute.indexOf('/app/products') >= 0 }">

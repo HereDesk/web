@@ -137,7 +137,21 @@
 **
 */
 
-/* BUG: add */
+/* Add */
+.page-bug-add-title img{
+  display: inline-block;
+  float: right;
+  margin:1rem 1rem 1rem 0;
+  height: 33px;
+  width:33px;
+}
+
+.page-bug-add-title h3{
+  display: inline-block;
+  font-weight: 300 !important;
+  margin:1rem 0;
+}
+
 .bug-label {
   text-align: right !important;
 }
@@ -148,7 +162,7 @@
   }
 }
 
-/* BUG: bug_index */
+/* index */
 
 @media (max-width: 768px) {
   #TestCaseSearchInput {
@@ -181,7 +195,7 @@
 }
 
 
-/* BUG: bug_index_about opreate */
+/* bug_index_about opreate */
 
 .tableOpreate {
   display: none;
@@ -220,7 +234,7 @@
   z-index: 9999;
 }
 
-/* BUG: bug_details */
+/* bug_details */
 
 .details-title {
   font-size:1.35rem;
@@ -636,7 +650,7 @@
 
 
 /*
-  test bug 
+  test
 */
 
 .log-text-time {
