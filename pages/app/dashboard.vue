@@ -19,16 +19,24 @@
         <span class="dashboard-username">{{ familyname || '' }}</span>
         <el-dropdown class="ml-3" trigger="click">
           <span id="dashboard-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="~/assets/images/more.png" style="height:24px;width:24px;">
-            </span>
+            <i class="iconfont icon-menu size-2 icon-8a8a8a"></i>
+          </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <nuxt-link to="/app/help" target="_blank">帮助文档</nuxt-link>
+              <nuxt-link to="/app/help" target="_blank">
+              <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
+              </nuxt-link>
             </el-dropdown-item>
             <el-dropdown-item divided>
-              <nuxt-link to="/app/set/passwd">修改密码</nuxt-link>
+              <nuxt-link to="/app/set/passwd">
+                <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
+              </nuxt-link>
             </el-dropdown-item>
-            <el-dropdown-item divided><a @click="HandLogout()">退出登录</a></el-dropdown-item>
+            <el-dropdown-item divided>
+              <a @click="HandLogout()">
+                <i class="iconfont icon-logout"></i>&nbsp;&nbsp;退出登录
+              </a>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -86,22 +94,22 @@
       <div id="dashboard-nav" class="row my-5">
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
           <nuxt-link to="/app/qa/bug" class="n-link">
-            <h5><img src="~/assets/images/bug.png" class="pr-3">缺陷</h5>
+            <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
           </nuxt-link>
         </div>
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
           <nuxt-link to="/app/qa/testcase" class="n-link">
-            <h5><img src="~/assets/images/case.png" class="pr-3">测试用例</h5>
+            <h5><i class="iconfont icon-T size-2 pr-3"></i>测试用例</h5>
           </nuxt-link>
         </div>
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF7919">
           <nuxt-link to="/app/products" class="n-link">
-            <h5><img src="~/assets/images/product.png" class="pr-3">产品管理</h5>
+            <h5><i class="iconfont icon-jingxuanchanpinku size-2 pr-3"></i>产品管理</h5>
           </nuxt-link>
         </div>
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FFA726">
           <nuxt-link to="/app/user-management/user" class="n-link">
-            <h5><img src="~/assets/images/user-management.png" class="pr-3">用户管理</h5>
+            <h5><i class="iconfont icon-user-manage size-2 pr-3"></i>用户管理</h5>
           </nuxt-link>
         </div>
       </div>

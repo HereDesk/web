@@ -4,7 +4,7 @@
       <div class='row'>
         <div class='col text-center page-pure-title'>
           <span @click="$router.go(-1)">
-            <v-icon name="times" style="color:#BFBFBF;" scale="2"></v-icon>
+            <i class="iconfont icon-close-windows icon-8a8a8a size-2"></i>
           </span>
           <h3>编写测试用例</h3>
           <div class="dropdown-divider"></div>
@@ -121,6 +121,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {  
   head () {
     return {

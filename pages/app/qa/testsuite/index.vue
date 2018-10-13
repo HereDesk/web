@@ -102,7 +102,6 @@ export default {
       QueryBuilder: {
         "pageSize": 10,
         "pageNumber": 1,
-        "product_code": 'oneone',
       },
       TestSuiteCreate: {
         "product_code": null,

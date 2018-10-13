@@ -4,14 +4,14 @@
     <div class="row">
       <div id="about-modules" class="col-xl-2 col-lg-3 col-md-3 col-sm-12 col-12  pt-3 pg-modules">
         <div>
-          <div class="t-manage-modules pb-3">
-            <p class="pl-4 pt-3" @click="click_all_modules()">全部</p>
+          <div class="t-manage-modules mb-3">
+            <p class="pl-4" @click="click_all_modules()">全部</p>
             <nuxt-link :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/assets/images/edit_1.png">
+              &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
             </nuxt-link>
-            <div class="divider"></div>
           </div>
-          <div class="t-modules-list">
+          <div class="divider"></div>
+          <div class="t-modules-list mt-3">
             <el-tree
               class="filter-tree"
               node-key="id"
@@ -83,10 +83,16 @@
             </el-dropdown>
           </div>
 
-          <div class="pt-2">
-            <span class="searchIcon mr-4" @click="clickSearch()"><img src="~/assets/images/query.png"></span>
-            <img class="mr-4" src="~/assets/images/jiang.png" title="成就" @click="myToday()">
-            <nuxt-link to="/app/qa/bug/add"><button type="btn" class="btn btn-create"> + 创建 </button></nuxt-link>
+          <div class="vertical-center">
+            <span class="searchIcon mr-4" @click="clickSearch()">
+              <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
+            </span>
+            <span  class="searchIcon mr-4" title="成就" @click="myToday()">
+              <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
+            </span>
+            <nuxt-link to="/app/qa/bug/add">
+              <button type="btn" class="btn btn-create"> + 创建 </button>
+            </nuxt-link>
           </div>
         </div>
 
@@ -196,13 +202,13 @@
                 <template slot-scope="scope">
                   <div class="tableOpreate" :class="{ 'showBugOpreate' : scope.row.bug_id === HoverBugId, 'hideText': scope.row.status === 'Closed'}">
                     <button @click="skipAssign(scope.row)">
-                      <img src="~/assets/images/zhi.png">
+                      <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
                     </button>
                     <button @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
-                      <img src="~/assets/images/fixed.png">
+                      <i class="iconfont icon-resolve icon-8a8a8a size-1-6"></i>
                     </button>
                     <button @click="BugClosedDialog(scope.row)" v-if="uGroup">
-                      <img src="~/assets/images/close.png">
+                      <i class="iconfont icon-close-opera icon-8a8a8a size-1-5"></i>
                     </button>
                   </div>
                 </template>

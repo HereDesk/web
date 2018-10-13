@@ -1,4 +1,5 @@
 const pkg = require('./package')
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
   mode: 'universal',
@@ -74,6 +75,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios'
   ],
+
   /*
    ** Axios module configuration
    */
@@ -108,7 +110,7 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {
-
+      
     }
   }
 }

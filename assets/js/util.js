@@ -142,10 +142,22 @@ export default {
       {'status': 12, 'name': '测试通过'},
       {'status': 13, 'name': '已上线'}
     ]
-    var x
+    let x
     for (x in data) {
       if (data[x]['status'] == type) {
         return data[x]['name']
+      }
+    }
+  },
+  FilterCaseStatus (status_value) {
+    let data = [
+      { status_name: "正常", status_value: 0 },
+      { status_name: "无效", status_value: 1 }
+    ]
+    let x
+    for (x in data) {
+      if (data[x]['status_value'] == status_value) {
+        return data[x]['status_name']
       }
     }
   }

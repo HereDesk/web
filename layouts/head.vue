@@ -39,19 +39,27 @@
           </li>
         </ul>
         <div id="user-info" class="h-nav">
-          <span class="familyname" :class="{ 'fDisplay': familyname }">{{ familyname }}</span>
+          <span class="familyname" :class="{ 'name_inline_block': familyname }">{{ familyname }}</span>
           <el-dropdown class="ml-3" trigger="click">
             <span id="dashboard-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="~/assets/images/more.png" class="head-more-icon">
+              <i class="iconfont icon-menu size-2 icon_8a8a8a"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <nuxt-link to="/app/help" target="_blank">帮助文档</nuxt-link>
+                <nuxt-link to="/app/help" target="_blank">
+                  <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
+                </nuxt-link>
               </el-dropdown-item>
               <el-dropdown-item divided>
-                <nuxt-link to="/app/set/passwd">修改密码</nuxt-link>
+                <nuxt-link to="/app/set/passwd">
+                  <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
+                </nuxt-link>
               </el-dropdown-item>
-              <el-dropdown-item divided><a @click="HandLogout()">退出登录</a></el-dropdown-item>
+              <el-dropdown-item divided>
+                <a @click="HandLogout()">
+                  <i class="iconfont icon-logout"></i>&nbsp;&nbsp;退出登录
+                </a>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>

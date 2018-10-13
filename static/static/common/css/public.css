@@ -229,6 +229,10 @@ html,body {
   color: #212121 !important;
 }
 
+.dropdown-item:hover {
+  color: #007bff !important;
+}
+
 .dropdown-item.active, .dropdown-item:active {
   color: #007bff !important;
   text-decoration: none;
@@ -240,6 +244,12 @@ html,body {
 **  Public: 以下为公共部分CSS
 **
 */
+
+/* color */
+.BFBFBF {
+  color: #BFBFBF !important;
+}
+
 a:link {
   text-decoration: none;
 }
@@ -736,4 +746,49 @@ input::-webkit-inner-spin-button {
 /* 关于图片预览插件v-viewer */
 .viewer-navbar {
   display: none;
+}
+
+/* Pubilc: icon font */
+
+.size-2 {
+  font-size:2rem !important;
+}
+
+.size-1-8 {
+  font-size:1.8rem !important;
+}
+
+.size-1-6 {
+  font-size:1.6rem !important;
+}
+
+.size-1-5 {
+  font-size:1.5rem !important;
+}
+
+.size-1-3 {
+  font-size: 1.3rem !important;
+}
+
+.size-1-2 {
+  font-size: 1.2rem !important;
+}
+
+.size-1 {
+  font-size:1rem !important;
+}
+
+.icon-8a8a8a {
+  color: #8a8a8a !important;
+}
+
+.icon-8a8a8a:hover {
+  color: #000 !important;
+}
+
+/* 垂直居中 */
+.vertical-center {
+  display: flex;
+  justify-content:center;
+  align-items:Center;
 }

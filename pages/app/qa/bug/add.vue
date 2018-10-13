@@ -4,7 +4,7 @@
       <div class='row'>
         <div class='col text-center page-pure-title'>
           <span @click="$router.go(-1)">
-            <v-icon name="times" style="color:#BFBFBF;" scale="2"></v-icon>
+            <i class="iconfont icon-close-windows size-2 icon-8a8a8a"></i>
           </span>
           <h3>创建缺陷</h3>
           <div class="dropdown-divider"></div>
@@ -119,9 +119,9 @@
 </template>
 
 <script>
-import axios from "axios";
-export default {
+import axios from "axios"
 
+export default {
   head() {
     return {
       title: "HDesk - 创建缺陷"

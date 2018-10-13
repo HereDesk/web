@@ -34,14 +34,15 @@
 
 .familyname {
   color: #fff;
-  background-color: #00BFA5;
-  padding: 0.5rem 0.7rem;
+  padding: 0.45rem 0.7rem;
   border-radius: 50%;
-  display: none;
 }
 
-.fDisplay {
+.name_inline_block {
+  background-color: #00BFA5;
   display: inline-block !important;
+  position: relative;
+  transform:translateY(-22%);
 }
 
 @media (max-width: 992px) {
@@ -49,13 +50,6 @@
     display: none;
   }
 }
-
-.head-more-icon {
-  height: 28px;
-  width: 28px;
-  margin-left: 1rem;
-}
-
 
 /*
  dashboard

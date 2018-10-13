@@ -4,13 +4,13 @@
       <div id="testcase-modules" class="col-xl-2 col-lg-3 col-md-3 col-sm-12 col-12 pg-modules pt-5">
         <div>
           <div class="t-manage-modules mb-3">
-            <p class="pl-4 pt-3" @click="click_all_modules()">全部</p>
+            <p class="pl-4" @click="click_all_modules()">全部</p>
             <nuxt-link :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              &nbsp;&nbsp;&nbsp;&nbsp;<img src="~/assets/images/edit_1.png">
+              &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
             </nuxt-link>
-            <div class="divider"></div>
           </div>
-          <div class="t-modules-list">
+          <div class="divider"></div>
+          <div class="t-modules-list mt-3">
             <el-tree
               class="filter-tree"
               node-key="id"
@@ -45,7 +45,7 @@
                 <span>
                   <span class="el-dropdown-desc">状态：</span>
                   <span class="el-dropdown-link bg-edown">
-                    {{ selected_status }}<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{ selected_status | FilterCaseStatus }}<i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                 </span>
                 <el-dropdown-menu slot="dropdown">
@@ -55,13 +55,21 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="pt-2 mobile-action-bar">
-              <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜"><img src="~/assets/images/query.png"></span>
-              <img class="mr-4" src="~/assets/images/jiang.png" title="测试用例统计" @click="myToday()">
-              <img class="mr-4" src="~/assets/images/import-export.png" title="导入导出" data-toggle="modal" data-target="#m-import-export">
-              <nuxt-link :to="{ path: '/app/qa/testcase/add' ,query: { 'product_code': selected_product }}">
-                <button type="btn" class="btn btn-create"> + 创建 </button>
-              </nuxt-link>
+            <div class="mobile-action-bar pt-2 vertical-center">
+              <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜">
+                <i class="iconfont icon-search icon-8a8a8a size-1-2"></i>
+              </span>
+              <span title="导入导出" class="mr-4" data-toggle="modal" data-target="#m-import-export">
+                <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
+              </span>
+              <span title="测试用例统计" class="mr-4" @click="myToday()">
+                <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
+              </span>
+              <span>
+                <nuxt-link :to="{ path: '/app/qa/testcase/add' ,query: { 'product_code': selected_product }}">
+                  <button type="btn" class="btn btn-create"> + 创建 </button>
+                </nuxt-link>
+              </span>
             </div>
           </div>
 
@@ -127,12 +135,12 @@
                 </el-table-column>
                 <el-table-column label='' width="40">
                   <template slot-scope="scope">
-                    <div class="tableOpreate" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                    <div class="tableOpreate pt-2" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <button v-if="scope.row.status === 0 && Rules.fall" @click="handleFall(scope.row)">
-                        <img title="失效" src="~/assets/images/vaild.png">
+                        <i class="iconfont icon-clear icon-8a8a8a size-1-5"></i>
                       </button>
                       <button v-if="scope.row.status === 0 && Rules.edit" @click="handleEdit(scope.row)">
-                        <img title="编辑" src="~/assets/images/edit.png">
+                        <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
                       </button>
                     </div>
                   </template>
@@ -233,7 +241,7 @@ export default {
         { status_name: "正常", status_value: 0 },
         { status_name: "无效", status_value: 1 }
       ],
-      selected_status: "正常",
+      selected_status: this.$route.query.status || 0,
       // Bug: 表格数据
       total: null,
       pageNumber: 1,
@@ -259,7 +267,8 @@ export default {
   },
 
   filters: {
-    date: util.date
+    date: util.date,
+    FilterCaseStatus: util.FilterCaseStatus
   },
 
   computed: {
@@ -275,9 +284,7 @@ export default {
       QueryBuilder["pageNumber"] = this.pageNumber;
       QueryBuilder["pageSize"] = this.pageSize;
       QueryBuilder["product_code"] = this.selected_product;
-      this.selected_status === "正常"
-        ? (QueryBuilder["status"] = 0)
-        : (QueryBuilder["status"] = 1);
+      QueryBuilder["status"] = this.selected_status;
       this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null;
       this.wd ? (QueryBuilder["wd"] = this.wd) : null;
       return QueryBuilder;
@@ -288,9 +295,7 @@ export default {
     },
     // userinfo group
     uGroup: function() {
-      return this.$store.state.userInfo.group === "test"
-        ? this.$store.state.userInfo.group
-        : null;
+      return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null;
     }
   },
 
@@ -389,7 +394,8 @@ export default {
         this.selected_product = data["product_code"];
       }
       if ("status_value" in data) {
-        this.selected_status = data["status_name"];
+        this.selected_status = data["status_value"];
+        console.log(this.selected_status)
       }
     },
 
