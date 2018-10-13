@@ -244,8 +244,8 @@ export default {
       selected_status: this.$route.query.status || 0,
       // Bug: 表格数据
       total: null,
-      pageNumber: 1,
-      pageSize: 10,
+      pageNumber: this.$route.query.pageNumber ||  1,
+      pageSize: this.$route.query.pageSize || 10,
       tableData: [],
       Msg: false,
       img_src: null,

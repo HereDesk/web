@@ -131,6 +131,7 @@ export default {
 
   data () {
     return {
+      last_url: '',
       product_list: [],
       modules_list: [],
       msg: '',
@@ -149,6 +150,11 @@ export default {
         module_id: []
       }
     }
+  },
+
+  beforeRouteLeave (to, from, next) {
+    this.last_url = to.path
+    next();
   },
 
   computed: {
@@ -259,7 +265,11 @@ export default {
         if (rep.data['status'] === 20000) {
           _this.isButtonDisabled = false
           if (event.target.value === 'only-once-commit') {
-            _this.$router.go(-1)
+            if (_this.last_url == '/app/qa/testcase') {
+              _this.$router.go(-1)
+            } else {
+              _this.$router.replace({ path: '/app/qa/testcase', query: { product_code: _this.CaseData.product_code }})
+            }
           }
           if (event.target.value === 'continue-commit') {
             $(document).scrollTop(0)
