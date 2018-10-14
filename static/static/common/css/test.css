@@ -292,20 +292,14 @@
   }
 }
 
-.t-manage-modules p,a {
-  display: inline;
-}
-.t-manage-modules a {
+.manage-modules {
   float: right;
   margin-right:2rem;
-}
-.t-manage-modules p:hover {
-  color: #1E88E5;
 }
 
 .t-modules-list {
   opacity: 1;
-  height: 70vh;
+  /* height: 70vh; */
   width: 100%;
   position: relative;
   overflow-y: scroll;
@@ -319,6 +313,13 @@
   width:0;
 }
 
+.el-active {
+  color: #1E88E5;
+}
+
+.li-color:hover {
+  color: #1E88E5 !important
+}
 /*
 ** 增加测试用例页面
 */

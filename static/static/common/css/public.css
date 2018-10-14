@@ -336,6 +336,9 @@ li {
   list-style: none;
 }
 
+.line-height-1-8 {
+  line-height: 1.8rem;
+}
 /* Public: circle */
 .circle {
   display: inline-block;
@@ -415,7 +418,7 @@ li {
 }
 
 .text-black {
-  columns: #242424;;
+  columns: #242424 !important;
 }
 
 .text-lg {
@@ -791,4 +794,9 @@ input::-webkit-inner-spin-button {
   display: flex;
   justify-content:center;
   align-items:Center;
+}
+
+/* 关于display */
+.display-inline {
+  display: inline;
 }

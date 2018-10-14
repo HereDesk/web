@@ -4,15 +4,32 @@
     <div class="row">
       <div id="about-modules" class="col-xl-2 col-lg-3 col-md-3 col-sm-12 col-12  pt-3 pg-modules">
         <div>
-          <div class="t-manage-modules mb-3">
-            <p class="pl-4" @click="click_all_modules()">全部</p>
-            <nuxt-link :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+          <div class="mb-3">
+            <p class="pl-4 display-inline" v-if="!modules_list.length">
+              <nuxt-link class="display-inline" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+                <span style="color:#2b2b2b;">维护模块</span>
+              </nuxt-link>
+            </p>
+            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()" v-else>显示全部</p>
+            <nuxt-link class="display-inline manage-modules" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
               &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
             </nuxt-link>
           </div>
           <div class="divider"></div>
           <div class="t-modules-list mt-3">
-            <el-tree
+            <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
+              <li :id="item1.id">
+                <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" @click="clickMoudle1(item1)">
+                  <i class="iconfont icon-8a8a8a" :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]"></i>&nbsp;&nbsp;{{ item1.label }}
+                </span>
+                <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
+                  <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" style="line-height:2.5rem;" @click="clickMoudle2(item2)">
+                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">{{ item2.label }}</span>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <!-- <el-tree
               class="filter-tree"
               node-key="id"
               accordion
@@ -20,7 +37,7 @@
               :data="modules_list"
               @node-click="handle_module()"
               ref="tree2">
-            </el-tree>
+            </el-tree> -->
           </div>
         </div>
       </div>
@@ -361,7 +378,7 @@ export default {
       product_list: [],
       modules_list: [],
       modules_id: [null,null],
-      m1_id: this.$route.query.m1_id ||null,
+      m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
       selected_product: this.$route.query.product_code || null,
       selected_release: this.$route.query.release || "全部",
@@ -646,19 +663,34 @@ export default {
           }
         })
     },
-    handle_module () {
-      this.pageNumber = 1
-      this.pageSize = 10
-      var node = this.$refs.tree2.getCurrentNode()
-      var is_parent = this.$refs.tree2.currentNode.node.parent.parent
-      if (is_parent) {
-        this.m1_id = null
-        this.m2_id = node['id']
+    clickMoudle1 (data) {
+      if (this.m1_id == data.id) {
+        this.m1_id = ''
+        this.m2_id = ''
       } else {
-        this.m1_id = node['id']
-        this.m2_id = null
+        this.m1_id = data.id
       }
     },
+    clickMoudle2 (data) {
+      if (this.m2_id == data.id) {
+        this.m2_id = ''
+      } else {
+        this.m2_id = data.id
+      }
+    },
+    // handle_module () {
+    //   this.pageNumber = 1
+    //   this.pageSize = 10
+    //   var node = this.$refs.tree2.getCurrentNode()
+    //   var is_parent = this.$refs.tree2.currentNode.node.parent.parent
+    //   if (is_parent) {
+    //     this.m1_id = null
+    //     this.m2_id = node['id']
+    //   } else {
+    //     this.m1_id = node['id']
+    //     this.m2_id = null
+    //   }
+    // },
     click_all_modules () {
       this.m1_id = null
       this.m2_id = null
