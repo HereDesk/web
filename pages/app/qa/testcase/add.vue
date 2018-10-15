@@ -70,14 +70,15 @@
                 <label for='CaseSteps' class="col-sm-2 testcase-label">
                   操作步骤<span class="text-red">*</span>
                 </label>
-                <el-input type="textarea" id="inputSteps" class="col-sm-9 px-0" maxlength="1000" 
+                <!-- <el-input type="textarea" id="inputSteps" class="col-sm-9 px-0" maxlength="1000" 
                   :autosize="{ minRows: 7}" 
                   placeholder="测试步骤..." 
                   v-model.trim='CaseData.steps'
                   required>
-                </el-input>
+                </el-input> -->
+                <quill-editor class="col-sm-9 px-0 quill-editor-define" v-model="CaseData.steps"></quill-editor>
               </div>
-              <div class='form-group row'>
+              <div class='form-group row mt-3'>
                 <label for='CaseInput' class="col-sm-2 testcase-label">
                   测试数据<p class="label-desc">(选填)</p>
                 </label>
@@ -143,7 +144,7 @@ export default {
         precondition: '',
         DataInput: '',
         ExpectedResult: '',
-        steps: '1.\n2.\n',
+        steps: '',
         remark: '',
         category: 'Functional',
         priority: 'P1',

@@ -26,6 +26,29 @@ html,body {
 
 /*
 **
+** 关于编辑器
+**
+*/
+.quill-editor-define {
+  padding-bottom: 4.7rem;
+  border-radius: 25px !important;
+}
+
+.ql-toolbar {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border:1px solid rgb(220, 223, 230) !important;
+}
+
+.ql-container {
+  border:1px solid rgb(220, 223, 230) !important;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  font-size: 0.95rem !important;
+}
+
+/*
+**
 ** 以下是关于element-ui部分的自定义 css代码
 **
 */

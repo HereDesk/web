@@ -65,6 +65,10 @@ module.exports = {
   plugins: [{
       src: '~plugins/public.js',
       ssr: true
+    },
+    {
+      src: '~plugins/qull.js',
+      ssr: true
     }
   ],
 
