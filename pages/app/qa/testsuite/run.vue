@@ -40,8 +40,12 @@
           <el-table-column label='操作' width='150'>
             <template slot-scope="scope">
               <div :class="{ 'invisible': scope.row.result !== 0 }">
-                <img src="~/assets/images/success.png" title="运行成功" class="mr-3" @click="run('1',scope.row.cell_id,case_id)">
-                <img src="~/assets/images/fail.png" title="运行失败" @click="run('-1',scope.row.cell_id,scope.row.case_id)">
+                <span title="运行成功" class="mr-3" @click="run('1',scope.row.cell_id,case_id)">
+                  <i class="iconfont icon-check-circle-fill size-1-5 text-success"></i>
+                </span>
+                <span title="运行失败" @click="run('-1',scope.row.cell_id,scope.row.case_id)">
+                  <i class="iconfont icon-close-circle-fill size-1-5"></i>
+                </span>
               </div>
             </template>
           </el-table-column>

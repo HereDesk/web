@@ -28,14 +28,20 @@
             <template slot-scope="scope">
               <span class="mr-3" v-if="scope.row.total > 0">
                 <nuxt-link :to="{ path: '/app/qa/testsuite/run', query: { 'suite_id': scope.row.suite_id, 'product_code':scope.row.product_code } }">
-                  <img src="~/assets/images/run_finish.png" title="运行完成" v-if="scope.row.executed === scope.row.total && scope.row.executed !== 0">
-                  <img src="~/assets/images/run.png" title="待运行" v-else-if="scope.row.total === 0 || scope.row.executed === 0">
-                  <img src="~/assets/images/running.png" title="运行中" v-else>
+                  <span title="运行完成" v-if="scope.row.executed === scope.row.total && scope.row.executed !== 0">
+                    <i class="iconfont icon-Running size-1-5 icon-E53935"></i>
+                  </span>
+                  <span  title="待运行" v-else-if="scope.row.total === 0 || scope.row.executed === 0">
+                     <i class="iconfont icon-Running size-1-5 icon-8a8a8a"></i>
+                  </span>
+                  <span  title="运行中" v-else>
+                    <i class="iconfont icon-Running size-1-5 icon-00BFA5"></i>
+                  </span>
                 </nuxt-link>
               </span>
               <span>
                 <nuxt-link :to="{ path: '/app/qa/testsuite/loader', query: { 'product_code':scope.row.product_code,'suite_id': scope.row.suite_id } }">
-                  <img src="~/assets/images/join.png" title="组织测试用例">
+                  <i class="iconfont icon-jiaru size-1-5 icon-8a8a8a" title="组织测试用例"></i>
                 </nuxt-link>
               </span>
             </template>
