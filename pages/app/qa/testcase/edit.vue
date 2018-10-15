@@ -56,7 +56,7 @@
             </div>
             <div class='form-group row'>
               <label for='CaseSteps' class="col-sm-2 testcase-label">操作步骤</label>
-              <textarea type='text' v-model.trim='CaseData.steps' class='textarea-control col-sm-9' id='inputSteps' placeholder='测试步骤...' maxlength='1000' wrap="hard" rows='7' required></textarea>
+              <quill-editor class="col-sm-9 px-0 quill-editor-define" v-model="CaseData.steps"></quill-editor>
             </div>
             <div class='form-group row'>
               <label for='CaseOutput' class="col-sm-2 testcase-label">预期结果</label>

@@ -19,7 +19,7 @@
         <div id="case-details-2-1" class='col-xl-8 col-lg-8 col-md-8'>
           <div id="case-steps" class="height-7 mb-5">
             <h6><span class="standline"></span>&nbsp;&nbsp;操作步骤</h6>
-            <pre class="details-block">{{ CaseDetails.steps }}</pre>
+            <div class="details-block" v-html="CaseDetails.steps"></div>
           </div>
           <div id="case-input" class="height-7 mb-3" v-if="CaseDetails.DataInput">
             <h6><span class="grayline"></span>&nbsp;&nbsp;测试输入数据</h6>
