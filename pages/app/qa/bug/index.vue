@@ -7,7 +7,7 @@
           <div class="mb-3">
             <p class="pl-4 display-inline" v-if="!modules_list.length">
               <nuxt-link class="display-inline" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-                <span style="color:#2b2b2b;">维护模块</span>
+                <span style="color:#2b2b2b;" title="维护模块">维护模块</span>
               </nuxt-link>
             </p>
             <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()" v-else>显示全部</p>
@@ -189,7 +189,7 @@
               </el-table-column>
               <el-table-column label='优先级' width='85'>
                 <template slot-scope="scope">
-                  <div @click="ModifyPriority(scope.row)">
+                  <div @click="BugPriorityDialog(scope.row)">
                     <span v-if="scope.row.priority === 'P1'" class="text-deadly">
                       <span class="circle circle-deadly"></span>&nbsp;&nbsp;{{ scope.row.priority }}
                     </span>
@@ -290,8 +290,30 @@
             <h5 class="lead">确定关闭此缺陷?</h5>
           </div>
           <div class="modal-footer modal-footer-center">
-            <button type="button" class="btn btn-cancel mr-5" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-cancel mr-5" data-dismiss="modal">以后</button>
             <button type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bug处理操作：修改优先级 -->
+    <div id="modal-modify-priority" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">修改优先级</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <ul class="ul-inline my-5">
+              <li class="mr-5 text-150 font-weight-light" v-for="item in priority_list" :key="item.id" v-if="item.pvalue != 'all'" @click="ModifyPriority(item.pvalue)">
+                {{ item.pvalue }}
+              </li>
+            </ul>
+            <p class="my-3 text-gray">备注：选择后，即实现提交，无需进行其它操作</p>
           </div>
         </div>
       </div>
@@ -318,7 +340,7 @@
           </div>
           <div id="test" v-else-if="MyTodayData.group == 'test'">
             <div class="modal-body text-center pb-5">
-              <h5 class="countdata-title">我的今日成就</h5>
+              <h5 class="countdata-title">今日工作情况</h5>
               <div class="row mt-5">
                 <div class="col">
                   <p class="countdata-num text-success">{{ MyTodayData.data.create }}</p>
@@ -336,7 +358,7 @@
             </div>
           </div>
           <div id="other" class="text-center my-5" v-else>
-            <p>目前只有开发、测试人员才能看到相关数据哦</p>
+            <p>您没有相关数据哦</p>
           </div>
         </div>
       </div>
@@ -799,8 +821,26 @@ export default {
       })
     },
     // 操作：bug修改优先级
+    BugPriorityDialog(row) {
+      $("#modal-modify-priority").modal("show")
+      this.ModifyPriorityData.bug_id = row.bug_id
+    },
     ModifyPriority(data) {
-      console.log(data)
+      let that = this
+      that.ModifyPriorityData.priority = data
+      axios({
+        method: 'post',
+        url: '/api/qa/bug/edit',
+        data: JSON.stringify(that.ModifyPriorityData),
+      }).then(function (res) {
+        if (res.data['status'] === 20000) {
+          that.$notify.success({title: '成功',message: res.data['msg']})
+          $("#modal-modify-priority").modal("hide")
+          that.getBugList()
+        } else {
+          that.$notify.error({title: '失败',message: res.data['msg']})
+        }
+      })
     },
     // 数据统计
     myToday() {
