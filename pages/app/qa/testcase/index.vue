@@ -28,14 +28,6 @@
                 </ul>
               </li>
             </ul>
-            <!-- <el-tree
-              class="filter-tree"
-              node-key="id"
-              :data="modules_list"
-              :props="defaultProps"
-              @node-click="handle_module()"
-              ref="tree2">
-            </el-tree> -->
           </div>
         </div>
       </div>
@@ -401,20 +393,6 @@ export default {
         this.m2_id = data.id
       }
     },
-
-    // handle_module(data, node) {
-    //   this.pageNumber = 1;
-    //   this.pageSize = 10;
-    //   var node = this.$refs.tree2.getCurrentNode();
-    //   var is_parent = this.$refs.tree2.currentNode.node.parent.parent;
-    //   if (is_parent) {
-    //     this.m1_id = null;
-    //     this.m2_id = node["id"];
-    //   } else {
-    //     this.m1_id = node["id"];
-    //     this.m2_id = null;
-    //   }
-    // },
 
     click_all_modules() {
       this.m1_id = null;

@@ -34,7 +34,7 @@
           <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-hangup" v-if="BtnRules.hangup">延期挂起</button>
 
           <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-notes" v-if="BtnRules.notes">备注</button>
-          <button type="button" class="btn btn-gray ml-3" @click="goBack()">返回</button>
+          <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">返回</button>
         </div>
       </div>
 
@@ -559,10 +559,6 @@ export default {
           that.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
-    },
-
-    goBack () {
-      this.$router.go(-1)
     }
   }
 }

@@ -172,17 +172,17 @@ export default {
       }
     },
     QueryBuilderBugWeek() {
-      var query = {
+      let query = {
         product_code: null,
         type: "section",
         start_date: null,
         end_date: null
       };
       // date
-      const dateOfToday = Date.now();
-      const dayOfToday = (new Date().getDay() + 7 - 1) % 7;
-      const daysOfThisWeek = Array.from(new Array(7)).map((_, i) => {
-        const date = new Date(
+      let dateOfToday = Date.now();
+      let dayOfToday = (new Date().getDay() + 7 - 1) % 7;
+      let daysOfThisWeek = Array.from(new Array(7)).map((_, i) => {
+        let date = new Date(
           dateOfToday + (i - dayOfToday) * 1000 * 60 * 60 * 24
         );
         return (
@@ -199,8 +199,8 @@ export default {
       return query;
     },
     BarYdata() {
-      var data = this.BugStatusData;
-      var ydata = [0, 0, 0, 0];
+      let data = this.BugStatusData;
+      let ydata = [0, 0, 0, 0];
       for (var i in data) {
         if (data[i]["name"] === "待解决") {
           ydata[0] = data[i]["value"];
@@ -218,10 +218,10 @@ export default {
       return ydata;
     },
     LineYdata() {
-      var data = this.BugWeekData;
-      var ydata = [0, 0, 0, 0, 0, 0, 0];
-      for (var i in data) {
-        var w = util.getWeek(data[i]["datetime"]);
+      let data = this.BugWeekData;
+      let ydata = [0, 0, 0, 0, 0, 0, 0];
+      for (let i in data) {
+        let w = util.getWeek(data[i]["datetime"]);
         ydata[w] = data[i]["num"];
       }
       return ydata;

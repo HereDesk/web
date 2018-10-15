@@ -29,15 +29,6 @@
                 </ul>
               </li>
             </ul>
-            <!-- <el-tree
-              class="filter-tree"
-              node-key="id"
-              accordion
-              highlight-current
-              :data="modules_list"
-              @node-click="handle_module()"
-              ref="tree2">
-            </el-tree> -->
           </div>
         </div>
       </div>
@@ -85,6 +76,19 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
+            <el-dropdown id="page-query-bugstatus" class="mr-3 my-3" trigger="click">
+              <span>
+                <span class="el-dropdown-desc">优先级：</span>
+                <span class="el-dropdown-link bg-edown">
+                  {{ selected_priority == 'all' ? "全部" : selected_priority }}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="item in priority_list" :key="item.id">
+                  <span @click="handleCommand(item)">{{ item.pname }}</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <el-dropdown id="page-query-quick" class="mr-3 my-3" trigger="click">
               <span>
                 <span class="el-dropdown-desc">快捷操作：</span>
@@ -104,7 +108,7 @@
             <span class="searchIcon mr-4" @click="clickSearch()">
               <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
             </span>
-            <span  class="searchIcon mr-4" title="成就" @click="myToday()">
+            <span  class="searchIcon mr-4" title="今日成就" @click="myToday()">
               <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
             </span>
             <nuxt-link to="/app/qa/bug/add">
@@ -185,15 +189,17 @@
               </el-table-column>
               <el-table-column label='优先级' width='85'>
                 <template slot-scope="scope">
-                  <span v-if="scope.row.priority === 'P1'" class="text-deadly">
-                    <span class="circle circle-deadly"></span>&nbsp;&nbsp;{{ scope.row.priority }}
-                  </span>
-                  <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.priority }}
-                  </span>
-                  <span v-else class="text-secondary">
-                    <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.priority }}
-                  </span>
+                  <div @click="ModifyPriority(scope.row)">
+                    <span v-if="scope.row.priority === 'P1'" class="text-deadly">
+                      <span class="circle circle-deadly"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    </span>
+                    <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
+                      <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    </span>
+                    <span v-else class="text-secondary">
+                      <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    </span>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label='创建' prop='creator_user' sortable width='90' show-overflow-tooltip></el-table-column>
@@ -309,12 +315,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="modal-body mb-5">
-              <h5 class="countdata-title">已解决总问题的</h5>
-              <div class="px-5 pt-5">
-                <el-progress :text-inside="true" :stroke-width="25" :percentage="developer_fixed_percentage" color="#20C997"></el-progress>
-              </div>
-            </div> -->
           </div>
           <div id="test" v-else-if="MyTodayData.group == 'test'">
             <div class="modal-body text-center pb-5">
@@ -352,6 +352,7 @@ import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import Pagination from "~/components/Pagination"
 import util from "~/assets/js/util.js"
+import data from "~/assets/js/data.js"
 import rules from "~/assets/js/rules.js"
 let _ = require("lodash/Collection")
 
@@ -361,7 +362,6 @@ export default {
       title: "HDesk - 缺陷列表"
     }
   },
-
   layout: "head",
   components: {
     loading,
@@ -382,61 +382,32 @@ export default {
       m2_id: this.$route.query.m2_id || null,
       selected_product: this.$route.query.product_code || null,
       selected_release: this.$route.query.release || "全部",
-      // Bug: 缺陷状态
-      status_list: [
-        { code: "all", name: "全部" },
-        { code: "New", name: "新建未分配" },
-        { code: "Open", name: "待解决" },
-        { code: "Reopen", name: "重新打开" },
-        { code: "Hang-up", name: "挂起延期" },
-        { code: "Fixed", name: "已解决" },
-        { code: "Closed", name: "已关闭" }
-      ],
+      // 缺陷状态
+      status_list: data.bug_status_list,
       selected_status: this.$route.query.status || "all",
-      // Bug: 更多操作
+      // 优先级列表
+      priority_list: data.priority_list,
+      selected_priority: this.$route.query.priority || "all",
+      // 更多操作
       operate: 'no',
-      QuickQperationList: [
-        { value: "no", name: "无" },
-        { value: "WaitPending", name: "待我处理" },
-        { value: "AssignedByMe", name: "指派给我" },
-        { value: "ResolvedByMe", name: "我解决的" },
-        { value: "ClosedByMe", name: "我关闭的" },
-        { value: "CreatedByMe", name: "我创建的" },
-        { value: "notClosed", name: "未关闭的" }, // 所有未关闭的
-        { value: "NotResolved", name: "未解决的" }, // 所有未解决的bug，包括：延期的
-        { value: "HighPriority", name: "高优先级" }
-      ],
-      // Bug: 搜索
-      SearchType: [
-        { tvalue: "ID", tname: "缺陷ID" },
-        { tvalue: "title", tname: "缺陷标题" },
-        { tvalue: "priority", tname: "优先级" },
-        { tvalue: "severity", tname: "严重程度" },
-        { tvalue: "bug_type", tname: "缺陷类型" },
-        { tvalue: "creator_user", tname: "创建者" },
-        { tvalue: "closed_user", tname: "关闭者" },
-        { tvalue: "fixed_user", tname: "解决者" },
-        { tvalue: "assignedTo_user", tname: "指派谁" },
-        { tvalue: "create_time", tname: "创建日期" },
-        { tvalue: "closed_time", tname: "关闭日期" },
-        { tvalue: "fixed_time", tname: "解决日期" }
-      ],
+      QuickQperationList: data.bug_quick_operation_list,
+      // 搜索
+      SearchType: data.bug_search_type_list,
       SearchCriteria: {
         Operators: "=",
         SearchType: "ID",
         start_date: null,
         end_date: null
       },
-      // Bug: 表格数据
+      wd: null,
+      isShowSearch: false,
+      // 表格数据
       total: null,
       pageNumber: this.$route.query.pageNumber || 1,
       pageSize: this.$route.query.pageSize || 10,
       tableData: [],
       Msg: false,
       img_src: null,
-      // Bug: 搜索
-      wd: null,
-      isShowSearch: false,
       // 控制显示
       isDisplayOperate: true,
       HoverBugId: "",
@@ -450,6 +421,10 @@ export default {
       // close bug
       ClosedData: {
         bug_id: ""
+      },
+      ModifyPriorityData: {
+        bug_id: "",
+        priority: ""
       }
     }
   },
@@ -502,6 +477,7 @@ export default {
       QueryBuilder["product_code"] = this.selected_product
       QueryBuilder["release"] = tmp_release
       QueryBuilder["status"] = this.selected_status
+      QueryBuilder["priority"] = this.selected_priority
       this.m2_id ? QueryBuilder['m2_id'] = this.m2_id : null
       this.m1_id ? QueryBuilder['m1_id'] = this.m1_id : null
       if (this.operate != "no") {
@@ -678,19 +654,6 @@ export default {
         this.m2_id = data.id
       }
     },
-    // handle_module () {
-    //   this.pageNumber = 1
-    //   this.pageSize = 10
-    //   var node = this.$refs.tree2.getCurrentNode()
-    //   var is_parent = this.$refs.tree2.currentNode.node.parent.parent
-    //   if (is_parent) {
-    //     this.m1_id = null
-    //     this.m2_id = node['id']
-    //   } else {
-    //     this.m1_id = node['id']
-    //     this.m2_id = null
-    //   }
-    // },
     click_all_modules () {
       this.m1_id = null
       this.m2_id = null
@@ -702,6 +665,9 @@ export default {
       }
       if ("version" in data) {
         this.selected_release = data["version"]
+      }
+      if ("pname" in data) {
+        this.selected_priority = data["pvalue"]
       }
       if ("code" in data) {
         this.operate = "no"
@@ -728,8 +694,7 @@ export default {
     getBugList() {
       let that = this
       if (!this.selected_product) { return }
-      axios
-        .get("/api/qa/bug/list", { params: this.QueryBuilder })
+      axios.get("/api/qa/bug/list", { params: this.QueryBuilder })
         .then(function(res) {
           if (res.data["status"] === 20000) {
             that.tableData = res.data["data"]
@@ -738,7 +703,6 @@ export default {
             that.Msg = res.data["msg"]
           }
         })
-        .catch(function(error) {})
     },
     // Bug: 搜索
     clickSearch() {
@@ -775,7 +739,7 @@ export default {
         }
       }
       if ((data.SearchType.indexOf("time") > 0) &(data.Operators !== "range")) {
-        var date = data.wd.match(reg)
+        let date = data.wd.match(reg)
         if (!date) {
           this.$notify.error({
             title: "提示",
@@ -801,19 +765,19 @@ export default {
       })
     },
 
-    // 操作bug: 指派
+    // 操作: bug指派
     skipAssign(row) {
       this.showBugAssignBox = true
       this.selectedBugId = row.bug_id
       $("#componentsAssign").modal("show")
     },
-    // 操作bug: 解决
+    // 操作: bug解决
     skipResolve(row) {
       this.showBugResolveBox = true
       this.selectedBugId = row.bug_id
       $("#componentsResolve").modal("show")
     },
-    // 操作bug: 关闭
+    // 操作: bug关闭
     BugClosedDialog(row) {
       $("#modal-bugClosed").modal("show")
       this.ClosedData.bug_id = row.bug_id
@@ -834,8 +798,11 @@ export default {
         $("#modal-bugClosed").modal("hide")
       })
     },
-
-    // my toady
+    // 操作：bug修改优先级
+    ModifyPriority(data) {
+      console.log(data)
+    },
+    // 数据统计
     myToday() {
       $("#modal-my-today").modal("show")
       let that = this
@@ -845,7 +812,6 @@ export default {
         }
       })
     },
-
     // table line hover and leave
     tableHover(row) {
       this.HoverBugIdOpenBy = row.openedBy
