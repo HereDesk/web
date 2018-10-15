@@ -39,7 +39,7 @@ export default {
     };
   },
   mounted() {
-    const token = getUserFromLocalStorage();
+    let token = getUserFromLocalStorage();
     if (token) {
       this.$router.push("/app/dashboard");
     }
@@ -47,8 +47,8 @@ export default {
   methods: {
     goLogin() {
       let _this = this;
-      const username = _this.LoginData.username;
-      const password = _this.LoginData.password;
+      let username = _this.LoginData.username;
+      let password = _this.LoginData.password;
       if (username.replace(/^s+/g, "").length === 0) {
         _this.$notify.error({
           title: "提交失败",
