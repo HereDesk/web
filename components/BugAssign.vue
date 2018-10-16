@@ -10,7 +10,9 @@
             <label for="assignedTo">分配</label>
             <select class='select-control border' v-model="AssignData.assignedTo">
               <option disabled value="">请选择</option>
-              <option v-for='item in person_list' :key="item.id" :value="item.user_id">{{ item.realname }}</option>
+              <option v-for='item in person_list' :key="item.id" :value="item.user_id" v-if="item.realname !== '超级管理员'">
+                {{ item.realname }}
+              </option>
             </select>
           </div>
           <div class='form-group row col-md-auto mx-3'>
