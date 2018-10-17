@@ -15,14 +15,20 @@
       <div class='row'>
         <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='form-group row'>
-              <label for='BugInfo' class="col-sm-2 bug-label">产品与模块<span class="text-red">*</span></label>
-              <el-select v-model="Bug.product_code" placeholder="请选择产品" class='col-sm-2'>
-                <el-option v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code"></el-option>
+              <label for='BugInfo' class="col-md-2 col-sm-12 col-12 bug-label">
+                产品与模块<span class="text-red">*</span>
+              </label>
+              <el-select class='col-md-2 col-sm-4 col-6' placeholder="请选择产品" v-model="Bug.product_code" >
+                <el-option 
+                  v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
+                </el-option>
               </el-select>
-              <el-select v-model="Bug.release" placeholder="请选择版本" class='col-sm-2'>
-                <el-option v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version"></el-option>
+              <el-select class='col-md-2 col-sm-4 col-6' placeholder="请选择版本" v-model="Bug.release">
+                <el-option 
+                  v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
+                </el-option>
               </el-select>
-              <el-cascader class="col-sm-4 px-3" 
+              <el-cascader class="col-md-2 col-sm-4 col-6 px-3" 
                 :options="modules_list" 
                 v-model="Bug.module_id" 
                 filterable change-on-select 
@@ -31,48 +37,64 @@
             </div>
 
             <div class='form-group row'>
-              <label for='BugInfo' class="col-sm-2 testcase-label">缺陷属性信息<span class="text-red">*</span></label>
-              <el-select v-model="Bug.assignedTo_id" placeholder="选择指派人" class='col-sm-2'>
-                <el-option v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id"></el-option>
+              <label for='BugInfo' class="col-md-2 col-sm-12 col-12 bug-label">
+                缺陷属性<span class="text-red">*</span>
+              </label>
+              <el-select v-model="Bug.assignedTo_id" placeholder="选择指派人" class='col-md-2 col-sm-3 col-6'>
+                <el-option 
+                  v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
+                </el-option>
               </el-select>
-              <el-select v-model="Bug.priority" placeholder="选择优先级" class='col-sm-2'>
-                <el-option v-for="item in BugPriorityList" :key="item.id" :label="item.name" :value="item.key"></el-option>
+              <el-select v-model="Bug.priority" placeholder="选择优先级" class='col-md-2 col-sm-3 col-6'>
+                <el-option 
+                  v-for="item in BugPriorityList" :key="item.id" :label="item.name" :value="item.key">
+                </el-option>
               </el-select>
-              <el-select v-model="Bug.severity" placeholder="选择严重程度" class='col-sm-2'>
-                <el-option v-for="item in BugSeverityList" :key="item.id" :label="item.name" :value="item.key"></el-option>
+              <el-select v-model="Bug.severity" placeholder="选择严重程度" class='col-md-2 col-sm-3 col-6'>
+                <el-option 
+                  v-for="item in BugSeverityList" :key="item.id" :label="item.name" :value="item.key">
+                </el-option>
               </el-select>
-              <el-select v-model="Bug.bug_type" placeholder="选择缺陷类型" class='col-sm-2'>
-                <el-option v-for="item in BugTypeList" :key="item.id" :label="item.name" :value="item.key"></el-option>
+              <el-select v-model="Bug.bug_type" placeholder="选择缺陷类型" class='col-md-2 col-sm-3 col-6'>
+                <el-option 
+                  v-for="item in BugTypeList" :key="item.id" :label="item.name" :value="item.key">
+                </el-option>
               </el-select>
             </div>
 
             <div id="t-bug-info">
               <div class='form-group row'>
-                <label for='bug-title' class="col-sm-2 bug-label">缺陷标题<span class="text-red">*</span></label>
-                <el-input type='text' id='bug_title' class='col-sm-8' maxlength='100' 
-                  v-model.trim='Bug.title' 
-                  placeholder='标题，最多100个字符 ~.' required >
+                <label for='bug-title' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+                  缺陷标题<span class="text-red">*</span>
+                </label>
+                <el-input type='text' id='bug_title' class='col-lg-8 col-md-10 col-sm-12'
+                  maxlength='100' placeholder='标题，最多100个字符 ~.' 
+                  v-model.trim='Bug.title' required>
                 </el-input>
               </div>
               <div class='form-group row'>
-                <label for='bug-steps' class="col-sm-2 bug-label">发现步骤<span class="text-red">*</span></label>
-                <el-input type="textarea" class="col-sm-8" maxlength="1000" 
+                <label for='bug-steps' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+                  发现步骤<span class="text-red">*</span>
+                </label>
+                <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12"
+                  maxlength="1000"  placeholder="请输入发现步骤" 
                   :autosize="{ minRows: 5}" 
-                  placeholder="请输入发现步骤" 
                   v-model.trim='Bug.steps'>
                 </el-input>
               </div>
               <div class='form-group row'>
-                <label for='bug-reality-result' class="col-sm-2 bug-label">实际结果<span class="text-red">*</span></label>
-                <el-input type="textarea" class="col-sm-8" maxlength="1000"
+                <label for='bug-reality-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+                  实际结果<span class="text-red">*</span>
+                </label>
+                <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12"
+                  maxlength="1000" placeholder="实际结果..."
                   :autosize="{ minRows: 4}" 
-                  placeholder="实际结果..."
                   v-model.trim='Bug.reality_result'>
                 </el-input>
               </div>
               <div class='form-group row'>
-                <label for='bug-expected-result' class="col-sm-2 bug-label">预期结果</label>
-                <el-input type="textarea" class="col-sm-8" maxlength="1000" 
+                <label for='bug-expected-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">预期结果</label>
+                <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12" maxlength="1000" 
                   :autosize="{ minRows: 4}" 
                   placeholder="预期结果..." 
                   v-model.trim='Bug.expected_result'>
@@ -80,8 +102,8 @@
               </div>
 
               <div class='form-group row'>
-                <label for='bug-expected-result' class="col-sm-2 bug-label">附件</label>
-                <form class="col-sm-8">
+                <label for='bug-remark' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
+                <form id="bug-remark" class="col-lg-8 col-md-10 col-sm-12">
                   <el-upload 
                     name="images" 
                     action="/api/support/upload" 
@@ -96,10 +118,10 @@
               </div>
 
               <div class='form-group row' v-if="isRemarkDisable">
-                <label for='bug-remark' class="col-sm-2 bug-label">备注</label>
-                <el-input type="textarea" class="col-sm-8" maxlength="1000" 
+                <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
+                <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12"
+                  maxlength="1000" placeholder="请输入备注..."
                   :autosize="{ minRows: 4}" 
-                  placeholder="请输入备注..." 
                   v-model.trim='Bug.remark'>
                 </el-input>
               </div>
@@ -108,8 +130,14 @@
             <!-- 提交按钮 -->
             <div class='d-flex justify-content-center my-5'>
               <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
-              <button type='button' class='btn btn-submit mx-5 px-3' v-bind:disabled="isButtonDisabled" @click='createBug($event)' value="only-once-commit">保存提交</button>
-              <button type='button' class='btn btn-accessories' v-bind:disabled="isButtonDisabled" @click='createBug($event)' value="continue-commit">继续添加</button>
+              <button type='button' class='btn btn-submit mx-3' value="only-once-commit" 
+                :disabled="isButtonDisabled" @click='createBug($event)'>
+                保存提交
+              </button>
+              <button type='button' class='btn btn-accessories' value="continue-commit" 
+                :disabled="isButtonDisabled" @click='createBug($event)'>
+                继续添加
+              </button>
               <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
             </div>
         </div>
@@ -219,10 +247,10 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isLt3M = file.size / 1024 / 1024 < 3;
-      const PicFormat = file.name.split(".")[1] === "jpg";
-      const PicFormat1 = file.name.split(".")[1] === "png";
-      const PicFormat2 = file.name.split(".")[1] === "jpeg";
-      const PicFormat3 = file.name.split(".")[1] === "gif";
+      const PicFormat = file.name.split(".")[1].toLowerCase() === "jpg";
+      const PicFormat1 = file.name.split(".")[1].toLowerCase() === "png";
+      const PicFormat2 = file.name.split(".")[1].toLowerCase() === "jpeg";
+      const PicFormat3 = file.name.split(".")[1].toLowerCase() === "gif";
       const isLt2M = file.size / 1024 / 1024 < 10;
       if (!PicFormat && !PicFormat1 && !PicFormat2 && !PicFormat3) {
         this.$notify.error({

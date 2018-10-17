@@ -16,8 +16,10 @@
         <div class='col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 offset-xl-1 offset-lg-1'>
           <form sytle='background-color:#fff;'>
             <div class='form-group row'>
-              <label for='CaseInfo' class="col-sm-2 testcase-label">产品与模块<span class="text-red">*</span></label>
-              <el-select v-model="CaseData.product_code" placeholder="请选择产品" class='col-sm-3 col-5 px-0'>
+              <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
+                产品与模块<span class="text-red">*</span>
+              </label>
+              <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" v-model="CaseData.product_code">
                 <el-option 
                   v-for="item in product_list" 
                   :key="item.label" 
@@ -30,20 +32,23 @@
                 :options="modules_list"
                 v-model="CaseData.module_id"
                 filterable
-                class="col-sm-3 col-5 ml-3 px-0"
+                class="col-md-3 col-sm-4 col-6"
               ></el-cascader>
             </div>
 
             <div class='form-group row'>
-              <label for='CaseInfo' class="col-sm-2 testcase-label">用例属性<span class="text-red">*</span></label>
-              <el-select v-model="CaseData.category" placeholder="用例类型" class='col-sm-3 col-5 px-0 e-select-support'>
+              <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
+                用例属性<span class="text-red">*</span>
+              </label>
+              <el-select class='col-md-3 col-sm-4 col-6 e-select-support' placeholder="用例类型" 
+                v-model="CaseData.category">
                 <el-option value="Functional" label="功能"></el-option>
                 <el-option value="compatibility" label="兼容"></el-option>
                 <el-option value="UI" label="UI">UI</el-option>
                 <el-option value="performance" label="性能"></el-option>
                 <el-option value="other" label="其它"></el-option>
               </el-select>
-              <el-select v-model="CaseData.priority" placeholder="优先级" class='col-sm-3 col-5 ml-3 px-0'>
+              <el-select v-model="CaseData.priority" placeholder="优先级" class='col-md-3 col-sm-4 col-6'>
                 <el-option value="P1">P1</el-option>
                 <el-option value="P2">P2</el-option>
                 <el-option value="P3">P3</el-option>
@@ -53,62 +58,72 @@
             <!-- 测试用例：功能测试用例 -->
             <div id="t-testcase-functional">
               <div class='form-group row'>
-                <label for='CaseTitle' class="col-sm-2 testcase-label">用例标题<span class="text-red">*</span></label>
-                <el-input type='text' v-model.trim='CaseData.title' class='px-0 col-sm-9' id='inputTitle' placeholder='用例标题...' maxlength='50' required ></el-input>
+                <label for='CaseTitle' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
+                  用例标题<span class="text-red">*</span>
+                </label>
+                <el-input type='text' id='inputTitle' class='col-lg-9 col-md-10 col-sm-12' 
+                  placeholder='用例标题...' maxlength='50' required
+                  v-model.trim='CaseData.title'>
+                </el-input>
               </div>
               <div class='form-group row'>
-                <label for='CasePrecondition' class="col-sm-2 testcase-label">
+                <label for='CasePrecondition' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                   执行前置条件<p class="label-desc">(选填)</p>
                 </label>
-                <el-input type="textarea" id="inputPrecondition" class="col-sm-9 px-0" maxlength="500" 
+                <el-input type="textarea" id="inputPrecondition" class="col-lg-9 col-md-10 col-sm-12" 
+                  maxlength="500" placeholder="测试用例执行前置条件..." 
                   :autosize="{ minRows: 2}" 
-                  placeholder="测试用例执行前置条件..." 
                   v-model.trim='CaseData.precondition'>
                 </el-input>
               </div>
               <div class='form-group row'>
-                <label for='CaseSteps' class="col-sm-2 testcase-label">
+                <label for='CaseSteps' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                   操作步骤<span class="text-red">*</span>
                 </label>
-                <!-- <el-input type="textarea" id="inputSteps" class="col-sm-9 px-0" maxlength="1000" 
-                  :autosize="{ minRows: 7}" 
-                  placeholder="测试步骤..." 
-                  v-model.trim='CaseData.steps'
-                  required>
-                </el-input> -->
-                <quill-editor class="col-sm-9 px-0 quill-editor-define" v-model="CaseData.steps"></quill-editor>
+                <quill-editor class="col-lg-9 col-md-10 col-sm-12 quill-editor-define" 
+                  v-model.trim="CaseData.steps">
+                </quill-editor>
               </div>
               <div class='form-group row mt-3'>
-                <label for='CaseInput' class="col-sm-2 testcase-label">
+                <label for='CaseInput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                   测试数据<p class="label-desc">(选填)</p>
                 </label>
-                <el-input type="textarea" id="inputData" class="col-sm-9 px-0" maxlength="500" 
-                  :autosize="{ minRows: 3}" 
-                  placeholder="需要使用的测试数据..." 
-                  v-model.trim='CaseData.DataInput'>
+                <el-input type="textarea" id="inputData" class="col-lg-9 col-md-10 col-sm-12" 
+                  maxlength="500" placeholder="需要使用的测试数据..." 
+                  :autosize="{ minRows: 3}" v-model.trim='CaseData.DataInput'>
                 </el-input>
               </div>
               <div class='form-group row'>
-                <label for='CaseOutput' class="col-sm-2 testcase-label">预期结果<span class="text-red">*</span></label>
-                <el-input type="textarea" id="inputOutput" class="col-sm-9 px-0" maxlength="500" 
-                  :autosize="{ minRows: 4}" 
-                  placeholder="测试用例预期结果..." 
-                  v-model.trim='CaseData.ExpectedResult'
+                <label for='CaseOutput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
+                  预期结果<span class="text-red">*</span>
+                </label>
+                <el-input type="textarea" id="inputOutput" class="col-lg-9 col-md-10 col-sm-12"
+                  maxlength="500" placeholder="测试用例预期结果..."
+                  :autosize="{ minRows: 4}" v-model.trim='CaseData.ExpectedResult'
                   required>
                 </el-input>
               </div>
               <div class='form-group row' v-show="isRemarkDisable">
-                <label for='CaseRemarks' class="col-sm-2 testcase-label">
+                <label for='CaseRemarks' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                   备注<p class="label-desc">(选填)</p>
                 </label>
-                <textarea type='text' v-model.trim='CaseData.remark' rows='4' class='textarea-control col-sm-9' id='inputRemarks' placeholder='请输入备注...' maxlength='1000' required></textarea>
+                <textarea type='text' id='inputRemarks' class='textarea-control col-lg-9 col-md-10 col-sm-12' 
+                  rows='4' placeholder='请输入备注...' maxlength='1000' required 
+                  v-model.trim='CaseData.remark' >
+                </textarea>
               </div>
 
               <!-- 提交按钮 -->
               <div class='d-flex justify-content-center my-5'>
                 <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
-                <button type='button' class='btn btn-submit mx-5 px-3' v-bind:disabled="isButtonDisabled" @click='addTest' value="only-once-commit">保存提交</button>
-                <button type='button' class='btn btn-accessories' v-bind:disabled="isButtonDisabled" @click='addTest($event)' value="continue-commit">继续添加</button>
+                <button type='button' class='btn btn-submit mx-3' value="only-once-commit" 
+                  :disabled="isButtonDisabled" @click='addTest'>
+                  保存提交
+                </button>
+                <button type='button' class='btn btn-accessories' value="continue-commit" 
+                  :disabled="isButtonDisabled" @click='addTest($event)'>
+                  继续添加
+                </button>
                 <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
               </div>
             </div>
@@ -167,7 +182,10 @@ export default {
   watch: {
     selected_product: function (val, oldVal) {
       this.getModule()
-      this.$router.replace({path: '/app/qa/testcase/add', query: {'product_code': this.CaseData.product_code}})
+      this.$router.replace({
+        path: '/app/qa/testcase/add',
+        query: {'product_code': this.CaseData.product_code}
+      })
     },
     product_list: function (val, oldVal) {
       if (this.product_list.length > 0 & !this.CaseData.product_code) {
@@ -269,7 +287,10 @@ export default {
             if (_this.last_url == '/app/qa/testcase') {
               _this.$router.go(-1)
             } else {
-              _this.$router.replace({ path: '/app/qa/testcase', query: { product_code: _this.CaseData.product_code }})
+              _this.$router.replace({ 
+                path: '/app/qa/testcase', 
+                query: { product_code: _this.CaseData.product_code }
+              })
             }
           }
           if (event.target.value === 'continue-commit') {
