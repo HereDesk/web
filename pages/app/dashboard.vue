@@ -6,7 +6,10 @@
         <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
         <el-dropdown class="ml-3">
           <span class="dashboard-product">
-              <span class="el-dropdown-link"> {{ current_product_code || '' }}</span>
+            <span class="el-dropdown-link" v-if="current_product_code"> 
+              {{ current_product_code || '' }}&nbsp;&nbsp;
+              <i class="iconfont icon-xiaotuziCduan_ icon-8a8a8a"></i>
+            </span>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for='item in product_list' :key="item.id">

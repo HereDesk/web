@@ -1,6 +1,6 @@
 export default {
   MenuRules (data) {
-    var rules = {
+    let rules = {
       user_management: false
     }
     let group = data.group
@@ -10,7 +10,7 @@ export default {
     return rules
   },
   BugRules (bug,userinfo) {
-  	var BtnRules = {
+  	let BtnRules = {
       del: false,
       edit: false,
       assign: false,
@@ -74,7 +74,7 @@ export default {
 
   // page: 用户管理页面
   UserMangeRules (data) {
-    var rules = false
+    let rules = false
     if (data) {
       let group = data.group
       if (group === 'admin') {
@@ -86,12 +86,12 @@ export default {
 
   // 产品管理页面
   ProductMangeRules (data) {
-    var rules = {
+    let rules = {
       add: false,
       operate: false
     }
     let group = data.group
-    var group_list = ['admin']
+    let group_list = ['admin']
     if (data) {
       if (group_list.indexOf(group) >= 0) {
         rules.add = true
@@ -103,7 +103,7 @@ export default {
 
   // Page: 测试用例
   TestCaseRules (data) {
-    var rules = {
+    let rules = {
       add: true,
       edit: false, 
       del: false,

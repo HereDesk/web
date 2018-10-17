@@ -9,13 +9,13 @@ import quillEditor from 'vue-quill-editor'
 Vue.use(quillEditor,{
 	modules: {
     	toolbar: [
-    		[{ 'header': 1 }, { 'header': 2 }],
+    		// [{ 'header': 1 }, { 'header': 2 }],
     		['bold', 'italic'],
     		[{ 'size': ['small', false, 'large'] }],
     	    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
     	    [{ 'align': [] }],
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'font': [] }],
+            // [{ 'font': [] }],
             ['blockquote', 'code-block'],
             [{ 'color': [] }, { 'background': [] }],
             [{ 'script': 'sub' }, { 'script': 'super' }],

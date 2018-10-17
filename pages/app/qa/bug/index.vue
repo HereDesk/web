@@ -7,12 +7,12 @@
           <div class="mb-3">
             <p class="pl-4 display-inline" v-if="!modules_list.length">
               <nuxt-link class="display-inline" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-                <span style="color:#2b2b2b;" title="维护模块">维护模块</span>
+                <span style="color:#2b2b2b" title="维护模块">维护模块</span>
               </nuxt-link>
             </p>
-            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()" v-else>显示全部</p>
+            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()" v-else>全部模块</p>
             <nuxt-link class="display-inline manage-modules" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+              &nbsp&nbsp&nbsp&nbsp<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
             </nuxt-link>
           </div>
           <div class="divider"></div>
@@ -20,10 +20,10 @@
             <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
               <li :id="item1.id">
                 <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" @click="clickMoudle1(item1)">
-                  <i class="iconfont icon-8a8a8a" :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]"></i>&nbsp;&nbsp;{{ item1.label }}
+                  <i class="iconfont icon-8a8a8a" :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]"></i>&nbsp&nbsp{{ item1.label }}
                 </span>
                 <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
-                  <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" style="line-height:2.5rem;" @click="clickMoudle2(item2)">
+                  <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" style="line-height:2.5rem" @click="clickMoudle2(item2)">
                     <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">{{ item2.label }}</span>
                   </li>
                 </ul>
@@ -160,22 +160,22 @@
               <el-table-column label='状态' width='100'>
                 <template slot-scope="scope">
                   <span v-if="scope.row.status === 'Closed'" class="text-secondary">
-                    <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
+                    <span class="circle circle-secondary"></span>&nbsp&nbsp{{ scope.row.status_name }}
                   </span>
                   <span v-else-if="scope.row.status === 'New'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
+                    <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.status_name }}
                   </span>
                   <span v-else-if="scope.row.status === 'Open'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
+                    <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.status_name }}
                   </span>
                   <span v-else-if="scope.row.status === 'Reopen'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
+                    <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.status_name }}
                   </span>
                   <span v-else-if="scope.row.status === 'Fixed'" class="text-success">
-                    <span class="circle circle-success"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
+                    <span class="circle circle-success"></span>&nbsp&nbsp{{ scope.row.status_name }}
                   </span>
                   <span v-else-if="scope.row.status === 'Hang-up'" class="text-warning">
-                    <span class="circle circle-warning"></span>&nbsp;&nbsp;{{ scope.row.status_name }}
+                    <span class="circle circle-warning"></span>&nbsp&nbsp{{ scope.row.status_name }}
                   </span>
                   <span v-else>{{ scope.row.status_name }}</span>
                 </template>
@@ -191,13 +191,13 @@
                 <template slot-scope="scope">
                   <div @click="BugPriorityDialog(scope.row)">
                     <span v-if="scope.row.priority === 'P1'" class="text-deadly">
-                      <span class="circle circle-deadly"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                      <span class="circle circle-deadly"></span>&nbsp&nbsp{{ scope.row.priority }}
                     </span>
                     <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
-                      <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                      <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.priority }}
                     </span>
                     <span v-else class="text-secondary">
-                      <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                      <span class="circle circle-secondary"></span>&nbsp&nbsp{{ scope.row.priority }}
                     </span>
                   </div>
                 </template>
@@ -213,10 +213,10 @@
                 <template slot-scope="scope">
                   <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
                     <span v-if="scope.row.solution_name === '已修复'" class="text-success">
-                      <span class="circle circle-success"></span>&nbsp;&nbsp;{{ scope.row.solution_name }}
+                      <span class="circle circle-success"></span>&nbsp&nbsp{{ scope.row.solution_name }}
                     </span>
                     <span v-else class="text-secondary">
-                      &nbsp;&nbsp;{{ scope.row.solution_name }}
+                      &nbsp&nbsp{{ scope.row.solution_name }}
                     </span>
                   </div>
                 </template>
@@ -304,11 +304,11 @@
           <div class="modal-header">
             <h5 class="modal-title">修改优先级</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">&times</span>
             </button>
           </div>
           <div class="modal-body text-center">
-            <ul class="ul-inline my-5">
+            <ul class="ul-inline mb-5 mt-3">
               <li class="mr-5 text-150 font-weight-light" v-for="item in priority_list" :key="item.id" v-if="item.pvalue != 'all'" @click="ModifyPriority(item.pvalue)">
                 {{ item.pvalue }}
               </li>
@@ -399,7 +399,7 @@ export default {
       // 产品、版本
       product_list: [],
       modules_list: [],
-      modules_id: [null,null],
+      modules_id: [null, null],
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
       selected_product: this.$route.query.product_code || null,
@@ -411,18 +411,19 @@ export default {
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
       // 更多操作
-      operate: 'no',
+      operate: "no",
       QuickQperationList: data.bug_quick_operation_list,
       // 搜索
       SearchType: data.bug_search_type_list,
       SearchCriteria: {
-        Operators: "=",
-        SearchType: "ID",
+        Operators: this.$route.query.Operators || "=",
+        SearchType: this.$route.query.SearchType || "ID",
         start_date: null,
         end_date: null
       },
-      wd: null,
-      isShowSearch: false,
+      SearchOperatorSymbol: this.$route.query.Operators || '=',
+      wd: this.$route.query.wd || null,
+      isShowSearch: this.$route.query.wd ? true : false,
       // 表格数据
       total: null,
       pageNumber: this.$route.query.pageNumber || 1,
@@ -457,9 +458,9 @@ export default {
     filterSearchType: util.getSearchTypeName,
     bugStatusName: util.bugStatusName,
     QuickQperationName: util.QuickQperationName,
-    FilterVersion: function (value) {
-      if (value == 'all') {
-        return '全部'
+    FilterVersion: function(value) {
+      if (value == "all") {
+        return "全部"
       } else {
         return value
       }
@@ -469,17 +470,17 @@ export default {
   computed: {
     developer_fixed_percentage: function() {
       if (this.MyTodayData.group == "developer") {
-        var data = this.MyTodayData.data
-        var num = (data.total - data.residue) / data.total * 100
+        let data = this.MyTodayData.data
+        let num = ((data.total - data.residue) / data.total) * 100
         return num.toFixed(1)
       }
       return 0
     },
     // 版本列表
     release_list: function() {
-      var arr = [{ version: "全部" }]
+      let arr = [{ version: "全部" }]
       if (this.selected_product) {
-        for (var i in this.product_list) {
+        for (let i in this.product_list) {
           if (this.selected_product === this.product_list[i]["product_code"]) {
             return arr.concat(this.product_list[i]["data"])
           }
@@ -490,31 +491,46 @@ export default {
     },
     // 查询条件
     QueryBuilder: function() {
-      var QueryBuilder = {}
-      var tmp_release
+      let QueryBuilder = {}
+      let tmp_release
       this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
-      // QueryBuilder
       QueryBuilder["pageNumber"] = this.pageNumber
       QueryBuilder["pageSize"] = this.pageSize
       QueryBuilder["product_code"] = this.selected_product
       QueryBuilder["release"] = tmp_release
       QueryBuilder["status"] = this.selected_status
       QueryBuilder["priority"] = this.selected_priority
-      this.m2_id ? QueryBuilder['m2_id'] = this.m2_id : null
-      this.m1_id ? QueryBuilder['m1_id'] = this.m1_id : null
+      this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null
+      this.m1_id ? (QueryBuilder["m1_id"] = this.m1_id) : null
       if (this.operate != "no") {
         QueryBuilder["operate"] = this.operate
+      }
+      if (this.wd) {
+        QueryBuilder["Operators"] = this.SearchCriteria.Operators
+        QueryBuilder["SearchType"] = this.SearchCriteria.SearchType
+        if (this.SearchCriteria.SearchType.indexOf("time") > 0) {
+          if (this.SearchCriteria.Operators === "range") {
+            let date = new Array()
+            date[0] = this.SearchCriteria.start_date
+            date[1] = this.SearchCriteria.end_date
+            QueryBuilder["wd"] = date
+          } else {
+            QueryBuilder["wd"] = this.SearchCriteria.start_date
+          }
+        } else {
+          QueryBuilder["wd"] = this.wd
+        }
       }
       return QueryBuilder
     },
     // 搜索
     OperatorsList: function() {
-      var search_type = this.SearchCriteria.SearchType
-      var OperatorsList1 = [
+      let search_type = this.SearchCriteria.SearchType
+      let OperatorsList1 = [
         { OperatorsValue: "=", OperatorsName: "=" },
         { OperatorsValue: "!=", OperatorsName: "!=" }
       ]
-      var OperatorsList2 = [
+      let OperatorsList2 = [
         { OperatorsValue: "=", OperatorsName: "=" },
         { OperatorsValue: "!=", OperatorsName: "!=" },
         { OperatorsValue: ">=", OperatorsName: ">=" },
@@ -533,8 +549,7 @@ export default {
       if (this.SearchCriteria.SearchType.indexOf("time") > 0) {
         if (this.SearchCriteria.Operators === "range") {
           return "date_range"
-        }
-        {
+        } else {
           return "date"
         }
       } else {
@@ -542,8 +557,8 @@ export default {
       }
     },
     placeholder: function() {
-      var data = this.SearchCriteria.SearchType
-      var symbol = this.SearchCriteria.Operators
+      let data = this.SearchCriteria.SearchType
+      let symbol = this.SearchCriteria.Operators
       if (data.indexOf("time") < 0) {
         return "输入关键字..."
       } else {
@@ -554,54 +569,30 @@ export default {
         }
       }
     },
-    SearchBuilder: function() {
-      var result = {}
-      var tmp_release
-      this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
-      result["pageNumber"] = this.pageNumber
-      result["pageSize"] = this.pageSize
-      result["product_code"] = this.selected_product
-      result["release"] = tmp_release
-      result["status"] = this.selected_status
-      result["Operators"] = this.SearchCriteria.Operators
-      result["SearchType"] = this.SearchCriteria.SearchType
-      if (this.SearchCriteria.SearchType.indexOf("time") > 0) {
-        if (this.SearchCriteria.Operators === "range") {
-          var date = new Array()
-          date[0] = this.SearchCriteria.start_date
-          date[1] = this.SearchCriteria.end_date
-          result["wd"] = date
-        } else {
-          result["wd"] = this.SearchCriteria.start_date
-        }
-      } else {
-        this.wd ? (result["wd"] = this.wd) : null
-      }
-      return result
-    },
     // userinfo group
     uGroup: function() {
       return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null
     },
     // show user config
     isShowModules: function() {
-      var config = this.$store.state.UserCustomization
-      return _.find(config, function(o) { return o.code == 'Bug_isShowMoudles' & o.code_value == 1 }) ? true : false
+      let config = this.$store.state.UserCustomization
+      return _.find(config, function(o) {
+        return (o.code == "Bug_isShowMoudles") & (o.code_value == 1)}) ? true : false
     }
   },
 
   watch: {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
-      this.wd ? this.goSearch(this.SearchBuilder) : this.getBugList()
-      this.$router.replace({ path: "/app/qa/bug", query: this.QueryBuilder })
+      this.wd ? this.goSearch(this.QueryBuilder) : this.getBugList()
+      this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {
         this.selected_product = this.product_list[0]["product_code"]
       }
     },
-    selected_product: function (val, oldVal) {
+    selected_product: function(val, oldVal) {
       this.getModule()
     },
     total: function() {
@@ -613,7 +604,7 @@ export default {
   },
 
   created() {
-    var query = this.$route.query
+    let query = this.$route.query
     if (query["status"]) {
       this.selected_status = query["status"]
     }
@@ -626,8 +617,8 @@ export default {
     this.getProductRelease()
   },
 
-  mounted () {
-    this.getBugList()
+  mounted() {
+    this.wd ? this.goSearch(this.QueryBuilder) : this.getBugList()
     this.getModule()
   },
 
@@ -639,44 +630,45 @@ export default {
     // get product info and release info
     getProductRelease() {
       let that = this
-      axios.get("/api/pm/product_release")
-        .then(function(res) {
-          if (res.data["status"] === 20000) {
-            that.product_list = res.data["data"]
-          } else {
-            that.BoxMsg = res.data["msg"]
-          }
-        })
+      axios.get("/api/pm/product_release").then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.product_list = res.data["data"]
+        } else {
+          that.BoxMsg = res.data["msg"]
+        }
+      })
     },
     // 获取所有模块
-    getModule () {
+    getModule() {
       let that = this
-      if (!this.selected_product) { return }
-      axios.get('/api/pm/get_module?product_code=' + this.selected_product)
-        .then(function (res) {
-          if (res.data['status'] === 20000) {
-            that.modules_list = res.data['data']
+      if (!this.selected_product) {
+        return
+      }
+      axios.get("/api/pm/get_module?product_code=" + this.selected_product)
+        .then(function(res) {
+          if (res.data["status"] === 20000) {
+            that.modules_list = res.data["data"]
           } else {
-            that.Msg = res.data['msg']
+            that.Msg = res.data["msg"]
           }
         })
     },
-    clickMoudle1 (data) {
+    clickMoudle1(data) {
       if (this.m1_id == data.id) {
-        this.m1_id = ''
-        this.m2_id = ''
+        this.m1_id = ""
+        this.m2_id = ""
       } else {
         this.m1_id = data.id
       }
     },
-    clickMoudle2 (data) {
+    clickMoudle2(data) {
       if (this.m2_id == data.id) {
-        this.m2_id = ''
+        this.m2_id = ""
       } else {
         this.m2_id = data.id
       }
     },
-    click_all_modules () {
+    click_all_modules() {
       this.m1_id = null
       this.m2_id = null
     },
@@ -715,7 +707,9 @@ export default {
     // Bug: 列表
     getBugList() {
       let that = this
-      if (!this.selected_product) { return }
+      if (!this.selected_product) {
+        return
+      }
       axios.get("/api/qa/bug/list", { params: this.QueryBuilder })
         .then(function(res) {
           if (res.data["status"] === 20000) {
@@ -737,7 +731,7 @@ export default {
       }
     },
     goSearch(data) {
-      var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
+      let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
       if (!data.wd && data.SearchType.indexOf("time") < 0) {
         this.$notify.error({ title: "提示", message: "请输入搜索内容" })
         return
@@ -760,7 +754,7 @@ export default {
           return
         }
       }
-      if ((data.SearchType.indexOf("time") > 0) &(data.Operators !== "range")) {
+      if ((data.SearchType.indexOf("time") > 0) & (data.Operators !== "range")) {
         let date = data.wd.match(reg)
         if (!date) {
           this.$notify.error({
@@ -813,9 +807,15 @@ export default {
       }).then(function(res) {
         if (res.data["status"] === 20000) {
           that.getBugList()
-          that.$notify.success({ title: "成功", message: res.data["msg"] })
+          that.$notify.success({
+            title: "成功",
+            message: res.data["msg"]
+          })
         } else {
-          that.$notify.error({ title: "错误", message: res.data["msg"] })
+          that.$notify.error({
+            title: "错误",
+            message: res.data["msg"]
+          })
         }
         $("#modal-bugClosed").modal("hide")
       })
@@ -829,16 +829,22 @@ export default {
       let that = this
       that.ModifyPriorityData.priority = data
       axios({
-        method: 'post',
-        url: '/api/qa/bug/edit',
-        data: JSON.stringify(that.ModifyPriorityData),
-      }).then(function (res) {
-        if (res.data['status'] === 20000) {
-          that.$notify.success({title: '成功',message: res.data['msg']})
+        method: "post",
+        url: "/api/qa/bug/edit",
+        data: JSON.stringify(that.ModifyPriorityData)
+      }).then(function(res) {
+        if (res.data["status"] === 20000) {
+          that.$notify.success({
+            title: "成功",
+            message: res.data["msg"]
+          })
           $("#modal-modify-priority").modal("hide")
           that.getBugList()
         } else {
-          that.$notify.error({title: '失败',message: res.data['msg']})
+          that.$notify.error({
+            title: "失败",
+            message: res.data["msg"]
+          })
         }
       })
     },

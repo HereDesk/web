@@ -1,7 +1,7 @@
 export default {
    txt_deal_with(txt){
-    var reg = /(((https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/ig;
-    var result = txt.replace(reg,function(item){
+    let reg = /(((https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/ig;
+    let result = txt.replace(reg,function(item){
       return '<a href="' +item+ '" target="_blank">' +item+ '</a>';
     });
     return result;
@@ -57,7 +57,7 @@ export default {
       {"code":"Fixed","name":"已解决"},
       {"code":"Closed","name":"已关闭"},
     ]
-    var x
+    let x
     for (x in status_list) {
       if (status_list[x]['code'] == data) {
         return status_list[x]['name']
@@ -76,7 +76,7 @@ export default {
       {"value": "or","name":"or"},
       {"value": "range","name":'范围'},
     ]
-    var x
+    let x
     for (x in list) {
       if (list[x]['value'] == data) {
         return list[x]['name']
@@ -98,7 +98,7 @@ export default {
       {"value": "closed_time","name":'关闭日期'},
       {"value": "fixed_time","name":'解决日期'},
     ]
-    var x
+    let x
     for (x in list) {
       if (list[x]['value'] == data) {
         return list[x]['name']
@@ -117,7 +117,7 @@ export default {
       {"value":"NotResolved","name":"未解决的"},  // 所有未解决的bug，包括：延期的
       {"value":"HighPriority","name":"高优先级"}
     ]
-    var x
+    let x
     for (x in QuickQperationList) {
       if (QuickQperationList[x]['value'] == data) {
         return QuickQperationList[x]['name']

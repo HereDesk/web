@@ -17,7 +17,11 @@
 
       <div id="case-details-2" class="row my-5">
         <div id="case-details-2-1" class='col-xl-8 col-lg-8 col-md-8'>
-          <div id="case-steps" class="height-7 mb-5">
+          <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
+            <h6><span class="grayline"></span>&nbsp;&nbsp;执行前置条件</h6>
+            <pre class="details-block">{{ CaseDetails.precondition }}</pre>
+          </div>
+          <div id="case-steps" class="height-7 mb-4">
             <h6><span class="standline"></span>&nbsp;&nbsp;操作步骤</h6>
             <div class="details-block" v-html="CaseDetails.steps"></div>
           </div>
@@ -28,10 +32,6 @@
           <div id="case-expected-result" class="height-7 mb-3">
             <h6><span class="successline"></span>&nbsp;&nbsp;预期结果</h6>
             <pre class="details-block">{{ CaseDetails.expected_result }}</pre>
-          </div>
-          <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
-            <h6><span class="grayline"></span>&nbsp;&nbsp;执行前置条件</h6>
-            <pre class="details-block">{{ CaseDetails.precondition }}</pre>
           </div>
           <div id="case-remark" class="height-7 mb-3" v-if="CaseDetails.remark">
             <h6><span class="grayline"></span>&nbsp;&nbsp;附加信息</h6>

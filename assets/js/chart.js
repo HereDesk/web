@@ -18,7 +18,7 @@ export default {
     }
     let a1a = new Array()
     let a2a = new Array()
-    for (var i in data) {
+    for (let i in data) {
       let d = data[i]['name']
       let n = data[i]['value']
       a1a.push(d)
@@ -40,7 +40,7 @@ export default {
     let tmp_data = data['data']
     let a1 = new Array()
     let a2 = new Array()
-    for (var i in tmp_data) {
+    for (let i in tmp_data) {
       let d = tmp_data[i]['datetime']
       let n = tmp_data[i]['num']
       if (data['type'] === 'week') {
@@ -83,7 +83,7 @@ export default {
   },
   // line图
   ChartLine () {
-    var args = arguments
+    let args = arguments
     let ChartLine = echarts.init(document.getElementById(args[0]))
     ChartLine.setOption({
       title: {
@@ -131,7 +131,7 @@ export default {
   },
 
   ChartBarStack () {
-    var args = arguments
+    let args = arguments
     let myChart = echarts.init(document.getElementById(args[0]))
     myChart.setOption({
       legend: {
@@ -175,7 +175,7 @@ export default {
             itemStyle: {
               normal: {
                 color: function(params) { 
-                  var colorList = ['#66C2CB']
+                  let colorList = ['#66C2CB']
                   return colorList[params.dataIndex]
                 },
                 barBorderRadius: [ 1,1,1,1 ]
@@ -196,7 +196,7 @@ export default {
             itemStyle: {
               normal: {
                 color: function(params) { 
-                  var colorList = ['#F48B31']
+                  let colorList = ['#F48B31']
                   return colorList[params.dataIndex]
                 },
                 barBorderRadius: [ 1,1,1,1 ]
@@ -210,7 +210,7 @@ export default {
 
   // 统计图：柱状图
   ChartBar () {
-    var args = arguments
+    let args = arguments
     let myChart = echarts.init(document.getElementById(args[0]))
     myChart.setOption({
       title: {
@@ -258,7 +258,7 @@ export default {
         itemStyle: {
           normal: {
             color: function(params) { 
-              var colorList = ['#F48B31','#66C2CB','#EF7030','#FBB731','#51C1F0']
+              let colorList = ['#F48B31','#66C2CB','#EF7030','#FBB731','#51C1F0']
               return colorList[params.dataIndex]
             },
             barBorderRadius: [ 15,15,1,1 ]
@@ -269,7 +269,7 @@ export default {
   },
 
   ChartPie () {
-    var args = arguments
+    let args = arguments
     console.log(args)
     let myChart = echarts.init(document.getElementById(args[0]))
     myChart.setOption({

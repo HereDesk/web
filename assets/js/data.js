@@ -30,7 +30,6 @@ export default {
     bug_search_type_list: [
         { tvalue: "ID", tname: "缺陷ID" },
         { tvalue: "title", tname: "缺陷标题" },
-        { tvalue: "priority", tname: "优先级" },
         { tvalue: "severity", tname: "严重程度" },
         { tvalue: "bug_type", tname: "缺陷类型" },
         { tvalue: "creator_user", tname: "创建者" },
