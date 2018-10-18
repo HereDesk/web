@@ -49,86 +49,87 @@
 </template>
 
 <script>
-import axios from 'axios'
-import chart from '~/assets/js/chart.js'
+import axios from "axios";
+import chart from "~/assets/js/chart.js"
 
 export default {
-
   validate({ query }) {
     return query.report_id ? true : false
   },
 
-  data () {
+  data() {
     return {
       Details: {},
-      bug_today: ['创建','关闭','解决','延期']
+      bug_today: ["创建", "关闭", "解决", "延期"]
     }
   },
 
   computed: {
-    report_id: function () {
+    report_id: function() {
       return this.$route.query.report_id
     },
-    chart1Y: function () {
+    chart1Y: function() {
       let data = this.Details.status_data
-      var ydata = [0,0,0,0]
+      var ydata = [0, 0, 0, 0]
       for (var i in data) {
-        if (data[i]['create']) {
-          ydata[0] = data[i]['create']
+        if (data[i]["create"]) {
+          ydata[0] = data[i]["create"]
         }
-        if (data[i]['closed']) {
-          ydata[1] = data[i]['closed']
+        if (data[i]["closed"]) {
+          ydata[1] = data[i]["closed"]
         }
-        if (data[i]['fixed']) {
-          ydata[2] = data[i]['fixed']
+        if (data[i]["fixed"]) {
+          ydata[2] = data[i]["fixed"]
         }
-        if (data[i]['hangUp']) {
-          ydata[3] = data[i]['hangUp']
+        if (data[i]["hangUp"]) {
+          ydata[3] = data[i]["hangUp"]
         }
       }
       return ydata
     },
-    chart2: function () {
+    chart2: function() {
       let data = this.Details.surplus_bug
       return data
     },
-    surplus_bug: function () {
-      var data = {"name":null,"value":''}
-      if (this.Details.surplus_bug) { 
-        data.name = this.Details.surplus_bug[0]['name']
-        data.value = this.Details.surplus_bug[0]['value']
+    surplus_bug: function() {
+      var data = { name: null, value: "" }
+      if (this.Details.surplus_bug) {
+        data.name = this.Details.surplus_bug[0]["name"]
+        data.value = this.Details.surplus_bug[0]["value"]
       }
       return data
     }
   },
 
   watch: {
-    chart1Y: function (val, oldval) {
-      let width = '24%'
-      chart.ChartBar('bug-chart-today',this.bug_today,this.chart1Y,width)
+    chart1Y: function(val, oldval) {
+      let width = "24%"
+      chart.ChartBar("bug-chart-today", this.bug_today, this.chart1Y, width)
     },
-    chart2: function (val, oldval) {
-      chart.ChartPie('bug-chart-surplus',this.chart2)
+    chart2: function(val, oldval) {
+      chart.ChartPie("bug-chart-surplus", this.chart2)
     }
   },
 
-  created () {
-    this.getReportDetails()
+  created() {
+    this.getReportDetails();
   },
 
   methods: {
     getReportDetails() {
-      let that = this
-      axios.get('/api/qa/bug/report/details?report_id=' + this.report_id).then(function(res) {
-        if (res.data['status'] === 20000) {
-          console.log(res.data)
-          that.Details = JSON.parse(res.data['data'])
-        } else {
-         that.$notify.error({title: '错误',message: res.data['msg']})
-        }
-      })
+      axios
+        .get("/api/qa/bug/report/details?report_id=" + this.report_id)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.Details = JSON.parse(res.data["data"])
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: res.data["msg"]
+            })
+          }
+        })
     }
   }
 }
 </script>
-

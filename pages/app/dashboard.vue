@@ -130,14 +130,12 @@
 import axios from "axios";
 import util from "~/assets/js/util.js";
 import chart from "~/assets/js/chart.js";
-
 export default {
   head() {
     return {
       title: "HDesk - 首页"
     };
   },
-
   data() {
     return {
       fullscreenLoading: false,
@@ -158,12 +156,9 @@ export default {
       img_src: ""
     };
   },
-
   computed: {
     familyname: function() {
-      return this.$store.state.isLogin
-        ? this.$store.state.userInfo.realname
-        : "";
+      return this.$store.state.isLogin ? this.$store.state.userInfo.realname : ""
     },
     isDisplayBody() {
       if (this.$store.state.userInfo.group === "admin") {
@@ -194,54 +189,53 @@ export default {
           String(date.getMonth() + 1).padStart(2, "0") +
           "-" +
           String(date.getDate()).padStart(2, "0")
-        );
-      });
-      query.product_code = this.current_product_code;
-      query.start_date = daysOfThisWeek[0];
-      query.end_date = daysOfThisWeek[6];
-      return query;
+        )
+      })
+      query.product_code = this.current_product_code
+      query.start_date = daysOfThisWeek[0]
+      query.end_date = daysOfThisWeek[6]
+      return query
     },
     BarYdata() {
-      let data = this.BugStatusData;
-      let ydata = [0, 0, 0, 0];
+      let data = this.BugStatusData
+      let ydata = [0, 0, 0, 0]
       for (var i in data) {
         if (data[i]["name"] === "待解决") {
-          ydata[0] = data[i]["value"];
+          ydata[0] = data[i]["value"]
         }
         if (data[i]["name"] === "已解决") {
-          ydata[1] = data[i]["value"];
+          ydata[1] = data[i]["value"]
         }
         if (data[i]["name"] === "已关闭") {
-          ydata[2] = data[i]["value"];
+          ydata[2] = data[i]["value"]
         }
         if (data[i]["name"] === "挂起延期") {
-          ydata[3] = data[i]["value"];
+          ydata[3] = data[i]["value"]
         }
       }
-      return ydata;
+      return ydata
     },
     LineYdata() {
-      let data = this.BugWeekData;
-      let ydata = [0, 0, 0, 0, 0, 0, 0];
+      let data = this.BugWeekData
+      let ydata = [0, 0, 0, 0, 0, 0, 0]
       for (let i in data) {
-        let w = util.getWeek(data[i]["datetime"]);
-        ydata[w] = data[i]["num"];
+        let w = util.getWeek(data[i]["datetime"])
+        ydata[w] = data[i]["num"]
       }
-      return ydata;
+      return ydata
     }
   },
-
   watch: {
     BarYdata: function(val, oldVal) {
-      let x = this.BugStatusXAxisData;
-      let y = this.BarYdata;
-      let width = chart.CharBarWidth(y);
-      chart.ChartBar("CharBarBugStatus", x, y, width, "缺陷状态统计");
+      let x = this.BugStatusXAxisData
+      let y = this.BarYdata
+      let width = chart.CharBarWidth(y)
+      chart.ChartBar("CharBarBugStatus", x, y, width, "缺陷状态统计")
     },
     LineYdata: function(val, oldVal) {
-      let x = ["日", "一", "二", "三", "四", "五", "六"];
-      let y = this.LineYdata;
-      chart.ChartLine("ChartLineBugWeek", x, y, "每周新建缺陷统计");
+      let x = ["日", "一", "二", "三", "四", "五", "六"]
+      let y = this.LineYdata
+      chart.ChartLine("ChartLineBugWeek", x, y, "每周新建缺陷统计")
     },
     current_product_code: function(val, oldVal) {
       if (this.current_product_code) {
@@ -250,10 +244,10 @@ export default {
           query: {
             product_code: this.current_product_code
           }
-        });
-        this.getBugDashData();
-        this.getBugStatusData();
-        this.getBugWeekData();
+        })
+        this.getBugDashData()
+        this.getBugStatusData()
+        this.getBugWeekData()
       }
     },
     product_msg: function(val, oldVal) {
@@ -262,82 +256,60 @@ export default {
       }
     }
   },
-
   created() {
     if (!this.$store.state.isLogin) {
       this.$store.dispatch("getUserInfo");
     }
     this.getProductRelease();
   },
-
   methods: {
     // 获取数据：产品版本
     getProductRelease() {
-      let that = this;
-      axios.get("/api/pm/product_release").then(function(res) {
+      axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
-          that.product_list = res.data["data"];
+          this.product_list = res.data["data"];
           if (res.data["data"].length > 0) {
-            that.current_product_code = that.product_list[0]["product_code"];
+            this.current_product_code = this.product_list[0]["product_code"];
           }
         } else {
-          that.product_msg = res.data["msg"];
+          this.product_msg = res.data["msg"];
         }
       });
     },
-
     // 获取数据：缺陷DashBoard
     getBugDashData() {
-      let that = this;
-      axios
-        .get(
-          "/api/dashboard/data_statistics?product_code=" +
-            this.current_product_code
-        )
-        .then(function(res) {
+      axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.BugDashData.WaitPending = res.data["data"]["WaitPending"];
-            that.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"];
-            that.BugDashData.NotFixed = res.data["data"]["NotFixed"];
-            that.BugDashData.Fixed = res.data["data"]["Fixed"];
+            this.BugDashData.WaitPending = res.data["data"]["WaitPending"];
+            this.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"];
+            this.BugDashData.NotFixed = res.data["data"]["NotFixed"];
+            this.BugDashData.Fixed = res.data["data"]["Fixed"];
           }
         });
     },
-
     // 获取数据：缺陷状态
     getBugStatusData() {
-      let that = this;
-      axios
-        .get(
-          "/api/analyze/bug/query?type=status&product_code=" +
-            this.current_product_code
-        )
-        .then(function(res) {
+      axios.get("/api/analyze/bug/query?type=status&product_code=" + this.current_product_code)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.BugStatusData = res.data["data"];
+            this.BugStatusData = res.data["data"]
           }
         });
     },
-
     // 获取数据：每周新建缺陷
     getBugWeekData() {
-      let that = this;
-      axios
-        .get("/api/analyze/bug/date/create", {
-          params: this.QueryBuilderBugWeek
-        })
-        .then(function(res) {
+      axios.get("/api/analyze/bug/date/create", {params: this.QueryBuilderBugWeek})
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.BugWeekData = res.data["data"];
+            this.BugWeekData = res.data["data"];
           }
         });
     },
-
     // 操作：切换产品
     handleCommand(data) {
       this.current_product_code = data["product_code"];
     },
-
     // 操作：用户退出登录
     HandLogout() {
       if (process.browser) {
@@ -352,5 +324,5 @@ export default {
 </script>
 
 <style>
-@import "~/static/static/common/css/main.css";
+  @import "~/static/static/common/css/main.css"
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class='container'>
-    <div class='row' id='setpasswd' style="margin-top:10%;">
+    <div class='row' id='setpasswd' style="margin-top:10%">
       <div class='col-xl-4 col-lg-4 col-md-4 col-12 offset-xl-4 col-lg-4 offset-md-4'>
         <form>
     	    <div class='form-group input-group-control'>
@@ -37,12 +37,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
 export default {
   head() {
     return {
       title: "HDesk - 增加用户"
-    };
+    }
   },
   layout: "head",
   data() {
@@ -69,16 +69,15 @@ export default {
         group: "",
         position: ""
       }
-    };
+    }
   },
 
   created() {
-    let that = this;
-    axios.get("/api/user/group").then(function(rep) {
-      if (rep.data["status"] === 20000) {
-        that.UserGroup = rep.data["data"];
+    axios.get("/api/user/group").then(res => {
+      if (res.data["status"] === 20000) {
+        this.UserGroup = res.data["data"]
       }
-    });
+    })
   },
 
   methods: {
@@ -89,61 +88,63 @@ export default {
         (this.UserData.password.length > 0) &
         (this.UserData.realname.length > 0)
       ) {
-        this.isButtonStatus = false;
+        this.isButtonStatus = false
       } else {
-        this.isButtonStatus = true;
+        this.isButtonStatus = true
       }
     },
     SubmitUser() {
-      const email = this.UserData.email;
-      const password = this.UserData.password;
-      const realname = this.UserData.realname;
-      const group = this.UserData.group;
+      const email = this.UserData.email
+      const password = this.UserData.password
+      const realname = this.UserData.realname
+      const group = this.UserData.group
       if ((email.length < 8) | (email.length > 30)) {
-        return this.$notify.error({
+        this.$notify.error({
           title: "错误",
           message: "Email的有效长度为8到30位"
-        });
+        })
+        return 
       }
       if ((password.length < 6) | (password.length > 16)) {
-        return this.$notify.error({
+        this.$notify.error({
           title: "错误",
           message: "密码的有效长度为6到16位"
-        });
+        })
+        return 
       }
       if ((realname.length < 2) | (realname.length > 8)) {
-        return this.$notify.error({
+        this.$notify.error({
           title: "错误",
           message: "姓名的有效长度为2到8位"
-        });
+        })
+        return 
       }
       if (group.length === 0) {
-        return this.$notify.error({
+        this.$notify.error({
           title: "错误",
           message: "用户组必须填写，不能为空"
-        });
+        })
+        return
       }
-
-      let that = this;
       axios({
         method: "post",
         url: "/api/user/add",
-        data: JSON.stringify(that.UserData)
-      }).then(function(res) {
+        data: JSON.stringify(this.UserData)
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          that.$notify.success({
+          this.$notify.success({
             title: "增加成功",
             message: res.data["msg"]
-          });
-          that.$router.push("/app/user-management/user");
+          })
+          this.$router.push("/app/user-management/user")
         } else {
-          that.$notify.error({
+          this.$notify.error({
             title: "增加失败",
             message: res.data["msg"]
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>

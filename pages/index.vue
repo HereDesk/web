@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { getUserFromLocalStorage } from "~/assets/js/auth";
+import axios from "axios"
+import { getUserFromLocalStorage } from "~/assets/js/auth"
 
 export default {
   data() {
@@ -36,56 +36,55 @@ export default {
         username: "",
         password: ""
       }
-    };
+    }
   },
   mounted() {
-    let token = getUserFromLocalStorage();
+    let token = getUserFromLocalStorage()
     if (token) {
-      this.$router.push("/app/dashboard");
+      this.$router.push("/app/dashboard")
     }
   },
   methods: {
     goLogin() {
-      let _this = this;
-      let username = _this.LoginData.username;
-      let password = _this.LoginData.password;
+      let username = this.LoginData.username
+      let password = this.LoginData.password
       if (username.replace(/^s+/g, "").length === 0) {
-        _this.$notify.error({
+        this.$notify.error({
           title: "提交失败",
           message: "用户名不为空哦"
-        });
-        return;
+        })
+        return
       }
       if ((username.length > 30) | (username.length < 6)) {
-        _this.$notify.error({
+        this.$notify.error({
           title: "提交失败",
           message: "用户名长度需在6到30位之间"
-        });
+        })
       }
       if (password.replace(/^s+/g, "").length === 0) {
-        _this.$notify.error({
+        this.$notify.error({
           title: "提交失败",
           message: "密码不能为空哦"
-        });
+        })
       }
       if ((password.length > 30) | (password.length < 6)) {
-        _this.$notify.error({
+        this.$notify.error({
           title: "提交失败",
           message: "密码长度需在6到30位之间"
-        });
-        return;
+        })
+        return
       }
       axios({
         method: "post",
         url: "/api/user/login",
         data: JSON.stringify(this.LoginData)
       })
-        .then(function(res) {
+        .then(res => {
           if (res.data["status"] === 10000) {
             // set localStorage and token
-            var token = res.data["data"]["token"];
+            var token = res.data["data"]["token"]
             if (process.browser) {
-              window.localStorage.setItem("token", token);
+              window.localStorage.setItem("token", token)
               var Days = 30;
               var exp = new Date();
               exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
@@ -98,25 +97,25 @@ export default {
                 ";" +
                 "path=/";
             }
-            _this.$store.commit("setUserInfo", res.data);
-            _this.$router.replace("/app/dashboard");
+            this.$store.commit("setUserInfo", res.data)
+            this.$router.replace("/app/dashboard")
           }
           if (res.data["status"] !== 10000) {
-            _this.LoginData.username = "";
-            _this.LoginData.password = "";
-            _this.$notify.error({
+            this.LoginData.username = ""
+            this.LoginData.password = ""
+            this.$notify.error({
               title: "登录失败",
               message: res.data["msg"]
-            });
+            })
           }
         })
-        .catch(function(error) {
-          console.log(error);
-          alert("请检查网络、或配置文件,或联系管理员");
-        });
+        .catch((error) => {
+          console.log(error)
+          alert("请检查网络、或配置文件,或联系管理员")
+        })
     }
   }
-};
+}
 </script>
 
 <style>

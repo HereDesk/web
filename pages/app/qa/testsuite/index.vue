@@ -132,7 +132,7 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.isProductInfo) {
+    if (!this.$store.state.isProduwctInfo) {
       this.$store.dispatch('getProductRelease')
     }
   },
@@ -147,13 +147,12 @@ export default {
       this.QueryBuilder.pageNumber = pn
     },
     getTestSuite () {
-      let that = this
-      axios.get('/api/qa/testsuite/list',{ params: this.QueryBuilder }).then(function (res) {
+      axios.get('/api/qa/testsuite/list',{ params: this.QueryBuilder }).then(res => {
         if (res.data['status'] === 20000) {
-          that.tableData = res.data['data']
-          that.total = res.data['total']
+          this.tableData = res.data['data']
+          this.total = res.data['total']
         } else {
-          that.$notify.error({title:'提示',message:res.data['msg']})
+          this.$notify.error({title:'提示',message:res.data['msg']})
         }
       })
     },
@@ -167,18 +166,17 @@ export default {
         this.$notify.error({title:'提示',message:'名字无效哦'})
         return
       }
-      let that = this
       axios({
         method: 'POST',
         url: '/api/qa/testsuite/create',
         data: JSON.stringify(this.TestSuiteCreate)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
           $('#m-create').modal('hide')
-          that.getTestSuite()
-          that.$notify.success({title:'成功',message:res.data['msg']})
+          this.getTestSuite()
+          this.$notify.success({title:'成功',message:res.data['msg']})
         } else {
-          that.$notify.error({title:'提示',message:res.data['msg']})
+          this.$notify.error({title:'提示',message:res.data['msg']})
         }
       })
     }

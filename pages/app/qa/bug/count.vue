@@ -193,7 +193,6 @@
     },
 
     watch: {
-
       SelectedProductReleaseInfo: {
         handler: function (val, oldVal) {
           let q = this.SelectedProductReleaseInfo
@@ -284,16 +283,15 @@
     methods: {
       // 数据：产品版本
       getProductRelease () {
-        let that = this
         axios.get('/api/pm/new_product_release')
-          .then(function (res) {
+          .then(res => {
             if (res.data['status'] === 20000) {
-              that.product_list = res.data['data']
-              if (res.data['data'].length > 0 && that.SelectedProductReleaseInfo.length === 0) {
-                that.SelectedProductReleaseInfo.push(that.product_list[0]['value'])
+              this.product_list = res.data['data']
+              if (res.data['data'].length > 0 && this.SelectedProductReleaseInfo.length === 0) {
+                this.SelectedProductReleaseInfo.push(this.product_list[0]['value'])
               }
             } else {
-              that.product_msg = res.data['msg']
+              this.product_msg = res.data['msg']
             }
           }
         )
@@ -304,80 +302,73 @@
       },
       // 数据：按日期查询新建缺陷
       getBugCreateDaily() {
-        let that = this
         axios.get('/api/analyze/bug/date/create',{params: this.QueryBugCreate})
-          .then(function (res) {
-            that.BugCreateDailyChartData = res.data
+          .then(res => {
+            this.BugCreateDailyChartData = res.data
           })
       },
       // 数据：缺陷状态
       getBugStatusData() {
-        let that = this
         this.QueryBugStatus.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugStatus.version = this.SelectedProductReleaseInfo[1]
         axios.get('/api/analyze/bug/query',{params: this.QueryBugStatus})
-          .then(function (res) {
-            that.BugStatusChartData = res.data['data']
+          .then(res => {
+            this.BugStatusChartData = res.data['data']
           })
       },
       // 数据：严重程度
       getBugSeverityData() {
-        let that = this
         this.QueryBugSeverity.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugSeverity.version = this.SelectedProductReleaseInfo[1]
         axios.get('/api/analyze/bug/query',{params: this.QueryBugSeverity})
-          .then(function (res) {
-            that.BugSeverityChartData = res.data['data']
+          .then(res => {
+            this.BugSeverityChartData = res.data['data']
           })
       },
       // 数据：优先级
       getBugPriorityData() {
-        let that = this
         this.QueryBugPriority.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugPriority.version = this.SelectedProductReleaseInfo[1]
         axios.get('/api/analyze/bug/query',{params: this.QueryBugPriority})
-          .then(function (res) {
-            that.BugPriorityChartData = res.data['data']
+          .then(res => {
+            this.BugPriorityChartData = res.data['data']
           })
       },
       // 数据：类型
       getBugTypeData() {
-        let that = this
         this.QueryBugType.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugType.version = this.SelectedProductReleaseInfo[1]
         axios.get('/api/analyze/bug/query',{params: this.QueryBugType})
-          .then(function (res) {
-            that.BugTypeChartData = res.data['data']
+          .then(res => {
+            this.BugTypeChartData = res.data['data']
           })
       },
       // 数据：测试人员
       getBugTesterData() {
-        let that = this
         this.QueryBugTester.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugTester.version = this.SelectedProductReleaseInfo[1]
         axios.get('/api/analyze/bug/tester',{params: this.QueryBugTester})
-          .then(function (res) {
-            that.BugTesterChartData = res.data['data']
+          .then(res => {
+            this.BugTesterChartData = res.data['data']
           })
       },
       // 数据：开发人员
       getBugDevloperData() {
-        let that = this
         this.QueryBugDeveloper.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugDeveloper.version = this.SelectedProductReleaseInfo[1]
         axios.get('/api/analyze/bug/developer',{params: this.QueryBugDeveloper})
-          .then(function (res) {
+          .then(res => {
             if (res.data['status'] === 20000) {
               let tmp_data = res.data['data']
               for (var i in tmp_data) {
                 if (tmp_data[i]['name']) {
-                  that.devloperName.push(tmp_data[i]['name'])
-                  that.devFixed.push(tmp_data[i]['fixed_num'])
-                  that.devNotFixed.push(tmp_data[i]['not_fixed_num'])
+                  this.devloperName.push(tmp_data[i]['name'])
+                  this.devFixed.push(tmp_data[i]['fixed_num'])
+                  this.devNotFixed.push(tmp_data[i]['not_fixed_num'])
                 }
               }
             } else {
-              that.$notify.error({title: '失败',message: res.data['msg']})
+              this.$notify.error({title: '失败',message: res.data['msg']})
             }
           })
       },

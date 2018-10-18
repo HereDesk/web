@@ -61,37 +61,35 @@ export default {
         this.$notify.error({
           title: "错误",
           message: "密码的有效长度为8到16位"
-        });
-        return;
+        })
+        return
       }
       if (oldPassword.length === 0) {
         this.$notify.error({
           title: "错误",
           message: "旧密码不能为空！"
-        });
-        return;
+        })
+        return
       }
-
-      let that = this;
       axios({
         method: "post",
         url: "/api/user/setpasswd",
-        data: JSON.stringify(that.passwdData)
-      }).then(function(rep) {
-        if (rep.data["status"] === 20000) {
-          that.$notify.error({
+        data: JSON.stringify(this.passwdData)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          this.$notify.error({
             title: "修改成功",
             message: rep.data["msg"]
-          });
-          that.HandLogout();
+          })
+          this.HandLogout()
         }
-        if (rep.data["status"] !== 20000) {
-          that.$notify.error({
+        if (res.data["status"] !== 20000) {
+          this.$notify.error({
             title: "修改失败",
             message: rep.data["msg"]
-          });
+          })
         }
-      });
+      })
     }
   }
 };

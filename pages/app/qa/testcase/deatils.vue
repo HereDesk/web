@@ -237,13 +237,12 @@ export default {
 
   methods: {
     getCaseDetails () {
-      let that = this
       if (this.currentcase_id) {
         axios.get('/api/qa/testcase/details?case_id=' + this.currentcase_id)
-          .then(function (res) {
+          .then(res => {
             if (res.data['status'] === 20000) {
-              that.CaseDetails = res.data['data']
-              that.CaseReviewDetails = res.data['review']
+              this.CaseDetails = res.data['data']
+              this.CaseReviewDetails = res.data['review']
             } else {
               console.log(res.data['msg'])
             }
@@ -258,20 +257,19 @@ export default {
 
     // Testcase: 评审
     CaseReview (data) {
-      let that = this
       this.review_data.result = data
       this.review_data.case_id = this.CaseDetails.case_id
       axios({
         method: 'post',
         url: '/api/qa/testcase/review',
         data: JSON.stringify(this.review_data)
-      }).then(function (res) {
+      }).then(res => {
           if (res.data['status'] === 20000) {
             $('#ModalCaseReview').modal('hide')
-            that.$router.go(-1)
-            that.$notify.success({title: '成功',message: res.data['msg']})
+            this.$router.go(-1)
+            this.$notify.success({title: '成功',message: res.data['msg']})
           } else {
-            that.$notify.error({title: '失败',message: res.data['msg']})
+            this.$notify.error({title: '失败',message: res.data['msg']})
           }
         }
       )
@@ -279,26 +277,24 @@ export default {
 
     // Testcase: delete
     CaseDelete (id) {
-      let that = this
-      axios('/api/qa/testcase/delete?case_id=' + id).then(function (res) {
+      axios('/api/qa/testcase/delete?case_id=' + id).then(res => {
         if (res.data['status'] === 20000) {
-          that.$notify.success({title: '成功',message: res.data['msg']})
-          that.$router.go(-1)
+          this.$notify.success({title: '成功',message: res.data['msg']})
+          this.$router.go(-1)
         } else {
-          that.$notify.error({title: '失败',message: res.data['msg']})
+          this.$notify.error({title: '失败',message: res.data['msg']})
         }
       })
     },
 
     // Testcase: 失效操作
     handleFall (id) {
-      let that = this
       axios.get('/api/qa/testcase/fall?case_id=' + id)
-        .then(function(res) {
+        .then(res => {
           if (res.data['status'] === 20000) {
-            that.$notify.success({"title":"成功","message":res.data['msg']})
+            this.$notify.success({"title":"成功","message":res.data['msg']})
           } else {
-            that.$notify.error({"title":"成功","message":res.data['msg']})
+            this.$notify.error({"title":"成功","message":res.data['msg']})
           }
         })
     },
@@ -307,5 +303,5 @@ export default {
 </script>
 
 <style>
-  @import '~/static/static/common/css/test.css';
+  @import '~/static/static/common/css/test.css'
 </style>

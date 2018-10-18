@@ -33,8 +33,8 @@
         </div>
         <ul class="ul_module_b pl-3">
           <li v-for="item in m2_list" :key="item.id" class="d-flex"> 
-            <span>-&nbsp;&nbsp;</span>
-            <span class="flex-grow-1 m2edit" contenteditable="true" @keyup="changeData($event,item)">{{ item.m2 }} &nbsp;</span>
+            <span>-&nbsp&nbsp</span>
+            <span class="flex-grow-1 m2edit" contenteditable="true" @keyup="changeData($event,item)">{{ item.m2 }} &nbsp</span>
             <div :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}" @click="SaveEditM2()">
               <img class="mr-3" src="~assets/images/save.png">
             </div>
@@ -69,14 +69,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-import loading from "~/components/loading";
+import axios from "axios"
+import loading from "~/components/loading"
 
 export default {
   head() {
     return {
       title: "HDesk - 产品模块维护"
-    };
+    }
   },
   layout: "head",
   data() {
@@ -99,173 +99,191 @@ export default {
         id: null,
         m2: null
       }
-    };
+    }
   },
 
   computed: {
     QueryBuilder: function() {
-      var QueryBuilder = {};
-      QueryBuilder["product_code"] = this.selected_product;
-      return QueryBuilder;
+      var QueryBuilder = {}
+      QueryBuilder["product_code"] = this.selected_product
+      return QueryBuilder
     }
   },
 
   watch: {
     product_list: function(val, oldVal) {
       if (this.product_list.length > 0 && !this.selected_product) {
-        this.selected_product = this.product_list[0]["product_code"];
-        this.getModuleA();
+        this.selected_product = this.product_list[0]["product_code"]
+        this.getModuleA()
       }
     },
     selected_product: function(val, oldVal) {
-      this.getModuleA();
+      this.getModuleA()
     },
     QueryBuilder: function(val, oldVal) {
       this.$router.replace({
         path: "/app/products/modules",
         query: this.QueryBuilder
-      });
+      })
     },
     selected_a_module: function(val, oldVal) {
-      this.getModuleB();
+      this.getModuleB()
     }
   },
 
   created() {
-    var query = this.$route.query;
+    var query = this.$route.query
     if (query["product_code"]) {
-      this.selected_product = query["product_code"];
+      this.selected_product = query["product_code"]
     }
-    this.getProductList();
+    this.getProductList()
   },
   methods: {
     // get product info and release info
     getProductList() {
-      let that = this;
-      axios
-        .get("/api/pm/new_product_release")
-        .then(function(res) {
+      axios.get("/api/pm/new_product_release")
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.product_list = res.data["data"];
+            this.product_list = res.data["data"]
           } else {
-            that.msg = res.data["msg"];
+            this.msg = res.data["msg"]
           }
         })
-        .catch(function(res) {});
+        .catch(res => {})
     },
     getModuleA() {
-      let that = this;
       axios
         .get("/api/pm/module/1/list?product_code=" + this.selected_product)
-        .then(function(res) {
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.m1_list = res.data["data"];
+            this.m1_list = res.data["data"]
             if (res.data["data"].length > 0) {
-              that.selected_a_module = res.data["data"][0]["id"];
+              this.selected_a_module = res.data["data"][0]["id"]
             }
           } else {
-            that.msg = res.data["msg"];
+            this.msg = res.data["msg"]
           }
-        });
+        })
     },
     handleModuleA(data) {
-      this.selected_a_module = data;
+      this.selected_a_module = data
     },
     addModuleA() {
-      let that = this;
-      that.a_module_data.product_code = that.selected_product;
+      this.a_module_data.product_code = this.selected_product
       axios({
         method: "post",
         url: "/api/pm/module/1/add",
-        data: JSON.stringify(that.a_module_data)
-      }).then(function(res) {
+        data: JSON.stringify(this.a_module_data)
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#add_module_a").modal("hide");
-          that.a_module_data.ModuleA = "";
-          that.getModuleA();
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
+          $("#add_module_a").modal("hide")
+          this.a_module_data.ModuleA = ""
+          this.getModuleA()
+          this.$notify.success({
+            title: "成功",
+            message: res.data["msg"]
+          })
         } else {
-          that.$notify.error({ title: "提示", message: res.data["msg"] });
+          this.$notify.error({
+            title: "提示",
+            message: res.data["msg"]
+          })
         }
-      });
+      })
     },
     getModuleB() {
-      let that = this;
-      axios
-        .get("/api/pm/module/2/list?module_a_id=" + this.selected_a_module)
-        .then(function(res) {
+      axios.get("/api/pm/module/2/list?module_a_id=" + this.selected_a_module)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.m2_list = res.data["data"];
+            this.m2_list = res.data["data"]
           } else {
-            that.msg = res.data["msg"];
+            this.msg = res.data["msg"]
           }
-        });
+        })
     },
     addModuleB() {
-      let that = this;
-      if (that.selected_a_module) {
-        that.b_module_data.module_a_id = that.selected_a_module;
+      if (this.selected_a_module) {
+        this.b_module_data.module_a_id = this.selected_a_module
       } else {
-        return that.$notify.error({ title: "提示", message: "请选择一级模块" });
+        return this.$notify.error({
+          title: "提示",
+          message: "请选择一级模块"
+        })
       }
       axios({
         method: "post",
         url: "/api/pm/module/2/add",
-        data: JSON.stringify(that.b_module_data)
-      }).then(function(res) {
+        data: JSON.stringify(this.b_module_data)
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          that.getModuleB();
-          that.b_module_data.module_b_name = "";
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.getModuleB()
+          this.b_module_data.module_b_name = ""
+          this.$notify.success({
+            title: "成功",
+            message: res.data["msg"]
+          })
         } else {
-          that.$notify.error({ title: "提示", message: res.data["msg"] });
+          this.$notify.error({
+            title: "提示",
+            message: res.data["msg"]
+          })
         }
-      });
+      })
     },
 
     changeData(event, data) {
-      this.editM2.id = data.id;
-      this.editM2.m2 = event.target.innerText;
+      this.editM2.id = data.id
+      this.editM2.m2 = event.target.innerText
     },
     SaveEditM2() {
       if (this.editM2.m2.length === 0) {
         this.$notify.error({
           title: "提示",
           message: "不能提交空文白哦，如需删除，请点击删除操作"
-        });
-        return;
+        })
+        return
       }
-      let that = this;
-      let tmp = this.editM2.m2;
-      this.editM2.m2 = tmp.replace(/(^\s*)|(\s*$)/g, "");
+      let tmp = this.editM2.m2
+      this.editM2.m2 = tmp.replace(/(^\s*)|(\s*$)/g, "")
       axios({
         method: "post",
         url: "/api/pm/module/2/edit",
         data: JSON.stringify(this.editM2)
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
-          that.getModuleB();
+          this.$notify.success({
+            title: "成功",
+            message: res.data["msg"]
+          })
+          this.getModuleB()
         } else {
-          that.$notify.error({ title: "提示", message: res.data["msg"] });
+          this.$notify.error({
+            title: "提示",
+            message: res.data["msg"]
+          })
         }
-      });
+      })
     },
     delM2(data) {
-      let that = this;
-      axios.get("/api/pm/module/2/del?id=" + data.id).then(function(res) {
+      axios.get("/api/pm/module/2/del?id=" + data.id).then(res => {
         if (res.data["status"] === 20000) {
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
-          that.getModuleB();
+          this.$notify.success({
+            title: "成功",
+            message: res.data["msg"]
+          })
+          this.getModuleB()
         } else {
-          that.$notify.error({ title: "提示", message: res.data["msg"] });
+          this.$notify.error({
+            title: "提示",
+            message: res.data["msg"]
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>
-@import "~/static/static/common/css/module.css";
+@import "~/static/static/common/css/module.css"
 </style>

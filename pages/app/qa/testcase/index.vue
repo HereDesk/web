@@ -7,7 +7,7 @@
             <p class="pl-4 display-inline" v-if="!modules_list.length">
               <nuxt-link class="display-inline" 
                 :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-                <span style="color:#2b2b2b;">维护模块</span>
+                <span style="color:#2b2b2b">维护模块</span>
               </nuxt-link>
             </p>
             <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }"
@@ -32,7 +32,7 @@
                   &nbsp;&nbsp;{{ item1.label }}
                 </span>
                 <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
-                  <li style="line-height:2.5rem;" 
+                  <li style="line-height:2.5rem" 
                     v-for="item2 in item1.children" :key="item2.id" :id="item1.id" 
                     @click="clickMoudle2(item2)">
                     <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
@@ -96,7 +96,7 @@
             </div>
           </div>
 
-          <div class="row ml-2 mr-5 hiddenSearch" style="border-bottom:1px solid #C5CAE9;"
+          <div class="row ml-2 mr-5 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
             :class="{ showSearch: isShowSearch }">
             <div class="col-md-10 col-10">
               <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
@@ -129,7 +129,7 @@
                 </el-table-column>
                 <el-table-column label='标题' show-overflow-tooltip>
                   <template slot-scope="scope">
-                    <nuxt-link style="color:#424242;"
+                    <nuxt-link style="color:#424242"
                       :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
                       {{ scope.row.title }}
                     </nuxt-link>
@@ -209,7 +209,7 @@
               <h5 class="countdata-title">今日工作</h5>
               <div class="row mt-5">
                 <div class="col">
-                  <p class="countdata-num" style="color:#20C997;">{{ MyTodayData.create }}</p>
+                  <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create }}</p>
                   <p class="countdata-desc">我今天创建的测试用例</p>
                 </div>
               </div>
@@ -227,7 +227,7 @@
               <h5 class="countdata-title">测试用例导入导出</h5>
               <div class="row mt-5">
                 <div class="col">
-                  <p class="countdata-num" style="color:#20C997;">{{ MyTodayData.create }}</p>
+                  <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create }}</p>
                   <p class="countdata-desc">测试用例</p>
                 </div>
               </div>
@@ -242,16 +242,16 @@
 
 <script>
 import axios from 'axios'
-import loading from "~/components/loading";
-import Pagination from "~/components/Pagination";
-import util from "~/assets/js/util.js";
-import rules from "~/assets/js/rules.js";
+import loading from "~/components/loading"
+import Pagination from "~/components/Pagination"
+import util from "~/assets/js/util.js"
+import rules from "~/assets/js/rules.js"
 
 export default {
   head() {
     return {
       title: "HDesk - 测试用例"
-    };
+    }
   },
 
   layout: "head",
@@ -292,7 +292,7 @@ export default {
         children: "children",
         label: "label"
       }
-    };
+    }
   },
 
   filters: {
@@ -303,99 +303,95 @@ export default {
   computed: {
     // 权限控制
     Rules: function() {
-      return rules.TestCaseRules(this.$store.state.userInfo);
+      return rules.TestCaseRules(this.$store.state.userInfo)
     },
 
     // 查询条件
     QueryBuilder: function() {
-      var QueryBuilder = {};
+      var QueryBuilder = {}
       // QueryBuilder
-      QueryBuilder["pageNumber"] = this.pageNumber;
-      QueryBuilder["pageSize"] = this.pageSize;
-      QueryBuilder["product_code"] = this.selected_product;
-      QueryBuilder["status"] = this.selected_status;
-      this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null;
-      this.wd ? (QueryBuilder["wd"] = this.wd) : null;
-      return QueryBuilder;
+      QueryBuilder["pageNumber"] = this.pageNumber
+      QueryBuilder["pageSize"] = this.pageSize
+      QueryBuilder["product_code"] = this.selected_product
+      QueryBuilder["status"] = this.selected_status
+      this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null
+      this.wd ? (QueryBuilder["wd"] = this.wd) : null
+      return QueryBuilder
     },
     // 最后一页
     LastPage: function() {
-      return Math.ceil(this.total / this.pageSize);
+      return Math.ceil(this.total / this.pageSize)
     },
     // userinfo group
     uGroup: function() {
-      return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null;
+      return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null
     }
   },
 
   watch: {
     QueryBuilder: function(val, oldVal) {
-      this.tableData = [];
-      this.wd ? this.goSearch() : this.getLeftData();
+      this.tableData = []
+      this.wd ? this.goSearch() : this.getLeftData()
       this.$router.replace({
         path: "/app/qa/testcase",
         query: this.QueryBuilder
-      });
+      })
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {
-        this.selected_product = this.product_list[0]["product_code"];
+        this.selected_product = this.product_list[0]["product_code"]
       }
     },
     selected_product: function(val, oldVal) {
-      this.getModule();
+      this.getModule()
     },
     total: function() {
       if (this.total === 0) {
-        this.img_src = require("static/pic/happy.png");
-        this.Msg = "没找到数据";
+        this.img_src = require("static/pic/happy.png")
+        this.Msg = "没找到数据"
       }
     },
     filterText(val) {
-      this.$refs.tree2.filter(val);
+      this.$refs.tree2.filter(val)
     }
   },
 
   created() {
-    var query = this.$route.query;
+    var query = this.$route.query
     if (query["product_code"]) {
-      this.selected_product = query["product_code"];
+      this.selected_product = query["product_code"]
     }
-    this.getProductRelease();
+    this.getProductRelease()
   },
 
   methods: {
     getPsPn: function(ps, pn) {
-      this.pageSize = ps;
-      this.pageNumber = pn;
+      this.pageSize = ps
+      this.pageNumber = pn
     },
     // get product info and release info
     getProductRelease() {
-      let that = this;
-      axios
-        .get("/api/pm/product_release")
-        .then(function(res) {
+      axios.get("/api/pm/product_release")
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.product_list = res.data["data"];
+             this.product_list = res.data["data"]
           } else {
-            that.Msg = res.data["msg"];
+             this.Msg = res.data["msg"]
           }
         })
-        .catch(function(res) {});
+        .catch(res => {})
     },
 
     // 获取所有模块
     getModule() {
-      let that = this;
-      axios
-        .get("/api/pm/get_module?product_code=" + this.selected_product)
-        .then(function(res) {
+      axios.get("/api/pm/get_module?product_code=" + this.selected_product)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.modules_list = res.data["data"];
+             this.modules_list = res.data["data"]
           } else {
-            that.Msg = res.data["msg"];
+             this.Msg = res.data["msg"]
           }
-        });
+        })
     },
 
     clickMoudle1 (data) {
@@ -415,126 +411,120 @@ export default {
     },
 
     click_all_modules() {
-      this.m1_id = null;
-      this.m2_id = null;
+      this.m1_id = null
+      this.m2_id = null
     },
 
     // 下拉相关操作
     handleCommand(data) {
       if ("product_code" in data) {
-        this.selected_product = data["product_code"];
+        this.selected_product = data["product_code"]
       }
       if ("status_value" in data) {
-        this.selected_status = data["status_value"];
+        this.selected_status = data["status_value"]
         console.log(this.selected_status)
       }
     },
 
     // TestCase: 数据列表
     getLeftData() {
-      let that = this;
-      axios
-        .get("/api/qa/testcase/list", { params: this.QueryBuilder })
-        .then(function(res) {
+      axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.tableData = res.data["data"];
-            that.total = res.data["total"];
+             this.tableData = res.data["data"]
+             this.total = res.data["total"]
           } else {
-            that.Msg = res.data["msg"];
+             this.Msg = res.data["msg"]
           }
-        });
+        })
     },
 
     // Testcase: 失效操作
     handleFall(data) {
-      let that = this;
-      let case_id = data.case_id;
-      axios.get("/api/qa/testcase/fall?case_id=" + case_id).then(function(res) {
-        if (res.data["status"] === 20000) {
-          that.getLeftData();
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
-        } else {
-          that.$notify.error({ title: "成功", message: res.data["msg"] });
-        }
-      });
+      let case_id = data.case_id
+      axios.get("/api/qa/testcase/fall?case_id=" + case_id)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.getLeftData()
+            this.$notify.success({ title: "成功", message: res.data["msg"] })
+          } else {
+            this.$notify.error({ title: "成功", message: res.data["msg"] })
+          }
+        })
     },
 
     // Testcase: 编辑操作
     handleEdit(data) {
-      let case_id = data.case_id;
-      this.$router.push("/app/qa/testcase/edit?case_id=" + case_id);
+      let case_id = data.case_id
+      this.$router.push("/app/qa/testcase/edit?case_id=" + case_id)
     },
 
     // Testcase: 评审
     CaseReview(data) {
-      let that = this;
-      this.review_data.result = data;
-      this.review_data.case_id = this.CaseDetails.case_id;
+      this.review_data.result = data
+      this.review_data.case_id = this.CaseDetails.case_id
       axios({
         method: "post",
         url: "/api/qa/testcase/review",
         data: JSON.stringify(this.review_data)
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#ModalCaseReview").modal("hide");
-          that.$router.go(-1);
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
+          $("#ModalCaseReview").modal("hide")
+           this.$router.go(-1)
+           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
-          that.$notify.error({ title: "失败", message: res.data["msg"] });
+           this.$notify.error({ title: "失败", message: res.data["msg"] })
         }
-      });
+      })
     },
 
     // Testcase: 搜索
     clickSearch() {
       if (this.isShowSearch) {
-        this.isShowSearch = false;
-        this.wd = null;
-        this.getBugList();
+        this.isShowSearch = false
+        this.wd = null
+        this.getBugList()
       } else {
-        this.isShowSearch = true;
+        this.isShowSearch = true
       }
     },
 
     goSearch() {
-      let that = this;
-      axios
-        .get("/api/qa/testcase/search", { params: this.QueryBuilder })
-        .then(function(res) {
+      axios.get("/api/qa/testcase/search", { params: this.QueryBuilder })
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.tableData = res.data["data"];
-            that.total = res.data["total"];
+            this.tableData = res.data["data"]
+            this.total = res.data["total"]
           } else {
-            that.total = 0;
-            that.tableData = [];
-            that.Msg = res.data["msg"];
+            this.total = 0
+            this.tableData = []
+            this.Msg = res.data["msg"]
           }
         })
-        .catch(function(error) {});
+        .catch((error) => {})
     },
 
     // my today
     myToday() {
-      $("#modal-my-today").modal("show");
-      let that = this;
-      axios("/api/analyze/testcase/my_today").then(function(res) {
+      $("#modal-my-today").modal("show")
+      axios("/api/analyze/testcase/my_today").then(res => {
         if (res.data["status"] === 20000) {
-          that.MyTodayData = res.data["data"];
+           this.MyTodayData = res.data["data"]
         }
-      });
+      })
     },
 
     // table line hover and leave
     tableHover(row) {
-      this.HoverTestcase_id = row.case_id;
+      this.HoverTestcase_id = row.case_id
     },
     tableLeave(row) {
-      this.HoverTestcase_id = "";
+      this.HoverTestcase_id = ""
     }
   }
-};
+}
 </script>
 
 <style>
-@import "~/static/static/common/css/test.css";
+  @import "~/static/static/common/css/test.css"
 </style>

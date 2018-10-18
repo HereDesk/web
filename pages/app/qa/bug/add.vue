@@ -149,14 +149,12 @@
 
 <script>
 import axios from "axios"
-
 export default {
   head() {
     return {
       title: "HDesk - 创建缺陷"
-    };
+    }
   },
-
   data() {
     return {
       fileList: [],
@@ -183,126 +181,119 @@ export default {
         remark: "",
         annex: []
       }
-    };
+    }
   },
 
   computed: {
     uploadDisabled: function() {
-      return this.fileList.length > 3;
+      return this.fileList.length > 3
     },
     selected_product_code: function() {
-      return this.Bug.product_code;
+      return this.Bug.product_code
     },
     BugTypeList() {
-      return this.$store.state.BugProperty.bug_type;
+      return this.$store.state.BugProperty.bug_type
     },
     BugPriorityList() {
-      return this.$store.state.BugProperty.bug_priority;
+      return this.$store.state.BugProperty.bug_priority
     },
     BugSeverityList() {
-      return this.$store.state.BugProperty.bug_severity;
+      return this.$store.state.BugProperty.bug_severity
     }
   },
 
   watch: {
     selected_product_code: function(old, oldVal) {
-      this.getModule();
+      this.getModule()
     }
   },
 
   created() {
-    this.getProductRelease();
+    this.getProductRelease()
     if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
-      this.$store.dispatch("getBugProperty");
+      this.$store.dispatch("getBugProperty")
     }
     if (this.$route.query.case_id) {
-      this.getCaseDetails();
+      this.getCaseDetails()
     }
   },
 
   methods: {
     getCaseDetails() {
-      let that = this;
-      axios
-        .get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
-        .then(function(res) {
+      axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.Bug.steps = res.data["data"]["steps"];
-            that.Bug.expected_result = res.data["data"]["expected_result"];
+            this.Bug.steps = res.data["data"]["steps"]
+            this.Bug.expected_result = res.data["data"]["expected_result"]
           } else {
-            console.log(res.data["msg"]);
+            console.log(res.data["msg"])
           }
-        });
+        })
     },
     handleRemove(file) {
-      let beDeleted = file.response["name"];
-      let annex = this.Bug.annex;
-      for (var i = 0; i < annex.length; i++) {
+      let beDeleted = file.response["name"]
+      let annex = this.Bug.annex
+      for (var i = 0 ;i < annex.length;i++) {
         if (annex[i] == beDeleted) {
-          annex.splice(i, 1);
+          annex.splice(i, 1)
         }
       }
     },
     ImageSuccess(response, fileList) {
-      this.Bug.annex.push(response["name"]);
+      this.Bug.annex.push(response["name"])
     },
     beforeAvatarUpload(file) {
-      const isLt3M = file.size / 1024 / 1024 < 3;
-      const PicFormat = file.name.split(".")[1].toLowerCase() === "jpg";
-      const PicFormat1 = file.name.split(".")[1].toLowerCase() === "png";
-      const PicFormat2 = file.name.split(".")[1].toLowerCase() === "jpeg";
-      const PicFormat3 = file.name.split(".")[1].toLowerCase() === "gif";
-      const isLt2M = file.size / 1024 / 1024 < 10;
+      const isLt3M = file.size / 1024 / 1024 < 3
+      const PicFormat = file.name.split(".")[1].toLowerCase() === "jpg"
+      const PicFormat1 = file.name.split(".")[1].toLowerCase() === "png"
+      const PicFormat2 = file.name.split(".")[1].toLowerCase() === "jpeg"
+      const PicFormat3 = file.name.split(".")[1].toLowerCase() === "gif"
+      const isLt2M = file.size / 1024 / 1024 < 10
       if (!PicFormat && !PicFormat1 && !PicFormat2 && !PicFormat3) {
         this.$notify.error({
           title: "上传失败",
           message: "上传图片格式只能为jpg/png/jpeg/gif"
-        });
+        })
       }
       if (!isLt3M) {
         this.$notify.error({
           title: "上传失败",
           message: "上传文件大小不能超过2.5M"
-        });
+        })
       }
-      return PicFormat || PicFormat1 || PicFormat2 || (PicFormat3 && isLt3M);
+      return PicFormat || PicFormat1 || PicFormat2 || (PicFormat3 && isLt3M)
     },
     // 获取产品版本信息
     getProductRelease() {
-      let that = this;
-      axios.get("/api/pm/product_release").then(function(res) {
+      axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
-          that.product_list = res.data["data"];
-          that.release_list = res.data["data"][0]["data"];
-          that.Bug.product_code = res.data["data"][0]["product_code"];
-          that.getDeveloper();
+          this.product_list = res.data["data"]
+          this.release_list = res.data["data"][0]["data"]
+          this.Bug.product_code = res.data["data"][0]["product_code"]
+          this.getDeveloper()
         }
-      });
+      })
     },
     getModule() {
-      let that = this;
-      axios
-        .get("/api/pm/get_module?product_code=" + this.Bug.product_code)
-        .then(function(res) {
+      axios.get("/api/pm/get_module?product_code=" + this.Bug.product_code)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.modules_list = res.data["data"];
+            this.modules_list = res.data["data"]
           } else {
-            that.Msg = res.data["msg"];
+            this.Msg = res.data["msg"]
           }
-        });
+        })
     },
     getDeveloper() {
-      let that = this;
-      axios
-        .get(
-          "/api/pm/member/list?group=Developer&product_code=" +
-            this.Bug.product_code
+      axios.get(
+        "/api/pm/member/list?group=Developer&product_code=" +
+          this.Bug.product_code
         )
-        .then(function(res) {
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.developer_list = res.data["data"];
+            this.developer_list = res.data["data"]
           }
-        });
+        })
     },
     isShowRemark () {
       if (this.isRemarkDisable) {
@@ -313,110 +304,106 @@ export default {
       }
     },
     createBug(event) {
-      let _this = this;
       if (this.Bug.release.length === 0) {
         this.$notify.error({
           title: "提示",
           message: "请选择版本号"
-        });
-        return;
+        })
+        return
       }
       if ((this.Bug.title.length < 6) | (this.Bug.title.length > 100)) {
         this.$notify.error({
           title: "提示",
           message: "标题的有效长度为6到100之间"
-        });
-        return;
+        })
+        return
       }
       if (this.Bug.steps.length === 0) {
         this.$notify.error({
           title: "提示",
           message: "操作步骤不能为空哦"
-        });
-        return;
+        })
+        return
       }
       if ((this.Bug.steps.length < 10) | (this.Bug.steps.length > 1000)) {
         this.$notify.error({
           title: "提示",
           message: "操作步骤，有效长度需为10到1000"
-        });
-        return;
+        })
+        return
       }
       if (this.Bug.reality_result.length === 0) {
         this.$notify.error({
           title: "提示",
           message: "实际结果不能为空哦"
-        });
-        return;
+        })
+        return
       }
-      if (
-        (this.Bug.reality_result.length < 2) |
-        (this.Bug.reality_result.length > 500)
-      ) {
+      if ((this.Bug.reality_result.length < 2) | (this.Bug.reality_result.length > 500)) {
         this.$notify.error({
           title: "提示",
           message: "实际结果, 有效长度为2到500"
-        });
-        return;
+        })
+        return
       }
       if (this.Bug.expected_result.length > 500) {
         this.$notify.error({
           title: "提示",
           message: "预期结果, 长度需小于500"
-        });
-        return;
+        })
+        return
       }
       if (this.Bug.remark.length > 1000) {
         this.$notify.error({
           title: "提示",
           message: "备注输入太长了,长度需要小于1000"
-        });
-        return;
+        })
+        return
       }
       axios({
         method: "post",
         url: "/api/qa/bug/create",
-        data: JSON.stringify(_this.Bug),
+        data: JSON.stringify(this.Bug),
         transformRequest: [
-          function(data) {
-            _this.isButtonDisabled = true;
-            return data;
+          (data) => {
+            this.isButtonDisabled = true
+            return data
           }
         ]
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          _this.$notify.success({
+          this.$notify.success({
             title: "成功",
             message: res.data["msg"]
-          });
+          })
           if (event.target.value === "only-once-commit") {
-            _this.$router.go(-1);
+            this.$router.go(-1)
           }
           if (event.target.value === "continue-commit") {
-            $(document).scrollTop(0);
-            _this.Bug.title = "";
-            _this.Bug.steps = "";
-            _this.Bug.expected_result = "";
-            _this.Bug.reality_result = "";
-            _this.Bug.assignedTo = "";
-            _this.Bug.remark = "";
-            _this.Bug.severity = "Normal";
-            _this.Bug.priority = "P2";
-            _this.isButtonDisabled = false;
+            $(document).scrollTop(0)
+            this.Bug.title = ""
+            this.Bug.steps = ""
+            this.Bug.expected_result = ""
+            this.Bug.reality_result = ""
+            this.Bug.assignedTo = ""
+            this.Bug.remark = ""
+            this.Bug.severity = "Normal"
+            this.Bug.priority = "P2"
+            this.isButtonDisabled = false
           }
         } else {
-          _this.isButtonDisabled = false;
-          _this.$notify.error({
+          this.isButtonDisabled = false
+          this.$notify.error({
             title: "失败",
             message: res.data["msg"]
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>
-  @import "~/static/static/common/css/test.css";
+  @import "~/static/static/common/css/test.css"
 </style>

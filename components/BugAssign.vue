@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
 
 export default {
   props: {
@@ -47,54 +47,51 @@ export default {
         assignedTo: "",
         remark: ""
       }
-    };
+    }
   },
   mounted() {
     if (this.member_list === undefined) {
-      this.getMemberList();
+      this.getMemberList()
     } else {
-      this.person_list = this.member_list;
+      this.person_list = this.member_list
     }
   },
   methods: {
     getMemberList() {
-      let that = this;
-      axios
-        .get("/api/pm/member/list?product_code=" + that.product_code)
-        .then(function(res) {
+      axios.get("/api/pm/member/list?product_code=" + this.product_code)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.person_list = res.data["data"];
+            this.person_list = res.data["data"]
           }
-        });
+        })
     },
     assign() {
-      let that = this;
-      if (that.AssignData.assignedTo === "") {
-        return that.$notify.error({
+      if (this.AssignData.assignedTo === "") {
+        return this.$notify.error({
           title: "数据校验",
           message: "请选择分配人"
-        });
+        })
       }
-      that.AssignData.bug_id = this.bug_id;
+      this.AssignData.bug_id = this.bug_id
       axios({
         method: "post",
         url: "/api/qa/bug/assign",
-        data: JSON.stringify(that.AssignData)
-      }).then(function(res) {
+        data: JSON.stringify(this.AssignData)
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#componentsAssign").modal("hide");
-          if (that.pageSource === "page_bug_index") {
-            that.$emit("refreshList");
+          $("#componentsAssign").modal("hide")
+          if (this.pageSource === "page_bug_index") {
+            this.$emit("refreshList")
           }
-          if (that.pageSource === "page_bug_details") {
-            that.$router.go(-1);
+          if (this.pageSource === "page_bug_details") {
+            this.$router.go(-1)
           }
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
-          that.$notify.error({ title: "失败", message: res.data["msg"] });
+          this.$notify.error({ title: "失败", message: res.data["msg"] })
         }
-      });
+      })
     }
   }
-};
+}
 </script>

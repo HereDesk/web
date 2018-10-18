@@ -211,22 +211,20 @@ export default {
 
   methods: {
     getProductList () {
-      let that = this
       axios.get('/api/pm/new_product_release')
-        .then(function (res) {
+        .then(res => {
           if (res.data['status'] === 20000) {
-            that.product_list = res.data['data']
+            this.product_list = res.data['data']
           }
         })
     },
     getModule () {
-      let that = this
       axios.get('/api/pm/get_module?product_code=' + this.CaseData.product_code)
-        .then(function (res) {
+        .then(res => {
           if (res.data['status'] === 20000) {
-            that.modules_list = res.data['data']
+            this.modules_list = res.data['data']
           } else {
-            that.Msg = res.data['msg']
+            this.Msg = res.data['msg']
           }
         })
     },
@@ -239,11 +237,10 @@ export default {
       }
     },
     addTest (event) {
-      let _this = this
-      var title = _this.CaseData.title
-      var DataInput = _this.CaseData.DataInput
-      var ExpectedResult = _this.CaseData.ExpectedResult
-      var steps = _this.CaseData.steps
+      var title = this.CaseData.title
+      var DataInput = this.CaseData.DataInput
+      var ExpectedResult = this.CaseData.ExpectedResult
+      var steps = this.CaseData.steps
 
       if (title.length < 5 | title.length > 50) {
         this.$notify.error({
@@ -283,36 +280,36 @@ export default {
       axios({
         method: 'post',
         url: '/api/qa/testcase/add',
-        data: JSON.stringify(_this.CaseData),
-        transformRequest: [ function (data) {
-          _this.isButtonDisabled = true
+        data: JSON.stringify(this.CaseData),
+        transformRequest: [ (data) => {
+          this.isButtonDisabled = true
           return data
         }]
-      }).then(function (rep) {
-        if (rep.data['status'] === 20000) {
-          _this.isButtonDisabled = false
+      }).then(res => {
+        if (res.data['status'] === 20000) {
+          this.isButtonDisabled = false
           if (event.target.value === 'only-once-commit') {
-            if (_this.last_url == '/app/qa/testcase') {
-              _this.$router.go(-1)
+            if (this.last_url == '/app/qa/testcase') {
+              this.$router.go(-1)
             } else {
-              _this.$router.replace({ 
+              this.$router.replace({ 
                 path: '/app/qa/testcase', 
-                query: { product_code: _this.CaseData.product_code }
+                query: { product_code: this.CaseData.product_code }
               })
             }
           }
           if (event.target.value === 'continue-commit') {
             $(document).scrollTop(0)
-            _this.CaseData.title = ''
-            _this.CaseData.precondition = ''
-            _this.CaseData.DataInput = ''
-            _this.CaseData.remark = ''
-            _this.CaseData.ExpectedResult = ''
-            _this.CaseData.steps = '1.\n2.\n'
+            this.CaseData.title = ''
+            this.CaseData.precondition = ''
+            this.CaseData.DataInput = ''
+            this.CaseData.remark = ''
+            this.CaseData.ExpectedResult = ''
+            this.CaseData.steps = '1.\n2.\n'
           } 
         } else {
-          _this.isButtonDisabled = false
-          _this.$notify.error({
+          this.isButtonDisabled = false
+          this.$notify.error({
             title: '错误',
             message: rep.data['msg']
           })

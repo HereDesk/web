@@ -677,27 +677,25 @@ export default {
     },
     // get product info and release info
     getProductRelease() {
-      let that = this
-      axios.get("/api/pm/product_release").then(function(res) {
+      axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
-          that.product_list = res.data["data"]
+          this.product_list = res.data["data"]
         } else {
-          that.BoxMsg = res.data["msg"]
+          this.BoxMsg = res.data["msg"]
         }
       })
     },
     // 获取所有模块
     getModule() {
-      let that = this
       if (!this.selected_product) {
         return
       }
       axios.get("/api/pm/get_module?product_code=" + this.selected_product)
-        .then(function(res) {
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.modules_list = res.data["data"]
+            this.modules_list = res.data["data"]
           } else {
-            that.Msg = res.data["msg"]
+            this.Msg = res.data["msg"]
           }
         })
     },
@@ -754,17 +752,16 @@ export default {
 
     // Bug: 列表
     getBugList() {
-      let that = this
       if (!this.selected_product) {
         return
       }
       axios.get("/api/qa/bug/list", { params: this.QueryBuilder })
-        .then(function(res) {
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.tableData = res.data["data"]
-            that.total = res.data["total"]
+            this.tableData = res.data["data"]
+            this.total = res.data["total"]
           } else {
-            that.Msg = res.data["msg"]
+            this.Msg = res.data["msg"]
           }
         })
     },
@@ -812,19 +809,18 @@ export default {
           return
         }
       }
-      let that = this
       axios({
         method: "POST",
         url: "/api/qa/bug/search?",
         data: data
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          that.tableData = res.data["data"]
-          that.total = res.data["total"]
+          this.tableData = res.data["data"]
+          this.total = res.data["total"]
         } else {
-          that.tableData = []
-          that.total = 0
-          that.Msg = res.data["msg"]
+          this.tableData = []
+          this.total = 0
+          this.Msg = res.data["msg"]
         }
       })
     },
@@ -847,20 +843,20 @@ export default {
       this.ClosedData.bug_id = row.bug_id
     },
     ClosedBug(bug_id) {
-      let that = this
+      
       axios({
         method: "post",
         url: "/api/qa/bug/close",
         data: JSON.stringify(this.ClosedData)
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          that.getBugList()
-          that.$notify.success({
+          this.getBugList()
+          this.$notify.success({
             title: "成功",
             message: res.data["msg"]
           })
         } else {
-          that.$notify.error({
+          this.$notify.error({
             title: "错误",
             message: res.data["msg"]
           })
@@ -874,22 +870,22 @@ export default {
       this.ModifyPriorityData.bug_id = row.bug_id
     },
     ModifyPriority(data) {
-      let that = this
-      that.ModifyPriorityData.priority = data
+      
+      this.ModifyPriorityData.priority = data
       axios({
         method: "post",
         url: "/api/qa/bug/edit",
-        data: JSON.stringify(that.ModifyPriorityData)
-      }).then(function(res) {
+        data: JSON.stringify(this.ModifyPriorityData)
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          that.$notify.success({
+          this.$notify.success({
             title: "成功",
             message: res.data["msg"]
           })
           $("#modal-modify-priority").modal("hide")
-          that.getBugList()
+          this.getBugList()
         } else {
-          that.$notify.error({
+          this.$notify.error({
             title: "失败",
             message: res.data["msg"]
           })
@@ -899,10 +895,9 @@ export default {
     // 数据统计
     myToday() {
       $("#modal-my-today").modal("show")
-      let that = this
-      axios("/api/analyze/bug/my_today").then(function(res) {
+      axios("/api/analyze/bug/my_today").then(res => {
         if (res.data["status"] === 20000) {
-          that.MyTodayData = res.data
+          this.MyTodayData = res.data
         }
       })
     },

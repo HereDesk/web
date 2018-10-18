@@ -69,11 +69,10 @@ export default {
 
   methods: {
     getProductRelease () {
-      let that = this
-      axios.get('/api/pm/product_release').then(function (res) {
+      axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
-          that.product_list = res.data['data']
-          that.request_data.product_code = res.data['data'][0]['product_code']
+          this.product_list = res.data['data']
+          this.request_data.product_code = res.data['data'][0]['product_code']
         }
       })
     },
@@ -82,7 +81,6 @@ export default {
     },
     generateReport (data) {
       let t = data
-      let that = this
       if (t == 'day') { 
         this.request_data.type = 'day'
         this.DayReportText = '获取中'
@@ -91,12 +89,13 @@ export default {
         this.request_data.type = 'week'
         this.WeekReportText = '获取中'
       }
-      axios.get('/api/qa/bug/report/generate', {params: this.request_data}).then(function (res) {
-        if (res.data['status'] === 20000) {
-          that.DayReportId = res.data['report_id']
-        } else {
-          that.DayReportText = '日报'
-        }
+      axios.get('/api/qa/bug/report/generate', {params: this.request_data})
+        .then(res => {
+          if (res.data['status'] === 20000) {
+            this.DayReportId = res.data['report_id']
+          } else {
+            this.DayReportText = '日报'
+          }
       })
     }
   }

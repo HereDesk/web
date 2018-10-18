@@ -85,18 +85,16 @@ export default {
   },
   methods: {
     getMemberList() {
-      let that = this;
       axios
-        .get("/api/pm/member/list?product_code=" + that.product_code)
-        .then(function(res) {
+        .get("/api/pm/member/list?product_code=" + this.product_code)
+        .then(res => {
           if (res.data["status"] === 20000) {
-            that.person_list = res.data["data"];
+            this.person_list = res.data["data"];
           }
         });
     },
     // bug resolve
     MoreRecovered() {
-      let that = this;
       this.ResolveData.bug_id = this.bug_id;
       // this.ResolveData.assignedTo = this.PageData.openedBy
       this.ResolveData.solution = this.scheme;
@@ -104,18 +102,18 @@ export default {
         method: "post",
         url: "/api/qa/bug/resolve",
         data: JSON.stringify(this.ResolveData)
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          if (that.pageSource === "page_bug_index") {
-            that.$emit("refreshList");
+          if (this.pageSource === "page_bug_index") {
+            this.$emit("refreshList");
           }
-          if (that.pageSource === "page_bug_details") {
-            that.$router.push("/app/qa/bug");
+          if (this.pageSource === "page_bug_details") {
+            this.$router.push("/app/qa/bug");
           }
           $("#componentsResolve").modal("hide");
-          that.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.$notify.success({ title: "成功", message: res.data["msg"] });
         } else {
-          that.$notify.error({ title: "错误", message: res.data["msg"] });
+          this.$notify.error({ title: "错误", message: res.data["msg"] });
         }
       });
     }

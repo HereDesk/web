@@ -78,15 +78,15 @@
 </template>
 
 <script>
-import axios from "axios";
-import util from "~/assets/js/util.js";
-import rules from "~/assets/js/rules.js";
+import axios from "axios"
+import util from "~/assets/js/util.js"
+import rules from "~/assets/js/rules.js"
 
 export default {
   head() {
     return {
       title: "HDesk - 产品管理"
-    };
+    }
   },
   layout: "head",
   filters: {
@@ -114,68 +114,65 @@ export default {
         product_code: "",
         product_name: ""
       }
-    };
+    }
   },
 
   computed: {
     ProductsRules: function() {
-      return rules.ProductMangeRules(this.$store.state.userInfo);
+      return rules.ProductMangeRules(this.$store.state.userInfo)
     }
   },
 
   created() {
-    this.getProductList();
+    this.getProductList()
   },
 
   methods: {
     getProductList() {
-      let that = this;
-      axios.get("/api/pm/get_product_name").then(function(rep) {
-        if ((rep.data["status"] === 20000) & (rep.data["data"].length > 0)) {
-          that.loading = false;
-          that.tableData = rep.data["data"];
-          // 显示控制
-          that.controlNull = false;
+      axios.get("/api/pm/get_product_name").then(res => {
+        if ((res.data["status"] === 20000) & (res.data["data"].length > 0)) {
+          this.loading = false
+          this.tableData = res.data["data"]
+          this.controlNull = false
         } else {
-          that.controlNull = true;
+          this.controlNull = true
         }
-      });
+      })
     },
     handleClick(row) {
-      this.isLook = true;
-      this.modalDetails.product_code = row.product_code;
-      this.modalDetails.product_name = row.product_name;
+      this.isLook = true
+      this.modalDetails.product_code = row.product_code
+      this.modalDetails.product_name = row.product_name
     },
     createProduct() {
-      let productCode = this.ProductData.product_code;
-      let productName = this.ProductData.product_name;
+      let productCode = this.ProductData.product_code
+      let productName = this.ProductData.product_name
       if ((productName.length > 20) | (productName.length === 0)) {
-        alert("项目名称的有效长度为1-20");
+        alert("项目名称的有效长度为1-20")
       }
       if ((productCode.length > 20) | (productCode.length === 0)) {
-        alert("项目编码的有效长度为1-20");
+        alert("项目编码的有效长度为1-20")
       }
-      let that = this;
       axios({
         method: "post",
         url: "/api/pm/product/create",
         data: JSON.stringify(this.ProductData)
-      }).then(function(res) {
+      }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#CreateProduct").modal("hide");
-          that.getProductList();
-          that.$notify.success({
+          $("#CreateProduct").modal("hide")
+          this.getProductList()
+          this.$notify.success({
             title: "成功",
             message: res.data["msg"]
-          });
+          })
         } else {
-          that.$notify.error({
+          this.$notify.error({
             title: "错误",
             message: res.data["msg"]
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>

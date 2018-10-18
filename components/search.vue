@@ -56,24 +56,23 @@ export default {
   methods: {
     // get product info and release info 
     getProductRelease () {
-      let that = this
-      axios.get('/api/pm/product_release').then(function (res) {
+      axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
-          that.product_list = res.data['data']
+          this.product_list = res.data['data']
           // loading
-          that.loading = false
+          this.loading = false
           // url query params
-          if (that.$route.query.product_code) {
-            that.product_code = that.$route.query.product_code
+          if (this.$route.query.product_code) {
+            this.product_code = this.$route.query.product_code
           } else {
-            that.product_code = that.product_list[0]['product_code']
-            that.$router.push('?product_code=' + that.product_code)
+            this.product_code = this.product_list[0]['product_code']
+            this.$router.push('?product_code=' + this.product_code)
           }
-          if (that.$route.query.release) {
-            that.release = that.$route.query.release
+          if (this.$route.query.release) {
+            this.release = this.$route.query.release
           }
         } else {
-          that.product_msg = res.data['msg']
+          this.product_msg = res.data['msg']
         }
       })
     },

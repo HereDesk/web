@@ -432,14 +432,13 @@ export default {
 
   methods: {
     getBugDetails () {
-      let that = this
       if (this.currentBugId) {
         axios.get('/api/qa/bug/details?bug_id=' + this.currentBugId)
-          .then(function (res) {
+          .then(res => {
             if (res.data['status'] === 20000) {
-              that.BugDetails = res.data['data']
-              that.Annex = res.data['annex']
-              that.product_code = res.data['data']['product_code']
+              this.BugDetails = res.data['data']
+              this.Annex = res.data['annex']
+              this.product_code = res.data['data']['product_code']
             } else {
 
             }
@@ -447,10 +446,9 @@ export default {
       }
     },
     getMemberList () {
-      let that = this
-      axios.get('/api/pm/member/list?product_code=' + that.product_code).then(function (res) {
+      axios.get('/api/pm/member/list?product_code=' + this.product_code).then(res => {
         if (res.data['status'] === 20000) {
-          that.member_list = res.data['data']
+          this.member_list = res.data['data']
         }
       })
     },
@@ -461,19 +459,18 @@ export default {
 
     // Bug immediate Recovered
     immediateRecovered () {
-      let that = this
       this.ResolveData.bug_id = this.currentBugId
       this.ResolveData.assignedTo = this.BugDetails.creator_id
       axios({
         method: 'post',
         url: '/api/qa/bug/resolve',
         data: JSON.stringify(this.ResolveData)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          that.$router.go(-1)
-          that.$notify.success({title: '成功',message: res.data['msg']})
+          this.$router.go(-1)
+          this.$notify.success({title: '成功',message: res.data['msg']})
         } else {
-          that.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
     },
@@ -492,31 +489,29 @@ export default {
 
     // bug delete
     BugDelete () {
-      let that = this
-      axios.get('/api/qa/bug/delete?bug_id=' + this.currentBugId).then(function (res) {
+      axios.get('/api/qa/bug/delete?bug_id=' + this.currentBugId).then(res => {
         if (res.data['status'] === 20000) {
-          that.$router.go(-1)
-          that.$notify.success({title: '成功',message: res.data['msg']})
+          this.$router.go(-1)
+          this.$notify.success({title: '成功',message: res.data['msg']})
         } else {
-          that.$notify.error({title: '失败',message: res.data['msg']})
+          this.$notify.error({title: '失败',message: res.data['msg']})
         }
       })
     },
 
     // bug closed
     BugClosed () {
-      let that = this
       this.ClosedData.bug_id = this.currentBugId
       axios({
         method: 'post',
         url: '/api/qa/bug/close',
         data: JSON.stringify(this.ClosedData)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          that.$notify.success({title: '成功',message: res.data['msg']})
-          that.$router.go(-1)
+          this.$notify.success({title: '成功',message: res.data['msg']})
+          this.$router.go(-1)
         } else {
-          that.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
     },
@@ -530,66 +525,62 @@ export default {
       if (this.ReOpenData.remark.length > 1000 | this.ReOpenData.remark.length < 5) {
         return this.$notify.error({title: '错误',message: '重新打开缺陷，原因不能为空哦'})
       }
-      let that = this
       axios({
         method: 'post',
         url: '/api/qa/bug/reopen',
         data: JSON.stringify(this.ReOpenData)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          that.$router.go(-1)
+          this.$router.go(-1)
           $('#modal-reopen').modal('hide')
-          that.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({title: '成功',message: res.data['msg']})
         } else {
-          that.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
     },
 
     // bug hand up 
     HandUp () {
-      let that = this
       this.HangUpData.bug_id = this.currentBugId
       axios({
         method: 'post',
         url: '/api/qa/bug/hangup',
         data: JSON.stringify(this.HangUpData)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          that.$router.go(-1)
+          this.$router.go(-1)
           $('#modal-hangup').modal('hide')
-          that.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({title: '成功',message: res.data['msg']})
         } else {
-          that.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
     },
 
     // the bug history record
     BugHistory () {
-      let that = this
-      axios.get('/api/qa/bug/history?bug_id=' + this.currentBugId).then(function (res) {
+      axios.get('/api/qa/bug/history?bug_id=' + this.currentBugId).then(res => {
         if (res.data['status'] === 20000) {
-          that.history = res.data['data'] 
+          this.history = res.data['data'] 
         }
       })
     },
 
     // add notes or remark
     AddNotes () {
-      let that = this
       this.NotesData.bug_id = this.currentBugId
       axios({
         method: 'post',
         url: '/api/qa/bug/add_notes',
         data: JSON.stringify(this.NotesData)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          that.BugHistory()
+          this.BugHistory()
           $('#modal-notes').modal('hide')
-          that.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({title: '成功',message: res.data['msg']})
         } else {
-          that.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
     }

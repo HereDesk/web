@@ -49,12 +49,12 @@ export default {
       return Math.ceil(this.total / this.pageSize)
     },
     PageList: function () {
-      var list = new Array()
+      let list = new Array()
       let lp = parseInt(this.LastPage)
       let pn = parseInt(this.pageNumber)
       if (lp <= 5){
-        var tmp = new Array()
-        for (var i = 0; i < lp; i++) {
+        let tmp = new Array()
+        for (let i = 0; i < lp; i++) {
           tmp.push(i+1)
         }
         return tmp
@@ -89,7 +89,7 @@ export default {
         }
       }
       if (data === 'pn') {
-        var text = event.target.innerText
+        let text = event.target.innerText
         if (text == '>') {
           this.pageNumber = parseInt(this.pageNumber) + 1
         }

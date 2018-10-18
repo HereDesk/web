@@ -166,50 +166,47 @@ export default {
 
   methods: {
     getCaseDetails () {
-      let that = this
       axios.get('/api/qa/testcase/details?case_id=' + this.case_id)
-        .then(function (res) {
+        .then(res => {
           if (res.data['status'] === 20000) {
             var data = res.data['data']
             var module = new Array()
             module[0] = data.m1_id
             module[1] = data.m2_id
-            that.CaseData.module_id = module
-            that.CaseData.product_code = data.product_code
-            that.CaseData.case_id = data.case_id
-            that.CaseData.product_code = data.product_code
-            that.CaseData.priority = data.priority
-            that.CaseData.title = data.title
-            that.CaseData.category = data.category
-            that.CaseData.precondition = data.precondition
-            that.CaseData.DataInput = data.DataInput
-            that.CaseData.steps = data.steps
-            that.CaseData.expected_result = data.expected_result
-            that.CaseData.remark = data.remark
+             this.CaseData.module_id = module
+             this.CaseData.product_code = data.product_code
+             this.CaseData.case_id = data.case_id
+             this.CaseData.product_code = data.product_code
+             this.CaseData.priority = data.priority
+             this.CaseData.title = data.title
+             this.CaseData.category = data.category
+             this.CaseData.precondition = data.precondition
+             this.CaseData.DataInput = data.DataInput
+             this.CaseData.steps = data.steps
+             this.CaseData.expected_result = data.expected_result
+             this.CaseData.remark = data.remark
           } else {
-            that.$router.go(-1)
+             this.$router.go(-1)
           }
       })
     },
 
     getModule () {
-      let that = this
       axios.get('/api/pm/get_module?product_code=' + this.seleted_product)
-        .then(function (res) {
+        .then(res => {
           if (res.data['status'] === 20000) {
-            that.modules_list = res.data['data']
+             this.modules_list = res.data['data']
           } else {
-            that.Msg = res.data['msg']
+             this.Msg = res.data['msg']
           }
         })
     },
 
     EditTestCase (event) {
-      let _this = this
-      var title = _this.CaseData.title
-      var DataInput = _this.CaseData.DataInput
-      var expected_result = _this.CaseData.expected_result
-      var steps = _this.CaseData.steps
+      var title =  this.CaseData.title
+      var DataInput =  this.CaseData.DataInput
+      var expected_result =  this.CaseData.expected_result
+      var steps =  this.CaseData.steps
 
       if (title.length < 5 | title.length > 50) {
         this.$notify.error({
@@ -249,19 +246,19 @@ export default {
       axios({
         method: 'post',
         url: '/api/qa/testcase/edit',
-        data: JSON.stringify(_this.CaseData),
-        transformRequest: [ function (data) {
-          _this.isButtonDisabled = true
-          return data
+        data: JSON.stringify(this.CaseData),
+        transformRequest: [ (data) => {
+            this.isButtonDisabled = true
+            return data
         }]
-      }).then(function (rep) {
-        if (rep.data['status'] === 20000) {
-          _this.$router.go(-1)
+      }).then(res => {
+        if (res.data['status'] === 20000) {
+           this.$router.go(-1)
         } else {
-          _this.isButtonDisabled = false
-          _this.$notify.error({
-            title: '错误',
-            message: rep.data['msg']
+            this.isButtonDisabled = false
+            this.$notify.error({
+              title: '错误',
+              message: rep.data['msg']
           })
         }
       })

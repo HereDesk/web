@@ -115,35 +115,32 @@ export default {
     },
 
     getTestCaseRunList () {
-      let that = this
-      axios.get('/api/qa/testsuite/cell/list',{ params: this.QueryBuilder }).then(function (res) {
+      axios.get('/api/qa/testsuite/cell/list',{ params: this.QueryBuilder }).then(res => {
         if (res.data['status'] === 20000) {
-          that.tableData = res.data['data']
-          that.total = res.data['total']
+          this.tableData = res.data['data']
+          this.total = res.data['total']
         } else {
-          that.$notify.error({title:'提示',message:res.data['msg']})
+          this.$notify.error({title:'提示',message:res.data['msg']})
         }
       })
     },
     run (result,cell_id,case_id) {
-      var that = this
       this.RunData.result = result
       this.RunData.cell_id = cell_id
       axios({
         method: 'post',
         url: '/api/qa/testsuite/cell/run',
         data: JSON.stringify(this.RunData)
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          that.getTestCaseRunList()
-          // that.$notify.success({title: '成功',message: res.data['msg']})
-          console.log(result)
+          this.getTestCaseRunList()
+          this.$notify.success({title: '成功',message: res.data['msg']})
           if (result === '-1') {
             let href = '/app/qa/bug/add?case_id=' + case_id + '&cell_id=' + cell_id
-            that.$router.push(href)
+            this.$router.push(href)
           }
         } else {
-          that.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({title: '错误',message: res.data['msg']})
         }
       })
     },

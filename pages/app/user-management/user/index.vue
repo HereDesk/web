@@ -89,9 +89,7 @@ export default {
       title: "HDesk - 用户管理"
     };
   },
-
   layout: "head",
-
   filters: {
     date: util.date
   },
@@ -114,26 +112,25 @@ export default {
 
   computed: {
     userRules: function() {
-      return rules.UserMangeRules(this.$store.state.userInfo);
+      return rules.UserMangeRules(this.$store.state.userInfo)
     }
   },
 
   created() {
-    this.getAllUser();
+    this.getAllUser()
   },
 
   methods: {
     getAllUser() {
-      let that = this;
-      axios.get("/api/user/user_list").then(function(rep) {
-        if (rep.data["status"] === 20000) {
-          that.tableData = rep.data["data"];
+      axios.get("/api/user/user_list").then(res => {
+        if (res.data["status"] === 20000) {
+          this.tableData = res.data["data"]
         }
-      });
+      })
     },
     // getUserId
     getUserId(event) {
-      this.password.user_id = event.user_id;
+      this.password.user_id = event.user_id
     },
     // 重置密码
     ResetPassword(event) {
@@ -141,15 +138,15 @@ export default {
         this.$notify.error({
           title: "提交失败",
           message: "密码不能为空"
-        });
-        return;
+        })
+        return
       }
       if (this.password.passwd !== this.password.RepeatPasswd) {
         this.$notify.error({
           title: "提交失败",
           message: "两次密码输入的不一致"
-        });
-        return;
+        })
+        return
       }
       if (
         (this.password.passwd.length < 8) |
@@ -158,58 +155,52 @@ export default {
         this.$notify.error({
           title: "提交失败",
           message: "密码的有效长度为8-16位"
-        });
-        return;
+        })
+        return
       }
-
-      let that = this;
       axios({
         method: "post",
         url: "/api/user/reset_passwd",
-        data: JSON.stringify(that.password)
-      }).then(function(rep) {
-        if (rep.data["status"] === 20000) {
+        data: JSON.stringify(this.password)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
           $("#reset-password").modal("hide");
-          that.$notify.success({
+          this.$notify.success({
             title: "成功",
-            message: rep.data["msg"]
-          });
-          that.getAllUser();
+            message: res.data["msg"]
+          })
+          this.getAllUser();
         } else {
-          that.$notify.error({
+          this.$notify.error({
             title: "失败",
-            message: rep.data["msg"]
-          });
+            message: res.data["msg"]
+          })
         }
-      });
+      })
     },
     // 封禁
     banned(rows, event) {
-      let that = this;
-      that.bannedData.user_id = rows.user_id;
-      that.bannedData.code = event.target.value;
+      this.bannedData.user_id = rows.user_id
+      this.bannedData.code = event.target.value
       axios({
         method: "post",
         url: "/api/user/banned",
-        data: JSON.stringify(that.bannedData)
+        data: JSON.stringify(this.bannedData)
       }).then(function(rep) {
         if (rep.data["status"] === 10060) {
-          that.$notify.success({
+          this.$notify.success({
             title: "成功",
             message: rep.data["msg"]
-          });
-          that.getAllUser();
+          })
+          this.getAllUser();
         } else {
-          that.$notify.error({
+          this.$notify.error({
             title: "失败",
             message: rep.data["msg"]
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
-
-<style scoped>
-</style>

@@ -7,7 +7,7 @@
       </div>
       <div class='col-auto'>
         <button type='button' class='btn btn-create' id='addRelease' data-toggle="modal" data-target="#modal-create-release">
-          &nbsp;&nbsp;增加版本&nbsp;&nbsp;
+          &nbsp&nbsp增加版本&nbsp&nbsp
         </button>
       </div>
     </div>
@@ -43,7 +43,7 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto'>
               <label for="pg-product-name" class="mx-5">选择产品</label>
-              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5;">
+              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9Ebackground-color:#f5f5f5">
                 <option>{{ product_code }}</option>
               </select>
             </div>
@@ -65,13 +65,13 @@
 
 <script>
 import axios from 'axios'
-import util from "~/assets/js/util.js";
+import util from "~/assets/js/util.js"
 
 export default {
   head() {
     return {
       title: "HDesk - 版本管理"
-    };
+    }
   },
   layout: "head",
   filters: {
@@ -88,66 +88,69 @@ export default {
         release: "",
         product_code: ""
       }
-    };
+    }
   },
   watch: {
     tableData: function(val, oldval) {
       if (this.tableData.length > 0) {
-        this.controlNull = false;
+        this.controlNull = false
       } else {
-        this.msg = this.product_code + "产品下暂时还没有版本哦";
-        this.controlNull = true;
+        this.msg = this.product_code + "产品下暂时还没有版本哦"
+        this.controlNull = true
       }
     }
   },
   created() {
-    this.product_code = this.$route.query.product_code;
+    this.product_code = this.$route.query.product_code
     if (this.$route.query.product_code) {
-      this.getRelease();
+      this.getRelease()
     } else {
-      this.$router.push("/basic/product");
+      this.$router.push("/basic/product")
     }
   },
   methods: {
     // 获取版本
     getRelease() {
-      let that = this;
-      axios
-        .get("/api/pm/release/list?product_code=" + that.product_code)
-        .then(function(rep) {
-          if (rep.data["status"] === 20000) {
-            that.tableData = rep.data["data"];
+      axios.get("/api/pm/release/list?product_code=" + this.product_code)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.tableData = res.data["data"]
           } else {
-            that.msg = rep.data["msg"];
+            this.msg = res.data["msg"]
           }
-        });
+        })
     },
     createRelease(row) {
-      let release = this.ReleaseData.release;
-      this.ReleaseData.product_code = this.product_code;
+      let release = this.ReleaseData.release
+      this.ReleaseData.product_code = this.product_code
       if ((release.length > 20) | (release.length === 0)) {
         this.$notify.error({
           title: "提交失败",
           message: "版本号的有效长度为0-8"
-        });
-        return;
+        })
+        return
       }
-      let that = this;
       axios({
         method: "post",
         url: "/api/pm/release/create",
         data: JSON.stringify(this.ReleaseData)
-      }).then(function(rep) {
-        if (rep.data["status"] === 20000) {
-          $("#modal-create-release").modal("hide");
-          that.$notify.success({ title: "成功", message: rep.data["msg"] });
-          that.getRelease();
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          $("#modal-create-release").modal("hide")
+          this.$notify.success({ 
+            title: "成功", 
+            message: res.data["msg"]
+          })
+          this.getRelease()
         }
-        if (rep.data["status"] !== 20000) {
-          that.$notify.error({ title: "错误", message: rep.data["msg"] });
+        if (res.data["status"] !== 20000) {
+          this.$notify.error({ 
+            title: "错误", 
+            message: res.data["msg"] 
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>

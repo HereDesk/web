@@ -207,42 +207,40 @@ export default {
 
   methods: {
     getModule () {
-      let that = this
       axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
-        .then(function (res) {
+        .then(res => {
           if (res.data['status'] === 20000) {
-            that.modules_list = res.data['data']
+            this.modules_list = res.data['data']
           } else {
-            that.Msg = res.data['msg']
+            this.Msg = res.data['msg']
           }
         })
     },
     // 获取缺陷详情
     getBugDetails () {
-      let that = this
       if (this.currentBugId) {
         axios.get('/api/qa/bug/details?bug_id=' + this.currentBugId)
-          .then(function (res) {
+          .then(res => {
             if (res.data['status'] === 20000) {
               let data = res.data['data']
-              that.Bug.title = data['title']
-              that.Annex = res.data['annex']
-              that.Bug.steps = data['steps']
-              that.Bug.reality_result = data['reality_result']
-              that.Bug.expected_result = data['expected_result']
-              that.Bug.remark = data['remark']
-              that.Bug.assignedTo_id = data['assignedTo_id']
-              that.Bug.bug_type = data['bug_type']
-              that.Bug.priority = data['priority']
-              that.Bug.severity = data['severity']
-              that.Bug.release = data['release']
-              that.Bug.product_code = data['product_code']
-              that.Bug.bug_id = data['bug_id']
+              this.Bug.title = data['title']
+              this.Annex = res.data['annex']
+              this.Bug.steps = data['steps']
+              this.Bug.reality_result = data['reality_result']
+              this.Bug.expected_result = data['expected_result']
+              this.Bug.remark = data['remark']
+              this.Bug.assignedTo_id = data['assignedTo_id']
+              this.Bug.bug_type = data['bug_type']
+              this.Bug.priority = data['priority']
+              this.Bug.severity = data['severity']
+              this.Bug.release = data['release']
+              this.Bug.product_code = data['product_code']
+              this.Bug.bug_id = data['bug_id']
               if (data['m1_id']) {
-                that.Bug.module_id[0] = data['m1_id']
+                this.Bug.module_id[0] = data['m1_id']
               }
               if (data['m2_id']) {
-                that.Bug.module_id[1] = data['m2_id']
+                this.Bug.module_id[1] = data['m2_id']
               }
             } else {
             }
@@ -251,28 +249,26 @@ export default {
     },
 
     getProductRelease () {
-      let that = this
-      axios.get('/api/pm/product_release').then(function (res) {
+      axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
-          that.product_list = res.data['data']
-          that.release_list = res.data['data'][0]['data']
-          that.Bug.product_code = res.data['data'][0]['product_code']
-          that.getDeveloper()
+          this.product_list = res.data['data']
+          this.release_list = res.data['data'][0]['data']
+          this.Bug.product_code = res.data['data'][0]['product_code']
+          this.getDeveloper()
         }
       })
     },
 
     annex_delete (data) {
-      let that = this
-      that.AnnexDelData.url = data
+      this.AnnexDelData.url = data
       axios({
         method: 'post',
         url: '/api/qa/bug/annex/delete',
-        data: that.AnnexDelData
-      }).then( function (res) {
+        data: this.AnnexDelData
+      }).then(res => {
         if (res.data['status'] === 20000) {
           let tmp = new Array()
-          tmp = that.Annex
+          tmp = this.Annex
           for (var i in tmp) {
             if (data == tmp[i]['url']) {
               let index = tmp.indexOf(tmp[i])
@@ -281,9 +277,9 @@ export default {
               }
             }
           }
-          that.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({title: '成功',message: res.data['msg']})
         } else {
-          that.$notify.error({title: '失败',message: res.data['msg']})
+          this.$notify.error({title: '失败',message: res.data['msg']})
         }
       })
     },
@@ -322,25 +318,22 @@ export default {
       return PicFormat || PicFormat1 || PicFormat2 || PicFormat3 && isLt3M
     },
     getBugProperty () {
-      let that = this
-      axios.get('/api/qa/bug/bug_property').then(function (res) {
+      axios.get('/api/qa/bug/bug_property').then(res => {
         if (res.data['status'] === 20000) {
-          that.bug_type = res.data['bug_type']
-          that.bug_priority = res.data['bug_priority']
-          that.bug_severity = res.data['bug_severity']
+          this.bug_type = res.data['bug_type']
+          this.bug_priority = res.data['bug_priority']
+          this.bug_severity = res.data['bug_severity']
         }
       })
     },
     getDeveloper () {
-      let that = this
-      axios.get('/api/pm/member/list?product_code=' + this.Bug.product_code).then(function (res) {
+      axios.get('/api/pm/member/list?product_code=' + this.Bug.product_code).then(res => {
         if (res.data['status'] === 20000) {
-          that.developer_list = res.data['data']
+          this.developer_list = res.data['data']
         }
       })
     },
     editBug (event) {
-      let _this = this
       if (this.Bug.release.length === 0) {
         this.$notify.error({title: '提示',message: '请选择版本号'})
         return
@@ -376,18 +369,18 @@ export default {
       axios({
         method: 'post',
         url: '/api/qa/bug/edit',
-        data: JSON.stringify(_this.Bug),
+        data: JSON.stringify(this.Bug),
         transformRequest: [ function (data) {
-          _this.isButtonDisabled = true
+          this.isButtonDisabled = true
           return data
         }]
-      }).then(function (res) {
+      }).then(res => {
         if (res.data['status'] === 20000) {
-          _this.$notify.success({title: '成功',message: res.data['msg']})
-          _this.$router.go(-1)
+          this.$notify.success({title: '成功',message: res.data['msg']})
+          this.$router.go(-1)
         } else {
-          _this.isButtonDisabled = false
-          _this.$notify.error({title: '失败',message: res.data['msg']})
+          this.isButtonDisabled = false
+          this.$notify.error({title: '失败',message: res.data['msg']})
         }
       })
     }
