@@ -19,7 +19,8 @@
               <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
                 产品与模块<span class="text-red">*</span>
               </label>
-              <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" v-model="CaseData.product_code">
+              <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" 
+                v-model="CaseData.product_code">
                 <el-option 
                   v-for="item in product_list" 
                   :key="item.label" 
@@ -48,7 +49,8 @@
                 <el-option value="performance" label="性能"></el-option>
                 <el-option value="other" label="其它"></el-option>
               </el-select>
-              <el-select v-model="CaseData.priority" placeholder="优先级" class='col-md-3 col-sm-4 col-6'>
+              <el-select class='col-md-3 col-sm-4 col-6' placeholder="优先级" 
+                v-model="CaseData.priority">
                 <el-option value="P1">P1</el-option>
                 <el-option value="P2">P2</el-option>
                 <el-option value="P3">P3</el-option>
@@ -104,27 +106,33 @@
                 </el-input>
               </div>
               <div class='form-group row' v-show="isRemarkDisable">
-                <label for='CaseRemarks' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
+                <label for='CaseOutput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                   备注<p class="label-desc">(选填)</p>
                 </label>
-                <textarea type='text' id='inputRemarks' class='textarea-control col-lg-9 col-md-10 col-sm-12' 
-                  rows='4' placeholder='请输入备注...' maxlength='1000' required 
-                  v-model.trim='CaseData.remark' >
-                </textarea>
+                <el-input type="textarea" id="inputOutput" class="col-lg-9 col-md-10 col-sm-12"
+                  maxlength="1000" placeholder="请输入备注..."
+                  :autosize="{ minRows: 4}" v-model.trim='CaseData.remark'>
+                </el-input>
               </div>
 
               <!-- 提交按钮 -->
               <div class='d-flex justify-content-center my-5'>
-                <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
+                <button type='button' class='btn btn-accessories' @click="isShowRemark">
+                  添加备注
+                </button>
                 <button type='button' class='btn btn-submit mx-3' value="only-once-commit" 
-                  :disabled="isButtonDisabled" @click='addTest'>
+                  :disabled="isButtonDisabled"
+                  @click='addTest'>
                   保存提交
                 </button>
                 <button type='button' class='btn btn-accessories' value="continue-commit" 
-                  :disabled="isButtonDisabled" @click='addTest($event)'>
+                  :disabled="isButtonDisabled"
+                  @click='addTest($event)'>
                   继续添加
                 </button>
-                <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
+                <button type='button' class='btn btn-accessories' @click="$router.go(-1)">
+                  返回
+                </button>
               </div>
             </div>
           </form>
@@ -254,14 +262,14 @@ export default {
       if (ExpectedResult.trim().length < 2 | ExpectedResult.trim().length > 500) {
         this.$notify.error({
           title: '错误',
-          message: '预期结果的有效长度为2到200位，且不能为空'
+          message: '预期结果的有效长度为2到500位，且不能为空'
         })
         return
       }
-      if (steps.trim().length < 10 | steps.trim().length > 1000) {
+      if (steps.trim().length < 5 | steps.trim().length > 1000) {
         this.$notify.error({
           title: '错误',
-          message: '操作步骤的有效长度为10到500'
+          message: '操作步骤的有效长度为5到1000'
         })
         return
       }

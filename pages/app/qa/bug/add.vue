@@ -16,7 +16,8 @@
         <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='form-group row'>
               <label for='BugInfo' class="col-md-2 col-sm-12 col-12 bug-label">
-                产品与模块<span class="text-red">*</span>
+                产品与模块
+                <span class="text-red">*</span>
               </label>
               <el-select class='col-md-2 col-sm-4 col-6' placeholder="请选择产品" v-model="Bug.product_code" >
                 <el-option 

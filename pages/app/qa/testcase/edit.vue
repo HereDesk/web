@@ -6,8 +6,11 @@
           <h3 class="text-center my-5">编辑测试用例</h3>
           
           <div class='form-group row'>
-            <label for='CaseInfo' class="col-sm-2 testcase-label">基本信息</label>
-            <el-select class='col-sm-3 col-5 px-0' placeholder="请选择产品" v-model="CaseData.product_code" disabled>
+            <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
+              产品与模块
+            </label>
+            <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" 
+              v-model="CaseData.product_code" disabled>
               <el-option 
                 v-for="item in product_list" 
                 :key="item.product_code" 
@@ -20,20 +23,23 @@
               :options="modules_list"
               v-model="CaseData.module_id"
               filterable
-              class="col-sm-3 col-5 ml-3 px-0"
+              class="col-md-3 col-sm-4 col-6"
             ></el-cascader>
           </div>
 
           <div class='form-group row'>
-            <label for='CaseInfo' class="col-sm-2 testcase-label">产品与模块</label>
-            <el-select class='col-sm-3 col-5 px-0 e-select-support' placeholder="用例类型" v-model="CaseData.category">
+            <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
+              用例属性
+            </label>
+            <el-select class='col-md-3 col-sm-4 col-6 e-select-support' placeholder="用例类型" 
+              v-model="CaseData.category">
               <el-option value="Functional" label="功能"></el-option>
               <el-option value="compatibility" label="兼容"></el-option>
               <el-option value="UI" label="UI">UI</el-option>
               <el-option value="performance" label="性能"></el-option>
               <el-option value="other" label="其它"></el-option>
             </el-select>
-            <el-select class='col-sm-3 col-5 ml-3 px-0' placeholder="优先级" v-model="CaseData.priority">
+            <el-select class='col-md-3 col-sm-4 col-6' placeholder="优先级" v-model="CaseData.priority">
               <el-option value="P1">P1</el-option>
               <el-option value="P2">P2</el-option>
               <el-option value="P3">P3</el-option>
@@ -43,49 +49,52 @@
           <!-- 测试用例：功能测试用例 -->
           <div id="t-testcase-functional">
             <div class='form-group row'>
-              <label for='CaseTitle' class="col-sm-2 testcase-label">用例标题</label>
-              <el-input type='text' id='inputTitle' class='px-0 col-sm-9' 
-                placeholder='用例标题...' maxlength='50' required 
+              <label for='CaseTitle' class="col-lg-2 col-md-2 col-sm-12 testcase-label">用例标题</label>
+              <el-input type='text' id='inputTitle' class='col-lg-9 col-md-10 col-sm-12' 
+                placeholder='用例标题...' maxlength='50' required
                 v-model.trim='CaseData.title'>
               </el-input>
             </div>
             <div class='form-group row'>
-              <label for='CasePrecondition' class="col-sm-2 testcase-label">
+              <label for='CasePrecondition' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 执行前置条件<p class="label-desc">(选填)</p>
               </label>
-              <textarea type='text' id='inputPrecondition' class='textarea-control col-sm-9' 
-                 maxlength='500' placeholder='测试用例执行前置条件...'
+              <el-input type="textarea" id="inputPrecondition" class="col-lg-9 col-md-10 col-sm-12" 
+                maxlength="500" placeholder="测试用例执行前置条件..." 
+                :autosize="{ minRows: 2}" 
                 v-model.trim='CaseData.precondition'>
-              </textarea>
+              </el-input>
             </div>
             <div class='form-group row'>
-              <label for='CaseInput' class="col-sm-2 testcase-label">
+              <label for='CaseSteps' class="col-lg-2 col-md-2 col-sm-12 testcase-label">操作步骤</label>
+              <quill-editor class="col-lg-9 col-md-10 col-sm-12 quill-editor-define" v-model="CaseData.steps">
+              </quill-editor>
+            </div>
+            <div class='form-group row'>
+              <label for='CaseInput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 测试数据<p class="label-desc">(选填)</p>
               </label>
-              <textarea type='text' id='inputData' class='textarea-control col-sm-9' 
-                maxlength='500' placeholder='测试数据...' required
-                v-model.trim='CaseData.DataInput'>
-                </textarea>
+              <el-input type="textarea" id="inputData" class="col-lg-9 col-md-10 col-sm-12" 
+                maxlength="500" placeholder="需要使用的测试数据..." 
+                :autosize="{ minRows: 3}" v-model.trim='CaseData.DataInput'>
+              </el-input>
             </div>
             <div class='form-group row'>
-              <label for='CaseSteps' class="col-sm-2 testcase-label">操作步骤</label>
-              <quill-editor class="col-sm-9 px-0 quill-editor-define" v-model="CaseData.steps"></quill-editor>
+              <label for='CaseOutput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">预期结果</label>
+              <el-input type="textarea" id="inputOutput" class="col-lg-9 col-md-10 col-sm-12"
+                maxlength="500" placeholder="测试用例预期结果..."
+                :autosize="{ minRows: 4}" v-model.trim='CaseData.expected_result'
+                required>
+              </el-input>
             </div>
             <div class='form-group row'>
-              <label for='CaseOutput' class="col-sm-2 testcase-label">预期结果</label>
-              <textarea type='text' id='inputOutput' class='textarea-control col-sm-9'
-                 rows='4' maxlength='500' placeholder='测试预期结果...' required
-                  v-model.trim='CaseData.expected_result' >
-              </textarea>
-            </div>
-            <div class='form-group row'>
-              <label for='CaseRemarks' class="col-sm-2 testcase-label">
+              <label for='CaseOutput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 备注<p class="label-desc">(选填)</p>
               </label>
-              <textarea type='text' id='inputRemarks' class='textarea-control col-sm-9'  
-                rows='4' maxlength='1000' placeholder='请输入备注...' 
-                v-model.trim='CaseData.remark' required>
-              </textarea>
+              <el-input type="textarea" id="inputOutput" class="col-lg-9 col-md-10 col-sm-12"
+                maxlength="1000" placeholder="请输入备注..."
+                :autosize="{ minRows: 4}" v-model.trim='CaseData.remark'>
+              </el-input>
             </div>
 
             <!-- 提交按钮 -->
