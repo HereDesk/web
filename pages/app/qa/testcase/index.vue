@@ -5,12 +5,17 @@
         <div>
           <div class="mb-3">
             <p class="pl-4 display-inline" v-if="!modules_list.length">
-              <nuxt-link class="display-inline" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+              <nuxt-link class="display-inline" 
+                :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
                 <span style="color:#2b2b2b;">维护模块</span>
               </nuxt-link>
             </p>
-            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()" v-else>全部模块</p>
-            <nuxt-link class="display-inline manage-modules" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }"
+              @click="click_all_modules()" v-else>
+              全部模块
+            </p>
+            <nuxt-link class="display-inline manage-modules" 
+              :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
               &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
             </nuxt-link>
           </div>
@@ -18,12 +23,21 @@
           <div class="t-modules-list mt-3">
             <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
               <li :id="item1.id">
-                <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" @click="clickMoudle1(item1)">
-                  <i class="iconfont icon-8a8a8a" :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]"></i>&nbsp;&nbsp;{{ item1.label }}
+                <span class="line-height-1-8 li-color" 
+                  :class="{ 'el-active': m1_id == item1.id }" 
+                  @click="clickMoudle1(item1)">
+                  <i class="iconfont icon-8a8a8a" 
+                    :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
+                  </i>
+                  &nbsp;&nbsp;{{ item1.label }}
                 </span>
                 <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
-                  <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" style="line-height:2.5rem;" @click="clickMoudle2(item2)">
-                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">{{ item2.label }}</span>
+                  <li style="line-height:2.5rem;" 
+                    v-for="item2 in item1.children" :key="item2.id" :id="item1.id" 
+                    @click="clickMoudle2(item2)">
+                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
+                      {{ item2.label }}
+                    </span>
                   </li>
                 </ul>
               </li>
@@ -82,9 +96,12 @@
             </div>
           </div>
 
-          <div class="row ml-2 mr-5 hiddenSearch" :class="{ showSearch: isShowSearch }" style="border-bottom:1px solid #C5CAE9;">
+          <div class="row ml-2 mr-5 hiddenSearch" style="border-bottom:1px solid #C5CAE9;"
+            :class="{ showSearch: isShowSearch }">
             <div class="col-md-10 col-10">
-              <input id="bugSearchInput" type="text" class="form-control border-none pt-3" placeholder="请输入ID或标题关键字进行搜索..." v-model.trim="wd" @keyup.enter="goSearch()" autofocus />
+              <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
+                placeholder="请输入ID或标题关键字进行搜索..." 
+                v-model.trim="wd" @keyup.enter="goSearch()" autofocus />
             </div>
             <div class="col-md-2 col-2 pt-2 text-center">
               <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
@@ -94,7 +111,8 @@
 
           <div id="testcase-data" class="row mt-3">
             <div class="col">
-              <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
+              <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" 
+                @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
@@ -111,8 +129,9 @@
                 </el-table-column>
                 <el-table-column label='标题' show-overflow-tooltip>
                   <template slot-scope="scope">
-                    <nuxt-link :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}" style="color:#424242;">
-                    {{ scope.row.title }}
+                    <nuxt-link style="color:#424242;"
+                      :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
+                      {{ scope.row.title }}
                     </nuxt-link>
                   </template>
                 </el-table-column>
@@ -144,7 +163,8 @@
                 </el-table-column>
                 <el-table-column label='' width="40">
                   <template slot-scope="scope">
-                    <div class="tableOpreate pt-2" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                    <div class="tableOpreate pt-2" 
+                      :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <button v-if="scope.row.status === 0 && Rules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-clear icon-8a8a8a size-1-5"></i>
                       </button>

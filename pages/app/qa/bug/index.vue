@@ -6,25 +6,36 @@
         <div>
           <div class="mb-3">
             <p class="pl-4 display-inline" v-if="!modules_list.length">
-              <nuxt-link class="display-inline" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+              <nuxt-link class="display-inline" 
+                :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
                 <span style="color:#2b2b2b" title="维护模块">维护模块</span>
               </nuxt-link>
             </p>
-            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()" v-else>全部模块</p>
-            <nuxt-link class="display-inline manage-modules" :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              &nbsp&nbsp&nbsp&nbsp<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
+              @click="click_all_modules()" v-else>全部模块</p>
+            <nuxt-link class="display-inline manage-modules" 
+              :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+              &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
             </nuxt-link>
           </div>
           <div class="divider"></div>
           <div class="t-modules-list mt-3">
             <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
               <li :id="item1.id">
-                <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" @click="clickMoudle1(item1)">
-                  <i class="iconfont icon-8a8a8a" :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]"></i>&nbsp&nbsp{{ item1.label }}
+                <span class="line-height-1-8 li-color"
+                  :class="{ 'el-active': m1_id == item1.id }" 
+                  @click="clickMoudle1(item1)">
+                  <i class="iconfont icon-8a8a8a" 
+                    :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
+                  </i>
+                  &nbsp;&nbsp;{{ item1.label }}
                 </span>
                 <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
-                  <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" style="line-height:2.5rem" @click="clickMoudle2(item2)">
-                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">{{ item2.label }}</span>
+                  <li style="line-height:2.5rem" 
+                    v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
+                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
+                      {{ item2.label }}
+                    </span>
                   </li>
                 </ul>
               </li>
@@ -54,7 +65,8 @@
               <span>
                 <span class="el-dropdown-desc">版本：</span>
                 <span class="el-dropdown-link bg-edown">
-                  {{ selected_release | FilterVersion }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  {{ selected_release | FilterVersion }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -67,7 +79,8 @@
               <span>
                 <span class="el-dropdown-desc">状态：</span>
                 <span class="el-dropdown-link bg-edown">
-                  {{ selected_status | bugStatusName }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  {{ selected_status | bugStatusName }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -80,7 +93,8 @@
               <span>
                 <span class="el-dropdown-desc">优先级：</span>
                 <span class="el-dropdown-link bg-edown">
-                  {{ selected_priority == 'all' ? "全部" : selected_priority }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  {{ selected_priority == 'all' ? "全部" : selected_priority }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -93,12 +107,15 @@
               <span>
                 <span class="el-dropdown-desc">快捷操作：</span>
                 <span class="el-dropdown-link bg-edown">
-                  {{ operate | QuickQperationName }}<i class="el-icon-arrow-down el-icon--right"></i>
+                  {{ operate | QuickQperationName }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
-                  <span :id="item.value" @click="SwitchOperate(item)">{{ item.value | QuickQperationName }}</span>
+                  <span :id="item.value" @click="SwitchOperate(item)">
+                    {{ item.value | QuickQperationName }}
+                  </span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -117,7 +134,8 @@
           </div>
         </div>
 
-        <div class="row mt-3 hiddenSearch" :class="{ showSearch: isShowSearch }" style="border-bottom:1px solid #C5CAE9">
+        <div class="row mt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
+          :class="{ showSearch: isShowSearch }">
           <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-12 pr-0 text-center">
             <el-dropdown id="page-query-product" class="mx-3 my-3" trigger="click">
               <span class="el-dropdown-link bg-edown bg-white text-center">
@@ -142,12 +160,22 @@
             </el-dropdown>
           </div>
           <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12 pt-2">
-            <input v-if="isShowInput === 'other'" type="text" id="bugSearchInput" class="form-control border-none pt-3" :placeholder="placeholder" v-model.trim="wd" @keyup.enter="goSearch(SearchBuilder)" autofocus />
-            <input v-if="isShowInput === 'date'" type="date" class="border-none text-90 pt-3" v-model="SearchCriteria.start_date">
-            <input v-if="isShowInput === 'date_range'" type="date" class="border-none text-90 pt-3" v-model="SearchCriteria.start_date">
-            <input v-if="isShowInput === 'date_range'" type="date" class="border-none text-90 pt-3" v-model="SearchCriteria.end_date">
+            <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
+              v-if="isShowInput === 'other'"
+              :placeholder="placeholder"
+              v-model.trim="wd" 
+              @keyup.enter="goSearch(SearchBuilder)" autofocus />
+            <input type="date" class="border-none text-90 pt-3" 
+              v-if="isShowInput === 'date'" 
+              v-model="SearchCriteria.start_date">
+            <input type="date" class="border-none text-90 pt-3" 
+              v-if="isShowInput === 'date_range'"
+              v-model="SearchCriteria.start_date">
+            <input type="date" class="border-none text-90 pt-3" 
+              v-if="isShowInput === 'date_range'" 
+              v-model="SearchCriteria.end_date">
           </div>
-          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-4  text-center">
+          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-4 text-center">
             <button type="button" class="btn text-90" @click="goSearch(SearchBuilder)">搜索</button>
           </div>
         </div>
@@ -155,34 +183,45 @@
         <!-- table: 数据展示 -->
         <div id="bug-list" class='row mt-3 mb-5 table_data'>
           <div class='col-xl-12 col-lg-12 col-md-12'>
-            <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
+            <el-table 
+              :data='tableData' 
+              :default-sort="{prop: 'date', order: 'descending'}" 
+              @cell-mouse-enter="tableHover" 
+              @cell-mouse-leave="tableLeave">
               <el-table-column label='ID' prop='id' sortable width='70'></el-table-column>
               <el-table-column label='状态' width='100'>
                 <template slot-scope="scope">
-                  <span v-if="scope.row.status === 'Closed'" class="text-secondary">
-                    <span class="circle circle-secondary"></span>&nbsp&nbsp{{ scope.row.status_name }}
+                  <span class="text-secondary" v-if="scope.row.status === 'Closed'" >
+                    <span class="circle circle-secondary"></span>
+                    &nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
-                  <span v-else-if="scope.row.status === 'New'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.status_name }}
+                  <span class="text-urgency" v-else-if="scope.row.status === 'New'" >
+                    <span class="circle circle-urgency"></span>
+                    &nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
-                  <span v-else-if="scope.row.status === 'Open'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.status_name }}
+                  <span class="text-urgency" v-else-if="scope.row.status === 'Open'" >
+                    <span class="circle circle-urgency"></span>
+                    &nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
-                  <span v-else-if="scope.row.status === 'Reopen'" class="text-urgency">
-                    <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.status_name }}
+                  <span class="text-urgency" v-else-if="scope.row.status === 'Reopen'">
+                    <span class="circle circle-urgency"></span>
+                    &nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
-                  <span v-else-if="scope.row.status === 'Fixed'" class="text-success">
-                    <span class="circle circle-success"></span>&nbsp&nbsp{{ scope.row.status_name }}
+                  <span class="text-success" v-else-if="scope.row.status === 'Fixed'">
+                    <span class="circle circle-success"></span>
+                    &nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
-                  <span v-else-if="scope.row.status === 'Hang-up'" class="text-warning">
-                    <span class="circle circle-warning"></span>&nbsp&nbsp{{ scope.row.status_name }}
+                  <span class="text-warning" v-else-if="scope.row.status === 'Hang-up'">
+                    <span class="circle circle-warning"></span>
+                    &nbsp;&nbsp;{{ scope.row.status_name }}
                   </span>
                   <span v-else>{{ scope.row.status_name }}</span>
                 </template>
               </el-table-column>
               <el-table-column label='标题' show-overflow-tooltip>
                 <template slot-scope="scope">
-                  <nuxt-link :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}" style="color:#424242">
+                  <nuxt-link 
+                    :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}" style="color:#424242">
                   {{ scope.row.title }}
                   </nuxt-link>
                 </template>
@@ -191,39 +230,46 @@
                 <template slot-scope="scope">
                   <div @click="BugPriorityDialog(scope.row)">
                     <span v-if="scope.row.priority === 'P1'" class="text-deadly">
-                      <span class="circle circle-deadly"></span>&nbsp&nbsp{{ scope.row.priority }}
+                      <span class="circle circle-deadly"></span>
+                      &nbsp;&nbsp;{{ scope.row.priority }}
                     </span>
                     <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
-                      <span class="circle circle-urgency"></span>&nbsp&nbsp{{ scope.row.priority }}
+                      <span class="circle circle-urgency"></span>
+                      &nbsp;&nbsp;{{ scope.row.priority }}
                     </span>
                     <span v-else class="text-secondary">
-                      <span class="circle circle-secondary"></span>&nbsp&nbsp{{ scope.row.priority }}
+                      <span class="circle circle-secondary"></span>
+                      &nbsp;&nbsp;{{ scope.row.priority }}
                     </span>
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label='创建' prop='creator_user' sortable width='90' show-overflow-tooltip></el-table-column>
+              <el-table-column label='创建' prop='creator_user' sortable width='90' show-overflow-tooltip>
+              </el-table-column>
               <el-table-column label='创建时间' width='120'>
                 <template slot-scope="scope">
                   <span>{{ scope.row.create_time | date(5) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label='指派' prop='assignedTo_user' sortable width='90' show-overflow-tooltip></el-table-column>
+              <el-table-column label='指派' prop='assignedTo_user' sortable width='90' show-overflow-tooltip>
+              </el-table-column>
               <el-table-column label='解决方案' width='90'>
                 <template slot-scope="scope">
                   <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
                     <span v-if="scope.row.solution_name === '已修复'" class="text-success">
-                      <span class="circle circle-success"></span>&nbsp&nbsp{{ scope.row.solution_name }}
+                      <span class="circle circle-success"></span>
+                      &nbsp;&nbsp;{{ scope.row.solution_name }}
                     </span>
                     <span v-else class="text-secondary">
-                      &nbsp&nbsp{{ scope.row.solution_name }}
+                      &nbsp;&nbsp;{{ scope.row.solution_name }}
                     </span>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column label='' width="50">
                 <template slot-scope="scope">
-                  <div class="tableOpreate" :class="{ 'showBugOpreate' : scope.row.bug_id === HoverBugId, 'hideText': scope.row.status === 'Closed'}">
+                  <div class="tableOpreate"
+                    :class="{ 'showBugOpreate' : scope.row.bug_id === HoverBugId, 'hideText': scope.row.status === 'Closed'}">
                     <button @click="skipAssign(scope.row)">
                       <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
                     </button>
@@ -304,12 +350,14 @@
           <div class="modal-header">
             <h5 class="modal-title">修改优先级</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times</span>
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body text-center">
             <ul class="ul-inline mb-5 mt-3">
-              <li class="mr-5 text-150 font-weight-light" v-for="item in priority_list" :key="item.id" v-if="item.pvalue != 'all'" @click="ModifyPriority(item.pvalue)">
+              <li class="mr-5 text-150 font-weight-light"
+                v-for="item in priority_list" :key="item.id" v-if="item.pvalue != 'all'" 
+                @click="ModifyPriority(item.pvalue)">
                 {{ item.pvalue }}
               </li>
             </ul>

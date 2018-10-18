@@ -8,9 +8,12 @@
           </h3>
         </div>
         <div id="page-details-1" class="col-xl-12 col-lg-12 col-md-12 my-4">
-          <button type="btn" class="btn btn-gray mr-3" @click="BugDelete()" v-if="BtnRules.del">删除</button>
-          <button type="btn" class="btn btn-gray" v-if="BtnRules.edit" @click="EditBug()">编辑</button>
-
+          <button type="btn" class="btn btn-gray mr-3" @click="BugDelete()" v-if="BtnRules.del">
+            删除
+          </button>
+          <button type="btn" class="btn btn-gray" v-if="BtnRules.edit" @click="EditBug()">
+            编辑
+          </button>
           <div class="btn-group btn-group-toggle mx-3">
             <label class="btn btn-gray active" v-if="BtnRules.assign">
               <input type="radio" name="options" id="bug-designate" autocomplete="off" @click="skipAssign()">分配
@@ -19,7 +22,6 @@
               <input type="radio" name="options" id="bug-open" autocomplete="off">重新打开
             </label>
           </div>
-
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-gray" @click="immediateRecovered()" v-if="BtnRules.Recovered">
               <input type="radio" name="options" id="bug-fixed" autocomplete="off">已解决
@@ -28,12 +30,21 @@
               <input type="radio" name="options" id="bug-other" autocomplete="off">其它解决方案
             </label>
           </div>
-
-          <button type="button" class="btn btn-gray ml-3" @click="BugClosed()" v-if="BtnRules.close">关闭</button>
-
-          <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-hangup" v-if="BtnRules.hangup">延期挂起</button>
-
-          <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#modal-notes" v-if="BtnRules.notes">备注</button>
+          <button type="button" class="btn btn-gray ml-3" 
+            @click="BugClosed()"
+            v-if="BtnRules.close">
+            关闭
+          </button>
+          <button type="button" class="btn btn-gray ml-3" 
+            data-toggle="modal" data-target="#modal-hangup"
+            v-if="BtnRules.hangup">
+            延期挂起
+          </button>
+          <button type="button" class="btn btn-gray ml-3" 
+            data-toggle="modal" data-target="#modal-notes"
+            v-if="BtnRules.notes">
+            备注
+          </button>
           <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">返回</button>
         </div>
       </div>
@@ -41,37 +52,49 @@
       <div class="row mt-5">
         <div id="bug-details-2" class='col-xl-8 col-lg-8 col-md-8'>
           <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">
-            <h6 class="bug-details-minor-title"><span class="standline"></span>&nbsp;&nbsp;操作步骤</h6>
+            <h6 class="bug-details-minor-title">
+              <span class="standline"></span>&nbsp;&nbsp;操作步骤
+            </h6>
             <pre class="details-block" v-html="BugDetails_steps "></pre>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
-            <h6 class="bug-details-minor-title"><span class="redline"></span>&nbsp;&nbsp;实际结果</h6>
+            <h6 class="bug-details-minor-title">
+              <span class="redline"></span>&nbsp;&nbsp;实际结果
+            </h6>
             <pre class="details-block" v-html="reality_result"></pre>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
-            <h6 class="bug-details-minor-title"><span class="successline"></span>&nbsp;&nbsp;预期结果</h6>
+            <h6 class="bug-details-minor-title">
+              <span class="successline"></span>&nbsp;&nbsp;预期结果
+            </h6>
             <pre class="details-block" v-html="expected_result"></pre>
           </div>
 
           <!-- 图片附件 -->
           <div id="bug-steps" class="height-7 mb-5" v-if="Annex.length > 0">
-            <h6 class="bug-details-minor-title"><span class="grayline"></span>&nbsp;&nbsp;附件</h6>
+            <h6 class="bug-details-minor-title">
+              <span class="grayline"></span>&nbsp;&nbsp;附件
+            </h6>
             ​<picture class="container-fluid">
               <div class="row">
-                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 images" v-for="p in Annex" :key="p.id" v-viewer>
+                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 images" 
+                  v-for="p in Annex" :key="p.id" v-viewer>
                   <img class="img-thumbnail" alt="..." :src="p.url" >
                 </div>
               </div>
             </picture>
           </div>
-
           <div id="bug-details-3" class="height-7 mb-5" v-if="BugDetails.remark">
-            <h6 class="bug-details-minor-title"><span class="grayline"></span>&nbsp;&nbsp;附加信息</h6>
+            <h6 class="bug-details-minor-title">
+              <span class="grayline"></span>&nbsp;&nbsp;附加信息
+            </h6>
             <div class="dropdown-divider"></div>
             <pre class="details-block" v-html="BugDetails_remark"></pre>
           </div>
           <div id="bug-details-history" class="height-7 mb-5 text-gray-38 text-93">
-            <h6 class="bug-details-minor-title"><span class="grayline"></span>&nbsp;&nbsp;活动记录</h6>
+            <h6 class="bug-details-minor-title">
+              <span class="grayline"></span>&nbsp;&nbsp;活动记录
+            </h6>
             <div class="dropdown-divider"></div>
             <div id="bug-history-record" class="mt-3">
               <ol class="pl-1">
@@ -87,7 +110,6 @@
             </div>
           </div>
         </div>
-
         <div id="page-details-4" class='col-xl-4 col-lg-4 col-md-4'>
           <div id="bug-details-desc">
             <h6 class="bug-details-minor-title">
@@ -203,12 +225,17 @@
               <label for="assignedTo">指派给</label>
               <select class='select-control border' v-model="ReOpenData.assignedTo">
                 <option disabled value="">请选择</option>
-                <option v-for='item in member_list' :key="item.id" :value="item.user_id">{{ item.realname }}</option>
+                <option v-for='item in member_list' :key="item.id" :value="item.user_id">
+                  {{ item.realname }}
+                </option>
               </select>
             </div>
             <div class='form-group row col-md-auto mx-3'>
               <label for="remark">原因</label>
-              <textarea type='text' v-model='ReOpenData.remark' class='textarea-control form-border-bottom' rows="5" placeholder='请输入原因...'></textarea>
+              <textarea type='text' class='textarea-control form-border-bottom' 
+                rows="5" placeholder='请输入原因...'
+                v-model='ReOpenData.remark'>
+              </textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -229,7 +256,10 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto mx-3'>
               <label for="remark">备注</label>
-              <textarea type='text' v-model='NotesData.remark' class='textarea-control form-border-bottom' rows="7" placeholder='请输入备注,2000字以内...'></textarea>
+              <textarea type='text' class='textarea-control form-border-bottom' 
+                rows="7" placeholder='请输入备注,2000字以内...'
+                v-model='NotesData.remark'>
+              </textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -250,7 +280,10 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto mx-3'>
               <label for="remark">延期说明</label>
-              <textarea type='text' v-model='HangUpData.remark' class='textarea-control form-border-bottom' rows="7" placeholder='请输入备注,2000字以内...'></textarea>
+              <textarea type='text' class='textarea-control form-border-bottom' 
+                rows="7" placeholder='请输入备注,2000字以内...'
+                v-model='HangUpData.remark'>
+              </textarea>
             </div>
           </div>
           <div class="modal-footer">

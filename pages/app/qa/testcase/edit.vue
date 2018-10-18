@@ -7,8 +7,12 @@
           
           <div class='form-group row'>
             <label for='CaseInfo' class="col-sm-2 testcase-label">基本信息</label>
-            <el-select v-model="CaseData.product_code" placeholder="请选择产品" class='col-sm-3 col-5 px-0' disabled>
-              <el-option v-for="item in product_list" :key="item.product_code" :label="item.product_code" :value="item.product_code">
+            <el-select class='col-sm-3 col-5 px-0' placeholder="请选择产品" v-model="CaseData.product_code" disabled>
+              <el-option 
+                v-for="item in product_list" 
+                :key="item.product_code" 
+                :label="item.product_code" 
+                :value="item.product_code">
               </el-option>
             </el-select>
             <el-cascader
@@ -22,14 +26,14 @@
 
           <div class='form-group row'>
             <label for='CaseInfo' class="col-sm-2 testcase-label">产品与模块</label>
-            <el-select v-model="CaseData.category" placeholder="用例类型" class='col-sm-3 col-5 px-0 e-select-support'>
+            <el-select class='col-sm-3 col-5 px-0 e-select-support' placeholder="用例类型" v-model="CaseData.category">
               <el-option value="Functional" label="功能"></el-option>
               <el-option value="compatibility" label="兼容"></el-option>
               <el-option value="UI" label="UI">UI</el-option>
               <el-option value="performance" label="性能"></el-option>
               <el-option value="other" label="其它"></el-option>
             </el-select>
-            <el-select v-model="CaseData.priority" placeholder="优先级" class='col-sm-3 col-5 ml-3 px-0'>
+            <el-select class='col-sm-3 col-5 ml-3 px-0' placeholder="优先级" v-model="CaseData.priority">
               <el-option value="P1">P1</el-option>
               <el-option value="P2">P2</el-option>
               <el-option value="P3">P3</el-option>
@@ -40,19 +44,28 @@
           <div id="t-testcase-functional">
             <div class='form-group row'>
               <label for='CaseTitle' class="col-sm-2 testcase-label">用例标题</label>
-              <el-input type='text' v-model.trim='CaseData.title' class='px-0 col-sm-9' id='inputTitle' placeholder='用例标题...' maxlength='50' required ></el-input>
+              <el-input type='text' id='inputTitle' class='px-0 col-sm-9' 
+                placeholder='用例标题...' maxlength='50' required 
+                v-model.trim='CaseData.title'>
+              </el-input>
             </div>
             <div class='form-group row'>
               <label for='CasePrecondition' class="col-sm-2 testcase-label">
                 执行前置条件<p class="label-desc">(选填)</p>
               </label>
-              <textarea type='text' v-model.trim='CaseData.precondition' class='textarea-control col-sm-9' id='inputPrecondition' placeholder='测试用例执行前置条件...' maxlength='500'></textarea>
+              <textarea type='text' id='inputPrecondition' class='textarea-control col-sm-9' 
+                 maxlength='500' placeholder='测试用例执行前置条件...'
+                v-model.trim='CaseData.precondition'>
+              </textarea>
             </div>
             <div class='form-group row'>
               <label for='CaseInput' class="col-sm-2 testcase-label">
                 测试数据<p class="label-desc">(选填)</p>
               </label>
-              <textarea type='text' v-model.trim='CaseData.DataInput' class='textarea-control col-sm-9' id='inputData' placeholder='测试数据...' maxlength='500' required></textarea>
+              <textarea type='text' id='inputData' class='textarea-control col-sm-9' 
+                maxlength='500' placeholder='测试数据...' required
+                v-model.trim='CaseData.DataInput'>
+                </textarea>
             </div>
             <div class='form-group row'>
               <label for='CaseSteps' class="col-sm-2 testcase-label">操作步骤</label>
@@ -60,19 +73,29 @@
             </div>
             <div class='form-group row'>
               <label for='CaseOutput' class="col-sm-2 testcase-label">预期结果</label>
-              <textarea type='text' v-model.trim='CaseData.expected_result' rows='4' class='textarea-control col-sm-9' id='inputOutput' placeholder='测试预期结果...' maxlength='500' required></textarea>
+              <textarea type='text' id='inputOutput' class='textarea-control col-sm-9'
+                 rows='4' maxlength='500' placeholder='测试预期结果...' required
+                  v-model.trim='CaseData.expected_result' >
+              </textarea>
             </div>
             <div class='form-group row'>
               <label for='CaseRemarks' class="col-sm-2 testcase-label">
                 备注<p class="label-desc">(选填)</p>
               </label>
-              <textarea type='text' v-model.trim='CaseData.remark' rows='4' class='textarea-control col-sm-9' id='inputRemarks' placeholder='请输入备注...' maxlength='1000' required></textarea>
+              <textarea type='text' id='inputRemarks' class='textarea-control col-sm-9'  
+                rows='4' maxlength='1000' placeholder='请输入备注...' 
+                v-model.trim='CaseData.remark' required>
+              </textarea>
             </div>
 
             <!-- 提交按钮 -->
             <div class='d-flex justify-content-center my-5'>
               <button type='button' class='btn btn-transparent' @click="$router.go(-1)">返回</button>
-              <button type='button' class='btn btn-submit mx-5 px-3' v-bind:disabled="isButtonDisabled" v-on:click='EditTestCase'>提交修改</button>
+              <button type='button' class='btn btn-submit mx-5 px-3' 
+                :disabled="isButtonDisabled"
+                @click='EditTestCase'>
+                提交修改
+              </button>
             </div>
           </div>
         </form>

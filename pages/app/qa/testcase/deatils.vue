@@ -8,33 +8,58 @@
           </h3>
         </div>
         <div id="page-details-1" class="col-xl-12 col-lg-12 col-md-12 my-4" v-if="CaseDetails.status === 0">
-          <button type="btn" class="btn btn-gray" @click="handleEdit()" v-if="Rules.edit">编辑</button>
-          <button type="button" class="btn btn-gray ml-3" @click="CaseDelete(CaseDetails.case_id)" v-if="CaseDetails.isDelete === 0 && Rules.del">删除</button>
-          <button type="button" class="btn btn-gray ml-3" @click="handleFall(CaseDetails.case_id)" v-if="Rules.fall">失效</button>
-          <button type="button" class="btn btn-gray ml-3" data-toggle="modal" data-target="#ModalCaseReview">评审</button>
+          <button type="btn" class="btn btn-gray" 
+            @click="handleEdit()" 
+            v-if="Rules.edit">
+            编辑
+          </button>
+          <button type="button" class="btn btn-gray ml-3" 
+            @click="CaseDelete(CaseDetails.case_id)"
+            v-if="CaseDetails.isDelete === 0 && Rules.del">
+            删除
+          </button>
+          <button type="button" class="btn btn-gray ml-3" 
+            @click="handleFall(CaseDetails.case_id)"
+            v-if="Rules.fall">
+            失效
+          </button>
+          <button type="button" class="btn btn-gray ml-3" 
+            data-toggle="modal" data-target="#ModalCaseReview">
+            评审
+          </button>
         </div>
       </div>
 
       <div id="case-details-2" class="row my-5">
         <div id="case-details-2-1" class='col-xl-8 col-lg-8 col-md-8'>
           <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
-            <h6><span class="grayline"></span>&nbsp;&nbsp;执行前置条件</h6>
+            <h6>
+              <span class="grayline"></span>&nbsp;&nbsp;执行前置条件
+            </h6>
             <pre class="details-block">{{ CaseDetails.precondition }}</pre>
           </div>
           <div id="case-steps" class="height-7 mb-4">
-            <h6><span class="standline"></span>&nbsp;&nbsp;操作步骤</h6>
+            <h6>
+              <span class="standline"></span>&nbsp;&nbsp;操作步骤
+            </h6>
             <div class="details-block" v-html="CaseDetails.steps"></div>
           </div>
           <div id="case-input" class="height-7 mb-3" v-if="CaseDetails.DataInput">
-            <h6><span class="grayline"></span>&nbsp;&nbsp;测试输入数据</h6>
+            <h6>
+              <span class="grayline"></span>&nbsp;&nbsp;测试输入数据
+            </h6>
             <pre class="details-block">{{ CaseDetails.DataInput }}</pre>
           </div>
           <div id="case-expected-result" class="height-7 mb-3">
-            <h6><span class="successline"></span>&nbsp;&nbsp;预期结果</h6>
+            <h6>
+              <span class="successline"></span>&nbsp;&nbsp;预期结果
+            </h6>
             <pre class="details-block">{{ CaseDetails.expected_result }}</pre>
           </div>
           <div id="case-remark" class="height-7 mb-3" v-if="CaseDetails.remark">
-            <h6><span class="grayline"></span>&nbsp;&nbsp;附加信息</h6>
+            <h6>
+              <span class="grayline"></span>&nbsp;&nbsp;附加信息
+            </h6>
             <pre class="details-block">{{ CaseDetails.remark }}</pre>
           </div>
         </div>
@@ -66,8 +91,12 @@
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
-              <li><label>创建者：</label>{{ CaseDetails.creator }}</li>
-              <li><label>创建日期：</label>{{ CaseDetails.create_time | date }}</li>
+              <li>
+                <label>创建者：</label>{{ CaseDetails.creator }}
+              </li>
+              <li>
+                <label>创建日期：</label>{{ CaseDetails.create_time | date }}
+              </li>
               <li>
                 <label>更新日期：</label>{{ CaseDetails.update_time | date }}
               </li>
@@ -129,7 +158,10 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto mx-3'>
               <label for="remark">评审意见</label>
-              <textarea type='text' v-model='review_data.remark' class='textarea-control form-border-bottom' rows="5" placeholder='请输入评审意见...'></textarea>
+              <textarea type='text' class='textarea-control form-border-bottom' 
+                rows="5" placeholder='请输入评审意见...'
+                v-model='review_data.remark'>
+              </textarea>
             </div>
           </div>
           <div class="text-center mb-5">
