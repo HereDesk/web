@@ -329,6 +329,9 @@ export default {
   },
 
   watch: {
+    wd: function(val, oldVal) {
+      this.pageNumber = 1
+    },
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch() : this.getCaseList()
