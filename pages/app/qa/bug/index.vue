@@ -163,8 +163,7 @@
             <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
               v-if="isShowInput === 'other'"
               :placeholder="placeholder"
-              v-model.trim="wd" 
-              @keyup.enter="goSearch(SearchBuilder)" autofocus />
+              v-model.trim="wd" autofocus />
             <input type="date" class="border-none text-90 pt-3" 
               v-if="isShowInput === 'date'" 
               v-model="SearchCriteria.start_date">
@@ -630,6 +629,9 @@ export default {
   },
 
   watch: {
+    wd: function(val, oldVal) {
+      this.pageNumber = 1
+    },
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch(this.QueryBuilder) : this.getBugList()

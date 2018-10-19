@@ -78,6 +78,11 @@ export default {
       }
     }
   },
+  watch: {
+    total () {
+      this.pageNumber = 1
+    }
+  },
 
   methods: {
     // 翻页

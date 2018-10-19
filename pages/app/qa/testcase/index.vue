@@ -279,8 +279,8 @@ export default {
       Msg: false,
       img_src: null,
       // Bug: 搜索
-      wd: null,
-      isShowSearch: false,
+      wd: this.$route.query.wd || null,
+      isShowSearch: this.$route.query.wd ? true : false,
       // 控制显示
       HoverTestcase_id: "",
       // 数据统计
@@ -331,7 +331,7 @@ export default {
   watch: {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
-      this.wd ? this.goSearch() : this.getLeftData()
+      this.wd ? this.goSearch() : this.getCaseList()
       this.$router.replace({
         path: "/app/qa/testcase",
         query: this.QueryBuilder
@@ -427,7 +427,7 @@ export default {
     },
 
     // TestCase: 数据列表
-    getLeftData() {
+    getCaseList() {
       axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -445,7 +445,7 @@ export default {
       axios.get("/api/qa/testcase/fall?case_id=" + case_id)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.getLeftData()
+            this.getCaseList()
             this.$notify.success({ title: "成功", message: res.data["msg"] })
           } else {
             this.$notify.error({ title: "成功", message: res.data["msg"] })
