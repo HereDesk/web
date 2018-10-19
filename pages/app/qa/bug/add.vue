@@ -160,7 +160,6 @@ export default {
       fileList: [],
       developer_list: [],
       product_list: [],
-      release_list: [],
       modules_list: [],
       isButtonDisabled: false,
       isRemarkDisable: false,
@@ -199,12 +198,26 @@ export default {
     },
     BugSeverityList() {
       return this.$store.state.BugProperty.bug_severity
-    }
+    },
+    release_list: function() {
+      let arr = [{ version: "全部" }]
+      if (this.Bug.product_code) {
+        for (let i in this.product_list) {
+          if (this.Bug.product_code === this.product_list[i]["product_code"]) {
+            return arr.concat(this.product_list[i]["data"])
+          }
+        }
+      } else {
+        return null
+      }
+    },
   },
 
   watch: {
     selected_product_code: function(old, oldVal) {
+      this.Bug.release = ''
       this.getModule()
+      this.getDeveloper()
     }
   },
 
@@ -268,9 +281,7 @@ export default {
       axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
           this.product_list = res.data["data"]
-          this.release_list = res.data["data"][0]["data"]
           this.Bug.product_code = res.data["data"][0]["product_code"]
-          this.getDeveloper()
         }
       })
     },

@@ -128,7 +128,7 @@
             <span  class="searchIcon mr-4" title="今日成就" @click="myToday()">
               <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
             </span>
-            <nuxt-link to="/app/qa/bug/add">
+            <nuxt-link to='/app/qa/bug/add'>
               <button type="btn" class="btn btn-create"> + 创建 </button>
             </nuxt-link>
           </div>

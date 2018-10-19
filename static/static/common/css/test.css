@@ -288,7 +288,7 @@
   border-right: 1px solid #eee;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767.99px) {
   .pg-modules {
     display: none;
   }
