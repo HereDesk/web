@@ -39,8 +39,8 @@ export default {
   data () {
     return {
       FirstPage: 1,
-      pageNumber: this.$route.query.pageNumber || 1,
-      pageSize: this.$route.query.pageSize || 10
+      pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+      pageSize: parseInt(this.$route.query.pageSize) || 10
     }
   },
 

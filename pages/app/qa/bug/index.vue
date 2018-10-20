@@ -50,7 +50,7 @@
           <div id="bug-query">
             <el-dropdown id="page-query-product" class="mr-3 my-3" trigger="click">
               <span>
-                <span class="el-dropdown-desc">产品：</span>
+                <span class="el-dropdown-desc">产品:</span>
                 <span class="el-dropdown-link bg-edown">
                   {{ selected_product }}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -63,7 +63,7 @@
             </el-dropdown>
             <el-dropdown id="page-query-version" class="mr-3 my-3" trigger="click">
               <span>
-                <span class="el-dropdown-desc">版本：</span>
+                <span class="el-dropdown-desc">版本:</span>
                 <span class="el-dropdown-link bg-edown">
                   {{ selected_release | FilterVersion }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
@@ -77,7 +77,7 @@
             </el-dropdown>
             <el-dropdown id="page-query-bugstatus" class="mr-3 my-3" trigger="click">
               <span>
-                <span class="el-dropdown-desc">状态：</span>
+                <span class="el-dropdown-desc">状态:</span>
                 <span class="el-dropdown-link bg-edown">
                   {{ selected_status | bugStatusName }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
@@ -91,7 +91,7 @@
             </el-dropdown>
             <el-dropdown id="page-query-bugstatus" class="mr-3 my-3" trigger="click">
               <span>
-                <span class="el-dropdown-desc">优先级：</span>
+                <span class="el-dropdown-desc">优先级:</span>
                 <span class="el-dropdown-link bg-edown">
                   {{ selected_priority == 'all' ? "全部" : selected_priority }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
@@ -105,7 +105,7 @@
             </el-dropdown>
             <el-dropdown id="page-query-quick" class="mr-3 my-3" trigger="click">
               <span>
-                <span class="el-dropdown-desc">快捷操作：</span>
+                <span class="el-dropdown-desc">快捷操作:</span>
                 <span class="el-dropdown-link bg-edown">
                   {{ operate | QuickQperationName }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
@@ -161,21 +161,21 @@
           </div>
           <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12 pt-2">
             <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
-              v-if="isShowInput === 'other'"
-              :placeholder="placeholder"
+              v-if="SwitchSearchInput === 'other'"
+              placeholder="输入关键字..."
               v-model.trim="wd" autofocus />
             <input type="date" class="border-none text-90 pt-3" 
-              v-if="isShowInput === 'date'" 
+              v-if="SwitchSearchInput === 'date'" 
               v-model="SearchCriteria.start_date">
             <input type="date" class="border-none text-90 pt-3" 
-              v-if="isShowInput === 'date_range'"
+              v-if="SwitchSearchInput === 'date_range'"
               v-model="SearchCriteria.start_date">
             <input type="date" class="border-none text-90 pt-3" 
-              v-if="isShowInput === 'date_range'" 
+              v-if="SwitchSearchInput === 'date_range'" 
               v-model="SearchCriteria.end_date">
           </div>
           <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-4 text-center">
-            <button type="button" class="btn text-90" @click="goSearch(SearchBuilder)">搜索</button>
+            <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
           </div>
         </div>
 
@@ -308,9 +308,9 @@
     <!-- Bug处理操作：指派 -->
     <div id="bug-list-assign" v-if="showBugAssignBox">
       <BugAssign 
-        v-bind:bug_id="selectedBugId" 
-        v-bind:product_code="selected_product"
-        v-bind:pageSource="pageSource"
+        :bug_id="selectedBugId" 
+        :product_code="selected_product"
+        :pageSource="pageSource"
         @refreshList="getBugList()">
       </BugAssign>
     </div>
@@ -318,13 +318,21 @@
     <!-- Bug处理操作：解决 -->
     <div id="bug-list-resolve" v-if="showBugResolveBox">
       <BugResolve
-        v-bind:bug_id="selectedBugId"
-        v-bind:OpenBy="HoverBugIdOpenBy"
-        v-bind:product_code="selected_product"
-        v-bind:pageSource="pageSource"
-        v-bind:scheme="scheme"
+        :bug_id="selectedBugId"
+        :OpenBy="HoverBugIdOpenBy"
+        :product_code="selected_product"
+        :pageSource="pageSource"
+        :scheme="scheme"
         @refreshList="getBugList()">
       </BugResolve>
+    </div>
+
+    <!-- Bug处理操作：修改优先级 -->
+    <div id="bug-list-priority" v-if="showBugPriorityBox">
+      <ChangePriority
+        :bug_id="selectedBugId"
+        @refreshList="getBugList()">
+      </ChangePriority>
     </div>
 
     <!-- Bug处理操作：关闭 -->
@@ -337,30 +345,6 @@
           <div class="modal-footer modal-footer-center">
             <button type="button" class="btn btn-cancel mr-5" data-dismiss="modal">以后</button>
             <button type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bug处理操作：修改优先级 -->
-    <div id="modal-modify-priority" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">修改优先级</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body text-center">
-            <ul class="ul-inline mb-5 mt-3">
-              <li class="mr-5 text-150 font-weight-light"
-                v-for="item in priority_list" :key="item.id" v-if="item.pvalue != 'all'" 
-                @click="ModifyPriority(item.pvalue)">
-                {{ item.pvalue }}
-              </li>
-            </ul>
-            <p class="my-3 text-gray">备注：选择后，即实现提交，无需进行其它操作</p>
           </div>
         </div>
       </div>
@@ -416,10 +400,13 @@
 
 <script>
 import axios from "axios"
+
 import loading from "~/components/loading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
+import ChangePriority from "~/components/ChangePriority"
 import Pagination from "~/components/Pagination"
+
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
 import rules from "~/assets/js/rules.js"
@@ -436,6 +423,7 @@ export default {
     loading,
     BugAssign,
     BugResolve,
+    ChangePriority,
     Pagination
   },
 
@@ -465,16 +453,22 @@ export default {
       SearchCriteria: {
         Operators: this.$route.query.Operators || "=",
         SearchType: this.$route.query.SearchType || "ID",
-        start_date: null,
-        end_date: null
+        start_date: String(this.$route.query.SearchType).includes('time') && 
+          (this.$route.query.wd).includes('#') 
+            ? String(this.$route.query.wd).split('#')[0]
+            : this.$route.query.wd,
+        end_date: String(this.$route.query.SearchType).includes('time') && 
+          (this.$route.query.wd).includes('#') 
+            ? String(this.$route.query.wd).split('#')[1]
+            : null,
       },
       SearchOperatorSymbol: this.$route.query.Operators || '=',
-      wd: this.$route.query.wd || null,
+      wd: null,
       isShowSearch: this.$route.query.wd ? true : false,
       // 表格数据
       total: null,
-      pageNumber: this.$route.query.pageNumber || 1,
-      pageSize: this.$route.query.pageSize || 10,
+      pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+      pageSize: parseInt(this.$route.query.pageSize) || 10,
       tableData: [],
       Msg: false,
       img_src: null,
@@ -486,15 +480,12 @@ export default {
       // 组件
       showBugAssignBox: false,
       showBugResolveBox: false,
+      showBugPriorityBox: false,
       scheme: "Fixed",
       pageSource: "page_bug_index",
       // close bug
       ClosedData: {
         bug_id: ""
-      },
-      ModifyPriorityData: {
-        bug_id: "",
-        priority: ""
       }
     }
   },
@@ -552,19 +543,16 @@ export default {
       if (this.operate != "no") {
         QueryBuilder["operate"] = this.operate
       }
-      if (this.wd) {
-        QueryBuilder["Operators"] = this.SearchCriteria.Operators
-        QueryBuilder["SearchType"] = this.SearchCriteria.SearchType
-        if (this.SearchCriteria.SearchType.indexOf("time") > 0) {
-          if (this.SearchCriteria.Operators === "range") {
-            let date = new Array()
-            date[0] = this.SearchCriteria.start_date
-            date[1] = this.SearchCriteria.end_date
-            QueryBuilder["wd"] = date
-          } else {
-            QueryBuilder["wd"] = this.SearchCriteria.start_date
-          }
-        } else {
+      if (this.isShowSearch) {
+        if (this.SearchCriteria.start_date && !this.SearchCriteria.end_date) {
+          this.wd = this.SearchCriteria.start_date
+        }
+        if (this.SearchCriteria.start_date && this.SearchCriteria.end_date) {
+          this.wd = this.SearchCriteria.start_date + '#' + this.SearchCriteria.end_date
+        } 
+        if (this.wd) {
+          QueryBuilder["Operators"] = this.SearchCriteria.Operators
+          QueryBuilder["SearchType"] = this.SearchCriteria.SearchType
           QueryBuilder["wd"] = this.wd
         }
       }
@@ -592,7 +580,7 @@ export default {
         return OperatorsList1
       }
     },
-    isShowInput: function() {
+    SwitchSearchInput: function() {
       if (this.SearchCriteria.SearchType.indexOf("time") > 0) {
         if (this.SearchCriteria.Operators === "range") {
           return "date_range"
@@ -601,19 +589,6 @@ export default {
         }
       } else {
         return "other"
-      }
-    },
-    placeholder: function() {
-      let data = this.SearchCriteria.SearchType
-      let symbol = this.SearchCriteria.Operators
-      if (data.indexOf("time") < 0) {
-        return "输入关键字..."
-      } else {
-        if (symbol === "range") {
-          return "若查询日期范围，在开始日期和结束日期之间，使用#分割"
-        } else {
-          return "日期格式: 2018-01-01"
-        }
       }
     },
     // userinfo group
@@ -634,7 +609,7 @@ export default {
     },
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
-      this.wd ? this.goSearch(this.QueryBuilder) : this.getBugList()
+      this.wd ? this.goSearch() : this.getBugList()
       this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
     },
     product_list: function(val, oldVal) {
@@ -668,7 +643,7 @@ export default {
   },
 
   mounted() {
-    this.wd ? this.goSearch(this.QueryBuilder) : this.getBugList()
+    this.wd && this.SearchCriteria.SearchType ? this.goSearch() : this.getBugList()
     this.getModule()
   },
 
@@ -736,10 +711,19 @@ export default {
         this.selected_status = data["code"]
       }
       if ("OperatorsName" in data) {
+        this.SearchCriteria.start_date = null
+        this.SearchCriteria.end_date = null
+        this.wd = null
         this.SearchCriteria.Operators = data["OperatorsValue"]
       }
       if ("tname" in data) {
+        this.wd = null
+        this.SearchCriteria.start_date = null
+        this.SearchCriteria.end_date = null
         this.SearchCriteria.SearchType = data["tvalue"]
+        if (!(this.SearchCriteria.SearchType).includes('time')) {
+          this.SearchCriteria.Operators = '='
+        }
       }
       if ("lable" in data) {
         this.modules_id[0] = data["value"]
@@ -750,6 +734,7 @@ export default {
       this.pageNumber = 1
       this.operate = item["value"]
       this.selected_status = "all"
+      this.selected_priority = "all"
     },
 
     // Bug: 列表
@@ -777,23 +762,27 @@ export default {
         this.isShowSearch = true
       }
     },
-    goSearch(data) {
+    goSearch() {
       let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
-      if (!data.wd && data.SearchType.indexOf("time") < 0) {
-        this.$notify.error({ title: "提示", message: "请输入搜索内容" })
+      let data = this.QueryBuilder
+      if (!data.wd && (data.SearchType).includes("time")) {
+        this.$notify.error({ 
+          title: "提示", 
+          message: "请输入搜索内容"
+        })
         return
       }
-      if (data.Operators === "range" && data.SearchType.indexOf("time") > 0) {
-        let start_date = data.wd[0]
-        let end_date = data.wd[1]
-        if (data.wd.length !== 2) {
+      if (data.Operators === "range" && (data.SearchType).includes("time") && (data.wd).includes("#")) {
+        let start_date = (data.wd).split("#")[0]
+        let end_date = (data.wd).split("#")[1]
+        if (!start_date && !end_date) {
           this.$notify.error({
             title: "提示",
             message: "请输入开始日期和结束日期"
           })
           return
         }
-        if (((data.wd.length === 2) & start_date.match(reg)) | !end_date.match(reg)) {
+        if (!start_date.match(reg) || !end_date.match(reg)) {
           this.$notify.error({
             title: "提示",
             message: "请输入有效日期范围,比如:2018-08-08 2018-10-01"
@@ -801,9 +790,9 @@ export default {
           return
         }
       }
-      if ((data.SearchType.indexOf("time") > 0) & (data.Operators !== "range")) {
-        let date = data.wd.match(reg)
-        if (!date) {
+      if ((data.SearchType).includes("time") && data.Operators !== "range") {
+        let date = data.wd
+        if (!date.match(reg)) {
           this.$notify.error({
             title: "提示",
             message: "请输入有效日期,比如:2018-08-08"
@@ -814,7 +803,7 @@ export default {
       axios({
         method: "POST",
         url: "/api/qa/bug/search?",
-        data: data
+        data: JSON.stringify(this.QueryBuilder)
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.tableData = res.data["data"]
@@ -827,6 +816,12 @@ export default {
       })
     },
 
+    // 操作：bug修改优先级
+    BugPriorityDialog(row) {
+      this.showBugPriorityBox = true
+      $("#modal-modify-priority").modal("show")
+      this.selectedBugId = row.bug_id
+    },
     // 操作: bug指派
     skipAssign(row) {
       this.showBugAssignBox = true
@@ -845,7 +840,6 @@ export default {
       this.ClosedData.bug_id = row.bug_id
     },
     ClosedBug(bug_id) {
-      
       axios({
         method: "post",
         url: "/api/qa/bug/close",
@@ -864,34 +858,6 @@ export default {
           })
         }
         $("#modal-bugClosed").modal("hide")
-      })
-    },
-    // 操作：bug修改优先级
-    BugPriorityDialog(row) {
-      $("#modal-modify-priority").modal("show")
-      this.ModifyPriorityData.bug_id = row.bug_id
-    },
-    ModifyPriority(data) {
-      
-      this.ModifyPriorityData.priority = data
-      axios({
-        method: "post",
-        url: "/api/qa/bug/edit",
-        data: JSON.stringify(this.ModifyPriorityData)
-      }).then(res => {
-        if (res.data["status"] === 20000) {
-          this.$notify.success({
-            title: "成功",
-            message: res.data["msg"]
-          })
-          $("#modal-modify-priority").modal("hide")
-          this.getBugList()
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: res.data["msg"]
-          })
-        }
       })
     },
     // 数据统计

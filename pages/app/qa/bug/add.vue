@@ -200,7 +200,7 @@ export default {
       return this.$store.state.BugProperty.bug_severity
     },
     release_list: function() {
-      let arr = [{ version: "全部" }]
+      let arr = []
       if (this.Bug.product_code) {
         for (let i in this.product_list) {
           if (this.Bug.product_code === this.product_list[i]["product_code"]) {

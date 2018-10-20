@@ -370,7 +370,7 @@ export default {
         method: 'post',
         url: '/api/qa/bug/edit',
         data: JSON.stringify(this.Bug),
-        transformRequest: [ function (data) {
+        transformRequest: [(data) => {
           this.isButtonDisabled = true
           return data
         }]

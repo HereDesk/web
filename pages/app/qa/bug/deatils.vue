@@ -16,7 +16,7 @@
           </button>
           <div class="btn-group btn-group-toggle mx-3">
             <label class="btn btn-gray active" v-if="BtnRules.assign">
-              <input type="radio" name="options" id="bug-designate" autocomplete="off" @click="skipAssign()">分配
+              <input type="radio" name="options" id="bug-designate" autocomplete="off" @click="SkipAssign()">分配
             </label>
             <label class="btn btn-gray" data-toggle="modal" data-target="#modal-reopen" v-if="BtnRules.reopen">
               <input type="radio" name="options" id="bug-open" autocomplete="off">重新打开
@@ -26,7 +26,7 @@
             <label class="btn btn-gray" @click="immediateRecovered()" v-if="BtnRules.Recovered">
               <input type="radio" name="options" id="bug-fixed" autocomplete="off">已解决
             </label>
-            <label class="btn btn-gray" @click="skipRecovered('other')" v-if="BtnRules.Recovered">
+            <label class="btn btn-gray" @click="SkipRecovered('other')" v-if="BtnRules.Recovered">
               <input type="radio" name="options" id="bug-other" autocomplete="off">其它解决方案
             </label>
           </div>
@@ -129,7 +129,7 @@
               <li>
                 <label>严重程度：</label>{{ BugDetails.severity_name }}
               </li>
-              <li>
+              <li @click="BugPriorityDialog">
                 <label>优先级：</label>{{ BugDetails.priority_name }}
               </li>
               <li>
@@ -211,6 +211,14 @@
         v-bind:pageSource="pageSource"
         v-bind:member_list="member_list">
       </BugResolve>
+    </div>
+
+    <!-- Bug处理操作：修改优先级 -->
+    <div id="bug-list-priority" v-if="showBugPriorityBox">
+      <ChangePriority
+        :bug_id="currentBugId"
+        @refreshList="getBugDetails()">
+      </ChangePriority>
     </div>
 
     <!-- Bug处理操作：重新打开缺陷 -->
@@ -307,6 +315,7 @@ import 'viewerjs/dist/viewer.min.css'
 import loading from '~/components/loading'
 import BugAssign from '~/components/BugAssign'
 import BugResolve from '~/components/BugResolve'
+import ChangePriority from "~/components/ChangePriority"
 
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
@@ -336,11 +345,13 @@ export default {
   components: {
     BugAssign,
     BugResolve,
+    ChangePriority,
     loading
   },
 
   data () {
     return {
+      currentBugId: this.$route.query.bug_id,
       BugDetails: {},
       Annex: [],
       product_code: '',
@@ -377,6 +388,7 @@ export default {
       bug_idOpenBy: '',
       showBugAssignBox: false,
       showBugResolveBox: false,
+      showBugPriorityBox: false,
       scheme: '',
       pageSource: 'page_bug_details'
     }
@@ -402,9 +414,6 @@ export default {
     },
     BID: function () {
       return this.BugDetails['id'] ? this.BugDetails['id'] + '、' : ''
-    },
-    currentBugId: function () {
-      return this.$route.query.bug_id
     },
     BugStatus: function () {
       return this.BugDetails ? this.BugDetails['status'] : false
@@ -440,7 +449,10 @@ export default {
               this.Annex = res.data['annex']
               this.product_code = res.data['data']['product_code']
             } else {
-
+              this.$notify.error({
+                title: '错误',
+                message: res.data['msg']
+              })
             }
         })
       }
@@ -475,14 +487,14 @@ export default {
       })
     },
 
-    skipRecovered (scheme) {
+    SkipRecovered (scheme) {
       this.showBugResolveBox = true
       this.scheme = scheme
       $('#componentsResolve').modal('show')
     },
 
     // 分配
-    skipAssign () {
+    SkipAssign () {
       this.showBugAssignBox = true
       $('#componentsAssign').modal('show')
     },
@@ -497,6 +509,12 @@ export default {
           this.$notify.error({title: '失败',message: res.data['msg']})
         }
       })
+    },
+
+    // 操作：bug修改优先级
+    BugPriorityDialog() {
+      this.showBugPriorityBox = true
+      $("#modal-modify-priority").modal("show")
     },
 
     // bug closed
@@ -551,9 +569,15 @@ export default {
         if (res.data['status'] === 20000) {
           this.$router.go(-1)
           $('#modal-hangup').modal('hide')
-          this.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({
+            title: '成功',
+            message: res.data['msg']
+          })
         } else {
-          this.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({
+            title: '错误',
+            message: res.data['msg']
+          })
         }
       })
     },
@@ -578,9 +602,15 @@ export default {
         if (res.data['status'] === 20000) {
           this.BugHistory()
           $('#modal-notes').modal('hide')
-          this.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({
+            title: '成功',
+            message: res.data['msg']
+          })
         } else {
-          this.$notify.error({title: '错误',message: res.data['msg']})
+          this.$notify.error({
+            title: '错误',
+            message: res.data['msg']
+          })
         }
       })
     }

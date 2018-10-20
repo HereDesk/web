@@ -27,6 +27,7 @@
             data-toggle="modal" data-target="#ModalCaseReview">
             评审
           </button>
+          <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">返回</button>
         </div>
       </div>
 
