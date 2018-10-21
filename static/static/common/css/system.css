@@ -36,8 +36,10 @@
 	word-break: break-all;
 	word-wrap: break-word;
 	min-width: 10rem;
+	list-style: none;
 }
 
 .ul_line li {
+	list-style: none;
 	line-height: 2.5rem;
 }

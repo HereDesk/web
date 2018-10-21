@@ -67,8 +67,12 @@ module.exports = {
       ssr: true
     },
     {
-      src: '~plugins/qull.js',
-      ssr: true
+      src: '~plugins/quill.js',
+      ssr: false
+    },
+    {
+      src: '~plugins/viewer.js',
+      ssr: false
     }
   ],
 
@@ -93,7 +97,7 @@ module.exports = {
         '^/api/': ''
       }
     },
-    '/media/': {
+    'media/': {
       target: 'http://127.0.0.1:8000/',
       pathRewrite: {
         '^/': ''
