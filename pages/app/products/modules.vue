@@ -36,10 +36,10 @@
             <span>-&nbsp;&nbsp;</span>
             <span class="flex-grow-1 m2edit" contenteditable="true" @keyup="changeData($event,item)">{{ item.m2 }} &nbsp;</span>
             <div :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}" @click="SaveEditM2()">
-              <img class="mr-3" src="~assets/images/save.png">
+              <i class="iconfont icon-duigou icon-8a8a8a size-1-5 mr-3"></i>
             </div>
             <div @click="delM2(item)">
-              <img class="mr-3" src="~assets/images/vaild.png">
+              <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
             </div>
           </li>
         </ul>

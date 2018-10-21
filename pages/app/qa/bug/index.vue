@@ -19,7 +19,7 @@
         </div>
         <div class="divider"></div>
         <div class="t-modules-list mt-3">
-          <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
+          <ul class="pl-4 ul-style-none" v-for="item1 in modules_list" :key="item1.id">
             <li :id="item1.id">
               <span class="line-height-1-8 li-color"
                 :class="{ 'el-active': m1_id == item1.id }" 
@@ -29,7 +29,7 @@
                 </i>
                 &nbsp;&nbsp;{{ item1.label }}
               </span>
-              <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
+              <ul class="ul-display pl-5 mt-2" v-if="m1_id == item1.id">
                 <li style="line-height:2.5rem" 
                   v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
                   <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">

@@ -100,12 +100,12 @@
                 <div v-for="item in Annex" :key="item.id" class="annex" style="display:inline;">
                   <img :src="item.url" :class="{ 'h-annex' : Bug.annex.length > 0 }">
                   <span class="annex_delete" @click="annex_delete(item.url)">
-                    <img src="~assets/images/delete.png" :class="{ 'h-annex' : Bug.annex.length > 0 }">
+                    <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : Bug.annex.length }"></i>
                   </span>
                 </div>
                 <el-upload style="display:inline;"
                   name="images"
-                  action="/api/support/upload"
+                  action="/api/support/upload?type=bug"
                   list-type="picture-card"
                   :limit="3"
                   :on-success="ImageSuccess"
@@ -137,6 +137,7 @@
 
 <script>
 import axios from 'axios'
+import fileutil from "~/assets/js/file.js"
 
 export default {
   head () {
@@ -259,63 +260,18 @@ export default {
       })
     },
 
-    annex_delete (data) {
-      this.AnnexDelData.url = data
-      axios({
-        method: 'post',
-        url: '/api/qa/bug/annex/delete',
-        data: this.AnnexDelData
-      }).then(res => {
-        if (res.data['status'] === 20000) {
-          let tmp = new Array()
-          tmp = this.Annex
-          for (var i in tmp) {
-            if (data == tmp[i]['url']) {
-              let index = tmp.indexOf(tmp[i])
-              if (index > -1) { 
-                tmp.splice(index, 1); 
-              }
-            }
-          }
-          this.$notify.success({title: '成功',message: res.data['msg']})
-        } else {
-          this.$notify.error({title: '失败',message: res.data['msg']})
-        }
-      })
+    annex_delete (file_path) {
+      this.AnnexDelData.url = file_path
+      fileutil.AnnexDelete("bug",file_path,this.AnnexDelData,this.Annex)
     },
-
     handleRemove(file) {
-      let beDeleted = file.response['name']
-      let annex = this.Bug.annex
-      for (var i = 0; i < annex.length; i++) {
-        if (annex[i] == beDeleted) {
-          annex.splice(i, 1)
-        }
-      }
+      fileutil.FileHandleRemove(file,this.Bug.annex)
     },
-    ImageSuccess (response,fileList) {
-      this.Bug.annex.push(response['name'])
+    ImageSuccess(response, fileList) {
+      this.Bug.annex.push(response["name"])
     },
-    beforeAvatarUpload (file) {
-      const isLt3M = file.size / 1024 / 1024 < 3
-      const PicFormat = file.name.split('.')[1] === 'jpg'
-      const PicFormat1 = file.name.split('.')[1] === 'png'
-      const PicFormat2 = file.name.split('.')[1] === 'jpeg'
-      const PicFormat3 = file.name.split('.')[1] === 'gif'
-      const isLt2M = file.size / 1024 / 1024 < 10
-      if (!PicFormat && !PicFormat1 && !PicFormat2 && !PicFormat3) {
-        this.$notify.error({
-          title: '上传失败',
-          message: '上传图片格式只能为jpg/png/jpeg/gif'
-        })
-      }
-      if (!isLt3M) {
-        this.$notify.error({
-          title: '上传失败',
-          message: '上传文件大小不能超过2.5M'
-        })
-      }
-      return PicFormat || PicFormat1 || PicFormat2 || PicFormat3 && isLt3M
+    beforeAvatarUpload(file) {
+      fileutil.FileBeforeAvatarUpload(file)
     },
     getBugProperty () {
       axios.get('/api/qa/bug/bug_property').then(res => {
@@ -376,11 +332,17 @@ export default {
         }]
       }).then(res => {
         if (res.data['status'] === 20000) {
-          this.$notify.success({title: '成功',message: res.data['msg']})
+          this.$notify.success({
+            title: '成功',
+            message: res.data['msg']
+          })
           this.$router.go(-1)
         } else {
           this.isButtonDisabled = false
-          this.$notify.error({title: '失败',message: res.data['msg']})
+          this.$notify.error({
+            title: '失败',
+            message: res.data['msg']
+          })
         }
       })
     }

@@ -24,6 +24,7 @@
 }
 
 .ul_module_a li {
+	list-style: none;
 	line-height: 1.5rem;
 	padding-left: 1rem;
 	margin-top:2rem;

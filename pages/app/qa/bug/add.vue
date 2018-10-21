@@ -103,11 +103,11 @@
               </div>
 
               <div class='form-group row'>
-                <label for='bug-remark' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
-                <form id="bug-remark" class="col-lg-8 col-md-10 col-sm-12">
+                <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
+                <form id="bug-file" class="col-lg-8 col-md-10 col-sm-12 px-0">
                   <el-upload 
                     name="images" 
-                    action="/api/support/upload" 
+                    action="/api/support/upload?type=bug" 
                     list-type="picture-card" 
                     :limit="3" :on-success="ImageSuccess" 
                     :on-remove="handleRemove" 
@@ -116,7 +116,7 @@
                     <i class="el-icon-plus"></i>
                   </el-upload>
                 </form>
-              </div>
+              </div> 
 
               <div class='form-group row' v-if="isRemarkDisable">
                 <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
@@ -149,6 +149,8 @@
 
 <script>
 import axios from "axios"
+import fileutil from "~/assets/js/file.js"
+
 export default {
   head() {
     return {
@@ -244,37 +246,13 @@ export default {
         })
     },
     handleRemove(file) {
-      let beDeleted = file.response["name"]
-      let annex = this.Bug.annex
-      for (var i = 0 ;i < annex.length;i++) {
-        if (annex[i] == beDeleted) {
-          annex.splice(i, 1)
-        }
-      }
+      fileutil.FileHandleRemove(file,this.Bug.annex)
     },
     ImageSuccess(response, fileList) {
       this.Bug.annex.push(response["name"])
     },
     beforeAvatarUpload(file) {
-      const isLt3M = file.size / 1024 / 1024 < 3
-      const PicFormat = file.name.split(".")[1].toLowerCase() === "jpg"
-      const PicFormat1 = file.name.split(".")[1].toLowerCase() === "png"
-      const PicFormat2 = file.name.split(".")[1].toLowerCase() === "jpeg"
-      const PicFormat3 = file.name.split(".")[1].toLowerCase() === "gif"
-      const isLt2M = file.size / 1024 / 1024 < 10
-      if (!PicFormat && !PicFormat1 && !PicFormat2 && !PicFormat3) {
-        this.$notify.error({
-          title: "上传失败",
-          message: "上传图片格式只能为jpg/png/jpeg/gif"
-        })
-      }
-      if (!isLt3M) {
-        this.$notify.error({
-          title: "上传失败",
-          message: "上传文件大小不能超过2.5M"
-        })
-      }
-      return PicFormat || PicFormat1 || PicFormat2 || (PicFormat3 && isLt3M)
+      fileutil.FileBeforeAvatarUpload(file)
     },
     // 获取产品版本信息
     getProductRelease() {

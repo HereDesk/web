@@ -30,7 +30,7 @@ html,body {
 **
 */
 .quill-editor-define {
-  padding-bottom: 4.7rem;
+  padding-bottom: 3rem;
   border-radius: 25px !important;
 }
 
@@ -45,6 +45,7 @@ html,body {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 0.95rem !important;
+  min-height: 8rem;
 }
 
 .ql-editor.ql-blank::before {
@@ -55,6 +56,12 @@ html,body {
   font-weight: 300;
 }
 
+.ql-editor ol, .ql-editor ul {
+  padding-left: 0rem !important;
+}
+.ql-editor li,p {
+  line-height: 1.8rem;
+}
 /*
 **
 ** 以下是关于element-ui部分的自定义 css代码
@@ -358,8 +365,9 @@ a:link {
   line-height: 3rem;
 }
 
-li {
+.ul-style-none li {
   list-style: none;
+  line-height: 2.5rem;
 }
 
 /* 
@@ -398,6 +406,23 @@ li {
   background-color: #00BFA5;
 }
 
+.center-circle {
+  width: 6.6rem;
+  height: 6.6rem;
+  line-height: 6.6rem;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.center-circle-success {
+  border:0.5rem solid red;
+}
+
+.center-circle > .center-circle-text {
+  position: relative;
+  text-align: center;
+}
+
 /* 
 ** 
 ** Public: 线条先关
@@ -414,6 +439,33 @@ li {
   border-top: 1px solid rgb(233, 236, 239);
 }
 
+.standline {
+  height: 1.1rem;
+  width: 3px;
+  background-color: #673AB7;
+  float: left;
+}
+
+.redline {
+  height: 1.1rem;
+  width: 3px;
+  background-color: #F44336;
+  float: left;
+}
+
+.successline {
+  height: 1.1rem;
+  width: 3px;
+  background-color: #4CAF50;
+  float: left;
+}
+
+.grayline {
+  height: 1.1rem;
+  width: 3px;
+  background-color: #B1BEC6;
+  float: left;
+}
 
 /* 
 **

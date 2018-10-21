@@ -60,12 +60,14 @@ export default {
           title: "提交失败",
           message: "用户名长度需在6到30位之间"
         })
+        return
       }
       if (password.replace(/^s+/g, "").length === 0) {
         this.$notify.error({
           title: "提交失败",
           message: "密码不能为空哦"
         })
+        return
       }
       if ((password.length > 30) | (password.length < 6)) {
         this.$notify.error({
@@ -119,5 +121,5 @@ export default {
 </script>
 
 <style>
-@import "../static/static/common/css/login.css";
+  @import "../static/static/common/css/login.css";
 </style>

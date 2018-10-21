@@ -63,7 +63,22 @@
             </h6>
             <pre class="details-block">{{ CaseDetails.remark }}</pre>
           </div>
+          <!-- 图片附件 -->
+          <div id="case-steps" class="height-7 mb-5" v-if="Annex.length > 0">
+            <h6>
+              <span class="grayline"></span>&nbsp;&nbsp;原型或设计图
+            </h6>
+            ​<picture class="container-fluid">
+              <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 images" 
+                  v-for="p in Annex" :key="p.id" v-viewer>
+                  <img class="img-thumbnail" alt="..." :src="p.file_path" >
+                </div>
+              </div>
+            </picture>
+          </div>
         </div>
+
 
         <div id="page-details-2-2" class='col-xl-4 col-lg-4 col-md-4'>
           <div id="page-details-2-2-1">
@@ -122,7 +137,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> 
 
       <div class="row mt-3 mb-5" v-if="CaseReviewDetails.length > 0">
         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
@@ -179,6 +194,7 @@
 
 <script>
 import axios from 'axios'
+
 import loading from '~/components/loading'
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
@@ -206,7 +222,8 @@ export default {
         case_id: '',
         result: 0,
         remark: ''
-      }
+      },
+      Annex: []
     }
   },
 
@@ -243,6 +260,7 @@ export default {
           .then(res => {
             if (res.data['status'] === 20000) {
               this.CaseDetails = res.data['data']
+              this.Annex = res.data['annex']
               this.CaseReviewDetails = res.data['review']
             } else {
               console.log(res.data['msg'])

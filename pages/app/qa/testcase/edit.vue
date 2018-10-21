@@ -97,6 +97,29 @@
               </el-input>
             </div>
 
+            <div class='form-group row'>
+              <label class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
+              <form class="col-lg-8 col-md-10 col-sm-12">
+                <div v-for="item in Annex" :key="item.id" class="annex" style="display:inline;">
+                  <img :src="item.file_path" :class="{ 'h-annex' : CaseData.annex.length > 0 }">
+                  <span class="annex_delete" @click="annex_delete(item.file_path)">
+                    <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : CaseData.annex.length }"></i>
+                  </span>
+                </div>
+                <el-upload style="display:inline;"
+                  name="images"
+                  action="/api/support/upload?type=testcase"
+                  list-type="picture-card"
+                  :limit="3"
+                  :on-success="ImageSuccess"
+                  :on-remove="handleRemove"
+                  :beforeUpload="beforeAvatarUpload"
+                  :file-list="fileList">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </form>
+            </div> 
+
             <!-- 提交按钮 -->
             <div class='d-flex justify-content-center my-5'>
               <button type='button' class='btn btn-transparent' @click="$router.go(-1)">返回</button>
@@ -116,6 +139,8 @@
 
 <script>
 import axios from 'axios'
+import fileutil from "~/assets/js/file.js"
+
 export default {
   head () {
     return {
@@ -136,7 +161,13 @@ export default {
       CaseData: {
         product_code: null,
         category: null,
-        priority: null
+        priority: null,
+        annex: []
+      },
+      fileList: [],
+      Annex: [],
+      AnnexDelData: {
+        file_path: null
       }
     }
   },
@@ -144,6 +175,9 @@ export default {
   computed: {
     seleted_product () {
       return this.CaseData.product_code
+    },
+    uploadDisabled:function() {
+      return this.fileList.length > 5
     }
   },
 
@@ -169,6 +203,7 @@ export default {
       axios.get('/api/qa/testcase/details?case_id=' + this.case_id)
         .then(res => {
           if (res.data['status'] === 20000) {
+            this.Annex = res.data['annex']
             var data = res.data['data']
             var module = new Array()
             module[0] = data.m1_id
@@ -202,6 +237,20 @@ export default {
         })
     },
 
+    handleRemove(file) {
+      fileutil.FileHandleRemove(file,this.CaseData.annex)
+    },
+    ImageSuccess(response, fileList) {
+      this.CaseData.annex.push(response["name"])
+    },
+    beforeAvatarUpload(file) {
+      fileutil.FileBeforeAvatarUpload(file)
+    },
+    annex_delete (file_path) {
+      this.AnnexDelData.file_path = file_path
+      fileutil.AnnexDelete("testcase",file_path,this.AnnexDelData,this.Annex)
+    },
+
     EditTestCase (event) {
       var title =  this.CaseData.title
       var DataInput =  this.CaseData.DataInput
@@ -229,10 +278,10 @@ export default {
         })
         return
       }
-      if (steps.trim().length < 10 | steps.trim().length > 500) {
+      if (steps.trim().length < 10 | steps.trim().length > 5000) {
         this.$notify.error({
           title: '错误',
-          message: '操作步骤的有效长度为10到500'
+          message: '操作步骤的有效长度为10到5000'
         })
         return
       }
@@ -242,6 +291,9 @@ export default {
           message: '备注输入太长了,有效最大长度为1000'
         })
         return
+      }
+      if (!this.CaseData.module_id[0] && !this.CaseData.module_id[1]){
+         this.CaseData.module_id = []
       }
       axios({
         method: 'post',
@@ -258,7 +310,7 @@ export default {
             this.isButtonDisabled = false
             this.$notify.error({
               title: '错误',
-              message: rep.data['msg']
+              message: res.data['msg']
           })
         }
       })

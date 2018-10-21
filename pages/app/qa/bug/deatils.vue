@@ -97,9 +97,9 @@
             </h6>
             <div class="dropdown-divider"></div>
             <div id="bug-history-record" class="mt-3">
-              <ol class="pl-1">
-                <li v-for="(item,index) in history" :key="item.id" class="my-2">
-                  {{ index + 1 }}.  {{ item.create_time | date }} :
+              <ol class="pl-3">
+                <li v-for="item in history" :key="item.id" class="my-2">
+                  {{ item.create_time | date }} :
                   <span class="log-text-user">{{ item.username }}</span>
                   {{ item.desc }}
                   <pre class="log-text-remark text-90" v-if="item.remark">
