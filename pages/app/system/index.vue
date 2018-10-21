@@ -2,7 +2,7 @@
   <div id="page-permissions" class="container">
     <div id="module-product" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
-        <a class="navbar-brand">系统管理</a>
+        <a class="navbar-brand">系统设置</a>
       </nav>
     </div>
     <div class="row" style="margin-top:15%;">
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import loading from "~/components/loading";
+import axios from "axios"
+import loading from "~/components/loading"
 export default {
   head() {
     return {
-      title: "HDesk - 系统管理"
+      title: "HDesk - 系统设置"
     };
   },
 
@@ -32,7 +32,12 @@ export default {
     return {
       LinkData: [
         {
-          url: "/app/system/permissions",
+          url: "/app/system/page",
+          img: require("~/static/pic/system_perm.png"),
+          text: "页面权限"
+        },
+        {
+          url: "/app/system/api",
           img: require("~/static/pic/system_perm.png"),
           text: "接口权限"
         },

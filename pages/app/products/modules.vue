@@ -33,8 +33,8 @@
         </div>
         <ul class="ul_module_b pl-3">
           <li v-for="item in m2_list" :key="item.id" class="d-flex"> 
-            <span>-&nbsp&nbsp</span>
-            <span class="flex-grow-1 m2edit" contenteditable="true" @keyup="changeData($event,item)">{{ item.m2 }} &nbsp</span>
+            <span>-&nbsp;&nbsp;</span>
+            <span class="flex-grow-1 m2edit" contenteditable="true" @keyup="changeData($event,item)">{{ item.m2 }} &nbsp;</span>
             <div :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}" @click="SaveEditM2()">
               <img class="mr-3" src="~assets/images/save.png">
             </div>
@@ -79,9 +79,12 @@ export default {
     }
   },
   layout: "head",
+  validate({ query }) {
+    return query.product_code ? true : false
+  },
   data() {
     return {
-      selected_product: "",
+      selected_product: this.$route.query.product_code || "",
       product_list: [],
       msg: "",
       selected_a_module: null,
@@ -132,11 +135,8 @@ export default {
   },
 
   created() {
-    var query = this.$route.query
-    if (query["product_code"]) {
-      this.selected_product = query["product_code"]
-    }
     this.getProductList()
+    this.getModuleA()
   },
   methods: {
     // get product info and release info

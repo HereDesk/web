@@ -129,8 +129,9 @@
               <li>
                 <label>严重程度：</label>{{ BugDetails.severity_name }}
               </li>
-              <li @click="BugPriorityDialog">
-                <label>优先级：</label>{{ BugDetails.priority_name }}
+              <li @click="BugPriorityDialog()">
+                <label>优先级：</label>
+                <span class="text-2973B7">{{ BugDetails.priority_name }}</span>
               </li>
               <li>
                 <label>解决方案：</label>{{ BugDetails.solution_name }}

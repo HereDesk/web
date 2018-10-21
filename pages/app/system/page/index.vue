@@ -1,0 +1,187 @@
+<template>
+  <div id="page-permissions" class="container">
+    <div id="module-product" class="row mt-5">
+      <nav class="navbar navbar-expand-lg mr-auto">
+        <a class="navbar-brand">页面管理</a>
+      </nav>
+    </div>
+    <div class="row mt-3">
+      <div id="permissions-group" class="col-xl-3 col-sm-12 col-12">
+        <p class="divider"></p>
+        <ul class="pl-0 ul_link">
+          <li v-for="item in group_list" 
+            :key="item.id" :value="item.group" 
+            :class="{ 'selected_data' : PageData.group == item.group }" 
+            v-if="item.group != 'admin'"
+            @click="select_group(item.group)">
+            {{ item.name }}
+          </li>
+        </ul>
+      </div>
+      <div id="permissions-management" class="col-xl-9 col-sm-12 col-12">
+        <div style="display:block;">
+          <button type="btn" class="btn btn-create float-right" data-toggle="modal" data-target="#add_router">
+            创建新页面
+          </button>
+        </div>
+        <div v-for="item in page_list" :key="item.id" class="mb-5 mt-5">
+          <h5>{{ item.flag }}</h5>
+          <p class="divider"></p>
+          <ul class="pl-0 ul_line">
+            <li v-for="p in item.data" :key="p.id" class="mr-3">
+              <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1" 
+                @click="PageManage($event,p.id)">
+                {{ p.page_name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="add_router" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">创建新页面</h5>
+          </div>
+          <div class="modal-body my-3">
+            <div class='form-group row col-md-auto mx-3'>
+              <label for="permissions_name">页面标记</label>
+              <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
+                v-model='PageData.flag' />
+            </div>
+            <div class='form-group row col-md-auto mx-3'>
+              <label for="permissions_name">页面名称</label>
+              <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
+                v-model='PageData.page_name' />
+            </div>
+             <div class='form-group row col-md-auto mx-3'>
+              <label for="permissions_url">页面地址</label>
+              <input type='text' class='form-control' maxlength="100" placeholder='请输入页面url...' 
+                v-model='PageData.page_url' />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary" @click="SavePageData()">提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios"
+
+export default {
+  head() {
+    return {
+      title: "HDesk - 页面管理"
+    }
+  },
+
+  data() {
+    return {
+      page_list: [],
+      modules: [],
+      PageData: {
+        page_name: "",
+        page_url: "",
+        flag: "",
+        group: "test"
+      },
+      group_list: []
+    };
+  },
+  created() {
+    this.get_group_list()
+    this.getPageList()
+  },
+  methods: {
+    get_group_list() {
+      axios.get("/api/user/group").then(res => {
+        if (res.data["status"] === 20000) {
+          this.group_list = res.data["data"]
+        } else {
+          this.$notify.error({ 
+            title: "提示", 
+            message: res.data["msg"] 
+          })
+        }
+      })
+    },
+    select_group(data) {
+      this.PageData.group = data
+      this.getPageList()
+    },
+    getPageList() {
+      axios.get("/api/system/page/list?group=" + this.PageData.group)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.page_list = res.data["data"]
+          } else {
+            this.page_list = []
+            this.$notify.error({ 
+              title: "提示", 
+              message: res.data["msg"] 
+            })
+          }
+        })
+    },
+    SavePageData() {
+      axios({
+        method: "post",
+        url: "/api/system/page/create",
+        data: JSON.stringify(this.PageData)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          this.getPageList()
+          $("#add_router").modal("hide")
+          this.$notify.success({ 
+            title: "成功", 
+            message: res.data["msg"] 
+          })
+        } else {
+          this.$notify.error({ 
+            title: "提示", 
+            message: res.data["msg"] 
+          })
+        }
+      })
+    },
+    PageManage(event, page_id) {
+      var data = {
+        is_allow: null,
+        page_id: null,
+        group: null
+      }
+      event.target.checked ? (data.is_allow = 1) : (data.is_allow = -1)
+      data.page_id = page_id
+      data.group = this.PageData.group
+      axios({
+        method: "post",
+        url: "/api/system/page/manage",
+        data: JSON.stringify(data)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          this.getPageList()
+          this.$notify.success({ 
+            title: "成功", 
+            message: res.data["msg"] 
+          })
+        } else {
+          this.$notify.error({ 
+            title: "提示", 
+            message: res.data["msg"] 
+          })
+        }
+      })
+    }
+  }
+};
+</script>
+
+<style>
+  @import "~/static/static/common/css/system.css";
+</style>

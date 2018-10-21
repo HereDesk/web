@@ -37,3 +37,7 @@
 	word-wrap: break-word;
 	min-width: 10rem;
 }
+
+.ul_line li {
+	line-height: 2.5rem;
+}

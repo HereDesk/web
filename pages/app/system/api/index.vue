@@ -2,7 +2,7 @@
   <div id="page-permissions" class="container">
     <div id="module-product" class="row mt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
-        <a class="navbar-brand">权限管理</a>
+        <a class="navbar-brand">API权限管理</a>
       </nav>
     </div>
     <div class="row mt-3">
@@ -11,7 +11,7 @@
         <ul class="pl-0 ul_link">
           <li v-for="item in group_list" 
             :key="item.id" :value="item.group" 
-            :class="{ 'selected_data' : PermissionsData.group == item.group }" 
+            :class="{ 'selected_data' : ApiPermissionsData.group == item.group }" 
             v-if="item.group != 'admin'"
             @click="select_group(item.group)">
             {{ item.name }}
@@ -22,12 +22,14 @@
         <div style="display:block;">
           <button type="btn" class="btn btn-create float-right" data-toggle="modal" data-target="#add_router">+权限</button>
         </div>
-        <div v-for="item in permissions_list" :key="item.id" class="mb-5 mt-5">
+        <div v-for="item in api_list" :key="item.id" class="mb-5 mt-5">
           <h5>{{ item.flag }}</h5>
           <p class="divider"></p>
           <ul class="pl-0 ul_perm">
             <li v-for="p in item.data" :key="p.id" class="mr-3">
-              <input type="checkbox" class="mr-2" :value="p.permissions_id" :checked="p.is_allow === 1" @click="MangePermissions($event,p.permissions_id)">{{ p.name }}
+              <input type="checkbox" class="mr-2" :value="p.api_id" :checked="p.is_allow === 1" 
+                @click="ApiManage($event,p.api_id)">
+                {{ p.name }}
             </li>
           </ul>
         </div>
@@ -43,26 +45,26 @@
           <div class="modal-body my-3">
             <div class='form-group row col-md-auto mx-3'>
               <label for="page_module">选择模块</label>
-              <select class="select-control form-border-bottom" v-model="PermissionsData.flag">
+              <select class="select-control form-border-bottom" v-model="ApiPermissionsData.flag">
                 <option v-for="item in modules" :key="item.id" :value="item.value">{{ item.name }}</option>
               </select>
             </div>
             <div class='form-group row col-md-auto mx-3'>
               <label for="permissions_name">权限名称</label>
-              <input type='text' v-model='PermissionsData.name' maxlength="100" class='form-control' placeholder='请输入页面名称...' />
+              <input type='text' v-model='ApiPermissionsData.name' maxlength="100" class='form-control' placeholder='请输入页面名称...' />
             </div>
             <div class='form-group row col-md-auto mx-3'>
               <label for="permissions_name">权限code</label>
-              <input type='text' v-model='PermissionsData.code' maxlength="100" class='form-control' placeholder='请输入页面名称...' />
+              <input type='text' v-model='ApiPermissionsData.code' maxlength="100" class='form-control' placeholder='请输入页面名称...' />
             </div>
              <div class='form-group row col-md-auto mx-3'>
               <label for="permissions_url">url</label>
-              <input type='text' v-model='PermissionsData.url' maxlength="100" class='form-control' placeholder='请输入页面url...' />
+              <input type='text' v-model='ApiPermissionsData.url' maxlength="100" class='form-control' placeholder='请输入页面url...' />
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="SavePermissions()">提交</button>
+            <button type="submit" class="btn btn-primary" @click="SaveApiData()">提交</button>
           </div>
         </div>
       </div>
@@ -81,9 +83,9 @@ export default {
 
   data() {
     return {
-      permissions_list: [],
+      api_list: [],
       modules: [],
-      PermissionsData: {
+      ApiPermissionsData: {
         group: "test",
         name: "",
         code: "",
@@ -92,14 +94,9 @@ export default {
       group_list: []
     };
   },
-
-  computed: {},
-
-  watch: {},
-
   created() {
     this.get_group_list()
-    this.getPermissionsList("test")
+    this.getApiList("test")
   },
   methods: {
     get_group_list() {
@@ -115,16 +112,16 @@ export default {
       })
     },
     select_group(data) {
-      this.PermissionsData.group = data
-      this.getPermissionsList(data)
+      this.ApiPermissionsData.group = data
+      this.getApiList(data)
     },
-    getPermissionsList(data) {
-      axios.get("/api/system/permissions/list?group=" + data)
+    getApiList(data) {
+      axios.get("/api/system/api/list?group=" + data)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.permissions_list = res.data["data"]
+            this.api_list = res.data["data"]
           } else {
-            this.permissions_list = []
+            this.api_list = []
             this.$notify.error({ 
               title: "提示", 
               message: res.data["msg"] 
@@ -132,15 +129,15 @@ export default {
           }
         })
     },
-    SavePermissions() {
+    SaveApiData() {
       axios({
         method: "post",
-        url: "/api/system/permissions/create",
-        data: JSON.stringify(this.PermissionsData)
+        url: "/api/system/api/create",
+        data: JSON.stringify(this.ApiPermissionsData)
       }).then(res => {
         if (res.data["status"] === 20000) {
           $("#add_router").modal("hide")
-          this.getPermissionsList(this.PermissionsData.flag)
+          this.getApiList(this.ApiPermissionsData.flag)
           this.$notify.success({ 
             title: "成功", 
             message: res.data["msg"] 
@@ -153,22 +150,22 @@ export default {
         }
       })
     },
-    MangePermissions(event, permissions_id) {
+    ApiManage(event, api_id) {
       var data = {
         is_allow: null,
-        permissions_id: null,
+        api_id: null,
         group: null
       }
       event.target.checked ? (data.is_allow = 1) : (data.is_allow = -1)
-      data.permissions_id = permissions_id
-      data.group = this.PermissionsData.group
+      data.api_id = api_id
+      data.group = this.ApiPermissionsData.group
       axios({
         method: "post",
-        url: "/api/system/permissions/manage",
+        url: "/api/system/api/manage",
         data: JSON.stringify(data)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.getPermissionsList(this.PermissionsData.group)
+          this.getApiList(this.ApiPermissionsData.group)
           this.$notify.success({ 
             title: "成功", 
             message: res.data["msg"] 

@@ -74,12 +74,15 @@ export default {
     }
   },
   layout: "head",
+  validate({ query }) {
+    return query.product_code ? true : false
+  },
   filters: {
     date: util.date
   },
   data() {
     return {
-      product_code: "",
+      product_code: this.$route.query.product_code || "",
       release_list: "",
       tableData: [],
       msg: "",
@@ -101,12 +104,7 @@ export default {
     }
   },
   created() {
-    this.product_code = this.$route.query.product_code
-    if (this.$route.query.product_code) {
-      this.getRelease()
-    } else {
-      this.$router.push("/basic/product")
-    }
+    this.getRelease()
   },
   methods: {
     // 获取版本

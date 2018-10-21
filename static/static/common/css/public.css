@@ -456,6 +456,10 @@ li {
   color: rgb(0, 123, 255) !important;
 }
 
+.text-2973B7 {
+  color: rgb(41, 115, 183);
+}
+
 .text-gray-38 {
   color: #383838;
 }
@@ -499,6 +503,10 @@ li {
 
 .text-200 {
   font-size:2rem;
+}
+
+.text-line {
+  text-decoration:underline;
 }
 
 .text-notes {
@@ -862,6 +870,10 @@ textarea::-webkit-input-placeholder {
 */
 .display-inline {
   display: inline;
+}
+
+.display-block {
+  display: block;
 }
 
 .display-none {

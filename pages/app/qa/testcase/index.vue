@@ -1,48 +1,43 @@
 <template>
   <div id="page-testcase" class="container-fluid">
     <div class="row">
-      <div id="testcase-modules" class="col-xl-2 col-lg-3 col-md-3 col-sm-12 col-12 pg-modules pt-5">
-        <div>
-          <div class="mb-3">
-            <p class="pl-4 display-inline" v-if="!modules_list.length">
-              <nuxt-link class="display-inline" 
-                :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-                <span style="color:#2b2b2b">维护模块</span>
-              </nuxt-link>
-            </p>
-            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }"
-              @click="click_all_modules()" v-else>
-              全部模块
-            </p>
-            <nuxt-link class="display-inline manage-modules" 
+      <div id="about-modules" class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12 pt-5 pg-modules">
+        <div class="mb-3">
+          <p class="pl-4 display-inline" v-if="!modules_list.length">
+            <nuxt-link class="display-inline" 
               :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+              <span style="color:#2b2b2b" title="维护模块">维护模块</span>
             </nuxt-link>
-          </div>
-          <div class="divider"></div>
-          <div class="t-modules-list mt-3">
-            <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
-              <li :id="item1.id">
-                <span class="line-height-1-8 li-color" 
-                  :class="{ 'el-active': m1_id == item1.id }" 
-                  @click="clickMoudle1(item1)">
-                  <i class="iconfont icon-8a8a8a" 
-                    :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
-                  </i>
-                  &nbsp;&nbsp;{{ item1.label }}
-                </span>
-                <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
-                  <li style="line-height:2.5rem" 
-                    v-for="item2 in item1.children" :key="item2.id" :id="item1.id" 
-                    @click="clickMoudle2(item2)">
-                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
-                      {{ item2.label }}
-                    </span>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+          </p>
+          <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
+            @click="click_all_modules()" v-else>全部模块</p>
+          <nuxt-link class="display-inline manage-modules" 
+            :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+            &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+          </nuxt-link>
+        </div>
+        <div class="divider"></div>
+        <div class="t-modules-list mt-3">
+          <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
+            <li :id="item1.id">
+              <span class="line-height-1-8 li-color"
+                :class="{ 'el-active': m1_id == item1.id }" 
+                @click="clickMoudle1(item1)">
+                <i class="iconfont icon-8a8a8a" 
+                  :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
+                </i>
+                &nbsp;&nbsp;{{ item1.label }}
+              </span>
+              <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
+                <li style="line-height:2.5rem" 
+                  v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
+                  <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
+                    {{ item2.label }}
+                  </span>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -184,7 +179,7 @@
           <!-- loading -->
           <div id="page-loading" class="row" v-if='total === null'>
             <div class="col text-center">
-              <loading></loading>
+              <loading></loading> 
             </div>
           </div>
 
@@ -264,8 +259,8 @@ export default {
       // 产品、版本
       product_list: [],
       selected_product: null,
-      m2_id: null,
-      m1_id: null,
+      m1_id: this.$route.query.m1_id || null,
+      m2_id: this.$route.query.m2_id || null,
       status_list: [
         { status_name: "正常", status_value: 0 },
         { status_name: "无效", status_value: 1 }
@@ -314,6 +309,7 @@ export default {
       QueryBuilder["pageSize"] = this.pageSize
       QueryBuilder["product_code"] = this.selected_product
       QueryBuilder["status"] = this.selected_status
+      this.m1_id ? (QueryBuilder["m1_id"] = this.m1_id) : null
       this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null
       this.wd ? (QueryBuilder["wd"] = this.wd) : null
       return QueryBuilder

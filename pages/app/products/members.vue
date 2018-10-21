@@ -3,7 +3,7 @@
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
-        <a class="navbar-brand">成员管理</a>
+        <a class="navbar-brand">{{ product_code }}成员列表</a>
       </div>
       <div class='col-auto'>
         <button type='button' class='btn btn-create' id='addRelease' data-toggle="modal" data-target="#P-Join-Members" @click="getAllUser()">
@@ -96,13 +96,19 @@ export default {
       title: "HDesk - 成员管理"
     }
   },
+  
   layout: "head",
-  components: {
-    tooltip
+
+  validate({ query }) {
+    return query.product_code ? true : false
   },
 
   filters: {
     date: util.date
+  },
+
+  components: {
+    tooltip
   },
 
   data() {

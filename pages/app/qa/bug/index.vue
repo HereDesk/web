@@ -2,53 +2,51 @@
 	<div id="page-bug" class="py-5 container-fluid">
     
     <div class="row">
-      <div id="about-modules" class="col-xl-2 col-lg-3 col-md-3 col-sm-12 col-12  pt-3 pg-modules">
-        <div>
-          <div class="mb-3">
-            <p class="pl-4 display-inline" v-if="!modules_list.length">
-              <nuxt-link class="display-inline" 
-                :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-                <span style="color:#2b2b2b" title="维护模块">维护模块</span>
-              </nuxt-link>
-            </p>
-            <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
-              @click="click_all_modules()" v-else>全部模块</p>
-            <nuxt-link class="display-inline manage-modules" 
+      <div id="about-modules" class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12 pt-3 pg-modules">
+        <div class="mb-3">
+          <p class="pl-4 display-inline" v-if="!modules_list.length">
+            <nuxt-link class="display-inline" 
               :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+              <span style="color:#2b2b2b" title="维护模块">维护模块</span>
             </nuxt-link>
-          </div>
-          <div class="divider"></div>
-          <div class="t-modules-list mt-3">
-            <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
-              <li :id="item1.id">
-                <span class="line-height-1-8 li-color"
-                  :class="{ 'el-active': m1_id == item1.id }" 
-                  @click="clickMoudle1(item1)">
-                  <i class="iconfont icon-8a8a8a" 
-                    :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
-                  </i>
-                  &nbsp;&nbsp;{{ item1.label }}
-                </span>
-                <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
-                  <li style="line-height:2.5rem" 
-                    v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
-                    <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
-                      {{ item2.label }}
-                    </span>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+          </p>
+          <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
+            @click="click_all_modules()" v-else>全部模块</p>
+          <nuxt-link class="display-inline manage-modules" 
+            :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
+            &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+          </nuxt-link>
+        </div>
+        <div class="divider"></div>
+        <div class="t-modules-list mt-3">
+          <ul v-for="item1 in modules_list" :key="item1.id" class="pl-4">
+            <li :id="item1.id">
+              <span class="line-height-1-8 li-color"
+                :class="{ 'el-active': m1_id == item1.id }" 
+                @click="clickMoudle1(item1)">
+                <i class="iconfont icon-8a8a8a" 
+                  :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
+                </i>
+                &nbsp;&nbsp;{{ item1.label }}
+              </span>
+              <ul class="ul-display pl-5 mt-3" v-if="m1_id == item1.id">
+                <li style="line-height:2.5rem" 
+                  v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
+                  <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
+                    {{ item2.label }}
+                  </span>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
 
       <!-- 查询以及操作相关 -->
-      <div class="col-xl-10 col-lg-9 col-md-9 col-sm-12 col-12 px-5">
-        <div id="bug-manage" class="row justify-content-between">
-          <div id="bug-query">
-            <el-dropdown id="page-query-product" class="mr-3 my-3" trigger="click">
+      <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 px-5">
+        <div id="bug-nav-manage" class="row justify-content-between">
+          <div id="bug-query-1">
+            <el-dropdown id="page-query-product" class="mr-3 my-1" trigger="click">
               <span>
                 <span class="el-dropdown-desc">产品:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -61,7 +59,7 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-version" class="mr-3 my-3" trigger="click">
+            <el-dropdown id="page-query-version" class="mr-3 my-1" trigger="click">
               <span>
                 <span class="el-dropdown-desc">版本:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -75,7 +73,7 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-bugstatus" class="mr-3 my-3" trigger="click">
+            <el-dropdown id="page-query-bugstatus" class="mr-3 my-1" trigger="click">
               <span>
                 <span class="el-dropdown-desc">状态:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -89,7 +87,7 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-bugstatus" class="mr-3 my-3" trigger="click">
+            <el-dropdown id="page-query-bugstatus" class="mr-3 my-1" trigger="click">
               <span>
                 <span class="el-dropdown-desc">优先级:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -103,7 +101,7 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-quick" class="mr-3 my-3" trigger="click">
+            <el-dropdown id="page-query-quick" class="mr-3 my-1" trigger="click">
               <span>
                 <span class="el-dropdown-desc">快捷操作:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -121,7 +119,7 @@
             </el-dropdown>
           </div>
 
-          <div class="vertical-center">
+          <div id="bug-query-2" class="vertical-center">
             <span class="searchIcon mr-4" @click="clickSearch()">
               <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
             </span>
@@ -134,10 +132,10 @@
           </div>
         </div>
 
-        <div class="row mt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
+        <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
           :class="{ showSearch: isShowSearch }">
           <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-12 pr-0 text-center">
-            <el-dropdown id="page-query-product" class="mx-3 my-3" trigger="click">
+            <el-dropdown id="page-query-product" class="mx-3 my-1" trigger="click">
               <span class="el-dropdown-link bg-edown bg-white text-center">
                 {{ SearchCriteria.SearchType  | filterSearchType }}
                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -148,7 +146,7 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-version" class="mx-3 my-3" trigger="click">
+            <el-dropdown id="page-query-version" class="mx-3 my-1" trigger="click">
               <span class="el-dropdown-link bg-edown bg-white text-center" style="font-weight:500">
                 {{ SearchCriteria.Operators | filterOperators }}
               </span>
@@ -159,22 +157,22 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12 pt-2">
-            <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
+          <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
+            <input type="text" id="bugSearchInput" class="border-none" 
               v-if="SwitchSearchInput === 'other'"
               placeholder="输入关键字..."
               v-model.trim="wd" autofocus />
-            <input type="date" class="border-none text-90 pt-3" 
+            <input type="date" class="border-none text-90" 
               v-if="SwitchSearchInput === 'date'" 
               v-model="SearchCriteria.start_date">
-            <input type="date" class="border-none text-90 pt-3" 
+            <input type="date" class="border-none text-90" 
               v-if="SwitchSearchInput === 'date_range'"
               v-model="SearchCriteria.start_date">
-            <input type="date" class="border-none text-90 pt-3" 
+            <input type="date" class="border-none text-90" 
               v-if="SwitchSearchInput === 'date_range'" 
               v-model="SearchCriteria.end_date">
           </div>
-          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-4 text-center">
+          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
             <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
           </div>
         </div>
@@ -504,7 +502,6 @@ export default {
       }
     }
   },
-
   computed: {
     developer_fixed_percentage: function() {
       if (this.MyTodayData.group == "developer") {

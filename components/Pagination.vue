@@ -21,8 +21,12 @@
         </nav>
       </div>
       <div class="col-auto pagination pt-2" v-if="total">
-        <span v-if="total > 0">共&nbsp;{{ total }}&nbsp;条 </span>
-        <span v-if="total >= 10" @click="handleChange('ps',$event)">{{ pageSize }}条/页</span>
+        <span v-if="total > 0">
+          共&nbsp;{{ total }}&nbsp;条
+        </span>
+        <span v-if="total >= 10" @click="handleChange('ps',$event)">
+          每页<span class="text-007BFF" style="text-decoration:underline;">{{ pageSize }}</span>条
+        </span>
       </div>
     </div>
   </div>
@@ -79,8 +83,9 @@ export default {
     }
   },
   watch: {
-    total () {
-      this.pageNumber = 1
+    "$route" () {
+      this.pageNumber = parseInt(this.$route.query.pageNumber)
+      this.pageSize = parseInt(this.$route.query.pageSize)
     }
   },
 
@@ -88,7 +93,10 @@ export default {
     // 翻页
     handleChange (data,event) {
       if (data === 'ps') {
-        if (this.pageSize < 50) {
+        if (this.pageSize == 50) {
+          this.pageNumber = 1
+          this.pageSize = parseInt(this.pageSize) - 40
+        } else {
           this.pageNumber = 1
           this.pageSize = parseInt(this.pageSize) + 20
         }
