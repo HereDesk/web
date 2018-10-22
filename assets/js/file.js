@@ -35,7 +35,7 @@ export default {
     if (source == 'bug') {
       url = '/api/qa/bug/annex/delete'
     } else if (source == 'testcase') {
-      url = '/api/qa/testcase/annex/delete'
+      url = '/api/qa/testcase/annex_delete'
     } else {
       return
     }
@@ -45,13 +45,11 @@ export default {
       data: req_data
     }).then(res => {
       if (res.data['status'] === 20000) {
-        let tmp = new Array()
-        tmp = page_data
-        for (var i in tmp) {
-          if (file_path == tmp[i]['url']) {
-            let index = tmp.indexOf(tmp[i])
+        for (let i in page_data) {
+          if (file_path == page_data[i]['url'] || file_path == page_data[i]['file_path']) {
+            let index = page_data.indexOf(page_data[i])
             if (index > -1) { 
-              tmp.splice(index, 1); 
+              page_data.splice(index, 1); 
             }
           }
         }

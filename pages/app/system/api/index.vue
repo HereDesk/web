@@ -20,16 +20,16 @@
       </div>
       <div id="permissions-management" class="col-xl-9 col-sm-12 col-12">
         <div style="display:block;">
-          <button type="btn" class="btn btn-create float-right" data-toggle="modal" data-target="#add_router">+权限</button>
+          <button type="btn" class="btn btn-create float-right" data-toggle="modal" data-target="#add_router">+ Api</button>
         </div>
         <div v-for="item in api_list" :key="item.id" class="mb-5 mt-5">
           <h5>{{ item.flag }}</h5>
           <p class="divider"></p>
           <ul class="pl-0 ul_perm">
             <li v-for="p in item.data" :key="p.id" class="mr-3">
-              <input type="checkbox" class="mr-2" :value="p.api_id" :checked="p.is_allow === 1" 
-                @click="ApiManage($event,p.api_id)">
-                {{ p.name }}
+              <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1" 
+                @click="ApiManage($event,p.id)">
+                {{ p.api_name }}
             </li>
           </ul>
         </div>
@@ -40,26 +40,28 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">添加权限</h5>
+            <h5 class="modal-title">添加Api</h5>
           </div>
           <div class="modal-body my-3">
             <div class='form-group row col-md-auto mx-3'>
-              <label for="page_module">选择模块</label>
-              <select class="select-control form-border-bottom" v-model="ApiPermissionsData.flag">
-                <option v-for="item in modules" :key="item.id" :value="item.value">{{ item.name }}</option>
-              </select>
+              <label for="api_module">所属模块</label>
+              <input type='text' maxlength="100" class='form-control' placeholder='请输入api所属模块...' 
+                v-model='ApiPermissionsData.flag' />
             </div>
             <div class='form-group row col-md-auto mx-3'>
-              <label for="permissions_name">权限名称</label>
-              <input type='text' v-model='ApiPermissionsData.name' maxlength="100" class='form-control' placeholder='请输入页面名称...' />
+              <label for="api_name">api_name</label>
+              <input type='text' maxlength="100" class='form-control' placeholder='请输入api名称...' 
+                v-model='ApiPermissionsData.api_name' />
             </div>
             <div class='form-group row col-md-auto mx-3'>
-              <label for="permissions_name">权限code</label>
-              <input type='text' v-model='ApiPermissionsData.code' maxlength="100" class='form-control' placeholder='请输入页面名称...' />
+              <label for="api_code">api_code</label>
+              <input type='text' maxlength="100" class='form-control' placeholder='请输入api_名称...' 
+                v-model='ApiPermissionsData.api_code' />
             </div>
              <div class='form-group row col-md-auto mx-3'>
-              <label for="permissions_url">url</label>
-              <input type='text' v-model='ApiPermissionsData.url' maxlength="100" class='form-control' placeholder='请输入页面url...' />
+              <label for="api_url">url</label>
+              <input type='text' maxlength="100" class='form-control' placeholder='请输入api_url...' 
+                v-model='ApiPermissionsData.url' />
             </div>
           </div>
           <div class="modal-footer">
@@ -87,9 +89,10 @@ export default {
       modules: [],
       ApiPermissionsData: {
         group: "test",
-        name: "",
-        code: "",
-        url: ""
+        api_name: "",
+        api_code: "",
+        url: "",
+        flag: "",
       },
       group_list: []
     };
@@ -137,7 +140,7 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           $("#add_router").modal("hide")
-          this.getApiList(this.ApiPermissionsData.flag)
+          this.getApiList(this.ApiPermissionsData.group)
           this.$notify.success({ 
             title: "成功", 
             message: res.data["msg"] 

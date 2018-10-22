@@ -246,9 +246,9 @@ export default {
     beforeAvatarUpload(file) {
       fileutil.FileBeforeAvatarUpload(file)
     },
-    annex_delete (file_path) {
-      this.AnnexDelData.file_path = file_path
-      fileutil.AnnexDelete("testcase",file_path,this.AnnexDelData,this.Annex)
+    annex_delete (path) {
+      this.AnnexDelData.file_path = path
+      fileutil.AnnexDelete("testcase",path,this.AnnexDelData,this.Annex)
     },
 
     EditTestCase (event) {
