@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <div id="data-paging" class="row my-5">
+  <div class="container-fluid" v-cloak>
+    <div id="data-paging" class="row" :class="{ 'my-5' : isModal !== 'Modal' }">
       <div class="col-auto mr-auto">
         <nav aria-label="Page navigation" v-if="total > pageSize">
           <ul class="pagination">
@@ -24,7 +24,7 @@
         <span v-if="total > 0">
           共&nbsp;{{ total }}&nbsp;条
         </span>
-        <span v-if="total >= 10" @click="handleChange('ps',$event)">
+        <span v-if="total >= 10 && isModal !== 'Modal'" @click="handleChange('ps',$event)">
           每页<span class="text-007BFF" style="text-decoration:underline;">{{ pageSize }}</span>条
         </span>
       </div>
@@ -37,7 +37,8 @@ import axios from 'axios'
 
 export default {
   props: {
-    "total": Number
+    "total": Number,
+    "isModal": String
   },
 
   data () {

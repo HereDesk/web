@@ -18,20 +18,19 @@
           </nuxt-link>
         </div>
         <div class="divider"></div>
-        <div class="t-modules-list mt-3">
-          <ul class="pl-4 ul-style-none" v-for="item1 in modules_list" :key="item1.id">
+        <div class="mt-3">
+          <ul class="ul-style-none" v-for="item1 in modules_list" :key="item1.id">
             <li :id="item1.id">
-              <span class="line-height-1-8 li-color"
-                :class="{ 'el-active': m1_id == item1.id }" 
+              <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" 
                 @click="clickMoudle1(item1)">
-                <i class="iconfont icon-8a8a8a" 
-                  :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
+                <i 
+                  class="iconfont icon-8a8a8a" 
+                  :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
                 </i>
                 &nbsp;&nbsp;{{ item1.label }}
               </span>
-              <ul class="ul-display pl-5 mt-2" v-if="m1_id == item1.id">
-                <li style="line-height:2.5rem" 
-                  v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
+              <ul class="t_module_second pl-5" v-if="m1_id == item1.id">
+                <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
                   <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
                     {{ item2.label }}
                   </span>
@@ -304,7 +303,7 @@
     </div>
 
     <!-- Bug处理操作：指派 -->
-    <div id="bug-list-assign" v-if="showBugAssignBox">
+    <div id="bug-list-assign">
       <BugAssign 
         :bug_id="selectedBugId" 
         :product_code="selected_product"
@@ -314,7 +313,7 @@
     </div>
 
     <!-- Bug处理操作：解决 -->
-    <div id="bug-list-resolve" v-if="showBugResolveBox">
+    <div id="bug-list-resolve">
       <BugResolve
         :bug_id="selectedBugId"
         :OpenBy="HoverBugIdOpenBy"
@@ -326,7 +325,7 @@
     </div>
 
     <!-- Bug处理操作：修改优先级 -->
-    <div id="bug-list-priority" v-if="showBugPriorityBox">
+    <div id="bug-list-priority">
       <ChangePriority
         :bug_id="selectedBugId"
         @refreshList="getBugList()">
@@ -476,9 +475,6 @@ export default {
       selectedBugId: "",
       HoverBugIdOpenBy: "",
       // 组件
-      showBugAssignBox: false,
-      showBugResolveBox: false,
-      showBugPriorityBox: false,
       scheme: "Fixed",
       pageSource: "page_bug_index",
       // close bug
@@ -602,6 +598,12 @@ export default {
 
   watch: {
     wd: function(val, oldVal) {
+      this.pageNumber = 1
+    },
+    m1_id: function(val, oldVal) {
+      this.pageNumber = 1
+    },
+    m2_id: function(val, oldVal) {
       this.pageNumber = 1
     },
     QueryBuilder: function(val, oldVal) {
@@ -815,19 +817,16 @@ export default {
 
     // 操作：bug修改优先级
     BugPriorityDialog(row) {
-      this.showBugPriorityBox = true
       $("#modal-modify-priority").modal("show")
       this.selectedBugId = row.bug_id
     },
     // 操作: bug指派
     skipAssign(row) {
-      this.showBugAssignBox = true
       this.selectedBugId = row.bug_id
       $("#componentsAssign").modal("show")
     },
     // 操作: bug解决
     skipResolve(row) {
-      this.showBugResolveBox = true
       this.selectedBugId = row.bug_id
       $("#componentsResolve").modal("show")
     },

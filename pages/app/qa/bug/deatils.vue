@@ -193,7 +193,7 @@
     </div>
 
     <!-- Bug处理操作：指派 -->
-    <div id="bug-list-assign" v-if="showBugAssignBox">
+    <div id="bug-list-assign">
       <BugAssign 
         v-bind:bug_id="currentBugId"
         v-bind:product_code="product_code"
@@ -203,7 +203,7 @@
     </div>
 
     <!-- Bug处理操作：解决 -->
-    <div id="bug-list-resolve" v-if="showBugResolveBox">
+    <div id="bug-list-resolve">
       <BugResolve
         v-bind:bug_id="currentBugId"
         v-bind:OpenBy="BugDetails.openedBy"
@@ -215,7 +215,7 @@
     </div>
 
     <!-- Bug处理操作：修改优先级 -->
-    <div id="bug-list-priority" v-if="showBugPriorityBox">
+    <div id="bug-list-priority">
       <ChangePriority
         :bug_id="currentBugId"
         @refreshList="getBugDetails()">
@@ -352,7 +352,7 @@ export default {
 
   data () {
     return {
-      currentBugId: this.$route.query.bug_id,
+      currentBugId: this.$route.query.bug_id || null,
       BugDetails: {},
       Annex: [],
       product_code: '',
@@ -387,9 +387,6 @@ export default {
       history: [],
       // 组件数据
       bug_idOpenBy: '',
-      showBugAssignBox: false,
-      showBugResolveBox: false,
-      showBugPriorityBox: false,
       scheme: '',
       pageSource: 'page_bug_details'
     }
@@ -489,14 +486,12 @@ export default {
     },
 
     SkipRecovered (scheme) {
-      this.showBugResolveBox = true
       this.scheme = scheme
       $('#componentsResolve').modal('show')
     },
 
     // 分配
     SkipAssign () {
-      this.showBugAssignBox = true
       $('#componentsAssign').modal('show')
     },
 
@@ -514,7 +509,6 @@ export default {
 
     // 操作：bug修改优先级
     BugPriorityDialog() {
-      this.showBugPriorityBox = true
       $("#modal-modify-priority").modal("show")
     },
 

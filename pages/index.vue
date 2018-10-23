@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5" id="p-user-login">
+  <div id="page-user-login" class="container mt-5" v-cloak>
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="float:right;">
         <h1>HDesk</h1>

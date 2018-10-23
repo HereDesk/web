@@ -1,6 +1,6 @@
 <template>
   <div id="page-testcase-execution" class="container">
-    <nav class="d-flex mt-5">
+    <nav class="d-flex my-5">
       <a class="navbar-brand flex-grow-1">TestSuite {{ childValue }}</a>
       <div class="pt-3">
         <button type="btn" class="btn btn-create" data-toggle="modal" data-target="#m-create"> + TestSuite</button>

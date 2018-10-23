@@ -273,19 +273,8 @@
   margin-right:2rem;
 }
 
-.t-modules-list {
-  opacity: 1;
-  width: 100%;
-  position: relative;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  margin-bottom: 5rem;
-  overflow:-moz-scrollbars-none;
-  -ms-overflow-style:none;
-}
-
-.t-modules-list::-webkit-scrollbar {
-  width:0;
+.t_module_second li {
+  line-height: 2.5rem;
 }
 
 .el-active {

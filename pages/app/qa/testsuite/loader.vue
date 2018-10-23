@@ -1,46 +1,58 @@
 <template>
   <div id="page-testcase-loader" class="container">
-    <div class="row mt-5">
-      <div id="no-add" class="col-xl-5 col-lg-5 col-md-5 suitepart">
-        <div id="testsuite-head-left" class="testsuite-head">
-          <h5 class="testsuite-title">选择 
-            <span v-if="LeftTotal">{{ LeftCheckedNum }}/{{ LeftTotal }}</span>
-          </h5>
-          <el-cascader
-            placeholder="按模块选择测试用例"
-            :options="modules_list"
-            v-model="selected_mod_id"
-            filterable
-            change-on-select
-          ></el-cascader>
-        </div>
-        <div class="divider"></div>
-        <ul class="case_list">
-          <li v-for="item in TestCaseList" :key="item.id">
-            <input type="checkbox" id="item.case_id" value="item.case_id" @click="LeftCheckedTestCaseID(item.case_id,$event)">&nbsp&nbsp{{ item.title }}
+    <nav class="d-flex my-5">
+      <a class="navbar-brand flex-grow-1">已加入的用例</a>
+      <div class="vertical-center">
+        <button type="btn" class="btn btn-create" data-toggle="modal" data-target="#modal-case-data"> + 添加</button>
+      </div>
+    </nav>
+    <div class="row" v-if="AddedTotal == 0">
+      <div class="col text-center" style="margin-top:13%;" data-toggle="modal" data-target="#modal-case-data">
+        <i class="iconfont icon-jiaru icon-8a8a8a size-5"></i>
+        <p class="lead">还没有数据哦，点击加入</p>
+      </div>
+    </div>
+    <div class="row" v-else>
+      <div class="col">
+        <ul class="ul-style-none">
+          <li v-for="item in AddedCaseData"  :key="item.id" :id="item.case_id" >
+            {{ item.id }}. &nbsp;&nbsp;{{ item.title }}
           </li>
         </ul>
-        <div class="loader-pagination">
-          <Pagination :total="LeftTotal" @PsPn="getPsPn1"></Pagination>
-        </div>
+        <Pagination :total="AddedTotal" @PsPn="getPsPn2"></Pagination>
       </div>
-      <div class="col-xl-2 col-lg-2 col-md-2 text-center cell-operate">
-        <button type="btn" class="btn btn-load" @click="SaveLeftChecked()"> > 添加已选用例</button>
-        <button type="btn" class="btn btn-load-all" @click="SaveLeftModulesAll($event)">添加当前模块<br>所有用例</button>
-      </div>
-      <div class="col-xl-5 col-lg-5 col-md-5 suitepart">
-        <div id="testsuite-head-right" class="testsuite-head">
-          <h5 class="testsuite-title">TestSuite测试用例列表</h5>
-          <span v-if="RightTotal">{{ RightTotal }}</span>
-        </div>
-        <div class="divider"></div>
-        <ul class="pl-2 mt-3 case_list">
-          <li v-for="item in RightListData" :key="item.id">
-            {{ item.id }}.&nbsp&nbsp{{ item.title }}
-          </li>
-        </ul>
-        <div class="loader-pagination">
-          <Pagination :total="RightTotal" @PsPn="getPsPn2"></Pagination>
+    </div>
+
+    <div id="modal-case-data" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header testsuite-head">
+            <h5 class="modal-title">用例列表</h5>
+            <el-cascader
+              class="border-none"
+              placeholder="按模块选择测试用例"
+              :options="modules_list"
+              v-model="selected_mod_id"
+              filterable
+              change-on-select
+            ></el-cascader>
+          </div>
+          <div class="modal-body">
+            <ul class="ul-style-none">
+              <li v-for="item in TestCaseList" :key="item.id">
+                <input type="checkbox" id="item.case_id" value="item.case_id" @click="CheckedCase(item.case_id,$event)">
+                &nbsp;&nbsp;{{ item.id }}.&nbsp;&nbsp;{{ item.title }}
+              </li>
+            </ul>
+            <div class="px-4">
+              <Pagination :total="AllTotal" :isModal="isModal" @PsPn="getPsPn1"></Pagination>
+            </div>
+          </div>
+          <div class="modal-footer px-5" style="justify-content:flex-start;">
+            <button type="button" class="btn btn-cancel" @click="CurrentAllCase()">全选</button>
+            <!-- <button type="button" class="btn btn-cancel" @click="SaveCheckedCaseData()">反选</button> -->
+            <button type="button" class="btn btn-cancel" @click="ReferChecked()">加入</button>
+          </div>
         </div>
       </div>
     </div>
@@ -63,30 +75,31 @@ export default {
 
   data() {
     return {
-      product_code: this.$route.query.product_code,
-      suite_id: this.$route.query.suite_id,
+      isModal: 'Modal',
+      product_code: this.$route.query.product_code || null,
+      suite_id: this.$route.query.suite_id || null,
       // right
-      RightListData: [],
-      RightQueryBuilder: {
+      AddedCaseData: [],
+      NoAddQueryBuilder: {
         suite_id: this.$route.query.suite_id,
         pageSize: 10,
         pageNumber: 1
       },
-      RightTotal: null,
+      AddedTotal: null,
       // left
       modules_list: [],
       selected_mod_id: [],
-      LefteQueryBuilder: {
-        product_code: null,
+      AddedQueryBuilder: {
+        product_code: this.$route.query.product_code,
         m1_id: null,
         m2_id: null,
         pageSize: 10,
         pageNumber: 1
       },
-      LeftTotal: null,
+      AllTotal: null,
       LeftCheckedNum: 0,
       TestCaseList: [],
-      LeftCheckedCellData: {
+      SaveCheckedCaseData: {
         suite_id: this.$route.query.suite_id,
         case_data: []
       }
@@ -96,20 +109,20 @@ export default {
   watch: {
     selected_mod_id: {
       handler: function(val, oldVal) {
-        this.LefteQueryBuilder.m1_id = this.selected_mod_id[0]
-        this.LefteQueryBuilder.m2_id = this.selected_mod_id[1]
+        this.AddedQueryBuilder.m1_id = this.selected_mod_id[0]
+        this.AddedQueryBuilder.m2_id = this.selected_mod_id[1]
       },
       deep: true
     },
-    LefteQueryBuilder: {
+    AddedQueryBuilder: {
       handler: function(val, oldVal) {
-        this.getLeftData()
+        this.getAllCaseData()
       },
       deep: true
     },
-    RightQueryBuilder: {
+    NoAddQueryBuilder: {
       handler: function(val, oldVal) {
-        this.getRightData()
+        this.getAddedCase()
       },
       deep: true
     }
@@ -117,17 +130,18 @@ export default {
 
   created() {
     this.getModule()
-    this.getRightData()
+    this.getAddedCase()
+    this.getAllCaseData()
   },
 
   methods: {
     getPsPn1: function(ps, pn) {
-      this.LefteQueryBuilder.pageSize = ps
-      this.LefteQueryBuilder.pageNumber = pn
+      this.AddedQueryBuilder.pageSize = ps
+      this.AddedQueryBuilder.pageNumber = pn
     },
     getPsPn2: function(ps, pn) {
-      this.RightQueryBuilder.pageSize = ps
-      this.RightQueryBuilder.pageNumber = pn
+      this.NoAddQueryBuilder.pageSize = ps
+      this.NoAddQueryBuilder.pageNumber = pn
     },
     getModule(product_code) {
       axios
@@ -140,61 +154,61 @@ export default {
           }
         })
     },
-    getLeftData() {
-      this.LefteQueryBuilder.product_code = this.product_code
+    getAllCaseData() {
+      // 请求所有的用例列表
       axios
-        .get("/api/qa/testcase/valid_list", { params: this.LefteQueryBuilder })
+        .get("/api/qa/testcase/valid_list", { params: this.AddedQueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
             this.TestCaseList = res.data["data"]
-            this.LeftTotal = res.data["total"]
+            this.AllTotal = res.data["total"]
           } else {
             this.$notify.error({ title: "提示", message: res.data["msg"] })
           }
         })
     },
-    getRightData() {
-      axios.get("/api/qa/testsuite/cell/brief_list", {params: this.RightQueryBuilder})
+    getAddedCase() {
+      axios.get("/api/qa/testsuite/cell/brief_list", {params: this.NoAddQueryBuilder})
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.RightListData = res.data["data"]
-            this.RightTotal = res.data["total"]
+            this.AddedCaseData = res.data["data"]
+            this.AddedTotal = res.data["total"]
           } else {
             this.$notify.error({ title: "提示", message: res.data["msg"] })
           }
         })
     },
-    LeftCheckedTestCaseID(case_id, event) {
+    CheckedCase(case_id, event) {
       let checked = event.target.checked
-      var tmp = this.LeftCheckedCellData.case_data
+      var tmp = this.SaveCheckedCaseData.case_data
       if (case_id && checked) {
         _.indexOf(tmp, case_id) >= 0 ? null : tmp.push(case_id)
       } else {
         _.pull(tmp, case_id)
       }
       this.LeftCheckedNum = tmp.length
-      this.LeftCheckedCellData.case_data = tmp
+      this.SaveCheckedCaseData.case_data = tmp
     },
-    SaveLeftChecked() {
-      if (this.LeftCheckedCellData.case_data.length === 0) {
+    ReferChecked() {
+      if (this.SaveCheckedCaseData.case_data.length === 0) {
         this.$notify.error({ title: "错误", message: "请选择后再提交" })
         return
       }
       axios({
         method: "POST",
         url: "/api/qa/testsuite/cell/add",
-        data: JSON.stringify(this.LeftCheckedCellData)
+        data: JSON.stringify(this.SaveCheckedCaseData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.getRightData()
-          this.getLeftData()
+          this.getAddedCase()
+          this.getAllCaseData()
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
           this.$notify.error({ title: "错误", message: res.data["msg"] })
         }
       })
     },
-    SaveLeftModulesAll(event) {
+    CurrentAllCase(event) {
       if (this.selected_mod_id.length === 0) {
         this.$notify.warning({ title: "提示", message: "请先选择模块" })
         return
@@ -219,8 +233,8 @@ export default {
         data: JSON.stringify(data)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.getRightData()
-          this.getLeftData()
+          this.getAddedCase()
+          this.getAllCaseData()
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
           this.$notify.warning({ title: "提示", message: res.data["msg"] })

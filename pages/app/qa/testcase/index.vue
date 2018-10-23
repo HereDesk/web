@@ -17,20 +17,19 @@
           </nuxt-link>
         </div>
         <div class="divider"></div>
-        <div class="t-modules-list mt-3">
-          <ul class="pl-4 ul-style-none" v-for="item1 in modules_list" :key="item1.id">
-            <li :id="item1.id">
-              <span class="line-height-1-8 li-color"
-                :class="{ 'el-active': m1_id == item1.id }" 
+        <div class="mt-3">
+          <ul class="ul-style-none" v-for="item1 in modules_list" :key="item1.id">
+            <li>
+              <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" 
                 @click="clickMoudle1(item1)">
-                <i class="iconfont icon-8a8a8a" 
-                  :class="[ m1_id == item1.id ? 'icon-xiaotuziCduan_' : 'icon-xiaotuziCduan_2' ]">
+                <i 
+                  class="iconfont icon-8a8a8a" 
+                  :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
                 </i>
                 &nbsp;&nbsp;{{ item1.label }}
               </span>
-              <ul class="ul-display pl-5 mt-2" v-if="m1_id == item1.id">
-                <li style="line-height:2.5rem" 
-                  v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
+              <ul class="t_module_second pl-5" v-if="m1_id == item1.id">
+                <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
                   <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
                     {{ item2.label }}
                   </span>
@@ -326,6 +325,12 @@ export default {
 
   watch: {
     wd: function(val, oldVal) {
+      this.pageNumber = 1
+    },
+    m1_id: function(val, oldVal) {
+      this.pageNumber = 1
+    },
+    m2_id: function(val, oldVal) {
       this.pageNumber = 1
     },
     QueryBuilder: function(val, oldVal) {

@@ -6,7 +6,7 @@
           <span @click="$router.go(-1)">
             <i class="iconfont icon-close-windows icon-8a8a8a size-2"></i>
           </span>
-          <h3>编写测试用例</h3>
+          <h3>新增测试用例</h3>
           <div class="dropdown-divider"></div>
         </div>
       </div>

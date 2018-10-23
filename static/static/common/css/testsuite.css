@@ -5,7 +5,7 @@
     min-height: 35rem;
 }
 
-.testsuite-head {
+/* .testsuite-head {
     display: inline !important;
 }
 
@@ -14,7 +14,7 @@
     line-height: 60px;
     font-size:1.15rem;
     padding:0 1rem;
-}
+} */
 
 .testsuite-head .el-input__inner {
     border: none !important;
