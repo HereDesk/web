@@ -96,19 +96,6 @@
 */
 
 /* Add */
-.page-pure-title span{
-  display: inline-block;
-  float: right;
-  margin:0.8rem 1rem 1rem 0;
-  height: 33px;
-  width:33px;
-}
-
-.page-pure-title h3{
-  display: inline-block;
-  font-weight: 300 !important;
-  margin:1rem 0;
-}
 
 @media (min-width: 576px) {
   .bug-label {

@@ -1,16 +1,6 @@
 <template>
   <div id="page-bug-add">
-    <div id="page-bug-add-title" class="container-fluid">
-      <div class='row'>
-        <div class='col text-center page-pure-title'>
-          <span @click="$router.go(-1)">
-            <i class="iconfont icon-close-windows size-2 icon-8a8a8a"></i>
-          </span>
-          <h3>创建缺陷</h3>
-          <div class="dropdown-divider"></div>
-        </div>
-      </div>
-    </div>
+    <BaseNav :title="title"></BaseNav>
     <div id="page-bug-add-input" class='container mt-5'>
       <div class='row'>
         <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
@@ -150,6 +140,7 @@
 <script>
 import axios from "axios"
 import fileutil from "~/assets/js/file.js"
+import BaseNav from '~/components/BaseNav'
 
 export default {
   head() {
@@ -157,8 +148,12 @@ export default {
       title: "HDesk - 创建缺陷"
     }
   },
+  components: {
+    BaseNav
+  },
   data() {
     return {
+      title: '创建缺陷',
       fileList: [],
       developer_list: [],
       product_list: [],

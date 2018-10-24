@@ -1,16 +1,6 @@
 <template>
   <div id="page-testcase-add">
-    <div id="page-testcase-add-title" class="container-fluid">
-      <div class='row'>
-        <div class='col text-center page-pure-title'>
-          <span @click="$router.go(-1)">
-            <i class="iconfont icon-close-windows icon-8a8a8a size-2"></i>
-          </span>
-          <h3>新增测试用例</h3>
-          <div class="dropdown-divider"></div>
-        </div>
-      </div>
-    </div>
+    <BaseNav :title="title"></BaseNav>
     <div id='page-testcase-add-input' class='container mt-5 pg-test-edit'>
       <div class='row' style='margin:0;'>
         <div class='col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 offset-xl-1 offset-lg-1'>
@@ -161,6 +151,7 @@
 <script>
 import axios from 'axios'
 import fileutil from "~/assets/js/file.js"
+import BaseNav from '~/components/BaseNav'
 
 export default {  
   head () {
@@ -169,8 +160,13 @@ export default {
     }
   },
 
+  components: {
+    BaseNav
+  },
+
   data () {
     return {
+      title: '增加测试用例',
       last_url: '',
       product_list: [],
       modules_list: [],
@@ -211,13 +207,9 @@ export default {
   watch: {
     selected_product: function (val, oldVal) {
       this.getModule()
-      this.$router.replace({
-        path: '/app/qa/testcase/add',
-        query: {'product_code': this.CaseData.product_code}
-      })
     },
     product_list: function (val, oldVal) {
-      if (this.product_list.length > 0 & !this.CaseData.product_code) {
+      if (this.product_list.length & !this.CaseData.product_code) {
         this.CaseData.product_code = this.product_list[0]['value']
       }
     }
