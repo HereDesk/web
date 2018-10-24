@@ -1,9 +1,7 @@
 <template>
   <div id="page-testcase-run" class="container">
-    <nav class="d-flex mt-5">
+    <nav class="d-flex my-5">
       <a class="navbar-brand flex-grow-1">运行测试用例</a>
-      <div class="pt-3">
-      </div>
     </nav>
 
     <div class="row">
@@ -24,23 +22,23 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label='执行人' prop='runner' width='100'></el-table-column>
-          <el-table-column label='执行时间' width='200'>
+          <el-table-column label='执行人' prop='runner' width='98'></el-table-column>
+          <el-table-column label='执行时间' width='170'>
             <template slot-scope="scope">
               <span>{{ scope.row.run_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='缺陷' prop='bug_id' width='150'>
+          <el-table-column label='缺陷' prop='bug_id' width='70'>
             <template slot-scope="scope">
-              <span v-for="item in scope.row.bug_id" :key="item.id">
-                <a :href="'/app/qa/bug/deatils?bug_id=' + item.bug_id" target="_blank" style="color:#212121;">查看</a>
+              <span class="text-2973B7" v-for="item in scope.row.bug_id" :key="item.id">
+                <a :href="'/app/qa/bug/deatils?bug_id=' + item.bug_id" target="_blank">查看</a>
               </span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' width='150'>
+          <el-table-column label='操作' width='100'>
             <template slot-scope="scope">
               <div :class="{ 'invisible': scope.row.result !== 0 }">
-                <span title="运行成功" class="mr-3" @click="run('1',scope.row.cell_id,case_id)">
+                <span title="运行成功" class="mr-2" @click="run('1',scope.row.cell_id,case_id)">
                   <i class="iconfont icon-check-circle-fill size-1-5 text-success"></i>
                 </span>
                 <span title="运行失败" @click="run('-1',scope.row.cell_id,scope.row.case_id)">
