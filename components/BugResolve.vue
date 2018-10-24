@@ -48,7 +48,6 @@ export default {
   },
   data() {
     return {
-      person_list: [],
       ResolveData: {
         bug_id: "",
         assignedTo: "",
@@ -58,41 +57,29 @@ export default {
     };
   },
   computed: {
+    solution_list: function () {
+      return this.$store.state.BugSolutionList
+    },
+    person_list: function () {
+      if (this.$store.state.ProductMemberList) {
+        return this.$store.state.ProductMemberList["data"]
+      }
+      return 
+    },
     mtitle: function() {
       if (this.scheme === "Postponed") {
         return "延期解决缺陷";
       } else {
         return "解决缺陷";
       }
-    },
-    solution_list: function() {
-      return this.$store.state.BugSolutionList;
-    }
-  },
-  created() {
-    if (this.member_list === undefined) {
-      this.getMemberList();
-    } else {
-      this.person_list = this.member_list;
     }
   },
   mounted() {
-    if (this.$store.state.BugSolutionList) {
-      this.solution_list = this.$store.state.BugSolutionList;
-    } else {
-      this.$store.dispatch("getBugSolution");
+    if (!this.$store.state.BugSolutionList) {
+      this.$store.dispatch("getBugSolution")
     }
   },
   methods: {
-    getMemberList() {
-      axios
-        .get("/api/pm/member/list?product_code=" + this.product_code)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.person_list = res.data["data"];
-          }
-        });
-    },
     // bug resolve
     MoreRecovered() {
       this.ResolveData.bug_id = this.bug_id;

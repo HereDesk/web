@@ -139,7 +139,7 @@
             </ul>
           </div>
           <div id="bug-details-5">
-            <h6 class="bug-details-minor-title">
+            <h6 class="bug-details-minor-title pt-3">
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
@@ -353,6 +353,7 @@ export default {
   data () {
     return {
       currentBugId: this.$route.query.bug_id || null,
+      current_product_code: '',
       BugDetails: {},
       Annex: [],
       product_code: '',
@@ -383,7 +384,6 @@ export default {
         bug_id: '',
         remark: '',
       },
-      member_list: [],
       history: [],
       // 组件数据
       bug_idOpenBy: '',
@@ -402,11 +402,19 @@ export default {
       this.BugHistory()
     },
     product_code: function (val, oldVal) {
-      this.getMemberList()
+      if (this.product_code) {
+        this.getMemberList()
+      }
     }
   },
 
   computed: {
+    member_list: function () {
+      if (this.$store.state.ProductMemberList) {
+        return this.$store.state.ProductMemberList["data"]
+      }
+      return 
+    },
     BtnRules: function () {
       return rules.BugRules(this.BugDetails,this.$store.state.userInfo)
     },
@@ -455,12 +463,13 @@ export default {
         })
       }
     },
-    getMemberList () {
-      axios.get('/api/pm/member/list?product_code=' + this.product_code).then(res => {
-        if (res.data['status'] === 20000) {
-          this.member_list = res.data['data']
-        }
-      })
+    getMemberList() {
+      axios.get("/api/pm/member/list?product_code=" + this.product_code)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.$store.commit("setProductMemberList", res.data)
+          }
+        })
     },
     // 编辑缺陷
     EditBug () {
@@ -487,11 +496,13 @@ export default {
 
     SkipRecovered (scheme) {
       this.scheme = scheme
+      // this.current_product_code = this.product_code
       $('#componentsResolve').modal('show')
     },
 
     // 分配
     SkipAssign () {
+      // this.current_product_code = this.product_code
       $('#componentsAssign').modal('show')
     },
 

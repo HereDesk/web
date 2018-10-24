@@ -15,7 +15,7 @@
         </el-dropdown>
       </nav>
     </div>
-    <div id="module_a" class="row mt-5">
+    <div id="module_a" class="row my-5">
       <div class="col-xl-3 col-sm-12 col-12">
         <h5 class="font-weight-light">一级模块</h5>
         <p class="add_m_a" data-toggle="modal" data-target="#add_module_a"> + 一级模块</p>

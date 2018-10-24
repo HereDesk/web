@@ -49,9 +49,8 @@
             </div>
           </div>
           <div class="modal-footer px-5" style="justify-content:flex-start;">
-            <button type="button" class="btn btn-cancel" @click="CurrentAllCase()">全选</button>
-            <!-- <button type="button" class="btn btn-cancel" @click="SaveCheckedCaseData()">反选</button> -->
             <button type="button" class="btn btn-cancel" @click="ReferChecked()">加入</button>
+            <button type="button" class="btn btn-cancel" @click="CaseForModuleAdd()">加入当前模块所有用例</button>
           </div>
         </div>
       </div>
@@ -208,7 +207,7 @@ export default {
         }
       })
     },
-    CurrentAllCase(event) {
+    CaseForModuleAdd(event) {
       if (this.selected_mod_id.length === 0) {
         this.$notify.warning({ title: "提示", message: "请先选择模块" })
         return
@@ -235,6 +234,7 @@ export default {
         if (res.data["status"] === 20000) {
           this.getAddedCase()
           this.getAllCaseData()
+          $("#modal-case-data").modal("hide")
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
           this.$notify.warning({ title: "提示", message: res.data["msg"] })

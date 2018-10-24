@@ -263,7 +263,10 @@ export default {
               this.Annex = res.data['annex']
               this.CaseReviewDetails = res.data['review']
             } else {
-              console.log(res.data['msg'])
+              this.$notify.error({
+                title: '失败',
+                message: res.data['msg']
+              })
             }
         })
       }

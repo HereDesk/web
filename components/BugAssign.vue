@@ -41,7 +41,6 @@ export default {
   },
   data() {
     return {
-      person_list: [],
       AssignData: {
         bug_id: "",
         assignedTo: "",
@@ -49,22 +48,15 @@ export default {
       }
     }
   },
-  mounted() {
-    if (this.member_list === undefined) {
-      this.getMemberList()
-    } else {
-      this.person_list = this.member_list
+  computed: {
+    person_list: function () {
+      if (this.$store.state.ProductMemberList) {
+        return this.$store.state.ProductMemberList["data"]
+      }
+      return 
     }
   },
   methods: {
-    getMemberList() {
-      axios.get("/api/pm/member/list?product_code=" + this.product_code)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.person_list = res.data["data"]
-          }
-        })
-    },
     assign() {
       if (this.AssignData.assignedTo === "") {
         return this.$notify.error({

@@ -434,7 +434,8 @@ export default {
       modules_id: [null, null],
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
-      selected_product: this.$route.query.product_code || null,
+      current_product_code: "",
+      selected_product: this.$route.query.product_code || "",
       selected_release: this.$route.query.release || "全部",
       // 缺陷状态
       status_list: data.bug_status_list,
@@ -618,6 +619,7 @@ export default {
     },
     selected_product: function(val, oldVal) {
       this.getModule()
+      this.getMemberList()
     },
     total: function() {
       if (this.total === 0) {
@@ -635,15 +637,13 @@ export default {
     if (query["operate"]) {
       this.operate = query["operate"]
     }
-    if (query["product_code"]) {
-      this.selected_product = query["product_code"]
-    }
     this.getProductRelease()
   },
 
   mounted() {
     this.wd && this.SearchCriteria.SearchType ? this.goSearch() : this.getBugList()
     this.getModule()
+    this.getMemberList()
   },
 
   methods: {
@@ -663,15 +663,22 @@ export default {
     },
     // 获取所有模块
     getModule() {
-      if (!this.selected_product) {
-        return
-      }
+      if (!this.selected_product) {return}
       axios.get("/api/pm/get_module?product_code=" + this.selected_product)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.modules_list = res.data["data"]
           } else {
             this.Msg = res.data["msg"]
+          }
+        })
+    },
+    getMemberList() {
+      if (!this.selected_product) {return}
+      axios.get("/api/pm/member/list?product_code=" + this.selected_product)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.$store.commit("setProductMemberList", res.data)
           }
         })
     },
@@ -823,11 +830,13 @@ export default {
     // 操作: bug指派
     skipAssign(row) {
       this.selectedBugId = row.bug_id
+      // this.current_product_code = this.selected_product
       $("#componentsAssign").modal("show")
     },
     // 操作: bug解决
     skipResolve(row) {
       this.selectedBugId = row.bug_id
+      // this.current_product_code = this.selected_product
       $("#componentsResolve").modal("show")
     },
     // 操作: bug关闭

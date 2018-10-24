@@ -112,7 +112,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
           alert("请检查网络、或配置文件,或联系管理员")
         })
     }

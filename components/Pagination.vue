@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid" v-cloak>
-    <div id="data-paging" class="row" :class="{ 'my-5' : isModal !== 'Modal' }">
+    <div id="data-paging" class="row" :class="{ 'my-5' : !isModal }">
       <div class="col-auto mr-auto">
         <nav aria-label="Page navigation" v-if="total > pageSize">
-          <ul class="pagination">
+          <ul class="pagination pl-0">
             <li class="page-item" v-if="FirstPage != pageNumber & LastPage > 5">
               <a class="page-link" aria-label="Previous" @click="handleChange('pn',$event)">
                 <span aria-hidden="true">&lt;</span>

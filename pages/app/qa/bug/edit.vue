@@ -295,7 +295,7 @@ export default {
       })
     },
     getDeveloper () {
-      axios.get('/api/pm/member/list?product_code=' + this.Bug.product_code).then(res => {
+      axios.get('/api/pm/member/list?group=developer&product_code=' + this.Bug.product_code).then(res => {
         if (res.data['status'] === 20000) {
           this.developer_list = res.data['data']
         }

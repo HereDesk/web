@@ -13,7 +13,8 @@ const createStore = () => {
       ProductInfo: [],
       isProductInfo: false,
       BugProperty: {},
-      BugSolutionList: false
+      BugSolutionList: false,
+      ProductMemberList: false
     },
     mutations: {
       setUserInfo(state, data) {
@@ -32,6 +33,11 @@ const createStore = () => {
       setBugPropery(state, data) {
         if (data) {
           state.BugProperty = data
+        }
+      },
+      setProductMemberList(state,data) {
+        if (data) {
+          state.ProductMemberList = data
         }
       },
       setBugSolution(state, data) {

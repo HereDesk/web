@@ -426,7 +426,6 @@ export default {
       }
       if ("status_value" in data) {
         this.selected_status = data["status_value"]
-        console.log(this.selected_status)
       }
     },
 
