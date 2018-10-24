@@ -106,6 +106,8 @@ module.exports = {
   },
 
   router: {
+    linkExactActiveClass: 'exact-active-link',
+    linkActiveClass: 'active-link',
     middleware: 'auth'
   },
   cache: true,

@@ -299,8 +299,15 @@ html,body {
   color: #BFBFBF !important;
 }
 
+/* link */
 a:link {
   text-decoration: none;
+}
+
+.active-link {
+  pointer-events: none;
+  cursor: default;
+  color: #3385FF !important;
 }
 
 /* Public: tiitle */
@@ -576,6 +583,12 @@ a:link {
 
 .hideText {
   visibility: hidden;
+}
+
+.ban-click {
+  pointer-events: none;
+  cursor: default;
+  color: rgb(0, 123, 255) !important;
 }
 
 /* 
