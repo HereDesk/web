@@ -363,5 +363,5 @@ export default {
 </script>
 
 <style>
-  @import '~/static/static/common/css/test.css';
+  @import '~/static/static/common/css/test.css'
 </style>

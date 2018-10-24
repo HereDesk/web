@@ -335,7 +335,7 @@ Vue.use(Viewer,{
 export default {
   head () {
     return {
-      title: 'HDesk - ' + this.BID + '缺陷详情'
+      title: 'HDesk - 缺陷详情'
     }
   },
   validate({ query }) {
@@ -343,6 +343,7 @@ export default {
   },
 
   layout: 'head',
+
   components: {
     BugAssign,
     BugResolve,
