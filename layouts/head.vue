@@ -2,36 +2,44 @@
   <div id="page" style="height:100%;">
     <nav id="page-head" class="navbar navbar-expand-lg navbar-light bg-white page-head">
       <a id="navbar-brand" class="navbar-brand" href="#">HDesk</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" 
+        data-toggle="collapse" data-target="#navbarSupportedContent" 
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div id="navbarSupportedContent" class="mx-5 collapse navbar-collapse">
         <ul class="navbar-nav mr-auto head-nav">
-          <li class="nav-item" :class="{ 'nav-active' :  currentRoute == '/app/dashboard' }">
+          <li class="nav-item" :class="{ 'nav-active' : currentRoute == '/app/dashboard' }">
             <nuxt-link class="nav-link" to="/app/dashboard">首页</nuxt-link>
           </li>
-          <li class="nav-item dropdown" :class="{ 'nav-active' :  currentRoute.indexOf('/app/qa/bug') >= 0 }">
-           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">缺陷</a>
+          <li class="nav-item dropdown" :class="{ 'nav-active' : currentRoute.includes('/app/qa/bug') }">
+            <a class="nav-link dropdown-toggle" 
+              data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+             缺陷
+            </a>
             <div class="dropdown-menu">
               <nuxt-link class="dropdown-item" to="/app/qa/bug/add">提交BUG</nuxt-link>
-              <nuxt-link class="dropdown-item" to="/app/qa/bug">缺陷列表</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/bug" exact>缺陷列表</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug/count">缺陷分析</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug/report">缺陷报告</nuxt-link>
             </div>
           </li>
-          <li class="nav-item dropdown" :class="{ 'nav-active' :  currentRoute.indexOf('/app/qa/testcase') >= 0 }">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">测试用例</a>
+          <li class="nav-item dropdown" :class="{ 'nav-active' : currentRoute.includes('/app/qa/testcase') }">
+            <a class="nav-link dropdown-toggle" 
+              data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              测试用例
+            </a>
             <div class="dropdown-menu">
               <nuxt-link class="dropdown-item" to="/app/qa/testcase/add">编写用例</nuxt-link>
-              <nuxt-link class="dropdown-item" to="/app/qa/testcase">管理用例</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/testcase" exact>管理用例</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/testsuite">执行用例</nuxt-link>
             </div>
           </li>
-          <li class="nav-item" :class="{ 'nav-active' :  currentRoute.indexOf('/app/products') >= 0 }">
+          <li class="nav-item">
             <nuxt-link class="nav-link" to="/app/products">产品管理</nuxt-link>
           </li>
-          <li class="nav-item" :class="{ 'nav-active' :  currentRoute.indexOf('/app/user-management') >= 0 }">
+          <li class="nav-item">
             <nuxt-link class="nav-link" to="/app/user-management/user">用户管理</nuxt-link>
           </li>
           <li class="nav-item media-lg-Logout">
@@ -79,7 +87,7 @@
   export default {
     computed: {
       currentRoute: function () {
-        return this.$route.path
+        return String(this.$route.path)
       },
       realname: function () {
         return this.$store.state.userInfo.realname
@@ -94,6 +102,9 @@
     beforeCreate () {
       if (!this.$store.state.isLogin) {
         this.$store.dispatch('getUserInfo')
+      }
+      if (!this.$store.state.PageData) {
+        this.$store.dispatch("getPageData")
       }
     },
     methods: {

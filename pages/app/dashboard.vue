@@ -8,7 +8,7 @@
           <span class="dashboard-product">
             <span class="el-dropdown-link" v-if="current_product_code"> 
               {{ current_product_code || '' }}&nbsp;&nbsp;
-              <i class="iconfont icon-xiaotuziCduan_ icon-8a8a8a"></i>
+              <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
             </span>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -256,11 +256,14 @@ export default {
       }
     }
   },
-  created() {
+  beforeCreate () {
     if (!this.$store.state.isLogin) {
-      this.$store.dispatch("getUserInfo");
+      this.$store.dispatch("getUserInfo")
+      this.$store.dispatch("getPageData")
     }
-    this.getProductRelease();
+  },
+  created() {
+    this.getProductRelease()
   },
   methods: {
     // 获取数据：产品版本
@@ -268,7 +271,7 @@ export default {
       axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
           this.product_list = res.data["data"];
-          if (res.data["data"].length > 0) {
+          if (res.data["data"].length) {
             this.current_product_code = this.product_list[0]["product_code"];
           }
         } else {

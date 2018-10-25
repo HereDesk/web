@@ -8,6 +8,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       userInfo: {},
+      PageData: false,
       UserCustomization: [],
       isLogin: false,
       ProductInfo: [],
@@ -22,6 +23,11 @@ const createStore = () => {
           state.isLogin = true
           state.userInfo = data['data']
           state.UserCustomization = data['config']
+        }
+      },
+      setPageData(state, data) {
+        if (data) {
+          state.PageData = data['data']
         }
       },
       setProductInfo(state, data) {
@@ -50,6 +56,10 @@ const createStore = () => {
       async getUserInfo({ commit }) {
         const { data } = await axios.get('/api/user/userinfo')
         commit('setUserInfo', data)
+      },
+      async getPageData({ commit }) {
+        const { data } = await axios.get('/api/user/pages')
+        commit('setPageData', data)
       },
       async getProductRelease({ commit }) {
         const { data } = await axios.get('/api/pm/product_release')

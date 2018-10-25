@@ -104,11 +104,12 @@ module.exports = {
       }
     }
   },
-
+  // cache: true,
   router: {
+    linkActiveClass: 'active-link',
     middleware: 'auth'
   },
-  cache: true,
+  
 
   /*
    ** Build configuration

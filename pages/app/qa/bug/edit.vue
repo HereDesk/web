@@ -1,16 +1,6 @@
 <template>
   <div id='page-edit-bug'>
-    <div id="page-bug-edit-title" class="container-fluid">
-      <div class='row'>
-        <div class='col text-center page-pure-title'>
-          <span @click="$router.go(-1)">
-            <i class="iconfont icon-close-windows size-2 icon-8a8a8a"></i>
-          </span>
-          <h3>编辑缺陷</h3>
-          <div class="dropdown-divider"></div>
-        </div>
-      </div>
-    </div>
+    <BaseNav :title="title"></BaseNav>
     <div id='page-bug-edit-input' class='container px-0 pt-5 white-background'>
       <div class='row'>
         <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
@@ -150,6 +140,7 @@
 <script>
 import axios from 'axios'
 import fileutil from "~/assets/js/file.js"
+import BaseNav from '~/components/BaseNav'
 
 export default {
   head () {
@@ -162,8 +153,13 @@ export default {
     return query.bug_id ? true : false
   },
 
+  components: {
+    BaseNav
+  },
+
   data () {
     return {
+      title: '编辑缺陷',
       fileList: [],
       bug_type: [],
       bug_priority: [],
@@ -363,5 +359,5 @@ export default {
 </script>
 
 <style>
-  @import '~/static/static/common/css/test.css';
+  @import '~/static/static/common/css/test.css'
 </style>

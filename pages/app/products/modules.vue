@@ -141,7 +141,7 @@ export default {
   methods: {
     // get product info and release info
     getProductList() {
-      axios.get("/api/pm/new_product_release")
+      axios.get("/api/pm/product/user_list")
         .then(res => {
           if (res.data["status"] === 20000) {
             this.product_list = res.data["data"]

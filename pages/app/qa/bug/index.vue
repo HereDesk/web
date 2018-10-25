@@ -103,7 +103,7 @@
             <el-dropdown id="page-query-quick" class="mr-3 my-1" trigger="click">
               <span>
                 <span class="el-dropdown-desc">快捷操作:</span>
-                <span class="el-dropdown-link bg-edown">
+                <span class="el-dropdown-link bg-edown" :class="{ 'text-2973B7': operate != 'no' }">
                   {{ operate | QuickQperationName }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -189,27 +189,27 @@
                 <template slot-scope="scope">
                   <span class="text-secondary" v-if="scope.row.status === 'Closed'" >
                     <span class="circle circle-secondary"></span>
-                    &nbsp;&nbsp;{{ scope.row.status_name }}
+                    &nbsp;{{ scope.row.status_name }}
                   </span>
                   <span class="text-urgency" v-else-if="scope.row.status === 'New'" >
                     <span class="circle circle-urgency"></span>
-                    &nbsp;&nbsp;{{ scope.row.status_name }}
+                    &nbsp;{{ scope.row.status_name }}
                   </span>
                   <span class="text-urgency" v-else-if="scope.row.status === 'Open'" >
                     <span class="circle circle-urgency"></span>
-                    &nbsp;&nbsp;{{ scope.row.status_name }}
+                    &nbsp;{{ scope.row.status_name }}
                   </span>
                   <span class="text-urgency" v-else-if="scope.row.status === 'Reopen'">
                     <span class="circle circle-urgency"></span>
-                    &nbsp;&nbsp;{{ scope.row.status_name }}
+                    &nbsp;{{ scope.row.status_name }}
                   </span>
                   <span class="text-success" v-else-if="scope.row.status === 'Fixed'">
                     <span class="circle circle-success"></span>
-                    &nbsp;&nbsp;{{ scope.row.status_name }}
+                    &nbsp;{{ scope.row.status_name }}
                   </span>
                   <span class="text-warning" v-else-if="scope.row.status === 'Hang-up'">
                     <span class="circle circle-warning"></span>
-                    &nbsp;&nbsp;{{ scope.row.status_name }}
+                    &nbsp;{{ scope.row.status_name }}
                   </span>
                   <span v-else>{{ scope.row.status_name }}</span>
                 </template>
@@ -222,32 +222,32 @@
                   </nuxt-link>
                 </template>
               </el-table-column>
-              <el-table-column label='优先级' width='85'>
+              <el-table-column label='优先级' width='80'>
                 <template slot-scope="scope">
                   <div @click="BugPriorityDialog(scope.row)">
                     <span v-if="scope.row.priority === 'P1'" class="text-deadly">
                       <span class="circle circle-deadly"></span>
-                      &nbsp;&nbsp;{{ scope.row.priority }}
+                      &nbsp;{{ scope.row.priority }}
                     </span>
                     <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
                       <span class="circle circle-urgency"></span>
-                      &nbsp;&nbsp;{{ scope.row.priority }}
+                      &nbsp;{{ scope.row.priority }}
                     </span>
                     <span v-else class="text-secondary">
                       <span class="circle circle-secondary"></span>
-                      &nbsp;&nbsp;{{ scope.row.priority }}
+                      &nbsp;{{ scope.row.priority }}
                     </span>
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label='创建' prop='creator_user' sortable width='90' show-overflow-tooltip>
+              <el-table-column label='创建' prop='creator_user' sortable width='85' show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label='创建时间' width='120'>
+              <el-table-column label='创建时间' width='100'>
                 <template slot-scope="scope">
                   <span>{{ scope.row.create_time | date(5) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label='指派' prop='assignedTo_user' sortable width='90' show-overflow-tooltip>
+              <el-table-column label='指派' prop='assignedTo_user' sortable width='85' show-overflow-tooltip>
               </el-table-column>
               <el-table-column label='解决方案' width='90'>
                 <template slot-scope="scope">

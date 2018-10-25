@@ -100,6 +100,9 @@ export default {
                 "path=/";
             }
             this.$store.commit("setUserInfo", res.data)
+            if (res.data["data"]["group"] !== "admin") {
+              this.$store.dispatch("getPageData")
+            }
             this.$router.replace("/app/dashboard")
           }
           if (res.data["status"] !== 10000) {
