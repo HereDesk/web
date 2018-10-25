@@ -129,7 +129,7 @@ export default {
 
   methods: {
     getProductList() {
-      axios.get("/api/pm/get_product_name").then(res => {
+      axios.get("/api/pm/product/all_list").then(res => {
         if ((res.data["status"] === 20000) & (res.data["data"].length > 0)) {
           this.loading = false
           this.tableData = res.data["data"]

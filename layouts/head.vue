@@ -10,17 +10,17 @@
 
       <div id="navbarSupportedContent" class="mx-5 collapse navbar-collapse">
         <ul class="navbar-nav mr-auto head-nav">
-          <li class="nav-item" :class="{ 'nav-active' :  currentRoute == '/app/dashboard' }">
+          <li class="nav-item" :class="{ 'nav-active' : currentRoute == '/app/dashboard' }">
             <nuxt-link class="nav-link" to="/app/dashboard">首页</nuxt-link>
           </li>
-          <li class="nav-item dropdown" :class="{ 'nav-active' :  currentRoute.includes('/app/qa/bug') }">
+          <li class="nav-item dropdown" :class="{ 'nav-active' : currentRoute.includes('/app/qa/bug') }">
             <a class="nav-link dropdown-toggle" 
               data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
              缺陷
             </a>
             <div class="dropdown-menu">
               <nuxt-link class="dropdown-item" to="/app/qa/bug/add">提交BUG</nuxt-link>
-              <nuxt-link class="dropdown-item" to="/app/qa/bug">缺陷列表</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/bug" exact>缺陷列表</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug/count">缺陷分析</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/bug/report">缺陷报告</nuxt-link>
             </div>
@@ -32,7 +32,7 @@
             </a>
             <div class="dropdown-menu">
               <nuxt-link class="dropdown-item" to="/app/qa/testcase/add">编写用例</nuxt-link>
-              <nuxt-link class="dropdown-item" to="/app/qa/testcase">管理用例</nuxt-link>
+              <nuxt-link class="dropdown-item" to="/app/qa/testcase" exact>管理用例</nuxt-link>
               <nuxt-link class="dropdown-item" to="/app/qa/testsuite">执行用例</nuxt-link>
             </div>
           </li>

@@ -366,6 +366,8 @@ export default {
           if (event.target.value === "continue-commit") {
             $(document).scrollTop(0)
             this.Bug.title = ""
+            this.Bug.annex = []
+            this.fileList = []
             this.Bug.steps = ""
             this.Bug.expected_result = ""
             this.Bug.reality_result = ""

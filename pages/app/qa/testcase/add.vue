@@ -13,9 +13,9 @@
                 v-model="CaseData.product_code">
                 <el-option 
                   v-for="item in product_list" 
-                  :key="item.label" 
-                  :label="item.value" 
-                  :value="item.value">
+                  :key="item.id" 
+                  :label="item.product_name" 
+                  :value="item.product_code">
                 </el-option>
               </el-select>
               <el-cascader
@@ -224,7 +224,7 @@ export default {
 
   methods: {
     getProductList () {
-      axios.get('/api/pm/new_product_release')
+      axios.get('/api/pm/product/user_list')
         .then(res => {
           if (res.data['status'] === 20000) {
             this.product_list = res.data['data']

@@ -108,7 +108,6 @@
 <script>
   import axios from 'axios'
   import chart from '~/assets/js/chart.js'
-
   export default {
     name: "BugCount",
     head () {
@@ -168,7 +167,6 @@
         BugTypeChartData: []
       }
     },
-
     computed: {
       // 缺陷趋势分析
       chart1: function () {
@@ -191,7 +189,6 @@
         return chart.BugQueryChartData(this.BugTypeChartData)
       }
     },
-
     watch: {
       SelectedProductReleaseInfo: {
         handler: function (val, oldVal) {
@@ -208,7 +205,6 @@
         },
         deep: true
       },
-
       QueryBugCreate: {
         handler: function (val, oldVal) {
           let qtype = this.QueryBugCreate.type
@@ -272,14 +268,12 @@
         chart.ChartBarStack('bug-dev-chart',this.devloperName,this.devFixed,this.devNotFixed,width)
       }
     },
-
     created () {
       if (this.$route.query.product_code) {
         this.SelectedProductReleaseInfo.push(this.$route.query.product_code)
       }
       this.getProductRelease()
     },
-
     methods: {
       // 数据：产品版本
       getProductRelease () {

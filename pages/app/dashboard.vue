@@ -8,7 +8,7 @@
           <span class="dashboard-product">
             <span class="el-dropdown-link" v-if="current_product_code"> 
               {{ current_product_code || '' }}&nbsp;&nbsp;
-              <i class="iconfont icon-xiaotuziCduan_ icon-8a8a8a"></i>
+              <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
             </span>
           </span>
           <el-dropdown-menu slot="dropdown">
