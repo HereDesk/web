@@ -5,7 +5,7 @@
       <div class="col-auto mr-auto">
       </div>
       <div class='col-auto'>
-        <nuxt-link to="/app/user-management/user/adduser" v-if="userRules">
+        <nuxt-link to="/app/user-management/user/adduser" v-if="userRules.create_user">
           <button type="btn" class="btn btn-create">+ 增加用户</button>
         </nuxt-link>
       </div>
@@ -34,7 +34,7 @@
                <span>{{ scope.row.update_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' width="150" v-if="userRules">
+          <el-table-column label='操作' width="150" v-if="userRules.create_user">
             <template slot-scope="scope">
               <span @click="banned(scope.row,$event)" v-if="scope.row.group !== 'admin' & scope.row.user_status === 1">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="2">封禁</button>
@@ -112,7 +112,9 @@ export default {
 
   computed: {
     userRules: function() {
-      return rules.UserMangeRules(this.$store.state.userInfo)
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.UserMangeRules(group,PagesRules)
     }
   },
 
@@ -186,7 +188,7 @@ export default {
         method: "post",
         url: "/api/user/banned",
         data: JSON.stringify(this.bannedData)
-      }).then(function(rep) {
+      }).then(rep => {
         if (rep.data["status"] === 10060) {
           this.$notify.success({
             title: "成功",

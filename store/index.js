@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      userInfo: {},
+      userInfo: false,
       PageData: false,
       UserCustomization: [],
       isLogin: false,

@@ -609,8 +609,8 @@ export default {
     },
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
-      this.wd ? this.goSearch() : this.getBugList()
       this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
+      this.wd ? this.goSearch() : this.getBugList()
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {

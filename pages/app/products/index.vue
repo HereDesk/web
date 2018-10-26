@@ -5,7 +5,9 @@
       <div class="col-auto mr-auto">
       </div>
       <div class='col-auto' >
-        <button type='button' class='btn btn-create' id='addproduct' data-toggle="modal" data-target="#CreateProduct" v-if="ProductsRules.add">
+        <button id='addproduct' type='button' class='btn btn-create' 
+          data-toggle="modal" data-target="#CreateProduct"
+          v-if="ProductsRules.add">
           + 增加产品
         </button>
       </div>
@@ -22,19 +24,21 @@
             </template>
           </el-table-column>
           <el-table-column prop='creator' label='创建人'></el-table-column>
-          <el-table-column label='操作' align="center" v-if="ProductsRules.operate">
+          <el-table-column label='操作' align="center" 
+            v-if="ProductsRules.manage_members || ProductsRules.manage_release || ProductsRules.manage_modules">
             <template slot-scope="scope">
-              <div v-if="scope.row.userGroup !== 'admin'">
-                <nuxt-link :to="{ path: '/app/products/members', query: { 'product_code': scope.row.product_code } }">
-                  <button type="button" class="btn btn-outline-primary btn-sm">成员</button>
-                </nuxt-link>
-                <nuxt-link :to="{ path: '/app/products/release', query: { 'product_code': scope.row.product_code } }">
-                  <button type="button" class="btn btn-outline-primary btn-sm ml-3">版本</button>
-                </nuxt-link>
-                <nuxt-link :to="{ path: '/app/products/modules', query: { 'product_code': scope.row.product_code } }">
-                  <button type="button" class="btn btn-outline-primary btn-sm ml-3">模块</button>
-                </nuxt-link>
-              </div>
+              <nuxt-link :to="{ path: '/app/products/members', query: { 'product_code': scope.row.product_code } }"
+                v-if="ProductsRules.manage_members">
+                <button type="button" class="btn btn-outline-primary btn-sm">成员</button>
+              </nuxt-link>
+              <nuxt-link :to="{ path: '/app/products/release', query: { 'product_code': scope.row.product_code } }"
+                v-if="ProductsRules.manage_release">
+                <button type="button" class="btn btn-outline-primary btn-sm ml-3">版本</button>
+              </nuxt-link>
+              <nuxt-link :to="{ path: '/app/products/modules', query: { 'product_code': scope.row.product_code } }"
+                v-if="ProductsRules.manage_modules">
+                <button type="button" class="btn btn-outline-primary btn-sm ml-3">模块</button>
+              </nuxt-link>
             </template>
           </el-table-column>
         </el-table>
@@ -50,11 +54,15 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto'>
               <label for="pg-product-name" class="mx-5">产品名称</label>
-              <input type='text' v-model='ProductData.product_name' class='form-control input-lg mx-5 my-1' id='pg-product-name' placeholder='输入（不超20个字）' maxlength='20' required >
+              <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1' 
+                placeholder='输入（不超20个字）' maxlength='20' required 
+                v-model='ProductData.product_name' >
             </div>
             <div class='form-group row col-md-auto'>
               <label for="pg-product-name" class="mx-5">产品编号</label>
-              <input type='text' v-model='ProductData.product_code' class='form-control input-lg mx-5 my-1' id='pg-product-name' placeholder='输入（不超20个字）' maxlength='20' required >
+              <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
+                placeholder='输入（不超20个字）' maxlength='20' required 
+                v-model='ProductData.product_code' >
               <p class="mx-5 mt-3 text-90 text-gray">备注：提交后无法修改，请慎重填写</p>
             </div>
             <span class="ml-5 ms-msg" v-if="errorMsg">错误提示：{{ errorMsg }}</span>
@@ -119,7 +127,9 @@ export default {
 
   computed: {
     ProductsRules: function() {
-      return rules.ProductMangeRules(this.$store.state.userInfo)
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.ProductMangeRules(group,PagesRules)
     }
   },
 

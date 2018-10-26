@@ -73,29 +73,53 @@ export default {
   },
 
   // page: 用户管理页面
-  UserMangeRules (data) {
-    let rules = false
-    if (data) {
-      let group = data.group
-      if (group === 'admin') {
-        rules = true
+  UserMangeRules (UserGroup,PagesRules) {
+    let rules = {
+      create_user: false
+    }
+    if (UserGroup == 'admin') {
+      rules.create_user = true
+    }
+    if (PagesRules) {
+      for (let item of PagesRules) {
+        // 重置密码、封禁解禁，是一个modal，没有页面，因此只要有增加用户的权限，就相应有此权限
+        if (item['url'] == '/app/user-management/user/adduser' && item['is_allow'] == 1) {
+          rules.create_user = true
+        }
       }
     }
     return rules
   },
 
   // 产品管理页面
-  ProductMangeRules (data) {
+  ProductMangeRules (UserGroup,PagesRules) {
     let rules = {
       add: false,
-      operate: false
+      manage_members: false,
+      manage_release: false,
+      manage_modules: false
     }
-    let group = data.group
-    let group_list = ['admin']
-    if (data) {
-      if (group_list.indexOf(group) >= 0) {
-        rules.add = true
-        rules.operate = true
+    if (UserGroup == 'admin') {
+      rules.add = true
+      manage_members = true
+      manage_release = true
+      manage_modules = true
+    }
+    if (PagesRules) {
+      for (let item of PagesRules) {
+        if (item['url'] == '/app/products/members' && item['is_allow'] == 1) {
+          rules.manage_members = true
+        }
+        if (item['url'] == '/app/products/release' && item['is_allow'] == 1) {
+          rules.manage_release = true
+        }
+        if (item['url'] == '/app/products/modules' && item['is_allow'] == 1) {
+          rules.manage_modules = true
+        }
+        // 增加产品入口，是一个modal，不是页面。因此当只要有管理人员、版本、模块的权限就有增加产品的权限
+        if (rules.manage_members && rules.manage_release && rules.manage_modules) {
+          rules.add = true
+        }
       }
     }
     return rules
