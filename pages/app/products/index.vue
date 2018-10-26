@@ -7,7 +7,7 @@
       <div class='col-auto' >
         <button id='addproduct' type='button' class='btn btn-create' 
           data-toggle="modal" data-target="#CreateProduct"
-          v-if="ProductsRules.add">
+          v-if="Rules.product_add">
           + 增加产品
         </button>
       </div>
@@ -25,18 +25,18 @@
           </el-table-column>
           <el-table-column prop='creator' label='创建人'></el-table-column>
           <el-table-column label='操作' align="center" 
-            v-if="ProductsRules.manage_members || ProductsRules.manage_release || ProductsRules.manage_modules">
+            v-if="Rules.product_members || Rules.product_release || Rules.product_modules">
             <template slot-scope="scope">
               <nuxt-link :to="{ path: '/app/products/members', query: { 'product_code': scope.row.product_code } }"
-                v-if="ProductsRules.manage_members">
+                v-if="Rules.product_members">
                 <button type="button" class="btn btn-outline-primary btn-sm">成员</button>
               </nuxt-link>
               <nuxt-link :to="{ path: '/app/products/release', query: { 'product_code': scope.row.product_code } }"
-                v-if="ProductsRules.manage_release">
+                v-if="Rules.product_release">
                 <button type="button" class="btn btn-outline-primary btn-sm ml-3">版本</button>
               </nuxt-link>
               <nuxt-link :to="{ path: '/app/products/modules', query: { 'product_code': scope.row.product_code } }"
-                v-if="ProductsRules.manage_modules">
+                v-if="Rules.product_modules">
                 <button type="button" class="btn btn-outline-primary btn-sm ml-3">模块</button>
               </nuxt-link>
             </template>
@@ -126,10 +126,10 @@ export default {
   },
 
   computed: {
-    ProductsRules: function() {
+    Rules: function() {
       let group = this.$store.state.userInfo.group
       let PagesRules = this.$store.state.PageData
-      return rules.ProductMangeRules(group,PagesRules)
+      return rules.RuleManges(group,PagesRules)
     }
   },
 

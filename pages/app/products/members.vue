@@ -3,10 +3,15 @@
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
-        <a class="navbar-brand">{{ product_code }}成员列表</a>
+        <a class="navbar-brand">
+          {{ product_code }}&nbsp;成员
+        </a>
       </div>
       <div class='col-auto'>
-        <button type='button' class='btn btn-create' id='addRelease' data-toggle="modal" data-target="#P-Join-Members" @click="getAllUser()">
+        <button type='button' class='btn btn-create' id='addRelease' 
+          data-toggle="modal" data-target="#P-Join-Members"
+          v-if="Rules.product_members" 
+          @click="getAllUser()">
           + 增加成员
         </button>
       </div>
@@ -29,7 +34,7 @@
               <span>{{ scope.row.join_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作'>
+          <el-table-column label='操作' v-if="Rules.product_members">
             <template slot-scope="scope">
               <span @click="banned(scope.row,$event)" v-if="scope.row.status === 0">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="1">禁用</button>
@@ -131,6 +136,13 @@ export default {
     }
   },
 
+  computed: {
+    Rules: function() {
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.RuleManges(group,PagesRules)
+    }
+  },
   watch: {
     tableData: function(val, oldval) {
       if (this.tableData.length > 0) {

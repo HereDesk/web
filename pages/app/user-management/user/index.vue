@@ -1,11 +1,10 @@
 <template>
-  <div class='container mt-3'>
-
+  <div id="page-user-index" class='container mt-3'>
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
       </div>
       <div class='col-auto'>
-        <nuxt-link to="/app/user-management/user/adduser" v-if="userRules.create_user">
+        <nuxt-link to="/app/user-management/user/adduser" v-if="Rules.user_create">
           <button type="btn" class="btn btn-create">+ 增加用户</button>
         </nuxt-link>
       </div>
@@ -34,16 +33,19 @@
                <span>{{ scope.row.update_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' width="150" v-if="userRules.create_user">
+          <el-table-column label='操作' width="150" v-if="Rules.user_create">
             <template slot-scope="scope">
-              <span @click="banned(scope.row,$event)" v-if="scope.row.group !== 'admin' & scope.row.user_status === 1">
+              <span @click="banned(scope.row,$event)" 
+                v-if="scope.row.group !== 'admin' & scope.row.user_status === 1">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="2">封禁</button>
               </span>
-              <span @click="banned(scope.row,$event)" v-if="scope.row.group !== 'admin' & scope.row.user_status === 2">
+              <span @click="banned(scope.row,$event)" 
+                v-if="scope.row.group !== 'admin' & scope.row.user_status === 2">
                 <button type="button" class="btn btn-outline-success btn-sm" value="1">解封</button>
               </span>
               <span @click="getUserId(scope.row,$event)" v-if="scope.row.group !== 'admin'">
-                <button type="button" class="ml-1 btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#reset-password">密码</button>
+                <button type="button" class="ml-1 btn btn-outline-dark btn-sm" 
+                  data-toggle="modal" data-target="#reset-password">密码</button>
               </span>
             </template>  
           </el-table-column>
@@ -60,11 +62,15 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto'>
               <label for="password" class="mx-5">密码</label>
-              <input type='password' v-model='password.passwd' class='form-control input-lg mx-5 my-1' id='password' placeholder='请输入密码' minlength="8" maxlength='16' required >
+              <input type='password' id='password' class='form-control input-lg mx-5 my-1' 
+                placeholder='请输入密码' minlength="8" maxlength='16' required 
+                v-model='password.passwd'>
             </div>
             <div class='form-group row col-md-auto'>
               <label for="t-password" class="mx-5">确认密码</label>
-              <input type='password' v-model='password.RepeatPasswd' class='form-control input-lg mx-5 my-1' id='t-password' placeholder='请再次输入密码' minlength="8" maxlength='16' required >
+              <input type='password' id='t-password' class='form-control input-lg mx-5 my-1' 
+                placeholder='请再次输入密码' minlength="8" maxlength='16' required 
+                v-model='password.RepeatPasswd' >
             </div>
           </div>
           <div class="modal-footer">
@@ -111,10 +117,10 @@ export default {
   },
 
   computed: {
-    userRules: function() {
+    Rules: function() {
       let group = this.$store.state.userInfo.group
       let PagesRules = this.$store.state.PageData
-      return rules.UserMangeRules(group,PagesRules)
+      return rules.RuleManges(group,PagesRules)
     }
   },
 

@@ -11,9 +11,12 @@
           </p>
           <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
             @click="click_all_modules()" v-else>全部模块</p>
-          <nuxt-link class="display-inline manage-modules" 
-            :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-            &nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
+          <nuxt-link 
+            class="display-inline manage-modules" 
+            :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }"
+            v-if="Rules.product_modules">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
           </nuxt-link>
         </div>
         <div class="divider"></div>
@@ -159,10 +162,10 @@
                   <template slot-scope="scope">
                     <div class="tableOpreate pt-2" 
                       :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
-                      <button v-if="scope.row.status === 0 && Rules.fall" @click="handleFall(scope.row)">
+                      <button v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
                       </button>
-                      <button v-if="scope.row.status === 0 && Rules.edit" @click="handleEdit(scope.row)">
+                      <button v-if="scope.row.status === 0 && CaseRules.edit" @click="handleEdit(scope.row)">
                         <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
                       </button>
                     </div>
@@ -296,8 +299,13 @@ export default {
 
   computed: {
     // 权限控制
-    Rules: function() {
+    CaseRules: function() {
       return rules.TestCaseRules(this.$store.state.userInfo)
+    },
+    Rules: function() {
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.RuleManges(group,PagesRules)
     },
 
     // 查询条件

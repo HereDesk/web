@@ -96,7 +96,7 @@
         return this.realname ? this.realname.slice(0,1) : ''
       },
       rules: function () {
-        return rules.MenuRules(this.$store.state.userInfo)
+        return rules.RuleManges(this.$store.state.userInfo)
       }
     },
     beforeCreate () {

@@ -3,11 +3,15 @@
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
-        <h1 class="navbar-brand">版本管理</h1>
+        <h1 class="navbar-brand">
+          {{ product_code }}&nbsp;版本
+        </h1>
       </div>
       <div class='col-auto'>
-        <button type='button' class='btn btn-create' id='addRelease' data-toggle="modal" data-target="#modal-create-release">
-          &nbsp&nbsp增加版本&nbsp&nbsp
+        <button type='button'  id='addRelease' class='btn btn-create'
+          data-toggle="modal" data-target="#modal-create-release"
+          v-if="Rules.product_release">
+          &nbsp;&nbsp;增加版本&nbsp;&nbsp;
         </button>
       </div>
     </div>
@@ -43,13 +47,15 @@
           <div class="modal-body">
             <div class='form-group row col-md-auto'>
               <label for="pg-product-name" class="mx-5">选择产品</label>
-              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9Ebackground-color:#f5f5f5">
+              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
                 <option>{{ product_code }}</option>
               </select>
             </div>
             <div class='form-group row col-md-auto'>
               <label for="pg-product-name" class="mx-5">版本</label>
-              <input type='text' v-model='ReleaseData.release' class='form-control input-lg mx-5 my-1' id='pg-product-name' placeholder='输入（不超20个字）' maxlength='20' required >
+              <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
+                placeholder='输入（不超20个字）' maxlength='20' required 
+                v-model='ReleaseData.release' >
             </div>
           </div>
           <div class="modal-footer">
@@ -66,6 +72,7 @@
 <script>
 import axios from 'axios'
 import util from "~/assets/js/util.js"
+import rules from "~/assets/js/rules.js"
 
 export default {
   head() {
@@ -79,6 +86,13 @@ export default {
   },
   filters: {
     date: util.date
+  },
+  computed: {
+    Rules: function() {
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.RuleManges(group,PagesRules)
+    }
   },
   data() {
     return {
@@ -95,7 +109,7 @@ export default {
   },
   watch: {
     tableData: function(val, oldval) {
-      if (this.tableData.length > 0) {
+      if (this.tableData.length) {
         this.controlNull = false
       } else {
         this.msg = this.product_code + "产品下暂时还没有版本哦"

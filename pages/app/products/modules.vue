@@ -2,43 +2,42 @@
   <div id="page-module" class="container">
     <div id="module-product" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
-        <a class="navbar-brand">模块管理</a>
-        <el-dropdown class="ml-3" trigger="click">
-          <span class="dashboard-product">
-            <span class="el-dropdown-link"> {{ selected_product || '' }}</span>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for='item in product_list' :key="item.id">
-              <span @click="handleCommand(item)">{{ item.value }}</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <a class="navbar-brand">
+          {{ selected_product }}&nbsp;模块
+        </a>
       </nav>
     </div>
     <div id="module_a" class="row my-5">
       <div class="col-xl-3 col-sm-12 col-12">
         <h5 class="font-weight-light">一级模块</h5>
-        <p class="add_m_a" data-toggle="modal" data-target="#add_module_a"> + 一级模块</p>
+        <p class="add_m_a" data-toggle="modal" data-target="#add_module_a" v-if="Rules.product_modules"> + 一级模块</p>
         <p class="divider"></p>
         <ul class="pl-0 ul_module_a">
-          <li v-for="item in m1_list" :key="item.id" :value="item.m1" :class="{ 'selected_a_module' : selected_a_module == item.id }" @click="handleModuleA(item.id)"> - {{ item.m1 }}</li>
+          <li v-for="item in m1_list" :key="item.id" :value="item.m1" 
+          :class="{ 'selected_a_module' : selected_a_module == item.id }" 
+          @click="handleModuleA(item.id)"> - {{ item.m1 }}</li>
         </ul>
       </div>
       <div id="module_b" class="col-xl-9 col-sm-12 col-12">
         <h5 class="font-weight-light">二级模块</h5>
         <div class="module_b p-3 mb-3">
-          <input type="text" class="form-control" placeholder="二级模块名称输入后，回车即可保存成功" 
+          <input type="text" class="form-control" placeholder="二级模块名称输入后，回车即可保存成功"
+            v-if="Rules.product_modules"
             v-model="b_module_data.module_b_name"
             @keyup.enter="addModuleB()">
         </div>
         <ul class="ul_module_b pl-3">
           <li v-for="item in m2_list" :key="item.id" class="d-flex"> 
             <span>-&nbsp;&nbsp;</span>
-            <span class="flex-grow-1 m2edit" contenteditable="true" @keyup="changeData($event,item)">{{ item.m2 }} &nbsp;</span>
-            <div :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}" @click="SaveEditM2()">
+            <span class="flex-grow-1 m2edit" :contenteditable="Rules.product_modules" @keyup="changeData($event,item)">
+              {{ item.m2 }} &nbsp;
+            </span>
+            <div v-if="Rules.product_modules" 
+              :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}"
+              @click="SaveEditM2()">
               <i class="iconfont icon-duigou icon-8a8a8a size-1-5 mr-3"></i>
             </div>
-            <div @click="delM2(item)">
+            <div v-if="Rules.product_modules" @click="delM2(item)">
               <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
             </div>
           </li>
@@ -71,6 +70,7 @@
 <script>
 import axios from "axios"
 import loading from "~/components/loading"
+import rules from "~/assets/js/rules.js"
 
 export default {
   head() {
@@ -110,16 +110,15 @@ export default {
       var QueryBuilder = {}
       QueryBuilder["product_code"] = this.selected_product
       return QueryBuilder
+    },
+    Rules: function() {
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.RuleManges(group,PagesRules)
     }
   },
 
   watch: {
-    product_list: function(val, oldVal) {
-      if (this.product_list.length > 0 && !this.selected_product) {
-        this.selected_product = this.product_list[0]["product_code"]
-        this.getModuleA()
-      }
-    },
     selected_product: function(val, oldVal) {
       this.getModuleA()
     },

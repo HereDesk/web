@@ -59,7 +59,9 @@ export default {
         { name: "web/H5", value: "web/H5" },
         { name: "产品", value: "pm" },
         { name: "服务端", value: "server" },
-        { name: "设计", value: "design" },
+        { name: "设计师", value: "design" },
+        { name: "技术总监", value: "CTO" },
+        { name: "产品总监", value: "pm-director" },
         { name: "其它", value: "other" }
       ],
       UserData: {
