@@ -264,6 +264,12 @@
   line-height: 2.5rem;
 }
 
+.t_module_second li span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .el-active {
   color: #1E88E5;
 }

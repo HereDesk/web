@@ -247,7 +247,7 @@ import rules from "~/assets/js/rules.js"
 export default {
   head() {
     return {
-      title: "HDesk - 测试用例"
+      title: "HDesk - 测试用例" 
     }
   },
 
@@ -310,16 +310,15 @@ export default {
 
     // 查询条件
     QueryBuilder: function() {
-      var QueryBuilder = {}
-      // QueryBuilder
-      QueryBuilder["pageNumber"] = this.pageNumber
-      QueryBuilder["pageSize"] = this.pageSize
-      QueryBuilder["product_code"] = this.selected_product
-      QueryBuilder["status"] = this.selected_status
-      this.m1_id ? (QueryBuilder["m1_id"] = this.m1_id) : null
-      this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null
-      this.wd ? (QueryBuilder["wd"] = this.wd) : null
-      return QueryBuilder
+      let Builder = {}
+      Builder["pageNumber"] = this.pageNumber
+      Builder["pageSize"] = this.pageSize
+      Builder["product_code"] = this.selected_product
+      Builder["status"] = this.selected_status
+      this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
+      this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
+      this.wd ? (Builder["wd"] = this.wd) : null
+      return Builder
     },
     // 最后一页
     LastPage: function() {

@@ -26,8 +26,7 @@
             <li :id="item1.id">
               <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" 
                 @click="clickMoudle1(item1)">
-                <i 
-                  class="iconfont icon-8a8a8a" 
+                <i class="iconfont icon-8a8a8a" 
                   :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
                 </i>
                 &nbsp;&nbsp;{{ item1.label }}
@@ -532,19 +531,19 @@ export default {
     },
     // 查询条件
     QueryBuilder: function() {
-      let QueryBuilder = {}
+      let Builder = {}
       let tmp_release
       this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
-      QueryBuilder["pageNumber"] = this.pageNumber
-      QueryBuilder["pageSize"] = this.pageSize
-      QueryBuilder["product_code"] = this.selected_product
-      QueryBuilder["release"] = tmp_release
-      QueryBuilder["status"] = this.selected_status
-      QueryBuilder["priority"] = this.selected_priority
-      this.m2_id ? (QueryBuilder["m2_id"] = this.m2_id) : null
-      this.m1_id ? (QueryBuilder["m1_id"] = this.m1_id) : null
+      Builder["pageNumber"] = this.pageNumber
+      Builder["pageSize"] = this.pageSize
+      Builder["product_code"] = this.selected_product
+      Builder["release"] = tmp_release
+      Builder["status"] = this.selected_status
+      Builder["priority"] = this.selected_priority
+      this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
+      this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
       if (this.operate != "no") {
-        QueryBuilder["operate"] = this.operate
+        Builder["operate"] = this.operate
       }
       if (this.isShowSearch) {
         if (this.SearchCriteria.start_date && !this.SearchCriteria.end_date) {
@@ -554,12 +553,12 @@ export default {
           this.wd = this.SearchCriteria.start_date + '#' + this.SearchCriteria.end_date
         } 
         if (this.wd) {
-          QueryBuilder["Operators"] = this.SearchCriteria.Operators
-          QueryBuilder["SearchType"] = this.SearchCriteria.SearchType
-          QueryBuilder["wd"] = this.wd
+          Builder["Operators"] = this.SearchCriteria.Operators
+          Builder["SearchType"] = this.SearchCriteria.SearchType
+          Builder["wd"] = this.wd
         }
       }
-      return QueryBuilder
+      return Builder
     },
     // 搜索
     OperatorsList: function() {
@@ -596,7 +595,8 @@ export default {
     },
     // userinfo group
     uGroup: function() {
-      return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null
+      let userInfo = this.$store.state.userInfo
+      return userInfo.group === "test" ? userInfo.group : null
     },
     // show user config
     isShowModules: function() {
