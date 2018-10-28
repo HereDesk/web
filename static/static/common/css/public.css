@@ -161,6 +161,10 @@ html,body {
   /*font-weight: 300 !important;*/
 }
 
+.el-cascader-menu {
+  padding-left:0rem !important;
+}
+
 #my-cascader .el-input__inner {
   border:none !important;
   width: 10rem;

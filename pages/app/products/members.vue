@@ -1,5 +1,5 @@
 <template>
-  <div class='container mt-3'>
+  <div id="page-product-members" class='container mt-3'>
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
@@ -85,13 +85,11 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import tooltip from "~/components/tooltip"
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -102,20 +100,17 @@ export default {
     }
   },
   
-  layout: "head",
+  layout: "head", 
 
   validate({ query }) {
-    return query.product_code ? true : false
+    console.log(query)
+    return query.product_code
   },
 
   filters: {
     date: util.date
   },
-
-  components: {
-    tooltip
-  },
-
+  
   data() {
     return {
       product_code: "",
@@ -154,7 +149,7 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     this.product_code = this.$route.query.product_code
     this.ProductMemberData.product_code = this.$route.query.product_code
     this.bannedData.product_code = this.$route.query.product_code

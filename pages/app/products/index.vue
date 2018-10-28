@@ -1,6 +1,5 @@
 <template>
   <div class='container mt-5'>
-    
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class='container mt-3'>
+  <div id="page-product-release" class='container mt-3'>
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
@@ -75,24 +75,17 @@ import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
 export default {
-  head() {
+  head () {
     return {
       title: "HDesk - 版本管理"
     }
   },
   layout: "head",
   validate({ query }) {
-    return query.product_code ? true : false
+    return query.product_code
   },
-  filters: {
+  filters: { 
     date: util.date
-  },
-  computed: {
-    Rules: function() {
-      let group = this.$store.state.userInfo.group
-      let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
-    }
   },
   data() {
     return {
@@ -105,6 +98,13 @@ export default {
         release: "",
         product_code: ""
       }
+    }
+  },
+  computed: {
+    Rules: function() {
+      let group = this.$store.state.userInfo.group
+      let PagesRules = this.$store.state.PageData
+      return rules.RuleManges(group,PagesRules)
     }
   },
   watch: {

@@ -98,16 +98,7 @@
               <div class='form-group row'>
                 <label for='case-file' class="col-lg-2 col-md-2 col-sm-12 testcase-label">设计图/原型图</label>
                 <form id="case-file" class="col-lg-9 col-md-10 col-sm-12 px-0">
-                  <el-upload 
-                    name="images" 
-                    action="/api/support/upload?type=testcase" 
-                    list-type="picture-card" 
-                    :limit="5" :on-success="ImageSuccess" 
-                    :on-remove="handleRemove" 
-                    :beforeUpload="beforeAvatarUpload" 
-                    :file-list="fileList">
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+                  <FileUpload @annex="getAnnex"></FileUpload>
                 </form>
               </div>
               <div class='form-group row' v-show="isRemarkDisable">
@@ -152,6 +143,7 @@
 import axios from 'axios'
 import fileutil from "~/assets/js/file.js"
 import BaseNav from '~/components/BaseNav'
+import FileUpload from '~/components/FileUpload'
 
 export default {  
   head () {
@@ -161,7 +153,8 @@ export default {
   },
 
   components: {
-    BaseNav
+    BaseNav,
+    FileUpload
   },
 
   data () {
@@ -185,8 +178,7 @@ export default {
         priority: 'P1',
         module_id: [],
         annex: []
-      },
-      fileList: [],
+      }
     }
   },
 
@@ -249,14 +241,11 @@ export default {
         this.isRemarkDisable = true
       }
     },
-    handleRemove(file) {
-      fileutil.FileHandleRemove(file,this.CaseData.annex)
-    },
-    ImageSuccess(response, fileList) {
-      this.CaseData.annex.push(response["name"])
-    },
-    beforeAvatarUpload(file) {
-      fileutil.FileBeforeAvatarUpload(file)
+    /*
+    ** testcase create
+    */
+    getAnnex (data) {
+      this.CaseData.annex = data
     },
     addTest (event) {
       var title = this.CaseData.title

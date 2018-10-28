@@ -339,7 +339,7 @@ export default {
     }
   },
   validate({ query }) {
-    return query.bug_id ? true : false
+    return query.bug_id
   },
 
   layout: 'head',

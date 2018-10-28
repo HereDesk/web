@@ -1,5 +1,5 @@
 <template>
-  <div id="page-module" class="container">
+  <div id="page-product-module" class="container">
     <div id="module-product" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand">
@@ -15,7 +15,7 @@
         <ul class="pl-0 ul_module_a">
           <li v-for="item in m1_list" :key="item.id" :value="item.m1" 
           :class="{ 'selected_a_module' : selected_a_module == item.id }" 
-          @click="handleModuleA(item.id)"> - {{ item.m1 }}</li>
+          @click="handleModuleA(item.id)"> * {{ item.m1 }}</li>
         </ul>
       </div>
       <div id="module_b" class="col-xl-9 col-sm-12 col-12">
@@ -54,7 +54,8 @@
           <div class="modal-body my-3">
             <div class='form-group row col-md-auto mx-3'>
               <label for="ModuleA">模块名称</label>
-              <input type='text' v-model='a_module_data.ModuleA' maxlength="20" class='form-control' rows="5" placeholder='请输入名称...' />
+              <input type='text' class='form-control' rows="5" maxlength="20" placeholder='请输入名称...' 
+                v-model='a_module_data.ModuleA'/>
             </div>
           </div>
           <div class="modal-footer">
@@ -80,7 +81,7 @@ export default {
   },
   layout: "head",
   validate({ query }) {
-    return query.product_code ? true : false
+    return query.product_code
   },
   data() {
     return {
@@ -138,7 +139,6 @@ export default {
     this.getModuleA()
   },
   methods: {
-    // get product info and release info
     getProductList() {
       axios.get("/api/pm/product/user_list")
         .then(res => {
@@ -151,8 +151,7 @@ export default {
         .catch(res => {})
     },
     getModuleA() {
-      axios
-        .get("/api/pm/module/1/list?product_code=" + this.selected_product)
+      axios.get("/api/pm/module/1/list?product_code=" + this.selected_product)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.m1_list = res.data["data"]
@@ -284,5 +283,5 @@ export default {
 </script>
 
 <style>
-@import "~/static/static/common/css/module.css"
+  @import "~/static/static/common/css/module.css"
 </style>

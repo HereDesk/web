@@ -90,14 +90,7 @@ export default {
               var Days = 30;
               var exp = new Date();
               exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-              document.cookie =
-                "token=" +
-                token +
-                ";" +
-                "expires=" +
-                exp.toGMTString() +
-                ";" +
-                "path=/";
+              document.cookie = "token=" + token + ";" + "expires=" + exp.toGMTString() + ";" + "path=/";
             }
             this.$store.commit("setUserInfo", res.data)
             if (res.data["data"]["group"] !== "admin") {

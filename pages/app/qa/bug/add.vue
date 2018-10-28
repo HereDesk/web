@@ -95,16 +95,7 @@
               <div class='form-group row'>
                 <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
                 <form id="bug-file" class="col-lg-8 col-md-10 col-sm-12 px-0">
-                  <el-upload 
-                    name="images" 
-                    action="/api/support/upload?type=bug" 
-                    list-type="picture-card" 
-                    :limit="3" :on-success="ImageSuccess" 
-                    :on-remove="handleRemove" 
-                    :beforeUpload="beforeAvatarUpload" 
-                    :file-list="fileList">
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+                  <FileUpload @annex="getAnnex"></FileUpload>
                 </form>
               </div> 
 
@@ -141,6 +132,7 @@
 import axios from "axios"
 import fileutil from "~/assets/js/file.js"
 import BaseNav from '~/components/BaseNav'
+import FileUpload from '~/components/FileUpload'
 
 export default {
   head() {
@@ -149,7 +141,8 @@ export default {
     }
   },
   components: {
-    BaseNav
+    BaseNav,
+    FileUpload
   },
   data() {
     return {
@@ -181,9 +174,6 @@ export default {
   },
 
   computed: {
-    uploadDisabled: function() {
-      return this.fileList.length > 3
-    },
     selected_product_code: function() {
       return this.Bug.product_code
     },
@@ -229,6 +219,11 @@ export default {
   },
 
   methods: {
+    // get commponents fileupload data
+    getAnnex (data) {
+      this.Bug.annex = data
+    },
+    // get testcase details
     getCaseDetails() {
       axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
         .then(res => {
@@ -240,16 +235,7 @@ export default {
           }
         })
     },
-    handleRemove(file) {
-      fileutil.FileHandleRemove(file,this.Bug.annex)
-    },
-    ImageSuccess(response, fileList) {
-      this.Bug.annex.push(response["name"])
-    },
-    beforeAvatarUpload(file) {
-      fileutil.FileBeforeAvatarUpload(file)
-    },
-    // 获取产品版本信息
+    // get product_release info
     getProductRelease() {
       axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
@@ -269,10 +255,7 @@ export default {
         })
     },
     getDeveloper() {
-      axios.get(
-        "/api/pm/member/list?group=Developer&product_code=" +
-          this.Bug.product_code
-        )
+      axios.get("/api/pm/member/list?group=Developer&product_code=" + this.Bug.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.developer_list = res.data["data"]

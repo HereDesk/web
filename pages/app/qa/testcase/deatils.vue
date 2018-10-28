@@ -91,7 +91,7 @@
                 <label>产品：</label>{{ CaseDetails.product_code }}
               </li>
               <li>
-                <label>模块：</label>{{ CaseDetails.m1_name }} {{ CaseDetails.m2_n }}
+                <label>模块：</label>{{ CaseDetails.m1_name }} {{ CaseDetails.m2_name }}
               </li>
               <li>
                 <label>状态：</label>{{ case_status }}
@@ -206,7 +206,7 @@ export default {
     }
   },
   validate({ query }) {
-    return query.case_id ? true : false
+    return query.case_id
   },
 
   layout: 'head',

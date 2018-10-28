@@ -97,24 +97,14 @@
               </div>
               <div class='form-group row'>
                 <label class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
-                <form class="col-lg-8 col-md-10 col-sm-12">
+                <form class="col-lg-8 col-md-10 col-sm-12 px-0">
                   <div v-for="item in Annex" :key="item.id" class="annex" style="display:inline;">
                     <img :src="item.url" :class="{ 'h-annex' : Bug.annex.length > 0 }">
                     <span class="annex_delete" @click="annex_delete(item.url)">
                       <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : Bug.annex.length }"></i>
                     </span>
                   </div>
-                  <el-upload style="display:inline;"
-                    name="images"
-                    action="/api/support/upload?type=bug"
-                    list-type="picture-card"
-                    :limit="3"
-                    :on-success="ImageSuccess"
-                    :on-remove="handleRemove"
-                    :beforeUpload="beforeAvatarUpload"
-                    :file-list="fileList">
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+                  <FileUpload @annex="getAnnex"></FileUpload>
                 </form>
               </div>
             </div>
@@ -141,6 +131,7 @@
 import axios from 'axios'
 import fileutil from "~/assets/js/file.js"
 import BaseNav from '~/components/BaseNav'
+import FileUpload from '~/components/FileUpload'
 
 export default {
   head () {
@@ -150,11 +141,12 @@ export default {
   },
 
   validate({ query }) {
-    return query.bug_id ? true : false
+    return query.bug_id
   },
 
   components: {
-    BaseNav
+    BaseNav,
+    FileUpload
   },
 
   data () {
@@ -215,6 +207,10 @@ export default {
   },
 
   methods: {
+    // get commponents fileupload data
+    getAnnex (data) {
+      this.Bug.annex = data
+    },
     getModule () {
       axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
         .then(res => {
@@ -271,15 +267,6 @@ export default {
     annex_delete (file_path) {
       this.AnnexDelData.url = file_path
       fileutil.AnnexDelete("bug",file_path,this.AnnexDelData,this.Annex)
-    },
-    handleRemove(file) {
-      fileutil.FileHandleRemove(file,this.Bug.annex)
-    },
-    ImageSuccess(response, fileList) {
-      this.Bug.annex.push(response["name"])
-    },
-    beforeAvatarUpload(file) {
-      fileutil.FileBeforeAvatarUpload(file)
     },
     getBugProperty () {
       axios.get('/api/qa/bug/bug_property').then(res => {

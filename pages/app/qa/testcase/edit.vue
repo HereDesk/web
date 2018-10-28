@@ -99,24 +99,14 @@
 
               <div class='form-group row'>
                 <label class="col-lg-2 col-md-2 col-sm-12 bug-label">设计图/原型图</label>
-                <form class="col-lg-8 col-md-10 col-sm-12">
+                <form class="col-lg-8 col-md-10 col-sm-12 px-0">
                   <div v-for="item in Annex" :key="item.id" class="annex" style="display:inline;">
                     <img :src="item.file_path" :class="{ 'h-annex' : CaseData.annex.length > 0 }">
                     <span class="annex_delete" @click="annex_delete(item.file_path)">
                       <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : CaseData.annex.length }"></i>
                     </span>
                   </div>
-                  <el-upload style="display:inline;"
-                    name="images"
-                    action="/api/support/upload?type=testcase"
-                    list-type="picture-card"
-                    :limit="3"
-                    :on-success="ImageSuccess"
-                    :on-remove="handleRemove"
-                    :beforeUpload="beforeAvatarUpload"
-                    :file-list="fileList">
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
+                  <FileUpload @annex="getAnnex"></FileUpload>
                 </form>
               </div> 
 
@@ -142,6 +132,7 @@
 import axios from 'axios'
 import fileutil from "~/assets/js/file.js"
 import BaseNav from '~/components/BaseNav'
+import FileUpload from '~/components/FileUpload'
 
 export default {
   head () {
@@ -150,11 +141,12 @@ export default {
     }
   },
   validate({ query }) {
-    return query.case_id ? true : false
+    return query.case_id
   },
 
   components: {
-    BaseNav
+    BaseNav,
+    FileUpload
   },
 
   data () {
@@ -206,6 +198,9 @@ export default {
   },
 
   methods: {
+    getAnnex (data) {
+      this.CaseData.annex = data
+    },
     getCaseDetails () {
       axios.get('/api/qa/testcase/details?case_id=' + this.case_id)
         .then(res => {
@@ -242,16 +237,6 @@ export default {
              this.Msg = res.data['msg']
           }
         })
-    },
-
-    handleRemove(file) {
-      fileutil.FileHandleRemove(file,this.CaseData.annex)
-    },
-    ImageSuccess(response, fileList) {
-      this.CaseData.annex.push(response["name"])
-    },
-    beforeAvatarUpload(file) {
-      fileutil.FileBeforeAvatarUpload(file)
     },
     annex_delete (path) {
       this.AnnexDelData.file_path = path
