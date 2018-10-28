@@ -250,7 +250,6 @@ export default {
       title: "HDesk - 测试用例" 
     }
   },
-
   layout: "head",
   components: {
     loading,
@@ -260,7 +259,7 @@ export default {
     return {
       // 产品、版本
       product_list: [],
-      selected_product: null,
+      selected_product: this.$route.query.product_code || null,
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
       status_list: [
@@ -270,8 +269,8 @@ export default {
       selected_status: this.$route.query.status || 0,
       // Bug: 表格数据
       total: null,
-      pageNumber: this.$route.query.pageNumber ||  1,
-      pageSize: this.$route.query.pageSize || 10,
+      pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+      pageSize: parseInt(this.$route.query.pageSize) || 10,
       tableData: [],
       Msg: false,
       img_src: null,
@@ -343,10 +342,7 @@ export default {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch() : this.getCaseList()
-      this.$router.replace({
-        path: "/app/qa/testcase",
-        query: this.QueryBuilder
-      })
+      this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {
@@ -368,11 +364,10 @@ export default {
   },
 
   created() {
-    var query = this.$route.query
-    if (query["product_code"]) {
-      this.selected_product = query["product_code"]
-    }
     this.getProductRelease()
+  },
+  mounted() {
+    this.wd ? this.goSearch() : this.getCaseList()
   },
 
   methods: {
@@ -438,6 +433,9 @@ export default {
 
     // TestCase: 数据列表
     getCaseList() {
+      if (!this.selected_product) {
+        return
+      }
       axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {

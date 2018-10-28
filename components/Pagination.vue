@@ -9,7 +9,10 @@
                 <span aria-hidden="true">&lt;</span>
               </a>
             </li>
-            <li class="page-item" :class="{ active: item === parseInt(pageNumber),disabled: item == '...'}" v-for="item in PageList" :key="item.id"  @click="handleChange('pn',$event)">
+            <li class="page-item" 
+              :class="{ active: item === parseInt(pageNumber),disabled: item == '...'}" 
+              v-for="item in PageList" :key="item.id" 
+              @click="handleChange('pn',$event)">
               <a class="page-link">{{ item }}</a>
             </li>
             <li class="page-item" v-if="LastPage != pageNumber & LastPage > 5">
@@ -85,14 +88,22 @@ export default {
   },
   watch: {
     "$route" () {
-      this.pageNumber = parseInt(this.$route.query.pageNumber)
-      this.pageSize = parseInt(this.$route.query.pageSize)
+      let query = this.$route.query
+      query.pageNumber ? (this.pageNumber = parseInt(query.pageNumber)) : undefined
+      query.pageSize ? (this.pageSize = parseInt(query.pageSize)) : undefined
+    },
+    pageSize () {
+      this.$emit('PsPn',this.pageSize,this.pageNumber) 
+    },
+    pageNumber () {
+      this.$emit('PsPn',this.pageSize,this.pageNumber) 
     }
   },
 
   methods: {
     // 翻页
     handleChange (data,event) {
+      console.log(event)
       if (data === 'ps') {
         if (this.pageSize == 50) {
           this.pageNumber = 1
@@ -111,10 +122,9 @@ export default {
           this.pageNumber = parseInt(this.pageNumber) - 1
         }
         if (parseInt(text)) {
-          this.pageNumber = text
+          this.pageNumber = parseInt(text)
         }
       }
-      this.$emit('PsPn',this.pageSize,this.pageNumber) 
     }
   }
 }

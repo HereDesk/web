@@ -69,18 +69,18 @@ export default {
   },
 
   validate({ query }) {
-    return query.suite_id && query.product_code ? true : false
+    return query.suite_id && query.product_code
   },
 
   data () {
     return {
       tableData: [],
       total: null,
-      product_code: this.$route.query.product_code,
+      product_code: this.$route.query.product_code || null,
       QueryBuilder: {
-        pageSize: 10,
-        pageNumber: 1,
-        suite_id: this.$route.query.suite_id
+        pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+        pageSize: parseInt(this.$route.query.pageSize) || 10,
+        suite_id: this.$route.query.suite_id || null
       },
       RunData: {
         cell_id: null,

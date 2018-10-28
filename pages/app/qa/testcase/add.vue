@@ -190,9 +190,6 @@ export default {
   computed: {
     selected_product () {
       return this.CaseData.product_code ? this.CaseData.product_code : null
-    },
-    uploadDisabled:function() {
-      return this.fileList.length > 5
     }
   },
 

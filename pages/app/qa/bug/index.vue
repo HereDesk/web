@@ -428,7 +428,6 @@ export default {
 
   data() {
     return {
-      selectData: false,
       MyTodayData: {},
       // 产品、版本
       product_list: [],
@@ -436,7 +435,6 @@ export default {
       modules_id: [null, null],
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
-      current_product_code: "",
       selected_product: this.$route.query.product_code || "",
       selected_release: this.$route.query.release || "全部",
       // 缺陷状态
@@ -618,7 +616,7 @@ export default {
     },
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
-      this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
+      this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
       this.wd ? this.goSearch() : this.getBugList()
     },
     product_list: function(val, oldVal) {
@@ -639,20 +637,12 @@ export default {
   },
 
   created() {
-    let query = this.$route.query
-    if (query["status"]) {
-      this.selected_status = query["status"]
-    }
-    if (query["operate"]) {
-      this.operate = query["operate"]
-    }
     this.getProductRelease()
   },
-
   mounted() {
-    this.wd && this.SearchCriteria.SearchType ? this.goSearch() : this.getBugList()
     this.getModule()
     this.getMemberList()
+    this.wd ? this.goSearch() : this.getBugList()
   },
 
   methods: {
@@ -839,13 +829,11 @@ export default {
     // 操作: bug指派
     skipAssign(row) {
       this.selectedBugId = row.bug_id
-      // this.current_product_code = this.selected_product
       $("#componentsAssign").modal("show")
     },
     // 操作: bug解决
     skipResolve(row) {
       this.selectedBugId = row.bug_id
-      // this.current_product_code = this.selected_product
       $("#componentsResolve").modal("show")
     },
     // 操作: bug关闭
