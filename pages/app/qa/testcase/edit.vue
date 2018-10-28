@@ -99,7 +99,7 @@
 
               <div class='form-group row'>
                 <label class="col-lg-2 col-md-2 col-sm-12 bug-label">设计图/原型图</label>
-                <form class="col-lg-8 col-md-10 col-sm-12 px-0">
+                <form class="col-lg-8 col-md-10 col-sm-12">
                   <div v-for="item in Annex" :key="item.id" class="annex" style="display:inline;">
                     <img :src="item.file_path" :class="{ 'h-annex' : CaseData.annex.length > 0 }">
                     <span class="annex_delete" @click="annex_delete(item.file_path)">

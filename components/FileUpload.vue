@@ -1,5 +1,6 @@
 <template>
   <el-upload
+    style="display:inline;"
     name="images" 
     action="/api/support/upload?type=bug" 
     list-type="picture-card" 

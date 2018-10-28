@@ -94,7 +94,7 @@
 
               <div class='form-group row'>
                 <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
-                <form id="bug-file" class="col-lg-8 col-md-10 col-sm-12 px-0">
+                <form id="bug-file" class="col-lg-8 col-md-10 col-sm-12">
                   <FileUpload @annex="getAnnex"></FileUpload>
                 </form>
               </div> 

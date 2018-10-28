@@ -97,7 +97,7 @@
               </div>
               <div class='form-group row'>
                 <label for='case-file' class="col-lg-2 col-md-2 col-sm-12 testcase-label">设计图/原型图</label>
-                <form id="case-file" class="col-lg-9 col-md-10 col-sm-12 px-0">
+                <form id="case-file" class="col-lg-9 col-md-10 col-sm-12">
                   <FileUpload @annex="getAnnex"></FileUpload>
                 </form>
               </div>
