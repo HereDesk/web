@@ -367,6 +367,7 @@ export default {
     this.getProductRelease()
   },
   mounted() {
+    this.getModule()
     this.wd ? this.goSearch() : this.getCaseList()
   },
 
