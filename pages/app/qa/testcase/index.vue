@@ -206,7 +206,7 @@
               <h5 class="countdata-title">今日工作</h5>
               <div class="row mt-5">
                 <div class="col">
-                  <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create }}</p>
+                  <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create || 0 }}</p>
                   <p class="countdata-desc">我今天创建的测试用例</p>
                 </div>
               </div>
@@ -391,6 +391,7 @@ export default {
 
     // 获取所有模块
     getModule() {
+      if (!this.selected_product) {return}
       axios.get("/api/pm/get_module?product_code=" + this.selected_product)
         .then(res => {
           if (res.data["status"] === 20000) {

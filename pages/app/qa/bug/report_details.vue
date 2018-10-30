@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-xl-1 col-lg-10 offset-xl-1 offset-lg-1 col-md-12 col-sm-12 col-12">
+      <div class="col-xl-10 col-lg-10 offset-xl-1 offset-lg-1 col-md-12 col-sm-12 col-12">
         <div id="report_title" class="text-center mt-5">
           <h1>{{ Details.product_code }}日报</h1>
           <span>{{ Details.datetime }}</span>

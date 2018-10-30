@@ -353,42 +353,35 @@
     <div id="modal-my-today" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content py-5">
-          <div id="developer" v-if="MyTodayData.group == 'developer'">
-            <div class="modal-body text-center">
-              <h5 class="countdata-title">今日</h5>
+          <div id="count">
+            <div class="modal-body text-center" v-if="MyTodayData">
+              <h5 class="countdata-title" v-if="MyTodayData.group == 'test'">今日</h5>
+              <h5 class="countdata-title" v-else>缺陷今日概况</h5>
+              <p>{{ selected_product }}</p>
               <div class="row mt-5">
                 <div class="col">
-                  <p class="countdata-num">{{ MyTodayData.data.fixed }}</p>
+                  <p class="countdata-num">{{ MyTodayData.data.create || 0 }}</p>
+                  <p class="countdata-desc">今日发现</p>
+                </div>
+                <div class="col">
+                  <p class="countdata-num text-success">{{ MyTodayData.data.fixed || 0 }}</p>
                   <p class="countdata-desc">今日解决</p>
                 </div>
                 <div class="col">
-                  <p class="countdata-num">{{ MyTodayData.data.residue }}</p>
-                  <p class="countdata-desc">剩余待解决</p>
+                  <p class="countdata-num text-success">{{ MyTodayData.data.closed || 0}}</p>
+                  <p class="countdata-desc">今日关闭</p>
+                </div>
+                <div class="col" v-if="MyTodayData.group != 'test' && MyTodayData.group != 'developer'">
+                  <p class="countdata-num text-red">{{ MyTodayData.data.hangUp || 0}}</p>
+                  <p class="countdata-desc">今日挂起</p>
+                </div>
+                <div class="col">
+                  <p class="countdata-num">{{ MyTodayData.data.residue || 0 }}</p>
+                  <p class="countdata-desc" v-if="MyTodayData.group == 'developer'">待我解决</p>
+                  <p class="countdata-desc" v-else>剩余待解决</p>
                 </div>
               </div>
             </div>
-          </div>
-          <div id="test" v-else-if="MyTodayData.group == 'test'">
-            <div class="modal-body text-center pb-5">
-              <h5 class="countdata-title">今日工作情况</h5>
-              <div class="row mt-5">
-                <div class="col">
-                  <p class="countdata-num text-success">{{ MyTodayData.data.create }}</p>
-                  <p class="countdata-desc">创建</p>
-                </div>
-                <div class="col">
-                  <p class="countdata-num text-success">{{ MyTodayData.data.closed }}</p>
-                  <p class="countdata-desc">关闭</p>
-                </div>
-                <div class="col">
-                  <p class="countdata-num text-red">{{ MyTodayData.data.hangUp }}</p>
-                  <p class="countdata-desc">挂起延期</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="other" class="text-center my-5" v-else>
-            <p>您没有相关数据哦</p>
           </div>
         </div>
       </div>
@@ -428,7 +421,7 @@ export default {
 
   data() {
     return {
-      MyTodayData: {},
+      MyTodayData: false,
       // 产品、版本
       product_list: [],
       modules_list: [],
@@ -443,7 +436,7 @@ export default {
       // 优先级列表
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
-      // 更多操作
+      // 更多操作:快捷操作
       operate: "no",
       QuickQperationList: data.bug_quick_operation_list,
       // 搜索
@@ -540,17 +533,17 @@ export default {
       Builder["priority"] = this.selected_priority
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
-      if (this.operate != "no") {
-        Builder["operate"] = this.operate
-      }
       if (this.isShowSearch) {
-        if (this.SearchCriteria.start_date && !this.SearchCriteria.end_date) {
-          this.wd = this.SearchCriteria.start_date
-        }
         if (this.SearchCriteria.start_date && this.SearchCriteria.end_date) {
           this.wd = this.SearchCriteria.start_date + '#' + this.SearchCriteria.end_date
         } 
+        if (this.SearchCriteria.start_date && !this.SearchCriteria.end_date) {
+          this.wd = this.SearchCriteria.start_date
+        }
         if (this.wd) {
+          if (this.operate != "no") {
+            Builder["operate"] = this.operate
+          }
           Builder["Operators"] = this.SearchCriteria.Operators
           Builder["SearchType"] = this.SearchCriteria.SearchType
           Builder["wd"] = this.wd
@@ -574,7 +567,7 @@ export default {
         { OperatorsValue: "<=", OperatorsName: "<=" },
         { OperatorsValue: "range", OperatorsName: "范围" }
       ]
-      if (search_type.indexOf("time") > 0) {
+      if (search_type.includes("time")) {
         return OperatorsList2
       } else {
         return OperatorsList1
@@ -615,9 +608,11 @@ export default {
       this.pageNumber = 1
     },
     QueryBuilder: function(val, oldVal) {
-      this.tableData = []
-      this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
-      this.wd ? this.goSearch() : this.getBugList()
+      if (JSON.stringify(val) != JSON.stringify(oldVal)) {
+        this.tableData = []
+        this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
+        this.wd ? this.goSearch() : this.getBugList()
+      }
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {
@@ -762,7 +757,6 @@ export default {
       if (this.isShowSearch) {
         this.isShowSearch = false
         this.wd = null
-        this.getBugList()
       } else {
         this.isShowSearch = true
       }
