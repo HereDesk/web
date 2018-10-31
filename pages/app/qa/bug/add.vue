@@ -164,7 +164,7 @@ export default {
         bug_type: "other",
         assignedTo_id: "",
         title: "",
-        steps: "1. \n2. \n",
+        steps: "",
         reality_result: "",
         expected_result: "",
         remark: "",

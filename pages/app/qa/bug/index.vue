@@ -437,7 +437,7 @@ export default {
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
       // 更多操作:快捷操作
-      operate: "no",
+      operate: this.$route.query.operate || "no",
       QuickQperationList: data.bug_quick_operation_list,
       // 搜索
       SearchType: data.bug_search_type_list,
@@ -533,6 +533,9 @@ export default {
       Builder["priority"] = this.selected_priority
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
+      if (this.operate != "no") {
+        Builder["operate"] = this.operate
+      }
       if (this.isShowSearch) {
         if (this.SearchCriteria.start_date && this.SearchCriteria.end_date) {
           this.wd = this.SearchCriteria.start_date + '#' + this.SearchCriteria.end_date
@@ -541,9 +544,6 @@ export default {
           this.wd = this.SearchCriteria.start_date
         }
         if (this.wd) {
-          if (this.operate != "no") {
-            Builder["operate"] = this.operate
-          }
           Builder["Operators"] = this.SearchCriteria.Operators
           Builder["SearchType"] = this.SearchCriteria.SearchType
           Builder["wd"] = this.wd
