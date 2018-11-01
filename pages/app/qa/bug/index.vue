@@ -739,9 +739,7 @@ export default {
 
     // Bug: 列表
     getBugList() {
-      if (!this.selected_product) {
-        return
-      }
+      if (!this.selected_product) { return }
       axios.get("/api/qa/bug/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -858,8 +856,9 @@ export default {
     },
     // 数据统计
     myToday() {
+      if (!this.selected_product) { return }
       $("#modal-my-today").modal("show")
-      axios("/api/analyze/bug/my_today").then(res => {
+      axios("/api/analyze/bug/my_today?product_code=" + this.selected_product).then(res => {
         if (res.data["status"] === 20000) {
           this.MyTodayData = res.data
         }
