@@ -124,6 +124,9 @@
             <span class="searchIcon mr-4" @click="clickSearch()">
               <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
             </span>
+            <span title="导入导出" class="mr-4" data-toggle="modal" data-target="#m-import-export">
+              <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
+            </span>
             <span  class="searchIcon mr-4" title="今日成就" @click="myToday()">
               <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
             </span>
@@ -187,7 +190,7 @@
               @cell-mouse-enter="tableHover" 
               @cell-mouse-leave="tableLeave">
               <el-table-column label='ID' prop='id' sortable width='70'></el-table-column>
-              <el-table-column label='状态' width='100'>
+              <el-table-column label='状态' width='100' sortable>
                 <template slot-scope="scope">
                   <span class="text-secondary" v-if="scope.row.status === 'Closed'" >
                     <span class="circle circle-secondary"></span>
@@ -224,7 +227,7 @@
                   </nuxt-link>
                 </template>
               </el-table-column>
-              <el-table-column label='优先级' width='80'>
+              <el-table-column label='优先级' width='95' sortable>
                 <template slot-scope="scope">
                   <div @click="BugPriorityDialog(scope.row)">
                     <span v-if="scope.row.priority === 'P1'" class="text-deadly">
@@ -251,7 +254,7 @@
               </el-table-column>
               <el-table-column label='指派' prop='assignedTo_user' sortable width='85' show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label='解决方案' width='90'>
+              <el-table-column label='解决方案' width='88'>
                 <template slot-scope="scope">
                   <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
                     <span v-if="scope.row.solution_name === '已修复'" class="text-success">
@@ -344,6 +347,28 @@
           <div class="modal-footer modal-footer-center">
             <button type="button" class="btn btn-cancel mr-5" data-dismiss="modal">以后</button>
             <button type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="row mt-5">
+              <div class="col px-3">
+                <p>1.仅支持按照产品、版本、缺陷状态查询条件导出</p>
+                <p>2.选择好查询条件，在点击导出</p>
+              </div>
+              <div class="col text-center">
+                <h5>缺陷导出</h5>
+                <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">导出</button>
+                <p v-if="JSON.stringify(BugExportFile) !== '{}'">
+                  下载地址: <a :href="BugExportFile.url">{{ BugExportFile.filename }}</a>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -474,7 +499,9 @@ export default {
       // close bug
       ClosedData: {
         bug_id: ""
-      }
+      },
+      // export bug
+      BugExportFile: {}
     }
   },
 
@@ -853,6 +880,21 @@ export default {
         }
         $("#modal-bugClosed").modal("hide")
       })
+    },
+    bug_export () {
+      if (!this.selected_product) { return }
+      axios.get("/api/qa/bug/export", { params: this.QueryBuilder })
+        .then( res => {
+          if (res.data["status"] === 20000) {
+            this.BugExportFile = res.data
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: res.data["msg"]
+            })
+          }
+        }
+      )
     },
     // 数据统计
     myToday() {

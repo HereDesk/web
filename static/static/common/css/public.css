@@ -655,9 +655,9 @@ pre {
 **
 */
 
-.btn {
+/* .btn {
   background:transparent;
-}
+} */
 
 .btn:focus {
   outline: 0;

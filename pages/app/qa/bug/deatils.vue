@@ -55,7 +55,7 @@
             <h6 class="bug-details-minor-title">
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
             </h6>
-            <pre class="details-block" v-html="BugDetails_steps "></pre>
+            <pre class="details-block">{{ BugDetails.steps }}</pre>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
             <h6 class="bug-details-minor-title">
@@ -437,9 +437,9 @@ export default {
     reality_result: function () {
       return util.txt_deal_with(this.BugDetails.reality_result)
     },
-    BugDetails_steps: function () {
-      return util.txt_deal_with(this.BugDetails.steps)
-    }
+    // BugDetails_steps: function () {
+    //   return util.txt_deal_with(this.BugDetails.steps)
+    // }
   },
 
   created () {

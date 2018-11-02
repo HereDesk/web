@@ -220,7 +220,7 @@
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content pt-5">
           <div id="test">
-            <div class="modal-body text-center pb-5" v-if="MyTodayData">
+            <div class="modal-body text-center pb-5">
               <h5 class="countdata-title">测试用例导入导出</h5>
               <div class="row mt-5">
                 <div class="col">
