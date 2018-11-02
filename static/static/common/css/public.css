@@ -343,9 +343,14 @@ a:link {
   background-color: #FEBB46;
 }
 
+.bg-EEEEEE {
+  background-color: #EEEEEE;
+}
+
 .bg_FAFAFA {
   background-color: #FAFAFA !important;
 }
+
 .white-background {
   background-color: #FFF !important;
 }

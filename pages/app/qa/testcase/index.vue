@@ -218,15 +218,20 @@
 
     <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content pt-5">
-          <div id="test">
-            <div class="modal-body text-center pb-5">
-              <h5 class="countdata-title">测试用例导入导出</h5>
-              <div class="row mt-5">
-                <div class="col">
-                  <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create }}</p>
-                  <p class="countdata-desc">测试用例</p>
-                </div>
+        <div class="modal-content">
+          <div class="modal-body p-0">
+            <div class="row">
+              <div class="col py-5 bg-EEEEEE">
+                <p class="px-3">1.仅支持按照产品、模块这两个查询条件导出</p>
+                <p class="px-3">2.选择好查询条件，再点击导出</p>
+                <p class="px-3">3.导出格式：目前仅支持 xlsx</p>
+              </div>
+              <div class="col py-5 text-center">
+                <h4>{{ selected_product }} 测试用例</h4>
+                <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">数据导出</button>
+                <p v-if="JSON.stringify(ExportFile) !== '{}'">
+                  下载地址: <a :href="ExportFile.url">{{ ExportFile.filename }}</a>
+                </p>
               </div>
             </div>
           </div>
@@ -287,7 +292,8 @@ export default {
       defaultProps: {
         children: "children",
         label: "label"
-      }
+      },
+      ExportFile: {}
     }
   },
 
@@ -522,6 +528,22 @@ export default {
            this.MyTodayData = res.data["data"]
         }
       })
+    },
+
+    bug_export () {
+      if (!this.selected_product) { return }
+      axios.get("/api/qa/testcase/export", { params: this.QueryBuilder })
+        .then( res => {
+          if (res.data["status"] === 20000) {
+            this.ExportFile = res.data
+          } else {
+            this.$notify.warning({
+              title: "提示",
+              message: res.data["msg"]
+            })
+          }
+        }
+      )
     },
 
     // table line hover and leave

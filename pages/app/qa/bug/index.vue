@@ -190,7 +190,7 @@
               @cell-mouse-enter="tableHover" 
               @cell-mouse-leave="tableLeave">
               <el-table-column label='ID' prop='id' sortable width='70'></el-table-column>
-              <el-table-column label='状态' width='100' sortable>
+              <el-table-column label='状态' prop="status" width='100' sortable>
                 <template slot-scope="scope">
                   <span class="text-secondary" v-if="scope.row.status === 'Closed'" >
                     <span class="circle circle-secondary"></span>
@@ -227,7 +227,7 @@
                   </nuxt-link>
                 </template>
               </el-table-column>
-              <el-table-column label='优先级' width='95' sortable>
+              <el-table-column label='优先级' prop="priority" align="center" width='95' sortable>
                 <template slot-scope="scope">
                   <div @click="BugPriorityDialog(scope.row)">
                     <span v-if="scope.row.priority === 'P1'" class="text-deadly">
@@ -245,24 +245,24 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label='创建' prop='creator_user' sortable width='85' show-overflow-tooltip>
+              <el-table-column label='创建' prop='creator_user' align="center" sortable width='85' show-overflow-tooltip>
               </el-table-column>
               <el-table-column label='创建时间' width='100'>
                 <template slot-scope="scope">
                   <span>{{ scope.row.create_time | date(5) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column label='指派' prop='assignedTo_user' sortable width='85' show-overflow-tooltip>
+              <el-table-column label='指派' prop='assignedTo_user' align="center" sortable width='85' show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label='解决方案' width='88'>
+              <el-table-column label='解决方案' width='90' align="center">
                 <template slot-scope="scope">
                   <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
                     <span v-if="scope.row.solution_name === '已修复'" class="text-success">
                       <span class="circle circle-success"></span>
-                      &nbsp;&nbsp;{{ scope.row.solution_name }}
+                      &nbsp;{{ scope.row.solution_name }}
                     </span>
                     <span v-else class="text-secondary">
-                      &nbsp;&nbsp;{{ scope.row.solution_name }}
+                      &nbsp;{{ scope.row.solution_name }}
                     </span>
                   </div>
                 </template>
@@ -355,15 +355,16 @@
     <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-          <div class="modal-body">
-            <div class="row mt-5">
-              <div class="col px-3">
-                <p>1.仅支持按照产品、版本、缺陷状态查询条件导出</p>
-                <p>2.选择好查询条件，在点击导出</p>
+          <div class="modal-body p-0">
+            <div class="row">
+              <div class="col py-5 bg-EEEEEE">
+                <p class="px-3">1.仅支持按照产品、版本、缺陷状态这三个查询条件导出</p>
+                <p class="px-3">2.选择好查询条件，再点击导出</p>
+                <p class="px-3">3.导出格式：目前仅支持 xlsx</p>
               </div>
-              <div class="col text-center">
-                <h5>缺陷导出</h5>
-                <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">导出</button>
+              <div class="col py-5 text-center">
+                <h4>{{ selected_product }} 缺陷</h4>
+                <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">数据导出</button>
                 <p v-if="JSON.stringify(BugExportFile) !== '{}'">
                   下载地址: <a :href="BugExportFile.url">{{ BugExportFile.filename }}</a>
                 </p>
@@ -888,8 +889,8 @@ export default {
           if (res.data["status"] === 20000) {
             this.BugExportFile = res.data
           } else {
-            this.$notify.error({
-              title: "错误",
+            this.$notify.warning({
+              title: "提示",
               message: res.data["msg"]
             })
           }
