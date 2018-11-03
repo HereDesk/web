@@ -45,6 +45,11 @@ export default {
           url: "/app/system/bug",
           img: require("~/static/pic/system_bug.png"),
           text: "缺陷设置"
+        },
+        {
+          url: "/app/system/log",
+          img: require("~/static/pic/system_log.png"),
+          text: "日志记录"
         }
       ]
     };

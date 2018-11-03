@@ -213,7 +213,7 @@ export default {
 
   methods: {
     getProductList () {
-      axios.get('/api/pm/product/user_list')
+      axios.get('/api/pm/product/my_list')
         .then(res => {
           if (res.data['status'] === 20000) {
             this.product_list = res.data['data']

@@ -102,6 +102,7 @@ html,body {
 .el-dropdown-menu__item {
   font-size: 0.9rem !important;
   color: #333 !important;
+  line-height: 2.8rem !important;
 }
 
 .el-dropdown-menu__item > a{
@@ -216,6 +217,12 @@ html,body {
 ** 以下为自定义的的Bootstrap Css部分代码
 ** 
 */
+
+/* padding */
+.mpy-5 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
 
 /* Bootstrap navbar */
 .navbar-brand {

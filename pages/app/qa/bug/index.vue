@@ -357,13 +357,13 @@
         <div class="modal-content">
           <div class="modal-body p-0">
             <div class="row">
-              <div class="col py-5 bg-EEEEEE">
-                <p class="px-3">1.仅支持按照产品、版本、缺陷状态这三个查询条件导出</p>
-                <p class="px-3">2.选择好查询条件，再点击导出</p>
-                <p class="px-3">3.导出格式：目前仅支持 xlsx</p>
+              <div class="col-12 col-sm-6 mpy-5 bg-EEEEEE">
+                <p>1.仅支持按照产品、版本、缺陷状态这三个查询条件导出</p>
+                <p>2.选择好查询条件，再点击导出</p>
+                <p>3.导出格式：目前仅支持 xlsx</p>
               </div>
-              <div class="col py-5 text-center">
-                <h4>{{ selected_product }} 缺陷</h4>
+              <div class="col-12 col-sm-6 mpy-5 text-center bg-white">
+                <h4 class="pt-2">{{ selected_product }} 缺陷</h4>
                 <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">数据导出</button>
                 <p v-if="JSON.stringify(BugExportFile) !== '{}'">
                   下载地址: <a :href="BugExportFile.url">{{ BugExportFile.filename }}</a>
@@ -899,8 +899,8 @@ export default {
     },
     // 数据统计
     myToday() {
-      if (!this.selected_product) { return }
       $("#modal-my-today").modal("show")
+      if (!this.selected_product) { return }
       axios("/api/analyze/bug/my_today?product_code=" + this.selected_product).then(res => {
         if (res.data["status"] === 20000) {
           this.MyTodayData = res.data

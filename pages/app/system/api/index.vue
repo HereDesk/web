@@ -55,7 +55,7 @@
             </div>
             <div class='form-group row col-md-auto mx-3'>
               <label for="api_code">api_code</label>
-              <input type='text' maxlength="100" class='form-control' placeholder='请输入api_名称...' 
+              <input type='text' maxlength="100" class='form-control' placeholder='请输入api_code...' 
                 v-model='ApiPermissionsData.api_code' />
             </div>
              <div class='form-group row col-md-auto mx-3'>
@@ -186,5 +186,5 @@ export default {
 </script>
 
 <style>
-@import "~/static/static/common/css/system.css";
+  @import "~/static/static/common/css/system.css";
 </style>

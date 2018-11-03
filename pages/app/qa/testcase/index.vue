@@ -221,13 +221,13 @@
         <div class="modal-content">
           <div class="modal-body p-0">
             <div class="row">
-              <div class="col py-5 bg-EEEEEE">
+              <div class="col-12 col-sm-6 mpy-5 bg-EEEEEE">
                 <p class="px-3">1.仅支持按照产品、模块这两个查询条件导出</p>
                 <p class="px-3">2.选择好查询条件，再点击导出</p>
                 <p class="px-3">3.导出格式：目前仅支持 xlsx</p>
               </div>
-              <div class="col py-5 text-center">
-                <h4>{{ selected_product }} 测试用例</h4>
+              <div class="col col-sm-6 mpy-5 text-center bg-white">
+                <h4 class="pt-2">{{ selected_product }} 测试用例</h4>
                 <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">数据导出</button>
                 <p v-if="JSON.stringify(ExportFile) !== '{}'">
                   下载地址: <a :href="ExportFile.url">{{ ExportFile.filename }}</a>
@@ -324,10 +324,6 @@ export default {
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.wd ? (Builder["wd"] = this.wd) : null
       return Builder
-    },
-    // 最后一页
-    LastPage: function() {
-      return Math.ceil(this.total / this.pageSize)
     },
     // userinfo group
     uGroup: function() {
@@ -441,9 +437,7 @@ export default {
 
     // TestCase: 数据列表
     getCaseList() {
-      if (!this.selected_product) {
-        return
-      }
+      if (!this.selected_product) { return }
       axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -523,9 +517,10 @@ export default {
     // my today
     myToday() {
       $("#modal-my-today").modal("show")
-      axios("/api/analyze/testcase/my_today").then(res => {
+      if (!this.selected_product) { return }
+      axios("/api/analyze/testcase/my_today?product_code=" + this.selected_product).then(res => {
         if (res.data["status"] === 20000) {
-           this.MyTodayData = res.data["data"]
+          this.MyTodayData = res.data["data"]
         }
       })
     },

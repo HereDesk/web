@@ -14,18 +14,18 @@
           </li>
           <li class="nav-item">
             <el-dropdown class="px-3" trigger="click" style="line-height:2.5rem;font-size:1rem;">
-              <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{ 'nav-active' : currentRoute.includes('/app/qa/bug') }">缺陷</span>
+              <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{ 'nav-active' : currentRoute.includes('bug') }">缺陷</span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
                   <nuxt-link to="/app/qa/bug/add">提交BUG</nuxt-link>
                 </el-dropdown-item>
-                <el-dropdown-item divided>
+                <el-dropdown-item>
                   <nuxt-link to="/app/qa/bug" exact>缺陷列表</nuxt-link>
                 </el-dropdown-item>
-                <el-dropdown-item divided>
+                <el-dropdown-item>
                   <nuxt-link to="/app/qa/bug/count">缺陷分析</nuxt-link>
                 </el-dropdown-item>
-                <el-dropdown-item divided>
+                <el-dropdown-item>
                   <nuxt-link to="/app/qa/bug/report">缺陷报告</nuxt-link>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -34,15 +34,15 @@
           <li class="nav-item">
             <el-dropdown class="px-3" trigger="click" style="line-height:2.5rem;font-size:1rem;">
               <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                 :class="{ 'nav-active' : currentRoute.includes('/app/qa/testcase') }">测试用例</span>
+                 :class="{ 'nav-active' : currentRoute.includes('test') }">测试用例</span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
                   <nuxt-link to="/app/qa/testcase/add">编写用例</nuxt-link>
                 </el-dropdown-item>
-                <el-dropdown-item divided>
+                <el-dropdown-item>
                   <nuxt-link to="/app/qa/testcase" exact>管理用例</nuxt-link>
                 </el-dropdown-item>
-                <el-dropdown-item divided>
+                <el-dropdown-item>
                   <nuxt-link to="/app/qa/testsuite">执行用例</nuxt-link>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -70,12 +70,12 @@
                   <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
                 </nuxt-link>
               </el-dropdown-item>
-              <el-dropdown-item divided>
+              <el-dropdown-item>
                 <nuxt-link to="/app/set/passwd">
                   <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
                 </nuxt-link>
               </el-dropdown-item>
-              <el-dropdown-item divided>
+              <el-dropdown-item>
                 <a @click="HandLogout()">
                   <i class="iconfont icon-logout"></i>&nbsp;&nbsp;退出登录
                 </a>
