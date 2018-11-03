@@ -95,6 +95,10 @@ html,body {
   min-width: 7rem !important;
 }
 
+.el-dropdown span:focus {
+  outline: none !important;
+}
+
 .el-dropdown-menu__item {
   font-size: 0.9rem !important;
   color: #333 !important;

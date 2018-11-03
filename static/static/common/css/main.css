@@ -11,7 +11,11 @@
 }
 
 .nav-active {
-  border-bottom: 2px solid #3385FF;
+  color: #3385FF !important;
+}
+
+.nav-active:focus {
+  outline: none !important;
 }
 
 @media (max-width: 992px) {
