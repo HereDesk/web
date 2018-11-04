@@ -38,7 +38,7 @@
             ></el-cascader>
           </div>
           <div class="modal-body">
-            <ul class="ul-style-none">
+            <ul class="ul-style-none mb-5">
               <li v-for="item in TestCaseList" :key="item.id">
                 <input type="checkbox" id="item.case_id" value="item.case_id" @click="CheckedCase(item.case_id,$event)">
                 &nbsp;&nbsp;{{ item.id }}.&nbsp;&nbsp;{{ item.title }}

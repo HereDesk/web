@@ -18,13 +18,13 @@
           <el-table-column label='未执行' prop='not_execution' width='100'></el-table-column>
           <el-table-column label='成功' prop='success' width='90'></el-table-column>
           <el-table-column label='失败' prop='fail' width='90'></el-table-column>
-          <el-table-column label='发现缺陷' prop='bug_num' width='90'>
+          <el-table-column label='发现缺陷' prop='bug_num' width='90' align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.bug_num !== 0">{{ scope.row.bug_num }}</span>
               <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作'>
+          <el-table-column label='操作' align="center">
             <template slot-scope="scope">
               <span class="mr-3" v-if="scope.row.total > 0">
                 <nuxt-link :to="{ path: '/app/qa/testsuite/run', query: { 'suite_id': scope.row.suite_id, 'product_code':scope.row.product_code } }">
