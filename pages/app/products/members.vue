@@ -103,7 +103,6 @@ export default {
   layout: "head", 
 
   validate({ query }) {
-    console.log(query)
     return query.product_code
   },
 

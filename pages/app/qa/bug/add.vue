@@ -231,7 +231,10 @@ export default {
             this.Bug.steps = res.data["data"]["steps"]
             this.Bug.expected_result = res.data["data"]["expected_result"]
           } else {
-            console.log(res.data["msg"])
+            this.$notify.error({
+              title: '提示',
+              message: res.data["msg"]
+            })
           }
         })
     },

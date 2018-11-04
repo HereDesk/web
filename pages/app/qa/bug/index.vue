@@ -189,7 +189,7 @@
               :default-sort="{prop: 'date', order: 'descending'}" 
               @cell-mouse-enter="tableHover" 
               @cell-mouse-leave="tableLeave">
-              <el-table-column label='ID' prop='id' sortable width='70'></el-table-column>
+              <el-table-column label='ID' prop='id' sortable width='63'></el-table-column>
               <el-table-column label='状态' prop="status" width='100' sortable>
                 <template slot-scope="scope">
                   <span class="text-secondary" v-if="scope.row.status === 'Closed'" >
@@ -254,7 +254,7 @@
               </el-table-column>
               <el-table-column label='指派' prop='assignedTo_user' align="center" sortable width='85' show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label='解决方案' width='90' align="center">
+              <el-table-column label='解决方案' width='91' align="center">
                 <template slot-scope="scope">
                   <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
                     <span v-if="scope.row.solution_name === '已修复'" class="text-success">

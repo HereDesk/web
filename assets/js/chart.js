@@ -270,7 +270,6 @@ export default {
 
   ChartPie () {
     let args = arguments
-    console.log(args)
     let myChart = echarts.init(document.getElementById(args[0]))
     myChart.setOption({
       title : {

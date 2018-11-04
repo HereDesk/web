@@ -8,7 +8,7 @@ import {
 axios.defaults.timeout = 100000
 axios.defaults.withCredentials = true
 
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use(function (config,context) {
   var url = config.url
   const token = process.server ? getUserFromCookie(config) : getUserFromLocalStorage()
   if (url.indexOf('login') < 0) {
@@ -22,7 +22,7 @@ axios.interceptors.request.use(function (config) {
 })
 
 axios.interceptors.response.use(function (response) {
-  if (process.browser) {
+  if (process.client) {
     if (response.data['status'] === 14444) {
       window.location.replace('/app/forbidden_auth')
     }
@@ -34,7 +34,7 @@ axios.interceptors.response.use(function (response) {
   }
   return response
 }, function (error) {
-  if (process.browser) {
+  if (process.client) {
     window.location.replace('/error')
   }
   return Promise.reject(error)

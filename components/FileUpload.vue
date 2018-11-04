@@ -44,10 +44,10 @@ export default {
     },
     FileBeforeAvatarUpload(file) {
       const isLt10M = file.size / 1024 / 1024 < 10
-      const PicFormat = file.name.split(".")[1].toLowerCase() === "jpg"
-      const PicFormat1 = file.name.split(".")[1].toLowerCase() === "png"
-      const PicFormat2 = file.name.split(".")[1].toLowerCase() === "jpeg"
-      const PicFormat3 = file.name.split(".")[1].toLowerCase() === "gif"
+      const PicFormat = file.name.split(".")[1] === "jpg"
+      const PicFormat1 = file.name.split(".")[1] === "png"
+      const PicFormat2 = file.name.split(".")[1] === "jpeg"
+      const PicFormat3 = file.name.split(".")[1] === "gif"
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!PicFormat && !PicFormat1 && !PicFormat2 && !PicFormat3) {
         this.$notify.error({

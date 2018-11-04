@@ -24,6 +24,7 @@
 
 <script>
 import axios from "axios"
+import { getUserFromLocalStorage } from "~/assets/js/auth"
 
 export default {
   data() {
@@ -37,8 +38,9 @@ export default {
       }
     }
   },
-  created() {
-    if (this.$store.state.isLogin) {
+  mounted() {
+    const token = getUserFromLocalStorage()
+    if (this.$store.state.isLogin || token) {
       this.$router.replace("/app/dashboard")
     }
   },

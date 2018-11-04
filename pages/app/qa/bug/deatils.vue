@@ -70,6 +70,14 @@
             <pre class="details-block" v-html="expected_result"></pre>
           </div>
 
+          <div id="bug-details-3" class="height-7 mb-5" v-if="BugDetails.remark">
+            <h6 class="bug-details-minor-title">
+              <span class="grayline"></span>&nbsp;&nbsp;附加信息
+            </h6>
+            <div class="dropdown-divider"></div>
+            <pre class="details-block" v-html="BugDetails_remark"></pre>
+          </div>
+
           <!-- 图片附件 -->
           <div id="bug-steps" class="height-7 mb-5" v-if="Annex.length > 0">
             <h6 class="bug-details-minor-title">
@@ -83,13 +91,6 @@
                 </div>
               </div>
             </picture>
-          </div>
-          <div id="bug-details-3" class="height-7 mb-5" v-if="BugDetails.remark">
-            <h6 class="bug-details-minor-title">
-              <span class="grayline"></span>&nbsp;&nbsp;附加信息
-            </h6>
-            <div class="dropdown-divider"></div>
-            <pre class="details-block" v-html="BugDetails_remark"></pre>
           </div>
           <div id="bug-details-history" class="height-7 mb-5 text-gray-38 text-93">
             <h6 class="bug-details-minor-title">

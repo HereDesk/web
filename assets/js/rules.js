@@ -14,7 +14,6 @@ export default {
   	if (bug && userinfo) {
   		let uid = userinfo.user_id
   		let group = userinfo.group
-      console.log(bug)
   		// Bug: 删除按钮规则
 		  // 1）Bug创建者、测试人员
 		  // 2）Bug状态为New时才能删除，已分配他人的缺陷不能删除

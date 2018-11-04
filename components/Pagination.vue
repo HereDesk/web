@@ -103,7 +103,6 @@ export default {
   methods: {
     // 翻页
     handleChange (data,event) {
-      console.log(event)
       if (data === 'ps') {
         if (this.pageSize == 50) {
           this.pageNumber = 1
