@@ -41,7 +41,7 @@ export default {
 
   		// Bug: 挂起按钮规则
   		// 当状态为：已解决、待解决、重新打开
-  		if (bug.status === 'Open' || bug.status === 'Reopen' || bug.status === 'Hang-Up') {
+  		if (bug.status === 'Open' || bug.status === 'Reopen' || bug.status === 'Fixed') {
   			BtnRules.hangup = true
   		}
 
