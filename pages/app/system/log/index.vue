@@ -12,8 +12,16 @@
           <el-table-column label='姓名' prop='realname'></el-table-column>
           <el-table-column label='标记' prop='flag'></el-table-column>
           <el-table-column label='IP' prop='ip'></el-table-column>
-          <el-table-column label='第一次' prop='create_time'></el-table-column>
-          <el-table-column label='最后一次更新时间' prop='update_time'></el-table-column>
+          <el-table-column label='第一次'>
+            <template slot-scope="scope">
+              <span>{{ scope.row.create_time | date }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label='最后一次更新时间'> 
+            <template slot-scope="scope">
+              <span>{{ scope.row.update_time | date }}</span>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -30,6 +38,10 @@ export default {
 
   components: {
     Pagination
+  },
+
+  filters: {
+    date: util.date
   },
 
   data () {
