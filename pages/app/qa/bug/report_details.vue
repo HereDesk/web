@@ -54,7 +54,7 @@ import chart from "~/assets/js/chart.js"
 
 export default {
   validate({ query }) {
-    return query.report_id
+    return /\w{2,6}/.test(query.report_id)
   },
 
   data() {

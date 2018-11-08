@@ -64,12 +64,14 @@ import Pagination from "~/components/Pagination"
 let _ = require("lodash/Array")
 
 export default {
+  
+  validate({ query }) {
+    return /\w{2,6}/.test(query.suite_id)
+  },
+  
   layout: "head",
   components: {
     Pagination
-  },
-  validate({ query }) {
-    return query.suite_id && query.product_code ? true : false
   },
 
   data() {

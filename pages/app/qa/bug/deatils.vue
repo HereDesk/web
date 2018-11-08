@@ -1,6 +1,6 @@
 <template>
-  <div id="page-bug-details" class="mt-5">
-    <div id="bug-details" class='container' v-if="JSON.stringify(BugDetails) !== '{}'">
+  <div id="page-bug-details">
+    <div id="bug-details" class='container mt-5' v-if="JSON.stringify(BugDetails) !== '{}'">
       <div id="page-details-0" class='row'>
         <div class='col-xl-12 col-lg-12 col-md-12'>
           <h3 class="details-title">
@@ -340,7 +340,7 @@ export default {
     }
   },
   validate({ query }) {
-    return query.bug_id
+    return /\w{2,6}/.test(query.bug_id)
   },
 
   layout: 'head',

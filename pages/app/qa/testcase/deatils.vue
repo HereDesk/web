@@ -206,7 +206,7 @@ export default {
     }
   },
   validate({ query }) {
-    return query.case_id
+    return /\w{2,6}/.test(query.case_id)
   },
 
   layout: 'head',

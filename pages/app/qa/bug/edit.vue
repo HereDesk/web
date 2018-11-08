@@ -141,7 +141,7 @@ export default {
   },
 
   validate({ query }) {
-    return query.bug_id
+    return /\w{2,6}/.test(query.bug_id)
   },
 
   components: {

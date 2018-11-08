@@ -79,10 +79,12 @@ export default {
       title: "HDesk - 产品模块维护"
     }
   },
-  layout: "head",
   validate({ query }) {
-    return query.product_code
+    return /\w+/.test(query.product_code)
   },
+  
+  layout: "head",
+
   data() {
     return {
       selected_product: this.$route.query.product_code || "",

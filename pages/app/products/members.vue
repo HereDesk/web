@@ -103,7 +103,7 @@ export default {
   layout: "head", 
 
   validate({ query }) {
-    return query.product_code
+    return /\w+/.test(query.product_code)
   },
 
   filters: {

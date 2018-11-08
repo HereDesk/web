@@ -80,13 +80,12 @@ export default {
       title: "HDesk - 版本管理"
     }
   },
-  layout: "head",
   validate({ query }) {
-    return query.product_code
+    return /\w+/.test(query.product_code)
   },
-  filters: { 
-    date: util.date
-  },
+
+  layout: "head",
+
   data() {
     return {
       product_code: this.$route.query.product_code || "",
@@ -106,6 +105,9 @@ export default {
       let PagesRules = this.$store.state.PageData
       return rules.RuleManges(group,PagesRules)
     }
+  },
+  filters: { 
+    date: util.date
   },
   watch: {
     tableData: function(val, oldval) {

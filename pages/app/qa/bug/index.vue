@@ -479,8 +479,7 @@ export default {
             ? String(this.$route.query.wd).split('#')[1]
             : null,
       },
-      SearchOperatorSymbol: this.$route.query.Operators || '=',
-      wd: null,
+      wd: this.$route.query.wd || null,
       isShowSearch: this.$route.query.wd ? true : false,
       // 表格数据
       total: null,

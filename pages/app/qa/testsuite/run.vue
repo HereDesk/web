@@ -69,7 +69,7 @@ export default {
   },
 
   validate({ query }) {
-    return query.suite_id && query.product_code
+    return /\w{2,6}/.test(query.suite_id)
   },
 
   data () {

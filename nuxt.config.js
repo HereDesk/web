@@ -104,7 +104,7 @@ module.exports = {
       }
     }
   },
-  // cache: true,
+  cache: true,
   router: {
     linkActiveClass: 'active-link',
     middleware: 'auth'
@@ -115,6 +115,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    vender: ['axios'],
     /*
      ** You can extend webpack config here
      */
