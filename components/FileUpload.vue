@@ -43,25 +43,28 @@ export default {
       this.annex.push(response["name"])
     },
     FileBeforeAvatarUpload(file) {
-      const isLt10M = file.size / 1024 / 1024 < 10
-      const PicFormat = file.name.split(".")[1] === "jpg"
-      const PicFormat1 = file.name.split(".")[1] === "png"
-      const PicFormat2 = file.name.split(".")[1] === "jpeg"
-      const PicFormat3 = file.name.split(".")[1] === "gif"
-      const isLt2M = file.size / 1024 / 1024 < 2
-      if (!PicFormat && !PicFormat1 && !PicFormat2 && !PicFormat3) {
+      const isLt20M = file.size / 1024 / 1024 < 20
+      const isJPG = String(file.name.split(".")[1]).toLowerCase() === "jpg"
+      const isPNG = String(file.name.split(".")[1]).toLowerCase() === "png"
+      const isJPEG = String(file.name.split(".")[1]).toLowerCase() === "jpeg"
+      const isGIF = String(file.name.split(".")[1]).toLowerCase() === "gif"
+      const isBMP = String(file.name.split(".")[1]).toLowerCase() === "bmp"
+      const isTXT = String(file.name.split(".")[1]).toLowerCase() === "txt"
+      const isMP4 = String(file.name.split(".")[1]).toLowerCase() === "mp4"
+      const isMOV = String(file.name.split(".")[1]).toLowerCase() === "mov"
+      if (!isJPG && !isPNG && !isJPEG && !isGIF && !isBMP && !isMP4 && !isTXT && !isMOV) {
         this.$notify.error({
           title: "上传失败",
-          message: "上传图片格式只能为jpg/png/jpeg/gif"
+          message: "上传图片格式只能为jpg/png/jpeg/gif; 文件格式只能是txt; 视频格式只能是mp4或mov"
         })
       }
-      if (!isLt10M) {
+      if (!isLt20M) {
         this.$notify.error({
           title: "上传失败",
-          message: "上传图片不能大于10M"
+          message: "附件大小不能大于20M"
         })
       }
-      return isLt10M && (PicFormat || PicFormat1 || PicFormat2 || PicFormat3)
+      return isLt20M && (isJPG || isPNG || isJPEG || isGIF || isBMP || isTXT || isMP4 || isMOV)
     }
   }
 }
