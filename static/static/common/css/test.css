@@ -639,3 +639,19 @@
 .bug-query-selected-byme {
   color: #3F51B5;
 }
+
+/*
+** 列表数据样式
+*/
+
+.ul-none {
+  padding-left: 0 !important;
+}
+.ul-none-2 li {
+  list-style: none;
+  border-bottom: 1px solid #eee;
+}
+
+.ul-none-2 li p:first-of-type {
+  margin:0.5rem 0;
+}

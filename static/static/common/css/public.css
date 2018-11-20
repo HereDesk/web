@@ -635,6 +635,14 @@ a:link {
   line-height: 2rem;
 }
 
+.line-height-2-5 {
+  line-height: 2.5rem;
+}
+
+.line-height-3 {
+  line-height: 3rem;
+}
+
 .height-5 {
   min-height: 5rem;
 }

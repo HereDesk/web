@@ -2,7 +2,7 @@
 	<div id="page-bug" class="py-5 container-fluid">
     
     <div class="row">
-      <div id="about-modules" class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12 pt-3 pg-modules">
+      <div id="data-modules" class="col-lg-2 col-md-12 pt-3 pg-modules" v-if="isShowModules">
         <div class="mb-3">
           <p class="pl-4 display-inline" v-if="!modules_list.length">
             <nuxt-link class="display-inline" 
@@ -44,7 +44,7 @@
       </div>
 
       <!-- 查询以及操作相关 -->
-      <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 px-5">
+      <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-10 offset-1']">
         <div id="bug-nav-manage" class="row justify-content-between">
           <div id="bug-query-1">
             <el-dropdown id="page-query-product" class="mr-3 my-1" trigger="click">
@@ -165,7 +165,7 @@
             <input type="text" id="bugSearchInput" class="border-none" 
               v-if="SwitchSearchInput === 'other'"
               placeholder="输入关键字..."
-              v-model.trim="wd" autofocus />
+              v-model="wd" autofocus />
             <input type="date" class="border-none text-90" 
               v-if="SwitchSearchInput === 'date'" 
               v-model="SearchCriteria.start_date">
@@ -331,10 +331,7 @@
 
     <!-- Bug处理操作：修改优先级 -->
     <div id="bug-list-priority">
-      <ChangePriority
-        :bug_id="selectedBugId"
-        @refreshList="getBugList()">
-      </ChangePriority>
+      <ChangePriority :bug_id="selectedBugId" @refreshList="getBugList()"></ChangePriority>
     </div>
 
     <!-- Bug处理操作：关闭 -->
@@ -519,6 +516,7 @@ export default {
       }
     }
   },
+  
   computed: {
     // page and menu rules
     Rules: function() {
@@ -618,9 +616,9 @@ export default {
     },
     // show user config
     isShowModules: function() {
-      let config = this.$store.state.UserCustomization
+      let config = this.$store.state.UserConfig
       return _.find(config, function(o) {
-        return (o.code == "Bug_isShowMoudles") & (o.code_value == 1)}) ? true : false
+        return (o.code == "IS_SHOW_MODULE") & (o.code_value == 1)}) ? true : false
     }
   },
 
@@ -781,7 +779,7 @@ export default {
     clickSearch() {
       if (this.isShowSearch) {
         this.isShowSearch = false
-        this.wd = null
+        this.wd = ""
       } else {
         this.isShowSearch = true
       }
@@ -789,14 +787,14 @@ export default {
     goSearch() {
       let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
       let data = this.QueryBuilder
-      if (!data.wd && (data.SearchType).includes("time")) {
+      if (!data.wd && String(data.SearchType).includes("time")) {
         this.$notify.error({ 
           title: "提示", 
           message: "请输入搜索内容"
         })
         return
       }
-      if (data.Operators === "range" && (data.SearchType).includes("time") && (data.wd).includes("#")) {
+      if (data.Operators === "range" && String(data.SearchType).includes("time") && String(data.wd).includes("#")) {
         let start_date = (data.wd).split("#")[0]
         let end_date = (data.wd).split("#")[1]
         if (!start_date && !end_date) {
@@ -814,7 +812,7 @@ export default {
           return
         }
       }
-      if ((data.SearchType).includes("time") && data.Operators !== "range") {
+      if (String(data.SearchType).includes("time") && data.Operators !== "range") {
         let date = data.wd
         if (!date.match(reg)) {
           this.$notify.error({

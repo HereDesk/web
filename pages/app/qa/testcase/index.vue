@@ -1,53 +1,28 @@
 <template>
   <div id="page-testcase" class="container-fluid">
-    <div class="row">
-      <div id="about-modules" class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12 pt-5 pg-modules">
-        <div class="mb-3">
-          <p class="pl-4 display-inline" v-if="!modules_list.length">
-            <nuxt-link class="display-inline" 
-              :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              <span style="color:#2b2b2b" title="维护模块">维护模块</span>
-            </nuxt-link>
-          </p>
-          <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
-            @click="click_all_modules()" v-else>全部模块</p>
-          <nuxt-link 
-            class="display-inline manage-modules" 
-            :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }"
-            v-if="Rules.product_modules">
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
-          </nuxt-link>
-        </div>
-        <div class="divider"></div>
-        <div class="mt-3">
-          <ul class="ul-style-none" v-for="item1 in modules_list" :key="item1.id">
-            <li>
-              <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" 
-                @click="clickMoudle1(item1)">
-                <i 
-                  class="iconfont icon-8a8a8a" 
-                  :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
-                </i>
-                &nbsp;&nbsp;{{ item1.label }}
-              </span>
-              <ul class="t_module_second pl-5" v-if="m1_id == item1.id">
-                <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
-                  <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
-                    {{ item2.label }}
-                  </span>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+    <div class="row pt-5">
+      <div style="position: absolute;z-index: 9;" class="pl-4 mt-2" @click="switchModule()">
+        <i class="iconfont bg-EEEEEE py-2" 
+          :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
       </div>
 
-      <div id="testcase-list" class="col-xl-10 col-lg-9 col-md-9 col-sm-12 col-12 pt-5">
+      <!-- 模块 -->
+      <div id="testcase-modules" class="col-lg-2 col-md-12 pg-modules" v-if="isShowModules">
+        <ProductModule 
+          :product_code="selected_product" 
+          :Rules="Rules"
+          @getM1M2="getM1M2">
+        </ProductModule>
+      </div>
+
+      <!-- 数据列表 -->
+      <div id="testcase-data" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-10 offset-1']">
         <div class="container-fluid">
-          <div id="testcase-manage" class="row justify-content-between">
+
+          <!-- 测试用例查询相关 -->
+          <div id="testcase-data-head" class="row justify-content-between">
             <div id="testcase-query">
-              <el-dropdown id="testcase-query-product" class="pt-2 pl-3" trigger="click">
+              <el-dropdown id="testcase-query-product" class="pl-3" trigger="click">
                 <span>
                   <span class="el-dropdown-desc">产品：</span>
                   <span class="el-dropdown-link bg-edown">
@@ -79,11 +54,14 @@
               <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜">
                 <i class="iconfont icon-search icon-8a8a8a size-1-2"></i>
               </span>
-              <span title="导入导出" class="mr-4" data-toggle="modal" data-target="#m-import-export">
+              <span title="导入导出" class="mr-4" data-toggle="modal" data-target="#modal-import-export">
                 <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
               </span>
               <span title="测试用例统计" class="mr-4" @click="myToday()">
                 <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
+              </span>
+              <span title="切换样式" class="mr-4" @click="switchStyle()">
+                <i class="iconfont icon-switch icon-8a8a8a size-1-5"></i>
               </span>
               <span>
                 <nuxt-link :to="{ path: '/app/qa/testcase/add' ,query: { 'product_code': selected_product }}">
@@ -93,7 +71,8 @@
             </div>
           </div>
 
-          <div class="row ml-2 mr-5 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
+          <!-- 测试用例搜索 -->
+          <div id="testcase-search" class="row ml-2 mr-5 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
             :class="{ showSearch: isShowSearch }">
             <div class="col-md-10 col-10">
               <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
@@ -105,9 +84,10 @@
             </div>
           </div>
 
-
-          <div id="testcase-data" class="row mt-3">
-            <div class="col">
+          <!-- 用例数据列表 -->
+          <div id="testcase-data-list" class="row mt-3">
+            <!-- 表格样式 -->
+            <div id="testcase-table-style" class="col" v-if="DataShowStyle">
               <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" 
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
@@ -124,7 +104,7 @@
                     </span>
                   </template>
                 </el-table-column>
-                <el-table-column label='标题' show-overflow-tooltip>
+                <el-table-column label='用例标题' show-overflow-tooltip>
                   <template slot-scope="scope">
                     <nuxt-link style="color:#424242"
                       :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
@@ -160,8 +140,7 @@
                 </el-table-column>
                 <el-table-column label='' width="40">
                   <template slot-scope="scope">
-                    <div class="tableOpreate pt-2" 
-                      :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                    <div class="tableOpreate pt-2" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <button v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
                       </button>
@@ -173,12 +152,25 @@
                 </el-table-column>
               </el-table>
             </div>
+            <!-- list样式 -->
+            <div id="testcase-list-style" class="col" v-else>
+              <ul class="ul-none ul-none-2">
+                <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
+                  <p>{{ item.id }}. {{ item.title }}</p>
+                  <p class="my-1">
+                    <span class="text-90 text-gray">
+                      {{ item.priority }} . {{ item.creator }} . {{ item.create_time | date }}
+                    </span>
+                  </p>
+                </li>
+              </ul> 
+            </div>
           </div>
 
           <!-- 翻页 -->
           <Pagination :total="total" @PsPn="getPsPn"></Pagination>
 
-          <!-- loading -->
+          <!-- page loading -->
           <div id="page-loading" class="row" v-if='total === null'>
             <div class="col text-center">
               <loading></loading> 
@@ -216,7 +208,8 @@
       </div>
     </div>
 
-    <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- 用例导入导出 -->
+    <div id="modal-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-body p-0">
@@ -244,10 +237,14 @@
 
 <script>
 import axios from 'axios'
+
 import loading from "~/components/loading"
 import Pagination from "~/components/Pagination"
+import ProductModule from "~/components/ProductModule"
+
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
+let _ = require("lodash/Collection")
 
 export default {
   head() {
@@ -258,7 +255,8 @@ export default {
   layout: "head",
   components: {
     loading,
-    Pagination
+    Pagination,
+    ProductModule
   },
   data() {
     return {
@@ -286,13 +284,6 @@ export default {
       HoverTestcase_id: "",
       // 数据统计
       MyTodayData: {},
-      // stree
-      filterText: "",
-      modules_list: [],
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
       ExportFile: {}
     }
   },
@@ -328,6 +319,18 @@ export default {
     // userinfo group
     uGroup: function() {
       return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null
+    },
+    // show user config
+    DataShowStyle: function() {
+      let config = this.$store.state.UserConfig
+      return _.find(config, function(o) {
+        return (o.code == "CAST_DATA_SHOW_STYPE") & (o.code_value == 'table') }) ? true : false
+    },
+    // show user config
+    isShowModules: function() {
+      let config = this.$store.state.UserConfig
+      return _.find(config, function(o) {
+        return (o.code == "IS_SHOW_MODULE") & (o.code_value == 1)}) ? true : false
     }
   },
 
@@ -351,25 +354,19 @@ export default {
         this.selected_product = this.product_list[0]["product_code"]
       }
     },
-    selected_product: function(val, oldVal) {
-      this.getModule()
-    },
     total: function() {
       if (this.total === 0) {
         this.img_src = require("static/pic/happy.png")
         this.Msg = "没找到数据"
       }
-    },
-    filterText(val) {
-      this.$refs.tree2.filter(val)
     }
   },
 
   created() {
     this.getProductRelease()
   },
+
   mounted() {
-    this.getModule()
     this.wd ? this.goSearch() : this.getCaseList()
   },
 
@@ -377,6 +374,10 @@ export default {
     getPsPn: function(ps, pn) {
       this.pageSize = ps
       this.pageNumber = pn
+    },
+    getM1M2: function(m1, m2) {
+      this.m1_id = m1
+      this.m2_id = m2
     },
     // get product info and release info
     getProductRelease() {
@@ -389,40 +390,6 @@ export default {
           }
         })
         .catch(res => {})
-    },
-
-    // 获取所有模块
-    getModule() {
-      if (!this.selected_product) {return}
-      axios.get("/api/pm/get_module?product_code=" + this.selected_product)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-             this.modules_list = res.data["data"]
-          } else {
-             this.Msg = res.data["msg"]
-          }
-        })
-    },
-
-    clickMoudle1 (data) {
-      if (this.m1_id == data.id) {
-        this.m1_id = ''
-        this.m2_id = ''
-      } else {
-        this.m1_id = data.id
-      }
-    },
-    clickMoudle2 (data) {
-      if (this.m2_id == data.id) {
-        this.m2_id = ''
-      } else {
-        this.m2_id = data.id
-      }
-    },
-
-    click_all_modules() {
-      this.m1_id = null
-      this.m2_id = null
     },
 
     // 下拉相关操作
@@ -547,6 +514,25 @@ export default {
     },
     tableLeave(row) {
       this.HoverTestcase_id = ""
+    },
+
+    // switch data style
+    switchStyle() {
+      let style = this.DataShowStyle ? 'list' : 'table'
+      axios.get('/api/userconfig?CAST_DATA_SHOW_STYPE=' + style).then(res => {
+        if (res.data["status"] === 20000) {
+          this.$store.dispatch('getUserInfo')
+        }
+      })
+    },
+    // is show module
+    switchModule() {
+      let isDisplay = this.isShowModules ? 0 : 1
+      axios.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay).then(res => {
+        if (res.data["status"] === 20000) {
+          this.$store.dispatch('getUserInfo')
+        }
+      })
     }
   }
 }

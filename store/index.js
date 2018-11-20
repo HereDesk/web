@@ -9,7 +9,7 @@ const createStore = () => {
     state: {
       userInfo: false,
       PageData: false,
-      UserCustomization: [],
+      UserConfig: [],
       isLogin: false,
       ProductInfo: [],
       isProductInfo: false,
@@ -22,7 +22,7 @@ const createStore = () => {
         if (data) {
           state.isLogin = true
           state.userInfo = data['data']
-          state.UserCustomization = data['config']
+          state.UserConfig = data['config']
         }
       },
       setPageData(state, data) {
