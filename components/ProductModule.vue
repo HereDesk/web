@@ -31,7 +31,7 @@
 
 <script>
 import axios from "axios"
-let _ = require("lodash/Collection")
+// let _ = require("lodash/Collection")
 
 export default {
   props: {

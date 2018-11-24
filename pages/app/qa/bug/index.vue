@@ -2,49 +2,24 @@
 	<div id="page-bug" class="py-5 container-fluid">
     
     <div class="row">
-      <div id="data-modules" class="col-lg-2 col-md-12 pt-3 pg-modules" v-if="isShowModules">
-        <div class="mb-3">
-          <p class="pl-4 display-inline" v-if="!modules_list.length">
-            <nuxt-link class="display-inline" 
-              :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }">
-              <span style="color:#2b2b2b" title="维护模块">维护模块</span>
-            </nuxt-link>
-          </p>
-          <p class="pl-4 display-inline" :class="{ 'el-active' : !m1_id && !m2_id }" 
-            @click="click_all_modules()" v-else>全部模块</p>
-          <nuxt-link 
-            class="display-inline manage-modules" 
-            :to="{ path: '/app/products/modules',query: {'product_code': selected_product } }"
-            v-if="Rules.product_modules">
-            &nbsp;&nbsp;&nbsp;&nbsp; 
-            <i class="iconfont icon-40 icon-8a8a8a size-1-5"></i>
-          </nuxt-link>
-        </div>
-        <div class="divider"></div>
-        <div class="mt-3">
-          <ul class="ul-style-none" v-for="item1 in modules_list" :key="item1.id">
-            <li :id="item1.id">
-              <span class="line-height-1-8 li-color" :class="{ 'el-active': m1_id == item1.id }" 
-                @click="clickMoudle1(item1)">
-                <i class="iconfont icon-8a8a8a" 
-                  :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
-                </i>
-                &nbsp;&nbsp;{{ item1.label }}
-              </span>
-              <ul class="t_module_second pl-5" v-if="m1_id == item1.id">
-                <li v-for="item2 in item1.children" :key="item2.id" :id="item1.id" @click="clickMoudle2(item2)">
-                  <span class="li-color" :class="{ 'el-active': m2_id == item2.id }">
-                    {{ item2.label }}
-                  </span>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+
+      <!-- 模块 -->
+      <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
+        <ProductModule v-if="isShowModules"
+          :product_code="selected_product" 
+          :Rules="Rules"
+          @getM1M2="getM1M2">
+        </ProductModule>
+      </div>
+
+      <div id="product-modules-switch" style="position: absolute;z-index: 9;" class="pl-4 mt-2 medium-devices-no" 
+        @click="switchModule()">
+        <i class="iconfont bg-EEEEEE py-2" style="visibility:hidden;"
+          :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
       </div>
 
       <!-- 查询以及操作相关 -->
-      <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-10 offset-1']">
+      <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
         <div id="bug-nav-manage" class="row justify-content-between">
           <div id="bug-query-1">
             <el-dropdown id="page-query-product" class="mr-3 my-1" trigger="click">
@@ -121,14 +96,17 @@
           </div>
 
           <div id="bug-query-2" class="vertical-center">
-            <span class="searchIcon mr-4" @click="clickSearch()">
+            <span class="searchIcon mr-3" @click="clickSearch()">
               <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
             </span>
-            <span title="导入导出" class="mr-4" data-toggle="modal" data-target="#m-import-export">
+            <span title="导入导出" class="mr-3" data-toggle="modal" data-target="#m-import-export">
               <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
             </span>
-            <span  class="searchIcon mr-4" title="今日成就" @click="myToday()">
+            <span  class="searchIcon mr-3" title="今日成就" @click="myToday()">
               <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
+            </span>
+            <span  class="searchIcon mr-3" title="今日成就" @click="switchStyle()">
+              <i class="iconfont icon-switch icon-8a8a8a size-1-3"></i>
             </span>
             <nuxt-link to='/app/qa/bug/add'>
               <button type="btn" class="btn btn-create"> + 创建 </button>
@@ -182,41 +160,20 @@
         </div>
 
         <!-- table: 数据展示 -->
-        <div id="bug-list" class='row mt-3 mb-5 table_data'>
-          <div class='col-xl-12 col-lg-12 col-md-12'>
-            <el-table 
-              :data='tableData' 
+        <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
+          <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
+            <el-table :data='tableData' 
               :default-sort="{prop: 'date', order: 'descending'}" 
-              @cell-mouse-enter="tableHover" 
-              @cell-mouse-leave="tableLeave">
+              @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
               <el-table-column label='ID' prop='id' sortable width='63'></el-table-column>
-              <el-table-column label='状态' prop="status" width='100' sortable>
+              <el-table-column label='状态' prop="status" align="center" width='100' sortable>
                 <template slot-scope="scope">
-                  <span class="text-secondary" v-if="scope.row.status === 'Closed'" >
-                    <span class="circle circle-secondary"></span>
-                    &nbsp;{{ scope.row.status_name }}
+                  <span class="circle-content" 
+                    :class="{ 'text-secondary': scope.row.status === 'Closed',
+                    'text-urgency': ['New','Open','Reopen'].indexOf(scope.row.status),
+                    'text-warning': scope.row.status === 'Hang-up'}">
+                    {{ scope.row.status_name }}
                   </span>
-                  <span class="text-urgency" v-else-if="scope.row.status === 'New'" >
-                    <span class="circle circle-urgency"></span>
-                    &nbsp;{{ scope.row.status_name }}
-                  </span>
-                  <span class="text-urgency" v-else-if="scope.row.status === 'Open'" >
-                    <span class="circle circle-urgency"></span>
-                    &nbsp;{{ scope.row.status_name }}
-                  </span>
-                  <span class="text-urgency" v-else-if="scope.row.status === 'Reopen'">
-                    <span class="circle circle-urgency"></span>
-                    &nbsp;{{ scope.row.status_name }}
-                  </span>
-                  <span class="text-success" v-else-if="scope.row.status === 'Fixed'">
-                    <span class="circle circle-success"></span>
-                    &nbsp;{{ scope.row.status_name }}
-                  </span>
-                  <span class="text-warning" v-else-if="scope.row.status === 'Hang-up'">
-                    <span class="circle circle-warning"></span>
-                    &nbsp;{{ scope.row.status_name }}
-                  </span>
-                  <span v-else>{{ scope.row.status_name }}</span>
                 </template>
               </el-table-column>
               <el-table-column label='标题' show-overflow-tooltip>
@@ -230,17 +187,9 @@
               <el-table-column label='优先级' prop="priority" align="center" width='95' sortable>
                 <template slot-scope="scope">
                   <div @click="BugPriorityDialog(scope.row)">
-                    <span v-if="scope.row.priority === 'P1'" class="text-deadly">
-                      <span class="circle circle-deadly"></span>
-                      &nbsp;{{ scope.row.priority }}
-                    </span>
-                    <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
-                      <span class="circle circle-urgency"></span>
-                      &nbsp;{{ scope.row.priority }}
-                    </span>
-                    <span v-else class="text-secondary">
-                      <span class="circle circle-secondary"></span>
-                      &nbsp;{{ scope.row.priority }}
+                    <span class="circle-content"
+                      :class="{'text-deadly': scope.row.priority == 'P1', 'text-urgency': scope.row.priority == 'P2'}">
+                      {{ scope.row.priority }}
                     </span>
                   </div>
                 </template>
@@ -257,11 +206,7 @@
               <el-table-column label='解决方案' width='91' align="center">
                 <template slot-scope="scope">
                   <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
-                    <span v-if="scope.row.solution_name === '已修复'" class="text-success">
-                      <span class="circle circle-success"></span>
-                      &nbsp;{{ scope.row.solution_name }}
-                    </span>
-                    <span v-else class="text-secondary">
+                    <span :class="[ scope.row.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
                       &nbsp;{{ scope.row.solution_name }}
                     </span>
                   </div>
@@ -284,6 +229,42 @@
                 </template>
               </el-table-column>
             </el-table>
+          </div>
+          <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
+            <ul class="ul-none ul-none-2">
+              <li v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
+                <p>
+                  <nuxt-link style="color:#424242" 
+                    :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
+                    {{ item.id }}. {{ item.title }}
+                  </nuxt-link>
+                </p>
+                <p class="my-1">
+                  <span class="text-90 text-gray">
+                    <span class="mr-2 circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
+                      'text-urgency': item.priority == 'P2' }"
+                      @click="BugPriorityDialog(item)">
+                      {{ item.priority }}
+                    </span>
+                    <span class="mr-2">{{ item.status_name }}</span> 
+                    <span class="mr-2">{{ item.create_time | date(5) }}</span>
+                    <span class="mr-2">创建: @{{ item.creator_user }}</span>
+                    <span class="mr-2">指派: @{{ item.assignedTo_user }}</span>
+                  </span>
+                  <span class="float-right display-block" :class="{'hideText': item.status === 'Closed'}">
+                    <span @click="skipAssign(item)">
+                      <i class="iconfont icon-assign icon-8a8a8a size-2 mx-2"></i>
+                    </span>
+                    <span @click="skipResolve(item)" v-if="item.status != 'Fixed'">
+                      <i class="iconfont icon-resolve icon-8a8a8a size-1-6 mx-2"></i>
+                    </span>
+                    <span @click="BugClosedDialog(item)" v-if="uGroup">
+                      <i class="iconfont icon-close-opera icon-8a8a8a size-1-5 mx-2"></i>
+                    </span>
+                  </span>
+                </p>
+              </li>
+            </ul> 
           </div>
         </div>
 
@@ -421,6 +402,7 @@ import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import ChangePriority from "~/components/ChangePriority"
 import Pagination from "~/components/Pagination"
+import ProductModule from "~/components/ProductModule"
 
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
@@ -439,7 +421,8 @@ export default {
     BugAssign,
     BugResolve,
     ChangePriority,
-    Pagination
+    Pagination,
+    ProductModule
   },
 
   data() {
@@ -615,6 +598,14 @@ export default {
       return userInfo.group === "test" ? userInfo.group : null
     },
     // show user config
+    DataShowStyle: function() {
+      let ScreenWidth = process.browser ? document.body.clientWidth : 0
+      let config = this.$store.state.UserConfig
+      return _.find(config, function(o) {
+        return (o.code == "BUG_DATA_SHOW_STYPE") & (o.code_value == 'table') & (ScreenWidth > 768)
+        }) ? 'table' : 'list'
+    },
+    // show user config
     isShowModules: function() {
       let config = this.$store.state.UserConfig
       return _.find(config, function(o) {
@@ -645,7 +636,6 @@ export default {
       }
     },
     selected_product: function(val, oldVal) {
-      this.getModule()
       this.getMemberList()
     },
     total: function() {
@@ -659,8 +649,8 @@ export default {
   created() {
     this.getProductRelease()
   },
+
   mounted() {
-    this.getModule()
     this.getMemberList()
     this.wd ? this.goSearch() : this.getBugList()
   },
@@ -669,6 +659,10 @@ export default {
     getPsPn: function(ps, pn) {
       this.pageSize = ps
       this.pageNumber = pn
+    },
+    getM1M2: function(m1, m2) {
+      this.m1_id = m1
+      this.m2_id = m2
     },
     // get product info and release info
     getProductRelease() {
@@ -680,18 +674,6 @@ export default {
         }
       })
     },
-    // 获取所有模块
-    getModule() {
-      if (!this.selected_product) {return}
-      axios.get("/api/pm/get_module?product_code=" + this.selected_product)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.modules_list = res.data["data"]
-          } else {
-            this.Msg = res.data["msg"]
-          }
-        })
-    },
     getMemberList() {
       if (!this.selected_product) {return}
       axios.get("/api/pm/member/list?product_code=" + this.selected_product)
@@ -700,25 +682,6 @@ export default {
             this.$store.commit("setProductMemberList", res.data)
           }
         })
-    },
-    clickMoudle1(data) {
-      if (this.m1_id == data.id) {
-        this.m1_id = ""
-        this.m2_id = ""
-      } else {
-        this.m1_id = data.id
-      }
-    },
-    clickMoudle2(data) {
-      if (this.m2_id == data.id) {
-        this.m2_id = ""
-      } else {
-        this.m2_id = data.id
-      }
-    },
-    click_all_modules() {
-      this.m1_id = null
-      this.m2_id = null
     },
     // 下拉相关操作
     handleCommand(data) {
@@ -911,7 +874,28 @@ export default {
     },
     tableLeave(row) {
       this.HoverBugId = ""
+    },
+
+    // is show module
+    switchModule() {
+      let isDisplay = this.isShowModules ? 0 : 1
+      axios.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay).then(res => {
+        if (res.data["status"] === 20000) {
+          this.$store.dispatch('getUserInfo')
+        }
+      })
+    },
+
+    // switch data style
+    switchStyle() {
+      let style = this.DataShowStyle == 'table' ? 'list' : 'table'
+      axios.get('/api/userconfig?BUG_DATA_SHOW_STYPE=' + style).then(res => {
+        if (res.data["status"] === 20000) {
+          this.$store.dispatch('getUserInfo')
+        }
+      })
     }
+
   }
 }
 </script>

@@ -28,6 +28,12 @@ html,body {
   margin-top:2rem;
 }
 
+@media (max-width:767.98px) {
+  .medium-devices-no {
+    display: none !important;
+  }
+}
+
 /*
 **
 ** 关于编辑器
@@ -82,12 +88,14 @@ html,body {
   display: inline-block;
   color: #4C4C4C;
   background-color: #F5F5F5;
-  padding:0.6rem 0.6rem 0.6rem 1rem;
+  padding:0.5rem 0.5rem 0.5rem 1rem;
   border-radius: 16px !important;
 }
 
-.el-dropdown {
-  font-size:1rem;
+@media (max-width:575.98px) {
+  .el-dropdown {
+    font-size:0.85rem !important;
+  }
 }
 
 .el-dropdown-menu {
@@ -102,7 +110,7 @@ html,body {
 .el-dropdown-menu__item {
   font-size: 0.9rem !important;
   color: #333 !important;
-  line-height: 2.8rem !important;
+  line-height: 2.3rem !important;
 }
 
 .el-dropdown-menu__item > a{
@@ -413,10 +421,16 @@ a:link {
 ** Public: circle 
 **
 */
+
+.circle-content::before {
+  content: "●";
+  font-weight: bold;
+}
+
 .circle {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
 }
 
@@ -710,12 +724,12 @@ pre {
 }
 
 .btn-create {
-  font-size:1rem;
+  font-size:14px;
   color:#fff;
   background-color: #3385FF;
   border:none;
   border-radius: 18px;
-  padding: 0.4rem 2rem;
+  padding: 0.4rem 1.7rem;
   outline: none;
 }
 
@@ -726,8 +740,8 @@ pre {
 
 @media (max-width: 414px) {
   .btn-create {
-    font-size:0.8rem;
-    padding:0.2rem 1rem;
+    font-size:0.95rem;
+    padding:0.3rem 1rem;
   }
 }
 
@@ -998,6 +1012,15 @@ textarea::-webkit-input-placeholder {
 
 .display-none {
   display: none;
+}
+
+/* 
+**
+** 关于float
+**
+*/
+.float-right {
+  float: right;
 }
 
 /*

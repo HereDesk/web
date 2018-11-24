@@ -50,6 +50,48 @@
 }
 
 /*
+** 页面：product modules
+*/
+ 
+.pg-modules {
+  border-right: 1px solid #eee;
+}
+
+@media (max-width: 991.99px) {
+  .pg-modules {
+    display: none;
+  }
+}
+
+#product-modules:hover + div>i {
+  visibility: visible !important;
+}
+#product-modules + div>i:hover {
+  visibility: visible !important;
+  z-index: 9;
+}
+
+.li-color:hover {
+  color: #1E88E5 !important
+}
+
+/* .manage-modules {
+  float: right;
+  margin-right:2rem;
+}
+
+.t_module_second li {
+  line-height: 2.5rem;
+}
+
+.t_module_second li span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+*/
+
+/*
   关于test统计的一些css
 */
 .countdata-title {
@@ -237,47 +279,6 @@
 **  以下是关于testcase相关页面的CSS
 **
 */
-
-/*
-** 页面：测试用例index
-*/
-#testcase-modules .el-input__inner {
-  height: 2.5rem !important;
-}
-
-.pg-modules {
-  border-right: 1px solid #eee;
-}
-
-@media (max-width: 991.99px) {
-  .pg-modules {
-    display: none;
-  }
-}
-
-.manage-modules {
-  float: right;
-  margin-right:2rem;
-}
-
-.t_module_second li {
-  line-height: 2.5rem;
-}
-
-.t_module_second li span {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.el-active {
-  color: #1E88E5;
-}
-
-.li-color:hover {
-  color: #1E88E5 !important
-}
-
 
 /*
 ** 增加测试用例页面

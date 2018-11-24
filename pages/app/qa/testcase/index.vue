@@ -1,22 +1,24 @@
 <template>
   <div id="page-testcase" class="container-fluid">
     <div class="row pt-5">
-      <div style="position: absolute;z-index: 9;" class="pl-4 mt-2" @click="switchModule()">
-        <i class="iconfont bg-EEEEEE py-2" 
-          :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
-      </div>
 
       <!-- 模块 -->
-      <div id="testcase-modules" class="col-lg-2 col-md-12 pg-modules" v-if="isShowModules">
+      <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <ProductModule 
           :product_code="selected_product" 
           :Rules="Rules"
-          @getM1M2="getM1M2">
+          @getM1M2="getM1M2" v-if="isShowModules">
         </ProductModule>
       </div>
 
+      <div id="product-modules-switch" style="position: absolute;z-index: 9;" class="pl-4 mt-2 medium-devices-no" 
+        @click="switchModule()">
+        <i class="iconfont bg-EEEEEE py-2" style="visibility:hidden;"
+          :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
+      </div>
+
       <!-- 数据列表 -->
-      <div id="testcase-data" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-10 offset-1']">
+      <div id="data-testcase" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-12 col-sm-12 col-md-10']">
         <div class="container-fluid">
 
           <!-- 测试用例查询相关 -->
@@ -50,7 +52,7 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="mobile-action-bar pt-2 vertical-center">
+            <div id="testcase-action" class="mobile-action-bar pt-2 vertical-center">
               <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜">
                 <i class="iconfont icon-search icon-8a8a8a size-1-2"></i>
               </span>
@@ -86,21 +88,16 @@
 
           <!-- 用例数据列表 -->
           <div id="testcase-data-list" class="row mt-3">
-            <!-- 表格样式 -->
+            <!-- table style -->
             <div id="testcase-table-style" class="col" v-if="DataShowStyle">
               <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" 
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
-                    <span v-if="scope.row.priority === 'P1'" class="text-deadly">
-                      <span class="circle circle-deadly"></span>&nbsp;&nbsp;{{ scope.row.priority }}
-                    </span>
-                    <span v-else-if="scope.row.priority === 'P2'" class="text-urgency">
-                      <span class="circle circle-urgency"></span>&nbsp;&nbsp;{{ scope.row.priority }}
-                    </span>
-                    <span v-else class="text-secondary">
-                      <span class="circle circle-secondary"></span>&nbsp;&nbsp;{{ scope.row.priority }}
+                    <span class="circle-content" :class="{ 'text-deadly': scope.row.priority == 'P1',
+                      'text-urgency': scope.row.priority == 'P2' }">
+                      {{ scope.row.priority }}
                     </span>
                   </template>
                 </el-table-column>
@@ -152,14 +149,29 @@
                 </el-table-column>
               </el-table>
             </div>
-            <!-- list样式 -->
+            <!-- list style -->
             <div id="testcase-list-style" class="col" v-else>
               <ul class="ul-none ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
-                  <p>{{ item.id }}. {{ item.title }}</p>
+                  <p>
+                    <nuxt-link style="color:#424242" 
+                      :to="{path:'/app/qa/testcase/deatils',query:{'case_id':item.case_id}}">
+                      {{ item.id }}. {{ item.title }}
+                    </nuxt-link>
+                  </p>
                   <p class="my-1">
                     <span class="text-90 text-gray">
-                      {{ item.priority }} . {{ item.creator }} . {{ item.create_time | date }}
+                      <span class="circle-content mr-2">&nbsp;{{ item.priority }}</span>
+                      <span class="mr-2">{{ item.creator }}</span>
+                      <span>{{ item.create_time | date(5) }}</span>
+                    </span>
+                    <span class="float-right display-block">
+                      <span class="mr-2" v-if="item.status === 0 && CaseRules.fall" @click="handleFall(item)">
+                        <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
+                      </span>
+                      <span v-if="item.status === 0 && CaseRules.edit" @click="handleEdit(item)">
+                        <i class="iconfont icon-edit icon-8a8a8a size-1-3" title="编辑"></i>
+                      </span>
                     </span>
                   </p>
                 </li>
@@ -322,9 +334,10 @@ export default {
     },
     // show user config
     DataShowStyle: function() {
+      let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
       return _.find(config, function(o) {
-        return (o.code == "CAST_DATA_SHOW_STYPE") & (o.code_value == 'table') }) ? true : false
+        return (o.code == "CAST_DATA_SHOW_STYPE") & (o.code_value == 'table') & (ScreenWidth > 768)}) ? true : false
     },
     // show user config
     isShowModules: function() {

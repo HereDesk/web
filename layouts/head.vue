@@ -12,8 +12,8 @@
           <li class="nav-item">
             <nuxt-link class="nav-link" to="/app/dashboard">首页</nuxt-link>
           </li>
-          <li class="nav-item">
-            <el-dropdown class="px-3" trigger="click" style="line-height:2.5rem;font-size:1rem;">
+          <li class="nav-item mx-3">
+            <el-dropdown trigger="click" style="line-height:2.5rem;font-size:1rem !important;">
               <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{ 'nav-active' : currentRoute.includes('bug') }">缺陷</span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
@@ -31,8 +31,8 @@
               </el-dropdown-menu>
             </el-dropdown>
           </li>
-          <li class="nav-item">
-            <el-dropdown class="px-3" trigger="click" style="line-height:2.5rem;font-size:1rem;">
+          <li class="nav-item mx-3">
+            <el-dropdown trigger="click" style="line-height:2.5rem;font-size:1rem !important;">
               <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                  :class="{ 'nav-active' : currentRoute.includes('test') }">测试用例</span>
               <el-dropdown-menu slot="dropdown">
