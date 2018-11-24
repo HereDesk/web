@@ -601,9 +601,11 @@ export default {
     DataShowStyle: function() {
       let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
-      return _.find(config, function(o) {
-        return (o.code == "BUG_DATA_SHOW_STYPE") & (o.code_value == 'table') & (ScreenWidth > 768)
-        }) ? 'table' : 'list'
+      if ("BUG_DATA_SHOW_STYPE" in config) {
+        return ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+      } else {
+        return ScreenWidth > 768 ? 'table' : 'list'
+      }
     },
     // show user config
     isShowModules: function() {

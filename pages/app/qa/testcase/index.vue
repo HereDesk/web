@@ -89,7 +89,7 @@
           <!-- 用例数据列表 -->
           <div id="testcase-data-list" class="row mt-3">
             <!-- table style -->
-            <div id="testcase-table-style" class="col" v-if="DataShowStyle">
+            <div id="testcase-table-style" class="col" v-if="DataShowStyle == 'table'">
               <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" 
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
@@ -150,7 +150,7 @@
               </el-table>
             </div>
             <!-- list style -->
-            <div id="testcase-list-style" class="col" v-else>
+            <div id="testcase-list-style" class="col" v-if="DataShowStyle == 'list'">
               <ul class="ul-none ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
                   <p>
@@ -336,8 +336,11 @@ export default {
     DataShowStyle: function() {
       let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
-      return _.find(config, function(o) {
-        return (o.code == "CAST_DATA_SHOW_STYPE") & (o.code_value == 'table') & (ScreenWidth > 768)}) ? true : false
+      if ("CASE_DATA_SHOW_STYPE" in config) {
+        return ScreenWidth > 768 ? config["CASE_DATA_SHOW_STYPE"] : 'list'
+      } else {
+        return ScreenWidth > 768 ? 'table' : 'list'
+      }
     },
     // show user config
     isShowModules: function() {
@@ -531,8 +534,8 @@ export default {
 
     // switch data style
     switchStyle() {
-      let style = this.DataShowStyle ? 'list' : 'table'
-      axios.get('/api/userconfig?CAST_DATA_SHOW_STYPE=' + style).then(res => {
+      let style = this.DataShowStyle == 'table' ? 'list' : 'table'
+      axios.get('/api/userconfig?CASE_DATA_SHOW_STYPE=' + style).then(res => {
         if (res.data["status"] === 20000) {
           this.$store.dispatch('getUserInfo')
         }

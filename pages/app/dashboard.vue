@@ -259,7 +259,9 @@ export default {
   beforeCreate () {
     if (!this.$store.state.isLogin) {
       this.$store.dispatch("getUserInfo")
-      this.$store.dispatch("getPageData")
+      if (this.$store.state.userInfo.group != 'admin') {
+        this.$store.dispatch("getPageData")
+      }
     }
   },
   created() {

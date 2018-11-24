@@ -115,7 +115,7 @@
       if (!this.$store.state.isLogin) {
         this.$store.dispatch('getUserInfo')
       }
-      if (!this.$store.state.PageData) {
+      if (this.$store.state.userInfo.group != 'admin' & !this.$store.state.PageData) {
         this.$store.dispatch("getPageData")
       }
     },
