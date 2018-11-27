@@ -75,7 +75,6 @@ module.exports = {
       ssr: false
     }
   ],
-
   /*
    ** Nuxt.js modules
    */
@@ -107,7 +106,7 @@ module.exports = {
   cache: true,
   router: {
     linkActiveClass: 'active-link',
-    middleware: 'auth'
+    middleware: ['auth']
   },
   
 

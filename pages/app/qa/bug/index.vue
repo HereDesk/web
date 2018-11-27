@@ -105,8 +105,8 @@
             <span  class="searchIcon mr-3" title="今日成就" @click="myToday()">
               <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
             </span>
-            <span  class="searchIcon mr-3" title="今日成就" @click="switchStyle()">
-              <i class="iconfont icon-switch icon-8a8a8a size-1-3"></i>
+            <span  class="searchIcon mr-3" title="切换样式" @click="switchStyle()">
+              <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
             </span>
             <nuxt-link to='/app/qa/bug/add'>
               <button type="btn" class="btn btn-create"> + 创建 </button>
@@ -607,11 +607,15 @@ export default {
         return ScreenWidth > 768 ? 'table' : 'list'
       }
     },
-    // show user config
+    // show user config : 1: show, 0: hide
     isShowModules: function() {
+      let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
-      return _.find(config, function(o) {
-        return (o.code == "IS_SHOW_MODULE") & (o.code_value == 1)}) ? true : false
+      if ("IS_SHOW_MODULE" in config) {
+        return (ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
+      } else {
+        return false
+      }
     }
   },
 

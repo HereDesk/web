@@ -61,13 +61,13 @@
             <h6 class="bug-details-minor-title">
               <span class="redline"></span>&nbsp;&nbsp;实际结果
             </h6>
-            <pre class="details-block" v-html="reality_result"></pre>
+            <pre class="details-block">{{ BugDetails.reality_result }}</pre>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
             <h6 class="bug-details-minor-title">
               <span class="successline"></span>&nbsp;&nbsp;预期结果
             </h6>
-            <pre class="details-block" v-html="expected_result"></pre>
+            <pre class="details-block">{{ BugDetails.expected_result }}</pre>
           </div>
 
           <div id="bug-details-3" class="height-7 mb-5" v-if="BugDetails.remark">
@@ -75,7 +75,7 @@
               <span class="grayline"></span>&nbsp;&nbsp;附加信息
             </h6>
             <div class="dropdown-divider"></div>
-            <pre class="details-block" v-html="BugDetails_remark"></pre>
+            <pre class="details-block">{{ BugDetails.remark }}</pre>
           </div>
 
           <!-- 图片附件 -->
@@ -428,19 +428,7 @@ export default {
     },
     isShowLoading: function () {
       return JSON.stringify(this.BugDetails) === '{}' ? '1' : null
-    },
-    expected_result: function () {
-      return util.txt_deal_with(this.BugDetails.expected_result)
-    },
-    BugDetails_remark: function () {
-      return util.txt_deal_with(this.BugDetails.remark)
-    },
-    reality_result: function () {
-      return util.txt_deal_with(this.BugDetails.reality_result)
-    },
-    // BugDetails_steps: function () {
-    //   return util.txt_deal_with(this.BugDetails.steps)
-    // }
+    }
   },
 
   created () {

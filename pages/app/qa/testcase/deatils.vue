@@ -314,6 +314,7 @@ export default {
       axios.get('/api/qa/testcase/fall?case_id=' + id)
         .then(res => {
           if (res.data['status'] === 20000) {
+            this.getCaseDetails()
             this.$notify.success({"title":"成功","message":res.data['msg']})
           } else {
             this.$notify.error({"title":"成功","message":res.data['msg']})
