@@ -35,19 +35,19 @@ export default {
         { "quick_value": "CreatedByMe", "quick_name": "我创建的" },
         { "quick_value": "notClosed", "quick_name": "未关闭的" }, // 所有未关闭的
         { "quick_value": "NotResolved", "quick_name": "未解决的" }, // 所有未解决的bug，包括：延期的
-        { "quick_value": "HighPriority", "quick_name": "高优先级" }
+        // { "quick_value": "HighPriority", "quick_name": "高优先级" }
     ],
     bug_search_type_list: [
-        { tvalue: "ID", tname: "缺陷ID" },
-        { tvalue: "title", tname: "缺陷标题" },
-        { tvalue: "severity", tname: "严重程度" },
-        { tvalue: "bug_type", tname: "缺陷类型" },
-        { tvalue: "creator_user", tname: "创建者" },
-        { tvalue: "closed_user", tname: "关闭者" },
-        { tvalue: "fixed_user", tname: "解决者" },
-        { tvalue: "assignedTo_user", tname: "指派谁" },
-        { tvalue: "create_time", tname: "创建日期" },
-        { tvalue: "closed_time", tname: "关闭日期" },
-        { tvalue: "fixed_time", tname: "解决日期" }
+        { "search_value": "ID", "search_name": "缺陷ID" },
+        { "search_value": "title", "search_name": "缺陷标题" },
+        { "search_value": "severity", "search_name": "严重程度" },
+        { "search_value": "bug_type", "search_name": "缺陷类型" },
+        { "search_value": "creator_user", "search_name": "创建者" },
+        { "search_value": "closed_user", "search_name": "关闭者" },
+        { "search_value": "fixed_user", "search_name": "解决者" },
+        { "search_value": "assignedTo_user", "search_name": "指派谁" },
+        { "search_value": "create_time", "search_name": "创建日期" },
+        { "search_value": "closed_time", "search_name": "关闭日期" },
+        { "search_value": "fixed_time", "search_name": "解决日期" }
     ]
 }

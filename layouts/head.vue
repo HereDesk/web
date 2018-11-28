@@ -12,41 +12,22 @@
           <li class="nav-item">
             <nuxt-link class="nav-link" to="/app/dashboard">首页</nuxt-link>
           </li>
-          <li class="nav-item mx-3">
-            <el-dropdown trigger="click" style="line-height:2.5rem;font-size:1rem !important;">
-              <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{ 'nav-active' : currentRoute.includes('bug') }">缺陷</span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/bug/add">提交BUG</nuxt-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/bug" exact>缺陷列表</nuxt-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/bug/count">缺陷分析</nuxt-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/bug/report">缺陷报告</nuxt-link>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+          <li class="nav-item mx-3 naspan">
+            <a class="nav-link" :class="{ 'nav-active' : currentRoute.includes('bug') }">缺陷</a>
+            <ul>
+              <li><nuxt-link to="/app/qa/bug/add">提交BUG</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/bug" exact>缺陷列表</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/bug/count">缺陷分析</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/bug/report">缺陷报告</nuxt-link></li>
+            </ul>
           </li>
-          <li class="nav-item mx-3">
-            <el-dropdown trigger="click" style="line-height:2.5rem;font-size:1rem !important;">
-              <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                 :class="{ 'nav-active' : currentRoute.includes('test') }">测试用例</span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/testcase/add">编写用例</nuxt-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/testcase" exact>管理用例</nuxt-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <nuxt-link to="/app/qa/testsuite">执行用例</nuxt-link>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+          <li class="nav-item mx-3 naspan">
+            <a class="nav-link" :class="{ 'nav-active' : currentRoute.includes('test') }">测试用例</a>
+            <ul>
+              <li><nuxt-link to="/app/qa/testcase/add">编写用例</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/testcase" exact>管理用例</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/testsuite">执行用例</nuxt-link></li>
+            </ul>
           </li>
           <li class="nav-item">
             <nuxt-link class="nav-link" to="/app/products">产品管理</nuxt-link>
@@ -60,28 +41,26 @@
         </ul>
         <div id="user-info" class="h-nav">
           <span class="familyname" :class="{ 'name_inline_block': familyname }">{{ familyname }}</span>
-          <el-dropdown class="ml-3" trigger="click">
-            <span id="dashboard-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="iconfont icon-menu size-2 icon_8a8a8a"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
+          <span id="dashboard-set" class="ml-3 naspan">
+            <i class="iconfont icon-menu size-2 icon_8a8a8a"></i>
+            <ul class="pl-2">
+              <li>
                 <nuxt-link to="/app/help" target="_blank">
-                  <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
+                  <i class="iconfont icon-help mr-2"></i>帮助文档
                 </nuxt-link>
-              </el-dropdown-item>
-              <el-dropdown-item>
+              </li>
+              <li>
                 <nuxt-link to="/app/set/passwd">
-                  <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
+                  <i class="iconfont icon-password mr-2"></i>修改密码
                 </nuxt-link>
-              </el-dropdown-item>
-              <el-dropdown-item>
+              </li>
+              <li>
                 <a @click="HandLogout()">
-                  <i class="iconfont icon-logout"></i>&nbsp;&nbsp;退出登录
+                  <i class="iconfont icon-logout mr-2"></i>退出登录
                 </a>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+              </li>
+            </ul>
+          </span>
         </div>
       </div>
       

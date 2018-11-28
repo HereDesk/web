@@ -78,8 +78,8 @@ export default {
   getSearchTypeName (data) {
     let list =  BasicData.bug_search_type_list
     for (let x in list) {
-      if (list[x]['value'] == data) {
-        return list[x]['name']
+      if (list[x]['search_value'] == data) {
+        return list[x]['search_name']
       }
     }
   },

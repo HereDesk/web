@@ -138,7 +138,7 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for='item in SearchType' :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.tname }}</span>
+                  <span @click="handleCommand(item)">{{ item.search_name }}</span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -385,7 +385,7 @@
         <div class="modal-content py-5">
           <div id="count">
             <div class="modal-body text-center" v-if="MyTodayData">
-              <h5 class="countdata-title" v-if="MyTodayData.group == 'test'">今日</h5>
+              <h5 class="countdata-title" v-if="MyTodayData.group == 'test'">今日概况</h5>
               <h5 class="countdata-title" v-else>缺陷今日概况</h5>
               <p>{{ selected_product }}</p>
               <div class="row mt-5">
@@ -750,11 +750,11 @@ export default {
         this.wd = null
         this.SearchCriteria.Operators = data["OperatorsValue"]
       }
-      if ("tname" in data) {
+      if ("search_name" in data) {
         this.wd = null
         this.SearchCriteria.start_date = null
         this.SearchCriteria.end_date = null
-        this.SearchCriteria.SearchType = data["tvalue"]
+        this.SearchCriteria.SearchType = data["search_value"]
         if (!(this.SearchCriteria.SearchType).includes('time')) {
           this.SearchCriteria.Operators = '='
         }
