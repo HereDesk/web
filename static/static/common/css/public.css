@@ -88,7 +88,7 @@ html,body {
   display: inline-block;
   color: #4C4C4C;
   background-color: #F5F5F5;
-  padding:0.5rem 0.5rem 0.5rem 1rem;
+  padding:0.5rem 0.5rem 0.5rem 0.88rem;
   border-radius: 16px !important;
 }
 
@@ -423,9 +423,14 @@ a:link {
 */
 
 .circle-content::before {
-  content: "●";
+  content: "#";
   font-weight: bold;
 }
+
+/* .circle-content::before {
+  content: "●";
+  font-weight: bold;
+} */
 
 .circle {
   display: inline-block;

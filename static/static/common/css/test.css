@@ -242,7 +242,7 @@
   }
 }
 
-.bug-details-minor-title {
+.details-minor-title {
   font-size: 1.1rem;
   font-weight: 500;
   color:#333333;
@@ -655,4 +655,16 @@
 
 .ul-none-2 li p:first-of-type {
   margin:0.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .data-liststyle-satellite span {
+    margin-right:3.5rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .data-liststyle-satellite span {
+    margin-right:1rem;
+  }
 }

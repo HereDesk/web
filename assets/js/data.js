@@ -1,31 +1,41 @@
 export default {
+    order_list: [
+        {"order_value":"priority","order_name":"优先级"},
+        {"order_value":"status","order_name":"状态"},
+        {"order_value":"creator_id","order_name":"创建人员"},
+        {"order_value":"assignedTo_id","order_name":"指派人员"},
+        {"order_value":"fixed_id","order_name":"修复人员"},
+        {"order_value":"create_time","order_name":"创建时间"},
+        {"order_value":"fixed_time","order_name":"解决时间"},
+        {"order_value":"last_time","order_name":"最后更新"}
+    ],
     bug_status_list: [
-        { code: "all", name: "全部" },
-        { code: "New", name: "新建未分配" },
-        { code: "Open", name: "待解决" },
-        { code: "Reopen", name: "重新打开" },
-        { code: "Hang-up", name: "挂起延期" },
-        { code: "Fixed", name: "已解决" },
-        { code: "Closed", name: "已关闭" }
+        { "status_value": "all", "status_name": "全部" },
+        { "status_value": "New", "status_name": "新建未分配" },
+        { "status_value": "Open", "status_name": "待解决" },
+        { "status_value": "Reopen", "status_name": "重新打开" },
+        { "status_value": "Hang-up", "status_name": "挂起延期" },
+        { "status_value": "Fixed", "status_name": "已解决" },
+        { "status_value": "Closed", "status_name": "已关闭" }
     ],
     priority_list: [
-        { "pname":"全部","pvalue":"all" },
-        { "pname":"P1","pvalue":"P1" },
-        { "pname":"P2","pvalue":"P2" },
-        { "pname":"P3","pvalue":"P3" },
-        { "pname":"P4","pvalue":"P4" },
-        { "pname":"P5","pvalue":"P5" }
+        { "priority_name":"全部","priority_value":"all" },
+        { "priority_name":"P1","priority_value":"P1" },
+        { "priority_name":"P2","priority_value":"P2" },
+        { "priority_name":"P3","priority_value":"P3" },
+        { "priority_name":"P4","priority_value":"P4" },
+        { "priority_name":"P5","priority_value":"P5" }
     ],
     bug_quick_operation_list: [
-        { value: "no", name: "无" },
-        { value: "WaitPending", name: "待我处理" },
-        { value: "AssignedByMe", name: "指派给我" },
-        { value: "ResolvedByMe", name: "我解决的" },
-        { value: "ClosedByMe", name: "我关闭的" },
-        { value: "CreatedByMe", name: "我创建的" },
-        { value: "notClosed", name: "未关闭的" }, // 所有未关闭的
-        { value: "NotResolved", name: "未解决的" }, // 所有未解决的bug，包括：延期的
-        { value: "HighPriority", name: "高优先级" }
+        { "quick_value": "no", "quick_name": "无" },
+        { "quick_value": "WaitPending", "quick_name": "待我处理" },
+        { "quick_value": "AssignedByMe", "quick_name": "指派给我" },
+        { "quick_value": "ResolvedByMe", "quick_name": "我解决的" },
+        { "quick_value": "ClosedByMe", "quick_name": "我关闭的" },
+        { "quick_value": "CreatedByMe", "quick_name": "我创建的" },
+        { "quick_value": "notClosed", "quick_name": "未关闭的" }, // 所有未关闭的
+        { "quick_value": "NotResolved", "quick_name": "未解决的" }, // 所有未解决的bug，包括：延期的
+        { "quick_value": "HighPriority", "quick_name": "高优先级" }
     ],
     bug_search_type_list: [
         { tvalue: "ID", tname: "缺陷ID" },

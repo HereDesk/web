@@ -22,7 +22,7 @@
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
         <div id="bug-nav-manage" class="row justify-content-between">
           <div id="bug-query-1">
-            <el-dropdown id="page-query-product" class="mr-3 my-1" trigger="click">
+            <el-dropdown id="page-query-product" class="mr-1 my-1">
               <span>
                 <span class="el-dropdown-desc">产品:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -35,7 +35,7 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-version" class="mr-3 my-1" trigger="click">
+            <el-dropdown id="page-query-version" class="mr-1 my-1">
               <span>
                 <span class="el-dropdown-desc">版本:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -49,21 +49,21 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-bugstatus" class="mr-3 my-1" trigger="click">
+            <el-dropdown id="page-query-bugstatus" class="mr-1 my-1">
               <span>
                 <span class="el-dropdown-desc">状态:</span>
                 <span class="el-dropdown-link bg-edown">
-                  {{ selected_status | bugStatusName }}
+                  {{ selected_status | filterBugStatusName }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in status_list" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.code | bugStatusName }}</span>
+                  <span @click="handleCommand(item)">{{ item.status_name }}</span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-bugstatus" class="mr-3 my-1" trigger="click">
+            <el-dropdown id="page-query-priority" class="mr-1 my-1">
               <span>
                 <span class="el-dropdown-desc">优先级:</span>
                 <span class="el-dropdown-link bg-edown">
@@ -73,11 +73,25 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in priority_list" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.pname }}</span>
+                  <span @click="handleCommand(item)">{{ item.priority_name }}</span>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown id="page-query-quick" class="mr-3 my-1" trigger="click">
+            <el-dropdown id="page-query-order" class="mr-1 my-1">
+              <span>
+                <span class="el-dropdown-desc">排序:</span>
+                <span class="el-dropdown-link bg-edown">
+                  {{ selected_order | filterOrder }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="item in order_list" :key="item.id">
+                  <span @click="handleCommand(item)">{{ item.order_name }}</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown id="page-query-quick" class="mr-1 my-1">
               <span>
                 <span class="el-dropdown-desc">快捷操作:</span>
                 <span class="el-dropdown-link bg-edown" :class="{ 'text-2973B7': operate != 'no' }">
@@ -87,8 +101,8 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
-                  <span :id="item.value" @click="SwitchOperate(item)">
-                    {{ item.value | QuickQperationName }}
+                  <span :id="item.quick_value" @click="handleCommand(item)">
+                    {{ item.quick_name }}
                   </span>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -102,7 +116,7 @@
             <span title="导入导出" class="mr-3" data-toggle="modal" data-target="#m-import-export">
               <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
             </span>
-            <span  class="searchIcon mr-3" title="今日成就" @click="myToday()">
+            <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
               <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
             </span>
             <span  class="searchIcon mr-3" title="切换样式" @click="switchStyle()">
@@ -161,6 +175,7 @@
 
         <!-- table: 数据展示 -->
         <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
+
           <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
             <el-table :data='tableData' 
               :default-sort="{prop: 'date', order: 'descending'}" 
@@ -170,7 +185,8 @@
                 <template slot-scope="scope">
                   <span class="circle-content" 
                     :class="{ 'text-secondary': scope.row.status === 'Closed',
-                    'text-urgency': ['New','Open','Reopen'].indexOf(scope.row.status),
+                    'text-success': scope.row.status === 'Fixed',
+                    'text-urgency': ['New','Open','Reopen'].includes(scope.row.status),
                     'text-warning': scope.row.status === 'Hang-up'}">
                     {{ scope.row.status_name }}
                   </span>
@@ -230,30 +246,40 @@
               </el-table-column>
             </el-table>
           </div>
+
           <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
             <ul class="ul-none ul-none-2">
               <li v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
-                <p>
+                <p class="mt-3">
                   <nuxt-link style="color:#424242" 
                     :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
                     {{ item.id }}. {{ item.title }}
                   </nuxt-link>
                 </p>
                 <p class="my-1">
-                  <span class="text-90 text-gray">
-                    <span class="mr-2 circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
-                      'text-urgency': item.priority == 'P2' }"
-                      @click="BugPriorityDialog(item)">
+                  <span class="text-90 text-gray data-liststyle-satellite">
+                    <span class="circle-content" @click="BugPriorityDialog(item)"
+                      :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
                       {{ item.priority }}
                     </span>
-                    <span class="mr-2">{{ item.status_name }}</span> 
-                    <span class="mr-2">{{ item.create_time | date(5) }}</span>
-                    <span class="mr-2">创建: @{{ item.creator_user }}</span>
-                    <span class="mr-2">指派: @{{ item.assignedTo_user }}</span>
+                    <span :class="{ 'text-secondary': item.status === 'Closed',
+                      'text-success': item.status === 'Fixed',
+                      'text-urgency': ['New','Open','Reopen'].includes(item.status),
+                      'text-warning': item.status === 'Hang-up'}">
+                      # {{ item.status_name }}
+                    </span>
+                    <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
+                    <span>@指派: {{ item.assignedTo_user }}</span>
+                    <span v-if="item.fixed_user">
+                      @解决: {{ item.fixed_user }}
+                      <p class="display-inline" :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
+                      &nbsp;# {{ item.solution_name }}</p>
+                    </span> 
+                    <span>最后更新: {{ item.last_time | date(5) }}</span>
                   </span>
                   <span class="float-right display-block" :class="{'hideText': item.status === 'Closed'}">
                     <span @click="skipAssign(item)">
-                      <i class="iconfont icon-assign icon-8a8a8a size-2 mx-2"></i>
+                      <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
                     </span>
                     <span @click="skipResolve(item)" v-if="item.status != 'Fixed'">
                       <i class="iconfont icon-resolve icon-8a8a8a size-1-6 mx-2"></i>
@@ -442,6 +468,9 @@ export default {
       // 优先级列表
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
+      // 排序
+      order_list: data.order_list,
+      selected_order: this.$route.query.order || "create_time",
       // 更多操作:快捷操作
       operate: this.$route.query.operate || "no",
       QuickQperationList: data.bug_quick_operation_list,
@@ -489,8 +518,9 @@ export default {
     date: util.date,
     filterOperators: util.getOperatorsName,
     filterSearchType: util.getSearchTypeName,
-    bugStatusName: util.bugStatusName,
+    filterBugStatusName: util.bugStatusName,
     QuickQperationName: util.QuickQperationName,
+    filterOrder: util.getOrderName,
     FilterVersion: function(value) {
       if (value == "all") {
         return "全部"
@@ -539,6 +569,7 @@ export default {
       Builder["release"] = tmp_release
       Builder["status"] = this.selected_status
       Builder["priority"] = this.selected_priority
+      Builder["order"] = this.selected_order
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
       if (this.operate != "no") {
@@ -691,18 +722,27 @@ export default {
     },
     // 下拉相关操作
     handleCommand(data) {
+      if ("order_name" in data) {
+        this.selected_order = data["order_value"]
+      }
+      if ("priority_name" in data) {
+        this.selected_priority = data["priority_value"]
+      }
+      if ("status_name" in data) {
+        this.operate = "no"
+        this.selected_status = data["status_value"]
+      }
+      if ("quick_name" in data) {
+        this.operate = data["quick_value"]
+        this.pageNumber = 1
+        this.selected_status = "all"
+        this.selected_priority = "all"
+      }
       if ("product_code" in data) {
         this.selected_product = data["product_code"]
       }
       if ("version" in data) {
         this.selected_release = data["version"]
-      }
-      if ("pname" in data) {
-        this.selected_priority = data["pvalue"]
-      }
-      if ("code" in data) {
-        this.operate = "no"
-        this.selected_status = data["code"]
       }
       if ("OperatorsName" in data) {
         this.SearchCriteria.start_date = null
@@ -723,12 +763,6 @@ export default {
         this.modules_id[0] = data["value"]
       }
       this.pageNumber = 1
-    },
-    SwitchOperate(item) {
-      this.pageNumber = 1
-      this.operate = item["value"]
-      this.selected_status = "all"
-      this.selected_priority = "all"
     },
 
     // Bug: 列表

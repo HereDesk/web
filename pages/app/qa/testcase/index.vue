@@ -95,8 +95,8 @@
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
-                    <span class="circle-content" :class="{ 'text-deadly': scope.row.priority == 'P1',
-                      'text-urgency': scope.row.priority == 'P2' }">
+                    <span class="circle-content" 
+                      :class="{ 'text-deadly': scope.row.priority == 'P1','text-urgency': scope.row.priority == 'P2' }">
                       {{ scope.row.priority }}
                     </span>
                   </template>
@@ -109,29 +109,28 @@
                     </nuxt-link>
                   </template>
                 </el-table-column>
-                <el-table-column label='评审' width='90'>
+                <el-table-column label='评审' width='70'>
                   <template slot-scope="scope">
-                    <span v-if="scope.row.isReview === 0">-</span>
-                    <span v-if="scope.row.isReview === 1">通过</span>
-                    <span v-if="scope.row.isReview === 2">失败</span>
+                    <span>
+                      {{ scope.row.isReview === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
+                    </span>
                   </template>
                 </el-table-column>
-                <el-table-column label='状态' width='60'>
+                <el-table-column label='状态' width='65'>
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status === 1">失效</span>
-                    <span v-else></span>
+                    <span>{{ scope.row.status === 1 ? '无效' : '' }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label='变更' width='60'>
                   <template slot-scope="scope">
-                    <span v-if="scope.row.isChange === 1">是</span>
-                    <span v-if="scope.row.isChange === 0">否</span>
+                    <span>{{ scope.row.isChange === 1 ? '是' : '-' }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label='创建' sortable width='100'>
+                <el-table-column label='创建' prop="creator" sortable width='100'></el-table-column>
+                <el-table-column label='最后更新时间' sortable width='165'>
                   <template slot-scope="scope">
                     <span :class="{ 'hideText' : scope.row.case_id === HoverTestcase_id }">
-                      {{ scope.row.creator }}
+                      {{ scope.row.update_time | date }}
                     </span>
                   </template>
                 </el-table-column>
@@ -160,10 +159,16 @@
                     </nuxt-link>
                   </p>
                   <p class="my-1">
-                    <span class="text-90 text-gray">
-                      <span class="circle-content mr-2">&nbsp;{{ item.priority }}</span>
-                      <span class="mr-2">{{ item.creator }}</span>
-                      <span>{{ item.create_time | date(5) }}</span>
+                    <span class="text-90 text-gray data-liststyle-satellite">
+                      <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
+                      'text-urgency': item.priority == 'P2' }">
+                        &nbsp;{{ item.priority }}
+                      </span>
+                      <span>
+                        #&nbsp;{{ item.isReview === 0 ? '未评审' : item.isReview === 1 ? '评审通过' : '未通过评审' }}
+                      </span>
+                      <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
+                      <span>最后更新: {{ item.update_time | date(5) }}</span>
                     </span>
                     <span class="float-right display-block">
                       <span class="mr-2" v-if="item.status === 0 && CaseRules.fall" @click="handleFall(item)">

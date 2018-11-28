@@ -52,26 +52,26 @@
       <div class="row mt-5">
         <div id="bug-details-2" class='col-xl-8 col-lg-8 col-md-8'>
           <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
             </h6>
             <pre class="details-block">{{ BugDetails.steps }}</pre>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="redline"></span>&nbsp;&nbsp;实际结果
             </h6>
             <pre class="details-block">{{ BugDetails.reality_result }}</pre>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="successline"></span>&nbsp;&nbsp;预期结果
             </h6>
             <pre class="details-block">{{ BugDetails.expected_result }}</pre>
           </div>
 
           <div id="bug-details-3" class="height-7 mb-5" v-if="BugDetails.remark">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附加信息
             </h6>
             <div class="dropdown-divider"></div>
@@ -80,7 +80,7 @@
 
           <!-- 图片附件 -->
           <div id="bug-steps" class="height-7 mb-5" v-if="Annex.length > 0">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附件
             </h6>
             ​<picture class="container-fluid">
@@ -93,7 +93,7 @@
             </picture>
           </div>
           <div id="bug-details-history" class="height-7 mb-5 text-gray-38 text-93">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;活动记录
             </h6>
             <div class="dropdown-divider"></div>
@@ -113,7 +113,7 @@
         </div>
         <div id="page-details-4" class='col-xl-4 col-lg-4 col-md-4'>
           <div id="bug-details-desc">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;详情
             </h6>
             <div class="dropdown-divider"></div>
@@ -140,7 +140,7 @@
             </ul>
           </div>
           <div id="bug-details-5">
-            <h6 class="bug-details-minor-title pt-3">
+            <h6 class="details-minor-title pt-3">
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
@@ -172,7 +172,7 @@
             </ul>
           </div>
           <div id="bug-details-relevancy" class="pb-5" v-if="BugDetails.case_id">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;关联的测试用例
             </h6>
             <div class="dropdown-divider"></div>

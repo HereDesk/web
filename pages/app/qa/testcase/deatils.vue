@@ -102,7 +102,7 @@
             </ul>
           </div>
           <div id="page-details-2-2-2">
-            <h6 class="bug-details-minor-title">
+            <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
