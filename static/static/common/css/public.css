@@ -1002,6 +1002,11 @@ textarea::-webkit-input-placeholder {
   align-items:Center;
 }
 
+.center-vertical{
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+}
 /* 
 **
 ** 关于display 

@@ -8,7 +8,7 @@
       </nav>
     </div>
     <div id="module_a" class="row my-5">
-      <div class="col-xl-3 col-sm-12 col-12">
+      <div class="col-md-3 col-sm-12 col-12">
         <h5 class="font-weight-light">一级模块</h5>
         <p class="add_m_a" data-toggle="modal" data-target="#add_module_a" v-if="Rules.product_modules"> + 一级模块</p>
         <p class="divider"></p>
@@ -18,7 +18,7 @@
           @click="handleModuleA(item.id)"> * {{ item.m1 }}</li>
         </ul>
       </div>
-      <div id="module_b" class="col-xl-9 col-sm-12 col-12">
+      <div id="module_b" class="col-md-9 col-sm-12 col-12">
         <h5 class="font-weight-light">二级模块</h5>
         <div class="module_b p-3 mb-3">
           <input type="text" class="form-control" placeholder="二级模块名称输入后，回车即可保存成功"

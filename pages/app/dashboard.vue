@@ -1,7 +1,7 @@
 <template>
-  <div id="bashboard" class='container'>
+  <div id="bashboard" class='container' style="height:100%;">
   
-    <div id="page-head" class="row pt-5">
+    <div id="page-head-head" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
         <el-dropdown class="ml-3">
@@ -45,7 +45,7 @@
       </div>
     </div>
   
-    <div id="page-data" v-if="isDisplayBody" style="margin-top:8%;">
+    <div id="page-data-main" class="center-vertical" v-if="isDisplayBody">
       <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 my-3">
           <div class="container">
@@ -118,7 +118,7 @@
       </div>
     </div>
   
-    <div class="text-center mt-5 pt-5" v-else>
+    <div class="text-center" v-else>
       <img :src="img_src" style="height:72px;width:72px;" v-show="img_src">
       <p class="mt-5">{{ product_msg }}</p>
     </div>
