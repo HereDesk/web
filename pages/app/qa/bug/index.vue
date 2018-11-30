@@ -20,295 +20,297 @@
 
       <!-- 查询以及操作相关 -->
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
-        <div id="bug-nav-manage" class="row justify-content-between">
-          <div id="bug-query-1">
-            <el-dropdown id="page-query-product" class="mr-1 my-1">
-              <span>
-                <span class="el-dropdown-desc">产品:</span>
-                <span class="el-dropdown-link bg-edown">
-                  {{ selected_product }}<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for='item in product_list' :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.product_code }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown id="page-query-version" class="mr-1 my-1">
-              <span>
-                <span class="el-dropdown-desc">版本:</span>
-                <span class="el-dropdown-link bg-edown">
-                  {{ selected_release | FilterVersion }}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in release_list" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.version }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown id="page-query-bugstatus" class="mr-1 my-1">
-              <span>
-                <span class="el-dropdown-desc">状态:</span>
-                <span class="el-dropdown-link bg-edown">
-                  {{ selected_status | filterBugStatusName }}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in status_list" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.status_name }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown id="page-query-priority" class="mr-1 my-1">
-              <span>
-                <span class="el-dropdown-desc">优先级:</span>
-                <span class="el-dropdown-link bg-edown">
-                  {{ selected_priority == 'all' ? "全部" : selected_priority }}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in priority_list" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.priority_name }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown id="page-query-order" class="mr-1 my-1">
-              <span>
-                <span class="el-dropdown-desc">排序:</span>
-                <span class="el-dropdown-link bg-edown">
-                  {{ selected_order | filterOrder }}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in order_list" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.order_name }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown id="page-query-quick" class="mr-1 my-1">
-              <span>
-                <span class="el-dropdown-desc">快捷操作:</span>
-                <span class="el-dropdown-link bg-edown" :class="{ 'text-2973B7': operate != 'no' }">
-                  {{ operate | QuickQperationName }}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
-                  <span :id="item.quick_value" @click="handleCommand(item)">
-                    {{ item.quick_name }}
+        <div class="container-fluid">
+          <div id="bug-nav-manage" class="row justify-content-between">
+            <div id="bug-query-1">
+              <el-dropdown id="page-query-product" class="mr-1 my-1">
+                <span>
+                  <span class="el-dropdown-desc">产品:</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_product }}<i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for='item in product_list' :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.product_code }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="page-query-version" class="mr-1 my-1">
+                <span>
+                  <span class="el-dropdown-desc">版本:</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_release | FilterVersion }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in release_list" :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.version }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="page-query-bugstatus" class="mr-1 my-1">
+                <span>
+                  <span class="el-dropdown-desc">状态:</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_status | filterBugStatusName }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in status_list" :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.status_name }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="page-query-priority" class="mr-1 my-1">
+                <span>
+                  <span class="el-dropdown-desc">优先级:</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_priority == 'all' ? "全部" : selected_priority }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in priority_list" :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.priority_name }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="page-query-order" class="mr-1 my-1">
+                <span>
+                  <span class="el-dropdown-desc">排序:</span>
+                  <span class="el-dropdown-link bg-edown">
+                    {{ selected_order | filterOrder }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in order_list" :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.order_name }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="page-query-quick" class="mr-1 my-1">
+                <span>
+                  <span class="el-dropdown-desc">快捷操作:</span>
+                  <span class="el-dropdown-link bg-edown" :class="{ 'text-2973B7': operate != 'no' }">
+                    {{ operate | QuickQperationName }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
+                    <span :id="item.quick_value" @click="handleCommand(item)">
+                      {{ item.quick_name }}
+                    </span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
 
-          <div id="bug-query-2" class="vertical-center">
-            <span class="searchIcon mr-3" @click="clickSearch()">
-              <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
-            </span>
-            <span title="导入导出" class="mr-3" data-toggle="modal" data-target="#m-import-export">
-              <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
-            </span>
-            <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
-              <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
-            </span>
-            <span  class="searchIcon mr-3" title="切换样式" @click="switchStyle()">
-              <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
-            </span>
-            <nuxt-link to='/app/qa/bug/add'>
-              <button type="btn" class="btn btn-create"> + 创建 </button>
-            </nuxt-link>
-          </div>
-        </div>
-
-        <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
-          :class="{ showSearch: isShowSearch }">
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-12 pr-0 text-center">
-            <el-dropdown id="page-query-product" class="mx-3 my-1" trigger="click">
-              <span class="el-dropdown-link bg-edown bg-white text-center">
-                {{ SearchCriteria.SearchType  | filterSearchType }}
-                <i class="el-icon-arrow-down el-icon--right"></i>
+            <div id="bug-query-2" class="vertical-center">
+              <span class="searchIcon mr-3" @click="clickSearch()">
+                <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for='item in SearchType' :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.search_name }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown id="page-query-version" class="mx-3 my-1" trigger="click">
-              <span class="el-dropdown-link bg-edown bg-white text-center" style="font-weight:500">
-                {{ SearchCriteria.Operators | filterOperators }}
+              <span title="导入导出" class="mr-3" data-toggle="modal" data-target="#m-import-export">
+                <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="item in OperatorsList" :key="item.id">
-                  <span @click="handleCommand(item)">{{ item.OperatorsName }}</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-          <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
-            <input type="text" id="bugSearchInput" class="border-none" 
-              v-if="SwitchSearchInput === 'other'"
-              placeholder="输入关键字..."
-              v-model="wd" autofocus />
-            <input type="date" class="border-none text-90" 
-              v-if="SwitchSearchInput === 'date'" 
-              v-model="SearchCriteria.start_date">
-            <input type="date" class="border-none text-90" 
-              v-if="SwitchSearchInput === 'date_range'"
-              v-model="SearchCriteria.start_date">
-            <input type="date" class="border-none text-90" 
-              v-if="SwitchSearchInput === 'date_range'" 
-              v-model="SearchCriteria.end_date">
-          </div>
-          <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
-            <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
-          </div>
-        </div>
-
-        <!-- table: 数据展示 -->
-        <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
-
-          <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
-            <el-table :data='tableData' 
-              :default-sort="{prop: 'date', order: 'descending'}" 
-              @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
-              <el-table-column label='ID' prop='id' sortable width='63'></el-table-column>
-              <el-table-column label='状态' prop="status" align="center" width='100' sortable>
-                <template slot-scope="scope">
-                  <span class="circle-content" 
-                    :class="{ 'text-secondary': scope.row.status === 'Closed',
-                    'text-success': scope.row.status === 'Fixed',
-                    'text-urgency': ['New','Open','Reopen'].includes(scope.row.status),
-                    'text-warning': scope.row.status === 'Hang-up'}">
-                    {{ scope.row.status_name }}
-                  </span>
-                </template>
-              </el-table-column>
-              <el-table-column label='标题' show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <nuxt-link 
-                    :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}" style="color:#424242">
-                  {{ scope.row.title }}
-                  </nuxt-link>
-                </template>
-              </el-table-column>
-              <el-table-column label='优先级' prop="priority" align="center" width='95' sortable>
-                <template slot-scope="scope">
-                  <div @click="BugPriorityDialog(scope.row)">
-                    <span class="circle-content"
-                      :class="{'text-deadly': scope.row.priority == 'P1', 'text-urgency': scope.row.priority == 'P2'}">
-                      {{ scope.row.priority }}
-                    </span>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column label='创建' prop='creator_user' align="center" sortable width='85' show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column label='创建时间' width='100'>
-                <template slot-scope="scope">
-                  <span>{{ scope.row.create_time | date(5) }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label='指派' prop='assignedTo_user' align="center" sortable width='85' show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column label='解决方案' width='91' align="center">
-                <template slot-scope="scope">
-                  <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
-                    <span :class="[ scope.row.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
-                      &nbsp;{{ scope.row.solution_name }}
-                    </span>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column label='' width="50">
-                <template slot-scope="scope">
-                  <div class="tableOpreate"
-                    :class="{ 'showBugOpreate' : scope.row.bug_id === HoverBugId, 'hideText': scope.row.status === 'Closed'}">
-                    <button @click="skipAssign(scope.row)">
-                      <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
-                    </button>
-                    <button @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
-                      <i class="iconfont icon-resolve icon-8a8a8a size-1-6"></i>
-                    </button>
-                    <button @click="BugClosedDialog(scope.row)" v-if="uGroup">
-                      <i class="iconfont icon-close-opera icon-8a8a8a size-1-5"></i>
-                    </button>
-                  </div>
-                </template>
-              </el-table-column>
-            </el-table>
+              <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
+                <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
+              </span>
+              <span  class="searchIcon mr-3" title="切换样式" @click="switchStyle()">
+                <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
+              </span>
+              <nuxt-link to='/app/qa/bug/add'>
+                <button type="btn" class="btn btn-create"> + 创建 </button>
+              </nuxt-link>
+            </div>
           </div>
 
-          <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
-            <ul class="ul-none ul-none-2">
-              <li v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
-                <p class="mt-3">
-                  <nuxt-link style="color:#424242" 
-                    :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
-                    {{ item.id }}. {{ item.title }}
-                  </nuxt-link>
-                </p>
-                <p class="my-1">
-                  <span class="text-90 text-gray data-liststyle-satellite">
-                    <span class="circle-content" @click="BugPriorityDialog(item)"
-                      :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
-                      {{ item.priority }}
-                    </span>
-                    <span :class="{ 'text-secondary': item.status === 'Closed',
-                      'text-success': item.status === 'Fixed',
-                      'text-urgency': ['New','Open','Reopen'].includes(item.status),
-                      'text-warning': item.status === 'Hang-up'}">
-                      # {{ item.status_name }}
-                    </span>
-                    <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
-                    <span>@指派: {{ item.assignedTo_user }}</span>
-                    <span v-if="item.fixed_user">
-                      @解决: {{ item.fixed_user }}
-                      <p class="display-inline" :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
-                      &nbsp;# {{ item.solution_name }}</p>
-                    </span> 
-                    <span>最后更新: {{ item.last_time | date(5) }}</span>
-                  </span>
-                  <span class="float-right display-block" :class="{'hideText': item.status === 'Closed'}">
-                    <span @click="skipAssign(item)">
-                      <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
-                    </span>
-                    <span @click="skipResolve(item)" v-if="item.status != 'Fixed'">
-                      <i class="iconfont icon-resolve icon-8a8a8a size-1-6 mx-2"></i>
-                    </span>
-                    <span @click="BugClosedDialog(item)" v-if="uGroup">
-                      <i class="iconfont icon-close-opera icon-8a8a8a size-1-5 mx-2"></i>
-                    </span>
-                  </span>
-                </p>
-              </li>
-            </ul> 
+          <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
+            :class="{ showSearch: isShowSearch }">
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-12 pr-0 text-center">
+              <el-dropdown id="page-query-product" class="mx-3 my-1" trigger="click">
+                <span class="el-dropdown-link bg-edown bg-white text-center">
+                  {{ SearchCriteria.SearchType  | filterSearchType }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for='item in SearchType' :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.search_name }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown id="page-query-version" class="mx-3 my-1" trigger="click">
+                <span class="el-dropdown-link bg-edown bg-white text-center" style="font-weight:500">
+                  {{ SearchCriteria.Operators | filterOperators }}
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in OperatorsList" :key="item.id">
+                    <span @click="handleCommand(item)">{{ item.OperatorsName }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
+              <input type="text" id="bugSearchInput" class="border-none" 
+                v-if="SwitchSearchInput === 'other'"
+                placeholder="输入关键字..."
+                v-model="wd" autofocus />
+              <input type="date" class="border-none text-90" 
+                v-if="SwitchSearchInput === 'date'" 
+                v-model="SearchCriteria.start_date">
+              <input type="date" class="border-none text-90" 
+                v-if="SwitchSearchInput === 'date_range'"
+                v-model="SearchCriteria.start_date">
+              <input type="date" class="border-none text-90" 
+                v-if="SwitchSearchInput === 'date_range'" 
+                v-model="SearchCriteria.end_date">
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
+              <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
+            </div>
           </div>
-        </div>
 
-        <!-- table: 翻页 -->
-        <Pagination :total="total" @PsPn="getPsPn"></Pagination>
-
-        <!-- loading -->
-        <div id="page-loading" class="row">
-          <div class="col text-center" v-if='total === null'>
-            <loading></loading>
+          <!-- table: 数据展示 -->
+          <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
+            <!-- style: table -->
+            <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
+              <el-table :data='tableData' 
+                :default-sort="{prop: 'date', order: 'descending'}" 
+                @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
+                <el-table-column label='ID' prop='id' sortable width='63'></el-table-column>
+                <el-table-column label='状态' prop="status" align="center" width='100' sortable>
+                  <template slot-scope="scope">
+                    <span class="circle-content" 
+                      :class="{ 'text-secondary': scope.row.status === 'Closed',
+                      'text-success': scope.row.status === 'Fixed',
+                      'text-urgency': ['New','Open','Reopen'].includes(scope.row.status),
+                      'text-warning': scope.row.status === 'Hang-up'}">
+                      {{ scope.row.status_name }}
+                    </span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='标题' show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <nuxt-link 
+                      :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}" style="color:#424242">
+                    {{ scope.row.title }}
+                    </nuxt-link>
+                  </template>
+                </el-table-column>
+                <el-table-column label='优先级' prop="priority" align="center" width='95' sortable>
+                  <template slot-scope="scope">
+                    <div @click="BugPriorityDialog(scope.row)">
+                      <span class="circle-content"
+                        :class="{'text-deadly': scope.row.priority == 'P1', 'text-urgency': scope.row.priority == 'P2'}">
+                        {{ scope.row.priority }}
+                      </span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label='创建' prop='creator_user' align="center" sortable width='85' show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label='创建时间' width='100'>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.create_time | date(5) }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label='指派' prop='assignedTo_user' align="center" sortable width='85' show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label='解决方案' width='91' align="center">
+                  <template slot-scope="scope">
+                    <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
+                      <span :class="[ scope.row.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
+                        &nbsp;{{ scope.row.solution_name }}
+                      </span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label='' width="50">
+                  <template slot-scope="scope">
+                    <div class="display-none"
+                      :class="{ 'showBugOpreate' : scope.row.bug_id === HoverBugId, 'hideText': scope.row.status === 'Closed'}">
+                      <button @click="skipAssign(scope.row)">
+                        <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
+                      </button>
+                      <button @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
+                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6"></i>
+                      </button>
+                      <button @click="BugClosedDialog(scope.row)" v-if="uGroup">
+                        <i class="iconfont icon-close-opera icon-8a8a8a size-1-5"></i>
+                      </button>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <!-- style: list -->
+            <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
+              <ul class="ul-none ul-none-2">
+                <li v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
+                  <p class="mt-3">
+                    <nuxt-link style="color:#424242" 
+                      :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
+                      {{ item.id }}. {{ item.title }}
+                    </nuxt-link>
+                  </p>
+                  <p class="my-2">
+                    <span class="text-90 text-gray data-liststyle-satellite">
+                      <span class="circle-content" @click="BugPriorityDialog(item)"
+                        :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
+                        {{ item.priority }}
+                      </span>
+                      <span :class="{ 'text-secondary': item.status === 'Closed',
+                        'text-success': item.status === 'Fixed',
+                        'text-urgency': ['New','Open','Reopen'].includes(item.status),
+                        'text-warning': item.status === 'Hang-up'}">
+                        # {{ item.status_name }}
+                      </span>
+                      <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
+                      <span>@指派: {{ item.assignedTo_user }}</span>
+                      <span v-if="item.fixed_user">
+                        @解决: {{ item.fixed_user }}
+                        <p class="display-inline" :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
+                        &nbsp;# {{ item.solution_name }}</p>
+                      </span> 
+                      <span>最后更新: {{ item.last_time | date(5) }}</span>
+                    </span>
+                    <span class="float-right display-block action" :class="{'display-none': item.status === 'Closed'}">
+                      <span @click="skipAssign(item)">
+                        <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
+                      </span>
+                      <span @click="skipResolve(item)" v-if="item.status != 'Fixed'">
+                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6 mx-2"></i>
+                      </span>
+                      <span @click="BugClosedDialog(item)" v-if="uGroup">
+                        <i class="iconfont icon-close-opera icon-8a8a8a size-1-5 mx-2"></i>
+                      </span>
+                    </span>
+                  </p>
+                </li>
+              </ul> 
+            </div>
           </div>
-        </div>
 
-        <!-- no data -->
-        <div id="page-error" class="row">
-          <div id="page-no-data" class="col text-center" v-if="total === 0">
-            <img :src="img_src" class="mt-5">
-            <p class="text-gray no-hint">{{ Msg }}</p>
+          <!-- table: 翻页 -->
+          <Pagination :total="total" @PsPn="getPsPn"></Pagination>
+
+          <!-- loading -->
+          <div id="page-loading" class="row">
+            <div class="col text-center" v-if='total === null'>
+              <loading></loading>
+            </div>
+          </div>
+
+          <!-- no data -->
+          <div id="page-error" class="row">
+            <div id="page-no-data" class="col text-center" v-if="total === 0">
+              <img :src="img_src" class="mt-5">
+              <p class="text-gray no-hint">{{ Msg }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -453,6 +455,7 @@ export default {
 
   data() {
     return {
+      ScreenWidth: 0,
       MyTodayData: false,
       // 产品、版本
       product_list: [],
@@ -613,7 +616,7 @@ export default {
       }
     },
     SwitchSearchInput: function() {
-      if (this.SearchCriteria.SearchType.indexOf("time") > 0) {
+      if (this.SearchCriteria.SearchType.includes("time") > 0) {
         if (this.SearchCriteria.Operators === "range") {
           return "date_range"
         } else {
@@ -630,20 +633,18 @@ export default {
     },
     // show user config
     DataShowStyle: function() {
-      let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
       if ("BUG_DATA_SHOW_STYPE" in config) {
-        return ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+        return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
       } else {
-        return ScreenWidth > 768 ? 'table' : 'list'
+        return this.ScreenWidth > 768 ? 'table' : 'list'
       }
     },
     // show user config : 1: show, 0: hide
     isShowModules: function() {
-      let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
       if ("IS_SHOW_MODULE" in config) {
-        return (ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
+        return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
       } else {
         return false
       }
@@ -690,6 +691,7 @@ export default {
   mounted() {
     this.getMemberList()
     this.wd ? this.goSearch() : this.getBugList()
+    this.ScreenWidth = process.server ? 0 : document.body.clientWidth
   },
 
   methods: {

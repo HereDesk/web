@@ -625,10 +625,6 @@ a:link {
   color: #9E9E9E;
 }
 
-.hideText {
-  visibility: hidden;
-}
-
 .ban-click {
   pointer-events: none;
   cursor: default;
@@ -1022,15 +1018,6 @@ textarea::-webkit-input-placeholder {
 
 .display-none {
   display: none;
-}
-
-/* 
-**
-** 关于float
-**
-*/
-.float-right {
-  float: right;
 }
 
 /*

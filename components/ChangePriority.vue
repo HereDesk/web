@@ -11,9 +11,9 @@
         <div class="modal-body text-center">
           <ul class="ul-inline mb-5 mt-3">
             <li class="mr-5 text-150 font-weight-light"
-              v-for="item in priority_list" :key="item.id" v-if="item.pvalue != 'all'" 
-              @click="ModifyPriority(item.pvalue)">
-              {{ item.pvalue }}
+              v-for="item in priority_list" :key="item.id" v-if="item.priority_value != 'all'" 
+              @click="ModifyPriority(item.priority_value)">
+              {{ item.priority_value }}
             </li>
           </ul>
           <p class="my-3 text-gray">备注：选择后，即实现提交，无需进行其它操作</p>

@@ -88,6 +88,7 @@
 
           <!-- 用例数据列表 -->
           <div id="testcase-data-list" class="row mt-3">
+
             <!-- table style -->
             <div id="testcase-table-style" class="col" v-if="DataShowStyle == 'table'">
               <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" 
@@ -136,7 +137,7 @@
                 </el-table-column>
                 <el-table-column label='' width="40">
                   <template slot-scope="scope">
-                    <div class="tableOpreate pt-2" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                    <div class="display-none pt-2" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <button v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
                       </button>
@@ -148,6 +149,7 @@
                 </el-table-column>
               </el-table>
             </div>
+
             <!-- list style -->
             <div id="testcase-list-style" class="col" v-if="DataShowStyle == 'list'">
               <ul class="ul-none ul-none-2">
@@ -158,7 +160,7 @@
                       {{ item.id }}. {{ item.title }}
                     </nuxt-link>
                   </p>
-                  <p class="my-1">
+                  <p class="my-2">
                     <span class="text-90 text-gray data-liststyle-satellite">
                       <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
                       'text-urgency': item.priority == 'P2' }">
@@ -170,7 +172,7 @@
                       <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
                       <span>最后更新: {{ item.update_time | date(5) }}</span>
                     </span>
-                    <span class="float-right display-block">
+                    <span class="float-right display-block action">
                       <span class="mr-2" v-if="item.status === 0 && CaseRules.fall" @click="handleFall(item)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
                       </span>
@@ -277,6 +279,7 @@ export default {
   },
   data() {
     return {
+      ScreenWidth: 0,
       // 产品、版本
       product_list: [],
       selected_product: this.$route.query.product_code || null,
@@ -339,20 +342,18 @@ export default {
     },
     // show user config: about data style:  table and list
     DataShowStyle: function() {
-      let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
       if ("CASE_DATA_SHOW_STYPE" in config) {
-        return ScreenWidth > 768 ? config["CASE_DATA_SHOW_STYPE"] : 'list'
+        return this.ScreenWidth > 768 ? config["CASE_DATA_SHOW_STYPE"] : 'list'
       } else {
-        return ScreenWidth > 768 ? 'table' : 'list'
+        return this.ScreenWidth > 768 ? 'table' : 'list'
       }
     },
     // show user config : 1: show, 0: hide
     isShowModules: function() {
-      let ScreenWidth = process.browser ? document.body.clientWidth : 0
       let config = this.$store.state.UserConfig
       if ("IS_SHOW_MODULE" in config) {
-        return (ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
+        return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
       } else {
         return false
       }
@@ -393,6 +394,7 @@ export default {
 
   mounted() {
     this.wd ? this.goSearch() : this.getCaseList()
+    this.ScreenWidth = process.server ? 0 : document.body.clientWidth
   },
 
   methods: {
