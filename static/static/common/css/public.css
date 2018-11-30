@@ -533,8 +533,18 @@ a:link {
   color: #00BFA5!important;
 }
 
+.text-bg-sucess {
+	color: #FFF !important;
+	background-color: #00BFA5 !important;
+}
+
 .text-secondary {
   color: #B1BEC6 !important;
+}
+
+.text-bg-secondary {
+	color: #FFF;
+	background-color: #B1BEC6;
 }
 
 .text-deadly {
@@ -545,8 +555,18 @@ a:link {
   color: #EF5350 !important;
 }
 
+.text-bg-urgency {
+	color: #FFF;
+	background-color: #EF5350;
+}
+
 .text-warning {
   color: #FEBB46 !important;
+}
+
+.text-bg-warning {
+  color: #FFF !important;
+	background-color: #FEBB46;
 }
 
 .text-red {
@@ -623,6 +643,10 @@ a:link {
   font-weight: 300;
   margin-top:1rem;
   color: #9E9E9E;
+}
+
+.hideText {
+  visibility: hidden;
 }
 
 .ban-click {
@@ -998,11 +1022,6 @@ textarea::-webkit-input-placeholder {
   align-items:Center;
 }
 
-.center-vertical{
-  position: relative;
-  top: 40%;
-  transform: translateY(-50%);
-}
 /* 
 **
 ** 关于display 
@@ -1020,6 +1039,15 @@ textarea::-webkit-input-placeholder {
   display: none;
 }
 
+/* 
+**
+** 关于float
+**
+*/
+.float-right {
+  float: right;
+}
+
 /*
 **
 ** Public: border;
@@ -1030,6 +1058,9 @@ textarea::-webkit-input-placeholder {
   border: 1px solid rgb(204, 204, 204) !important;
 }
 
+.border-radius-5 {
+	border-radius: 5px;
+}
 .border-right {
   border-right:1px solid #eee;
 }

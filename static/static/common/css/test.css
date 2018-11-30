@@ -138,6 +138,10 @@
 
 /* bug_index_about opreate */
 
+.tableOpreate {
+  display: none;
+}
+
 .showBugOpreate {
   position: absolute;
   display: inline;
