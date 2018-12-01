@@ -83,6 +83,11 @@ html,body {
   padding-left:0 !important;
 }
 
+/* el-upload */
+.el-upload-list {
+  padding-left:0 !important
+}
+
 /* el-dropdown */
 .bg-edown {
   display: inline-block;
@@ -581,57 +586,57 @@ a:link {
   color: rgb(112, 112, 112);
 }
 
-.text-007BFF {
+.font-color-007BFF {
   color: rgb(0, 123, 255) !important;
 }
 
-.text-2973B7 {
+.font-color-2973B7 {
   color: rgb(41, 115, 183);
 }
 
-.text-gray-38 {
+.font-color-1296db {
+  color: #1296db;
+}
+
+.font-color-00BFA5 {
+  color: #FF6F00;
+}
+
+.font-color-00BFA5 {
+  color: #00BFA5;
+}
+
+.font-color-d81e06 {
+  color: #d81e06 !important;
+}
+
+.font-color-757575 {
+  color: #757575;
+}
+
+.font-color-383838 {
   color: #383838;
 }
 
-.text-black {
-  columns: #242424 !important;
+.font-size-150 {
+  font-size:1.5rem;
+}
+
+.font-size-93 {
+  font-size: 0.93rem;
+}
+
+.font-size-90 {
+  font-size: 0.90rem !important;
+}
+
+.font-size-85 {
+  font-size: 0.85rem;
 }
 
 .text-lg {
   font-weight: 300;
   font-size: 1.35rem;
-}
-
-.text-200 {
-  font-size:2rem;
-}
-
-.text-150 {
-  font-size:1.5rem;
-}
-
-.text-90 {
-  font-size: 0.90rem;
-}
-
-.text-93 {
-  font-size: 0.93rem;
-}
-
-.text-94 {
-  font-size: 0.94rem;
-}
-
-.text-95 {
-  font-size: 0.95rem;
-}
-
-.text-97 {
-  font-size: 0.97rem;
-}
-
-.text-200 {
-  font-size:2rem;
 }
 
 .text-line {
@@ -1125,4 +1130,23 @@ textarea::-webkit-input-placeholder {
 */
 .viewer-navbar {
   display: none;
+}
+
+/* 
+  file card
+*/
+.file-card {
+  border: 1px dashed rgb(192, 204, 218);
+  border-radius: 6px;
+  box-sizing: border-box;
+  width: 99px;
+  height: 99px;
+  display: flex;
+}
+
+.file-link {
+  display: block;
+  width:100%;
+  height:100%;
+  color:inherit;
 }

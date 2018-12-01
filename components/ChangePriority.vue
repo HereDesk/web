@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body text-center">
           <ul class="ul-inline mb-5 mt-3">
-            <li class="mr-5 text-150 font-weight-light"
+            <li class="mr-5 font-size-150 font-weight-light"
               v-for="item in priority_list" :key="item.id" v-if="item.priority_value != 'all'" 
               @click="ModifyPriority(item.priority_value)">
               {{ item.priority_value }}

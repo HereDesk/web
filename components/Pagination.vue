@@ -28,7 +28,7 @@
           共&nbsp;{{ total }}&nbsp;条
         </span>
         <span v-if="total >= 10 && isModal !== 'Modal'" @click="handleChange('ps',$event)">
-          每页<span class="text-007BFF" style="text-decoration:underline;">{{ pageSize }}</span>条
+          每页<span class="font-color-007BFF" style="text-decoration:underline;">{{ pageSize }}</span>条
         </span>
       </div>
     </div>

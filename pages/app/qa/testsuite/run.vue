@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column label='缺陷' prop='bug_id' width='70'>
             <template slot-scope="scope">
-              <span class="text-2973B7" v-for="item in scope.row.bug_id" :key="item.id">
+              <span class="font-color-2973B7" v-for="item in scope.row.bug_id" :key="item.id">
                 <a :href="'/app/qa/bug/deatils?bug_id=' + item.bug_id" target="_blank">查看</a>
               </span>
             </template>

@@ -45,7 +45,7 @@
       </div>
     </div>
   
-    <div id="page-data-main" class="center-vertical" v-if="isDisplayBody">
+    <div id="page-data-main" class="center-vertical mt-5" v-if="isDisplayBody">
       <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 my-3">
           <div class="container">

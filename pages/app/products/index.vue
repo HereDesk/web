@@ -62,7 +62,7 @@
               <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
                 placeholder='输入（不超20个字）' maxlength='20' required 
                 v-model='ProductData.product_code' >
-              <p class="mx-5 mt-3 text-90 text-gray">备注：提交后无法修改，请慎重填写</p>
+              <p class="mx-5 mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
             </div>
             <span class="ml-5 ms-msg" v-if="errorMsg">错误提示：{{ errorMsg }}</span>
           </div>
