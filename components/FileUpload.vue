@@ -1,9 +1,11 @@
 <template>
   <el-upload
-    style="display:inline;"
-    name="images" 
-    action="/api/support/upload?type=bug" 
-    list-type="picture-card" 
+    class="file-upload"
+    style="display:inline; padding-left:0;"
+    name="files" 
+    action=url
+    list-type="picture-card"
+    :with-credentials=true 
     :limit="3" 
     :on-success="ImageSuccess" 
     :on-remove="handleRemove" 
@@ -18,7 +20,8 @@ export default {
   data () {
     return {
       fileList: [],
-      annex: []
+      annex: [],
+      filetype: 'other'
     }
   },
   watch: {
@@ -27,6 +30,11 @@ export default {
         this.$emit('annex',this.annex)
       },
       deep: true
+    }
+  },
+  computed: {
+    url () {
+      return "/api/support/upload?type=" + this.filetype
     }
   },
   methods: {
@@ -44,8 +52,8 @@ export default {
     },
     FileBeforeAvatarUpload(file) {
       const allow_file_format_list = ["jpg","png","jpeg","gif","bmp",
-      	"txt","log","pdf","docx","docx","xls","xlxs","md","html","json",
-      	"mp4","mov"]
+      	"docx","docx","xls","xlsx","ppt","pptx","pdf","txt","log","md","html","json",
+      	"mp4","mp3","mov"]
       const tmp = file.name.split(".")
       const FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()
       const isLt20M = file.size / 1024 / 1024 < 20
@@ -53,7 +61,7 @@ export default {
       if (!isFile) {
         this.$notify.error({
           title: "上传失败",
-          message: "不允许上传" + FileSuffix + "文件"
+          message: "不允许上传" + FileSuffix + "格式的文件"
         })
       }
       if (!isLt20M) {

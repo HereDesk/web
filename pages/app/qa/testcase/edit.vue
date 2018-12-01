@@ -106,7 +106,7 @@
                       <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : CaseData.annex.length }"></i>
                     </span>
                   </div>
-                  <FileUpload @annex="getAnnex"></FileUpload>
+                  <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
                 </form>
               </div> 
 
@@ -152,6 +152,7 @@ export default {
   data () {
     return {
       title: '编辑测试用例',
+      page_type: 'testcase',
       product_list: [],
       modules_list: [],
       msg: '',

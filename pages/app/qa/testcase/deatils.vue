@@ -70,9 +70,34 @@
             </h6>
             ​<picture class="container-fluid">
               <div class="row">
-                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 images" 
-                  v-for="p in Annex" :key="p.id" v-viewer>
-                  <img class="img-thumbnail" alt="..." :src="p.file_path" >
+                <div class="col-lg-2 col-md-3 col-sm-4 images" v-for="p in Annex" :key="p.id" v-viewer>
+                  <span class="file-card text-center pt-2" 
+                    v-if="['md','log','txt','doc','docx','pdf','json','html'].includes(p.suffix)">
+                    <a class="file-link" :href="p.file_path" target="_blank">
+                      <i class="iconfont size-2"
+                        :class="{
+                          'icon-markdown': p.suffix === 'md',
+                          'icon-icon-rizhi font-color-1296db': p.suffix === 'log',
+                          'icon-txt font-color-00BFA5': p.suffix === 'txt',
+                          'icon-jsonfile': p.suffix === 'json',
+                          'icon-html font-color-00BFA5': p.suffix === 'html',
+                          'icon-PDF font-color-d81e06': p.suffix === 'pdf',
+                          'icon-WORD font-color-007BFF': ['doc','docx'].includes(p.suffix),
+                          'icon-excel font-color-00BFA5': ['xls','xlsx'].includes(p.suffix),
+                          'icon-PPT font-color-d81e06': ['ppt','pptx'].includes(p.suffix)
+                        }"></i>
+                      <p class="font-size-85 font-color-757575">下载查看</p>
+                    </a>
+                  </span>
+                  <span v-else-if="['mp4','mov','mp3'].includes(p.suffix)">
+                    <a class="file-link" :href="p.file_path" target="_blank">
+                      <i class="iconfont size-2 icon-video"></i>
+                      <p class="font-size-85 font-color-757575">下载查看</p>
+                    </a>
+                  </span>
+                  <span v-else>
+                    <img class="img-thumbnail" alt="..." :src="p.file_path">
+                  </span>
                 </div>
               </div>
             </picture>
@@ -145,13 +170,12 @@
           <div class="dropdown-divider"></div>
           <div id="testcase-record" class="mt-3">
             <ol class="pl-1">
-              <li v-for="(item,index) in CaseReviewDetails" :key="item.id" class="my-2">
-                {{ index + 1 }}.  
+              <li v-for="(item,index) in CaseReviewDetails" :key="index" class="my-2">
                 <span class="log-text-time">{{ item.create_time | date }} : </span>
                 <span class="log-text-user">{{ item.realname }}, </span>
                 <span v-if="item.result === 1">评审意见：通过</span>
                 <span v-if="item.result === 2">评审意见：不通过</span>
-                <pre v-if="item.remark" class="log-text-remark text-90">
+                <pre v-if="item.remark" class="log-text-remark font-size-90">
                   {{ item.remark }}
                 </pre>
               </li>

@@ -14,7 +14,7 @@
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pt-5" style="height:20rem;">
               <p>如图所示:</p>
-              <p class="text-93">今日，测试人员，发现了{{ chart1Y[0] }}个bug，
+              <p class="font-size-93">今日，测试人员，发现了{{ chart1Y[0] }}个bug，
                 关闭了{{  chart1Y[1] }}个bug。</p>
               <p v-if="chart1Y[2] > 0">今日，开发人员，解决了{{ chart1Y[2] }}个bug。</p>
             </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pt-5" style="height:20rem;">
               <p>如图所示: <br></p>
-              <p class="text-93">在所有未解决的缺陷中，{{ surplus_bug.name }}类bug，占大多数，共计{{ surplus_bug.value }}个</p>
+              <p class="font-size-93">在所有未解决的缺陷中，{{ surplus_bug.name }}类bug，占大多数，共计{{ surplus_bug.value }}个</p>
             </div>
           </div>
         </div>

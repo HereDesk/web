@@ -82,7 +82,7 @@
                 v-model.trim="wd" @keyup.enter="goSearch()" autofocus />
             </div>
             <div class="col-md-2 col-2 pt-2 text-center">
-              <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
+              <button type="button" class="btn font-size-90" @click="goSearch()">搜索</button>
             </div>
           </div>
 
@@ -161,7 +161,7 @@
                     </nuxt-link>
                   </p>
                   <p class="my-2">
-                    <span class="text-90 text-gray data-liststyle-satellite">
+                    <span class="font-size-90 text-gray data-liststyle-satellite">
                       <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
                       'text-urgency': item.priority == 'P2' }">
                         &nbsp;{{ item.priority }}

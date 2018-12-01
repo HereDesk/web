@@ -95,7 +95,7 @@
               <div class='form-group row'>
                 <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
                 <form id="bug-file" class="col-lg-8 col-md-10 col-sm-12">
-                  <FileUpload @annex="getAnnex"></FileUpload>
+                  <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
                 </form>
               </div> 
 
@@ -147,6 +147,7 @@ export default {
   data() {
     return {
       title: '创建缺陷',
+      page_type: 'bug',
       fileList: [],
       developer_list: [],
       product_list: [],
@@ -174,7 +175,7 @@ export default {
   },
 
   computed: {
-    selected_product_code: function() {
+    selected_product_code () {
       return this.Bug.product_code
     },
     BugTypeList() {
@@ -186,7 +187,7 @@ export default {
     BugSeverityList() {
       return this.$store.state.BugProperty.bug_severity
     },
-    release_list: function() {
+    release_list () {
       let arr = []
       if (this.Bug.product_code) {
         for (let i in this.product_list) {

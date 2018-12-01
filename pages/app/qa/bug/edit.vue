@@ -104,7 +104,7 @@
                       <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : Bug.annex.length }"></i>
                     </span>
                   </div>
-                  <FileUpload @annex="getAnnex"></FileUpload>
+                  <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
                 </form>
               </div>
             </div>
@@ -152,6 +152,7 @@ export default {
   data () {
     return {
       title: '编辑缺陷',
+      page_type: 'bug',
       fileList: [],
       bug_type: [],
       bug_priority: [],

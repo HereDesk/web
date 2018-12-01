@@ -95,7 +95,7 @@
               <el-dropdown id="page-query-quick" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">快捷操作:</span>
-                  <span class="el-dropdown-link bg-edown" :class="{ 'text-2973B7': operate != 'no' }">
+                  <span class="el-dropdown-link bg-edown" :class="{ '2973B7': operate != 'no' }">
                     {{ operate | QuickQperationName }}
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
@@ -159,18 +159,18 @@
                 v-if="SwitchSearchInput === 'other'"
                 placeholder="输入关键字..."
                 v-model="wd" autofocus />
-              <input type="date" class="border-none text-90" 
+              <input type="date" class="border-none font-size-90" 
                 v-if="SwitchSearchInput === 'date'" 
                 v-model="SearchCriteria.start_date">
-              <input type="date" class="border-none text-90" 
+              <input type="date" class="border-none font-size-90" 
                 v-if="SwitchSearchInput === 'date_range'"
                 v-model="SearchCriteria.start_date">
-              <input type="date" class="border-none text-90" 
+              <input type="date" class="border-none font-size-90" 
                 v-if="SwitchSearchInput === 'date_range'" 
                 v-model="SearchCriteria.end_date">
             </div>
             <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
-              <button type="button" class="btn text-90" @click="goSearch()">搜索</button>
+              <button type="button" class="btn font-size-90" @click="goSearch()">搜索</button>
             </div>
           </div>
 
@@ -258,7 +258,7 @@
                     </nuxt-link>
                   </p>
                   <p class="my-2">
-                    <span class="text-90 text-gray data-liststyle-satellite">
+                    <span class="font-size-90 text-gray data-liststyle-satellite">
                       <span class="circle-content" @click="BugPriorityDialog(item)"
                         :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
                         {{ item.priority }}
