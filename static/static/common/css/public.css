@@ -654,6 +654,10 @@ a:link {
   visibility: hidden;
 }
 
+.visibleText {
+  visibility: visible;
+}
+
 .ban-click {
   pointer-events: none;
   cursor: default;

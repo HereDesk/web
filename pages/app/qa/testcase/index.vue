@@ -152,7 +152,7 @@
 
             <!-- list style -->
             <div id="testcase-list-style" class="col" v-if="DataShowStyle == 'list'">
-              <ul class="ul-none ul-none-2">
+              <ul class="pl-0 ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
                   <p>
                     <nuxt-link style="color:#424242" 
@@ -160,8 +160,8 @@
                       {{ item.id }}. {{ item.title }}
                     </nuxt-link>
                   </p>
-                  <p class="my-2">
-                    <span class="font-size-90 text-gray data-liststyle-satellite">
+                  <div id="data-testcase-info" class="my-2">
+                    <div id="data-detailed-information" class="data-liststyle-satellite">
                       <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
                       'text-urgency': item.priority == 'P2' }">
                         &nbsp;{{ item.priority }}
@@ -171,16 +171,16 @@
                       </span>
                       <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
                       <span>最后更新: {{ item.update_time | date(5) }}</span>
-                    </span>
-                    <span class="float-right display-block action">
+                    </div>
+                    <div id="data-testcase-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
                       <span class="mr-2" v-if="item.status === 0 && CaseRules.fall" @click="handleFall(item)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
                       </span>
                       <span v-if="item.status === 0 && CaseRules.edit" @click="handleEdit(item)">
                         <i class="iconfont icon-edit icon-8a8a8a size-1-3" title="编辑"></i>
                       </span>
-                    </span>
-                  </p>
+                    </div>
+                  </div>
                 </li>
               </ul> 
             </div>

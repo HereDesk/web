@@ -1,8 +1,6 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
-    
     <div class="row">
-
       <!-- 模块 -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <ProductModule v-if="isShowModules"
@@ -176,6 +174,7 @@
 
           <!-- table: 数据展示 -->
           <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
+
             <!-- style: table -->
             <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
               <el-table :data='tableData' 
@@ -232,7 +231,7 @@
                 <el-table-column label='' width="50">
                   <template slot-scope="scope">
                     <div class="display-none"
-                      :class="{ 'showBugOpreate' : scope.row.bug_id === HoverBugId, 'hideText': scope.row.status === 'Closed'}">
+                      :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 'hideText': scope.row.status == 'Closed'}">
                       <button @click="skipAssign(scope.row)">
                         <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
                       </button>
@@ -247,18 +246,19 @@
                 </el-table-column>
               </el-table>
             </div>
+
             <!-- style: list -->
             <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
-              <ul class="ul-none ul-none-2">
-                <li v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
-                  <p class="mt-3">
+              <ul class="pl-0 ul-none-2">
+                <li id="data" v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
+                  <p id="data-bugtitle" class="mt-3">
                     <nuxt-link style="color:#424242" 
                       :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
                       {{ item.id }}. {{ item.title }}
                     </nuxt-link>
                   </p>
-                  <p class="my-2">
-                    <span class="font-size-90 text-gray data-liststyle-satellite">
+                  <div id="data-buginfo" class="my-2">
+                    <div id="data-detailed-information" class="display-inline data-liststyle-satellite">
                       <span class="circle-content" @click="BugPriorityDialog(item)"
                         :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
                         {{ item.priority }}
@@ -272,13 +272,15 @@
                       <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
                       <span>@指派: {{ item.assignedTo_user }}</span>
                       <span v-if="item.fixed_user">
-                        @解决: {{ item.fixed_user }}
-                        <p class="display-inline" :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
-                        &nbsp;# {{ item.solution_name }}</p>
+                        @解决: {{ item.fixed_user }}&nbsp;|&nbsp;
+                        <p class="display-inline" 
+                          :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
+                        {{ item.solution_name }}</p>
                       </span> 
                       <span>最后更新: {{ item.last_time | date(5) }}</span>
-                    </span>
-                    <span class="float-right display-block action" :class="{'display-none': item.status === 'Closed'}">
+                    </div>
+                    <div id="data-action" class="float-right display-inline" style="margin-top:-1rem;"
+                      :class="{'display-none': item.status == 'Closed', 'action': item.status != 'Closed' }">
                       <span @click="skipAssign(item)">
                         <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
                       </span>
@@ -288,8 +290,8 @@
                       <span @click="BugClosedDialog(item)" v-if="uGroup">
                         <i class="iconfont icon-close-opera icon-8a8a8a size-1-5 mx-2"></i>
                       </span>
-                    </span>
-                  </p>
+                    </div>
+                  </div>
                 </li>
               </ul> 
             </div>
