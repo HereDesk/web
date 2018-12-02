@@ -78,7 +78,9 @@
               </el-dropdown>
               <el-dropdown id="page-query-order" class="mr-1 my-1">
                 <span>
-                  <span class="el-dropdown-desc">排序:</span>
+                  <span class="el-dropdown-desc" @click="SortData($event)">
+                    按<span style="text-decoration: underline">{{sort_text}}</span>序:
+                  </span>
                   <span class="el-dropdown-link bg-edown">
                     {{ selected_order | filterOrder }}
                     <i class="el-icon-arrow-down el-icon--right"></i>
@@ -474,6 +476,7 @@ export default {
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
       // 排序
+      sort_text: '倒',
       order_list: data.order_list,
       selected_order: this.$route.query.order || "create_time",
       // 更多操作:快捷操作
@@ -567,6 +570,8 @@ export default {
     QueryBuilder: function() {
       let Builder = {}
       let tmp_release
+      let sort_symbol
+      this.sort_text.includes('倒') ? sort_symbol = '-' : sort_symbol = ''
       this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
       Builder["pageNumber"] = this.pageNumber
       Builder["pageSize"] = this.pageSize
@@ -574,7 +579,7 @@ export default {
       Builder["release"] = tmp_release
       Builder["status"] = this.selected_status
       Builder["priority"] = this.selected_priority
-      Builder["order"] = this.selected_order
+      Builder["order"] = sort_symbol + this.selected_order
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
       if (this.operate != "no") {
@@ -781,6 +786,10 @@ export default {
             this.Msg = res.data["msg"]
           }
         })
+    },
+    // 排序
+    SortData() {
+      this.sort_text.includes('倒') ? this.sort_text = '正' : this.sort_text = '倒'
     },
     // Bug: 搜索
     clickSearch() {
