@@ -241,9 +241,7 @@ export default {
       if (this.current_product_code) {
         this.$router.replace({
           path: "/app/dashboard",
-          query: {
-            product_code: this.current_product_code
-          }
+          query: { product_code: this.current_product_code},
         })
         this.getBugDashData()
         this.getBugStatusData()

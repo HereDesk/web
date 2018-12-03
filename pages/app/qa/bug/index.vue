@@ -21,7 +21,7 @@
         <div class="container-fluid">
           <div id="bug-nav-manage" class="row justify-content-between">
             <div id="bug-query-1">
-              <el-dropdown id="page-query-product" class="mr-1 my-1">
+              <el-dropdown id="bug-query-product" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">产品:</span>
                   <span class="el-dropdown-link bg-edown">
@@ -34,7 +34,7 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-version" class="mr-1 my-1">
+              <el-dropdown id="bug-query-version" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">版本:</span>
                   <span class="el-dropdown-link bg-edown">
@@ -48,7 +48,7 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-bugstatus" class="mr-1 my-1">
+              <el-dropdown id="bug-query-status" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">状态:</span>
                   <span class="el-dropdown-link bg-edown">
@@ -62,7 +62,7 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-priority" class="mr-1 my-1">
+              <el-dropdown id="bug-query-priority" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">优先级:</span>
                   <span class="el-dropdown-link bg-edown">
@@ -76,10 +76,10 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-order" class="mr-1 my-1">
+              <el-dropdown id="bug-query-order" class="bug-sort mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc" @click="SortData($event)">
-                    按<span style="text-decoration: underline">{{sort_text}}</span>序:
+                    按<span class="sort_text">{{sort_text}}</span>序:
                   </span>
                   <span class="el-dropdown-link bg-edown">
                     {{ selected_order.replace('-','') | filterOrder }}
@@ -92,7 +92,7 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-quick" class="mr-1 my-1">
+              <el-dropdown id="bug-query-quick" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">快捷操作:</span>
                   <span class="el-dropdown-link bg-edown" :class="{ '2973B7': operate != 'no' }">
@@ -205,7 +205,7 @@
                 <el-table-column label='优先级' prop="priority" align="center" width='95' sortable>
                   <template slot-scope="scope">
                     <div @click="BugPriorityDialog(scope.row)">
-                      <span class="circle-content"
+                      <span class="circle-content font-color-757575"
                         :class="{'text-deadly': scope.row.priority == 'P1', 'text-urgency': scope.row.priority == 'P2'}">
                         {{ scope.row.priority }}
                       </span>
@@ -361,7 +361,8 @@
         </div>
       </div>
     </div>
-
+    
+    <!-- Bug处理操作: 导出 -->
     <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -671,7 +672,8 @@ export default {
     QueryBuilder: function(val, oldVal) {
       if (JSON.stringify(val) != JSON.stringify(oldVal)) {
         this.tableData = []
-        this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
+        this.$route.query.product_code ? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder}) 
+          : this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
         this.wd ? this.goSearch() : this.getBugList()
       }
     },
@@ -783,6 +785,7 @@ export default {
             this.tableData = res.data["data"]
             this.total = res.data["total"]
           } else {
+            this.total = 0
             this.Msg = res.data["msg"]
           }
         })

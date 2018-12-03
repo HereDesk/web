@@ -373,7 +373,8 @@ export default {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch() : this.getCaseList()
-      this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
+      this.$route.query.product_code ? this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
+      	: this.$router.replace({path: "/app/qa/testcase",query: this.QueryBuilder})
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {

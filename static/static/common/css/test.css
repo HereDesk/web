@@ -172,6 +172,13 @@
   z-index: 9999;
 }
 
+.bug-sort .sort_text {
+  text-decoration: underline;
+}
+
+.bug-sort:hover .sort_text {
+  color: #17a2b8;
+}
 /* 
 **
 ** 缺陷详情：bug_details 
@@ -256,16 +263,16 @@
   position: relative;
 }
 
-.annex:hover > img {
-  filter:alpha(Opacity=30);
-  -moz-opacity:0.3;
-  opacity: 0.3;
-}
-
 .annex > img {
   height: 148px;
   width:148px;
   border-radius: 5px;
+}
+
+.annex:hover > img {
+  filter:alpha(Opacity=30);
+  -moz-opacity:0.3;
+  opacity: 0.3;
 }
 
 .annex_delete {
@@ -275,14 +282,15 @@
   right: 90px;
 }
 
-.h-annex {
-  margin-top:-150px;
-}
-
 .annex_delete > img {
   height: 28px;
   width:28px;
 }
+
+.h-annex {
+  margin-top:-150px;
+}
+
 .annex:hover .annex_delete {
   visibility: visible;
 }

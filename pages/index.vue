@@ -8,13 +8,17 @@
         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 offset-lg-3 offset-md-3 offset-xl-4">
           <h2 class="p-user-login-title">欢迎登录</h2>
           <div class="input-group input-group-lg" id="input-email">
-            <input type="email" id="user_name" name="email" v-model="LoginData.username" class="form-control" maxlength="30" minlength="6" placeholder="电子邮件" />
+            <input type="email" id="user_name" name="email" class="form-control" 
+              maxlength="30" minlength="6" placeholder="电子邮件"
+              v-model="LoginData.username" />
           </div>
           <div class="input-group input-group-lg passwd" id="input-passwd">
-            <input type="password" id="user_passwd" name="user_passwd" class="form-control" maxlength="30" minlength="6" placeholder="输入密码" v-model="LoginData.password" @keyup.enter="goLogin" />
+            <input type="password" id="user_passwd" name="user_passwd" class="form-control" 
+              maxlength="30" minlength="6" placeholder="输入密码" 
+              v-model="LoginData.password" @keyup.enter="goLogin" />
           </div>
           <div class="login-btn">
-            <button id="user_login_btn"  class="btn btn-login btn-lg btn-block" type="button" @click="goLogin">登录</button>
+            <button id="user_login_btn" class="btn btn-login btn-lg btn-block" type="button" @click="goLogin">登录</button>
           </div>
         </div>
       </div>
