@@ -82,7 +82,7 @@
                     按<span style="text-decoration: underline">{{sort_text}}</span>序:
                   </span>
                   <span class="el-dropdown-link bg-edown">
-                    {{ selected_order | filterOrder }}
+                    {{ selected_order.replace('-','') | filterOrder }}
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                 </span>
@@ -579,7 +579,7 @@ export default {
       Builder["release"] = tmp_release
       Builder["status"] = this.selected_status
       Builder["priority"] = this.selected_priority
-      Builder["order"] = sort_symbol + this.selected_order
+      Builder["order"] = sort_symbol + String(this.selected_order).replace('-','')
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
       if (this.operate != "no") {
