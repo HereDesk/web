@@ -154,7 +154,7 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
+            <div class="col-lg-8 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
               <input type="text" id="bugSearchInput" class="border-none" 
                 v-if="SwitchSearchInput === 'other'"
                 placeholder="输入关键字..."
@@ -234,6 +234,11 @@
                   <template slot-scope="scope">
                     <div class="display-none"
                       :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 'hideText': scope.row.status == 'Closed'}">
+                      <button v-if="scope.row.creator_id == myUID">
+                        <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
+                          <i class="iconfont icon-edit icon-8a8a8a size-1-3"></i>
+                        </nuxt-link>
+                      </button>
                       <button @click="skipAssign(scope.row)">
                         <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
                       </button>
@@ -546,14 +551,6 @@ export default {
       let PagesRules = this.$store.state.PageData
       return rules.RuleManges(group,PagesRules)
     },
-    developer_fixed_percentage: function() {
-      if (this.MyTodayData.group == "developer") {
-        let data = this.MyTodayData.data
-        let num = ((data.total - data.residue) / data.total) * 100
-        return num.toFixed(1)
-      }
-      return 0
-    },
     // 版本列表
     release_list: function() {
       let arr = [{ version: "全部" }]
@@ -601,7 +598,7 @@ export default {
       }
       return Builder
     },
-    // 搜索
+    // 搜索条件
     OperatorsList: function() {
       let search_type = this.SearchCriteria.SearchType
       let OperatorsList1 = [
@@ -623,6 +620,7 @@ export default {
         return OperatorsList1
       }
     },
+    // 搜索框
     SwitchSearchInput: function() {
       if (this.SearchCriteria.SearchType.includes("time") > 0) {
         if (this.SearchCriteria.Operators === "range") {
@@ -638,6 +636,10 @@ export default {
     uGroup: function() {
       let userInfo = this.$store.state.userInfo
       return userInfo.group === "test" ? userInfo.group : null
+    },
+    myUID: function() {
+    	let userInfo = this.$store.state.userInfo
+    	return userInfo.user_id ? userInfo.user_id : null
     },
     // show user config
     DataShowStyle: function() {

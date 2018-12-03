@@ -68,10 +68,9 @@
                   发现步骤
                   <span class="text-red">*</span>
                 </label>
-                <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12" 
-                  :autosize="{ minRows: 5}" maxlength="1000" placeholder="请输入发现步骤"
-                  v-model.trim='Bug.steps'>
-                </el-input>
+                <quill-editor class="col-lg-8 col-md-10 col-sm-12 quill-editor-define" 
+                	v-model.trim="Bug.steps">
+                </quill-editor>
               </div>
               <div class='form-group row'>
                 <label for='bug-reality-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">

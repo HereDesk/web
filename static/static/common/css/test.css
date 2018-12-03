@@ -153,6 +153,11 @@
   border: none;
   display: inline-block;
   z-index: 9999;
+  padding: 0 0.2rem;
+}
+
+.showBugOpreate button:last-child {
+  padding-right: 0;
 }
 
 .showCaseOpreate {
