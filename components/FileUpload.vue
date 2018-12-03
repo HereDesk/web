@@ -3,7 +3,7 @@
     class="file-upload"
     style="display:inline; padding-left:0;"
     name="files" 
-    action=url
+    :action="url"
     list-type="picture-card"
     :with-credentials=true 
     :limit="3" 
