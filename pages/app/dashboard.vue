@@ -1,5 +1,5 @@
 <template>
-  <div id="bashboard" class='container' style="height:100%;">
+  <div id="bashboard" class='container'  style="height:100vh;">
   
     <div id="page-head-head" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
@@ -45,9 +45,9 @@
       </div>
     </div>
   
-    <div id="page-data-main" class="center-vertical mt-5" v-if="isDisplayBody">
-      <div class="row">
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 my-3">
+    <div id="page-data-main" v-if="isDisplayBody" style="margin-top:15%;">
+      <div id="dashboard-chart" class="row align-items-center">
+        <div class="col-lg-4 col-md-4 col-sm-12 my-3">
           <div class="container">
             <div class="row pt-3">
               <div class="col-6 border-right">
@@ -85,32 +85,31 @@
             </div>
           </div>
         </div>
-  
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 px-0 text-center my-3" style="height:18rem;">
+        <div class="col-lg-4 col-md-4 col-sm-12 px-0 text-center my-3" style="height:18rem;">
           <div id="CharBarBugStatus" style="width: 100%;height:100%;"></div>
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 px-0 text-center my-3" style="height:18rem;">
+        <div class="col-lg-4 col-md-4 col-sm-12 px-0 text-center my-3" style="height:18rem;">
           <div id="ChartLineBugWeek" style="width: 100%;height:100%;"></div>
         </div>
       </div>
   
-      <div id="dashboard-nav" class="row my-5">
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
+      <div id="dashboard-nav" class="row align-items-center mt-5">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
           <nuxt-link to="/app/qa/bug" class="n-link">
             <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
           </nuxt-link>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
           <nuxt-link to="/app/qa/testcase" class="n-link">
             <h5><i class="iconfont icon-T size-2 pr-3"></i>测试用例</h5>
           </nuxt-link>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF7919">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF7919">
           <nuxt-link to="/app/products" class="n-link">
             <h5><i class="iconfont icon-jingxuanchanpinku size-2 pr-3"></i>产品管理</h5>
           </nuxt-link>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FFA726">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FFA726">
           <nuxt-link to="/app/user-management/user" class="n-link">
             <h5><i class="iconfont icon-user-manage size-2 pr-3"></i>用户管理</h5>
           </nuxt-link>
@@ -118,7 +117,7 @@
       </div>
     </div>
   
-    <div class="text-center" v-else>
+    <div id="page-msg" class="text-center" v-else>
       <img :src="img_src" style="height:72px;width:72px;" v-show="img_src">
       <p class="mt-5">{{ product_msg }}</p>
     </div>
