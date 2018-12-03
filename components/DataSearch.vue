@@ -32,7 +32,6 @@ export default {
       product_code: '',
       release: 'all',
       product_msg: '',
-      // loading
       loading: true
     }
   },
@@ -59,7 +58,6 @@ export default {
       axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
           this.product_list = res.data['data']
-          // loading
           this.loading = false
           // url query params
           if (this.$route.query.product_code) {

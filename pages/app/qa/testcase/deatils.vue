@@ -186,7 +186,7 @@
     </div>
 
     <div id="page-loading" class="col text-center" v-if='isShowLoading'>
-      <loading></loading>
+      <PageLoading></PageLoading>
     </div>
 
     <div id="ModalCaseReview" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -219,7 +219,7 @@
 <script>
 import axios from 'axios'
 
-import loading from '~/components/loading'
+import PageLoading from '~/components/PageLoading'
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
 
@@ -235,7 +235,7 @@ export default {
 
   layout: 'head',
   components: {
-    loading
+    PageLoading
   },
 
   data () {

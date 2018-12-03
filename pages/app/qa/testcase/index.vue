@@ -192,7 +192,7 @@
           <!-- page loading -->
           <div id="page-loading" class="row" v-if='total === null'>
             <div class="col text-center">
-              <loading></loading> 
+              <PageLoading></PageLoading> 
             </div>
           </div>
 
@@ -257,7 +257,7 @@
 <script>
 import axios from 'axios'
 
-import loading from "~/components/loading"
+import PageLoading from "~/components/PageLoading"
 import Pagination from "~/components/Pagination"
 import ProductModule from "~/components/ProductModule"
 
@@ -273,7 +273,7 @@ export default {
   },
   layout: "head",
   components: {
-    loading,
+    PageLoading,
     Pagination,
     ProductModule
   },

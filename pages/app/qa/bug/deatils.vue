@@ -228,7 +228,7 @@
     </div>
 
     <div id="page-loading" class="col text-center" v-if="isShowLoading">
-      <loading></loading>
+      <PageLoading></PageLoading>
     </div>
 
     <!-- Bug处理操作：指派 -->
@@ -359,7 +359,7 @@ import axios from "axios";
 import Viewer from "v-viewer";
 import "viewerjs/dist/viewer.min.css";
 
-import loading from "~/components/loading";
+import PageLoading from "~/components/PageLoading";
 import BugAssign from "~/components/BugAssign";
 import BugResolve from "~/components/BugResolve";
 import ChangePriority from "~/components/ChangePriority";
@@ -394,7 +394,7 @@ export default {
     BugAssign,
     BugResolve,
     ChangePriority,
-    loading
+    PageLoading
   },
 
   data() {

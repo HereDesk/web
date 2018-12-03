@@ -310,7 +310,7 @@
           <!-- loading -->
           <div id="page-loading" class="row">
             <div class="col text-center" v-if='total === null'>
-              <loading></loading>
+              <PageLoading></PageLoading>
             </div>
           </div>
 
@@ -435,7 +435,7 @@
 <script>
 import axios from "axios"
 
-import loading from "~/components/loading"
+import PageLoading from "~/components/PageLoading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import ChangePriority from "~/components/ChangePriority"
@@ -455,7 +455,7 @@ export default {
   },
   layout: "head",
   components: {
-    loading,
+    PageLoading,
     BugAssign,
     BugResolve,
     ChangePriority,

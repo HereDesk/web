@@ -20,7 +20,7 @@
 
 <script>
 import axios from "axios"
-import loading from "~/components/loading"
+import PageLoading from "~/components/PageLoading"
 export default {
   head() {
     return {

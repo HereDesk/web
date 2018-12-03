@@ -70,7 +70,7 @@
 
 <script>
 import axios from "axios"
-import loading from "~/components/loading"
+import PageLoading from "~/components/PageLoading"
 import rules from "~/assets/js/rules.js"
 
 export default {
