@@ -167,6 +167,10 @@
                 <label>解决方案：</label>
                 {{ BugDetails.solution_name }}
               </li>
+              <li>
+                <label>最后操作时间：</label>
+                {{ BugDetails.last_time | date }}
+              </li>
             </ul>
           </div>
           <div id="bug-details-of-person-date">
@@ -174,7 +178,7 @@
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
-            <ul class="mt-3 pl-3 satellite_info">
+            <ul class="mt-3 mb-5 pl-3 satellite_info">
               <li>
                 <label>创建者：</label>
                 {{ BugDetails.creator_user }}
