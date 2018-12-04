@@ -119,9 +119,7 @@
                   {{ item.create_time | date }} :
                   <span class="log-text-user">{{ item.username }}</span>
                   {{ item.desc }}
-                  <pre class="log-text-remark font-size-90" v-if="item.remark">
-                    {{ item.remark }}
-                  </pre>
+                  <pre class="log-text-remark font-size-90" v-if="item.remark" v-html="item.remark"></pre>
                 </li>
               </ol>
             </div>
@@ -302,22 +300,15 @@
 
     <!-- Bug处理操作：备注 -->
     <div id="modal-notes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">添加备注</h5>
           </div>
           <div class="modal-body">
-            <div class="form-group row col-md-auto mx-3">
-              <label for="remark">备注</label>
-              <textarea
-                type="text"
-                class="textarea-control form-border-bottom"
-                rows="7"
-                placeholder="请输入备注,2000字以内..."
-                v-model="NotesData.remark"
-              ></textarea>
-            </div>
+              <quill-editor class="mx-3"
+                v-model.trim="NotesData.remark">
+              </quill-editor>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
