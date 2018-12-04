@@ -6,6 +6,18 @@ import 'quill/dist/quill.bubble.css'
 import Vue from 'vue'
 import quillEditor from 'vue-quill-editor'
 
+// import hljs from 'highlight.js'
+// import 'highlight.js/styles/github.css'
+
+// hljs.highlightCode =  function () {
+// 	let blocks = document.querySelectorAll('pre code');
+// 	[].forEach.call(blocks, hljs.highlightBlock);
+// };
+
+// hljs.configure({
+//   languages: ['javascript', 'ruby', 'python']
+// });
+
 Vue.use(quillEditor,{
 	modules: {
     	toolbar: [

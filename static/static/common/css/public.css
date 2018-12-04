@@ -72,6 +72,12 @@ html,body {
 .ql-editor li,p {
   line-height: 1.8rem;
 }
+
+.ql-snow .ql-editor pre.ql-syntax {
+  background-color: rgb(246, 248, 250) !important;
+  color: #212121 !important;
+}
+
 /*
 **
 ** 以下是关于element-ui部分的自定义 css代码

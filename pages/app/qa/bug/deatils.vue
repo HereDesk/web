@@ -47,7 +47,7 @@
             <h6 class="details-minor-title">
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
             </h6>
-            <pre class="details-block">{{ BugDetails.steps }}</pre>
+            <pre class="details-block" v-html="BugDetails.steps"></pre>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
             <h6 class="details-minor-title">

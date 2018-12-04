@@ -45,7 +45,7 @@
       </div>
     </div>
   
-    <div id="page-data-main" v-if="isDisplayBody" style="margin-top:11.5%;">
+    <div id="page-data-main" v-if="isDisplayBody" style="top:15%;">
       <div id="dashboard-chart" class="row align-items-center">
         <div class="col-lg-4 col-md-4 col-sm-12 my-3">
           <div class="container">
