@@ -131,7 +131,7 @@
 
           <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
             :class="{ showSearch: isShowSearch }">
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5 col-12 pr-0 text-center">
+            <div class="col-lg-2 col-md-4 col-sm-5 col-12 pr-0 text-center">
               <el-dropdown id="page-query-product" class="mx-3 my-1" trigger="click">
                 <span class="el-dropdown-link bg-edown bg-white text-center">
                   {{ SearchCriteria.SearchType  | filterSearchType }}
@@ -154,23 +154,23 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="col-lg-8 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
-              <input type="text" id="bugSearchInput" class="border-none" 
-                v-if="SwitchSearchInput === 'other'"
-                placeholder="输入关键字..."
-                v-model="wd" autofocus />
+            <div class="col-lg-9 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
               <input type="date" class="border-none font-size-90" 
-                v-if="SwitchSearchInput === 'date'" 
+                v-if="SwitchSearchInput == 'date'" 
                 v-model="SearchCriteria.start_date">
               <input type="date" class="border-none font-size-90" 
-                v-if="SwitchSearchInput === 'date_range'"
+                v-else-if="SwitchSearchInput == 'date_range'"
                 v-model="SearchCriteria.start_date">
               <input type="date" class="border-none font-size-90" 
-                v-if="SwitchSearchInput === 'date_range'" 
+                v-else-if="SwitchSearchInput == 'date_range'" 
                 v-model="SearchCriteria.end_date">
+              <input type="text" id="bugSearchInput" class="border-none" 
+              	v-else
+              	placeholder="输入关键字..."
+              	v-model="wd" autofocus />
             </div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
-              <button type="button" class="btn font-size-90" @click="goSearch()">搜索</button>
+            <div class="col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
+              <button type="button" class="btn btn-outline-dark font-size-90" @click="goSearch()">搜索</button>
             </div>
           </div>
 
@@ -349,7 +349,7 @@
 
     <!-- Bug处理操作：修改优先级 -->
     <div id="bug-list-priority">
-      <ChangePriority :bug_id="selectedBugId" @refreshList="getBugList()"></ChangePriority>
+      <BugChange :bug_id="selectedBugId" :data_type="'priority'" @refreshList="getBugList()"></BugChange>
     </div>
 
     <!-- Bug处理操作：关闭 -->
@@ -438,7 +438,7 @@ import axios from "axios"
 import PageLoading from "~/components/PageLoading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
-import ChangePriority from "~/components/ChangePriority"
+import BugChange from "~/components/BugChange"
 import Pagination from "~/components/Pagination"
 import ProductModule from "~/components/ProductModule"
 
@@ -458,7 +458,7 @@ export default {
     PageLoading,
     BugAssign,
     BugResolve,
-    ChangePriority,
+    BugChange,
     Pagination,
     ProductModule
   },
@@ -502,7 +502,7 @@ export default {
             ? String(this.$route.query.wd).split('#')[1]
             : null,
       },
-      wd: this.$route.query.wd || null,
+      wd: this.$route.query.wd || '',
       isShowSearch: this.$route.query.wd ? true : false,
       // 表格数据
       total: null,
@@ -622,8 +622,8 @@ export default {
     },
     // 搜索框
     SwitchSearchInput: function() {
-      if (this.SearchCriteria.SearchType.includes("time") > 0) {
-        if (this.SearchCriteria.Operators === "range") {
+      if (this.SearchCriteria.SearchType.includes("time")) {
+        if (this.SearchCriteria.Operators == "range") {
           return "date_range"
         } else {
           return "date"
@@ -697,6 +697,9 @@ export default {
 
   created() {
     this.getProductRelease()
+    if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
+    	this.$store.dispatch("getBugProperty")
+    }
   },
 
   mounted() {

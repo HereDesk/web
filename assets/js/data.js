@@ -18,13 +18,20 @@ export default {
         { "status_value": "Fixed", "status_name": "已解决" },
         { "status_value": "Closed", "status_name": "已关闭" }
     ],
+    severity_list: [
+        { "severity_name":"致命","severity_value":"Fatal" },
+        { "severity_name":"严重","severity_value":"Critical" },
+        { "severity_name":"一般","severity_value":"Noraml" },
+        { "severity_name":"轻微","severity_value":"Minor" },
+        { "severity_name":"建议","severity_value":"Suggestion" }
+    ],
     priority_list: [
-        { "priority_name":"全部","priority_value":"all" },
-        { "priority_name":"P1","priority_value":"P1" },
-        { "priority_name":"P2","priority_value":"P2" },
-        { "priority_name":"P3","priority_value":"P3" },
-        { "priority_name":"P4","priority_value":"P4" },
-        { "priority_name":"P5","priority_value":"P5" }
+    	{ "priority_name":"全部","priority_value":"all" },
+    	{ "priority_name":"P1","priority_value":"P1" },
+    	{ "priority_name":"P2","priority_value":"P2" },
+    	{ "priority_name":"P3","priority_value":"P3" },
+    	{ "priority_name":"P4","priority_value":"P4" },
+    	{ "priority_name":"P5","priority_value":"P5" }
     ],
     bug_quick_operation_list: [
         { "quick_value": "no", "quick_name": "无" },

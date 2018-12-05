@@ -34,14 +34,47 @@ html,body {
   }
 }
 
+/* 
+** markdown 
+*/
+.shadow {
+  /* box-shadow: 0 0px 4px rgba(0,0,0,0.157), 0 0px 4px rgba(0,0,0,0.227) !important; */
+  box-shadow: none !important;
+} 
+
+.v-note-op {
+  border-top-right-radius: 5px !important;
+  border-top-left-radius: 5px !important;
+  border: 1px solid #dcdfe6 !important;
+}
+
+.v-note-panel{
+  border-bottom-right-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+  border: 1px solid #dcdfe6 !important;
+  border-top: none !important;
+}
 /*
 **
-** 关于编辑器
+** 关于quill编辑器
 **
 */
+
 .quill-editor-define {
-  padding-bottom: 3rem;
+  margin-bottom: 3rem;
   border-radius: 25px !important;
+}
+
+@media (max-width: 1199.98px) and (min-width: 575.98px) {
+  .quill-editor-define {
+    margin-bottom: 4.5rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .quill-editor-define {
+    margin-bottom: 7rem !important;
+  }
 }
 
 .ql-toolbar {

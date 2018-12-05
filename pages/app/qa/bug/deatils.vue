@@ -151,14 +151,16 @@
 									'text-warning': BugDetails.status === 'Hang-up'}"
                 >{{ BugDetails.status_name }}</span>
               </li>
-              <li id="bug-desc-severity">
+              <li id="bug-desc-severity" @click="BugPriorityDialog('severity')">
                 <label>严重程度：</label>
-                <span>{{ BugDetails.severity_name }}</span>
+                <span class="font-color-2973B7">
+                  {{ BugDetails.severity_name }} <i class="iconfont icon-edit ml-3" v-if="BtnRules.edit"></i>
+                </span>
               </li>
-              <li id="bug-desc-priority" @click="BugPriorityDialog()">
+              <li id="bug-desc-priority" @click="BugPriorityDialog('priority')">
                 <label>优先级：</label>
-                <span class="font-color-2973B7" style="text-decoration:underline;">
-                  {{ BugDetails.priority_name }}
+                <span class="font-color-2973B7">
+                  {{ BugDetails.priority_name }} <i class="iconfont icon-edit ml-3" v-if="BtnRules.edit"></i>
                 </span>
               </li>
               <li>
@@ -166,7 +168,7 @@
                 {{ BugDetails.solution_name }}
               </li>
               <li>
-                <label>最后操作时间：</label>
+                <label>最后操作：</label>
                 {{ BugDetails.last_time | date }}
               </li>
             </ul>
@@ -255,9 +257,9 @@
       ></BugResolve>
     </div>
 
-    <!-- Bug处理操作：修改优先级 -->
-    <div id="bug-list-priority">
-      <ChangePriority :bug_id="currentBugId" @refreshList="getBugDetails()"></ChangePriority>
+    <!-- Bug处理操作：修改优先级/严重程度 -->
+    <div id="bug-list-change">
+      <BugChange :data_type="components_value" :bug_id="currentBugId" @refreshList="getBugDetails()"></BugChange>
     </div>
 
     <!-- Bug处理操作：重新打开缺陷 -->
@@ -351,27 +353,14 @@
 import Vue from "vue";
 import axios from "axios";
 
-import Viewer from "v-viewer";
-import "viewerjs/dist/viewer.min.css";
-
 import PageLoading from "~/components/PageLoading";
 import BugAssign from "~/components/BugAssign";
 import BugResolve from "~/components/BugResolve";
-import ChangePriority from "~/components/ChangePriority";
+import BugChange from "~/components/BugChange";
 
 import util from "~/assets/js/util.js";
 import rules from "~/assets/js/rules.js";
 
-Vue.use(Viewer, {
-  defaultOptions: {
-    toolbar: {
-      // zoomIn:3,
-      zoomOut: 3,
-      flipVertical: 0,
-      rotateLeft: 4
-    }
-  }
-});
 
 export default {
   head() {
@@ -388,12 +377,13 @@ export default {
   components: {
     BugAssign,
     BugResolve,
-    ChangePriority,
+    BugChange,
     PageLoading
   },
 
   data() {
     return {
+      components_value: '',
       currentBugId: this.$route.query.bug_id || null,
       current_product_code: "",
       BugDetails: {},
@@ -452,10 +442,7 @@ export default {
 
   computed: {
     member_list: function() {
-      if (this.$store.state.ProductMemberList) {
-        return this.$store.state.ProductMemberList["data"];
-      }
-      return;
+      return this.$store.state.ProductMemberList ? this.$store.state.ProductMemberList["data"] : '';
     },
     BtnRules: function() {
       return rules.BugRules(this.BugDetails, this.$store.state.userInfo);
@@ -472,7 +459,10 @@ export default {
   },
 
   created() {
-    this.getBugDetails();
+    this.getBugDetails()
+    if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
+    	this.$store.dispatch("getBugProperty")
+    }
   },
 
   methods: {
@@ -482,16 +472,18 @@ export default {
           .get("/api/qa/bug/details?bug_id=" + this.currentBugId)
           .then(res => {
             if (res.data["status"] === 20000) {
-              this.BugDetails = res.data["data"];
-              this.Annex = res.data["annex"];
-              this.product_code = res.data["data"]["product_code"];
+              this.BugDetails = res.data["data"]
+              this.Annex = res.data["annex"]
+              this.product_code = res.data["data"]["product_code"]
+              // get history
+              this.BugHistory()
             } else {
               this.$notify.error({
                 title: "错误",
                 message: res.data["msg"]
-              });
+              })
             }
-          });
+          })
       }
     },
     getMemberList() {
@@ -501,7 +493,7 @@ export default {
           if (res.data["status"] === 20000) {
             this.$store.commit("setProductMemberList", res.data);
           }
-        });
+        })
     },
     // 编辑缺陷
     EditBug() {
@@ -551,8 +543,11 @@ export default {
     },
 
     // 操作：bug修改优先级
-    BugPriorityDialog() {
-      $("#modal-modify-priority").modal("show");
+    BugPriorityDialog(data) {
+      this.components_value = data
+      if (this.components_value && this.BtnRules.edit) {
+        $("#modal-modify-priority").modal("show");
+      }
     },
 
     // bug closed
