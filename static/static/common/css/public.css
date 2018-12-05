@@ -55,7 +55,7 @@ html,body {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 0.95rem !important;
-  min-height: 8rem;
+  min-height: 10rem;
 }
 
 .ql-editor.ql-blank::before {
@@ -78,6 +78,7 @@ html,body {
   color: rgb(215, 58, 73) !important;
 }
 pre.ql-syntax {
+  line-height: 1.2rem !important;
   color: rgb(215, 58, 73) !important;
 }
 

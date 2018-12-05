@@ -31,21 +31,25 @@
                 <span class="text-red">*</span>
               </label>
               <el-select class='col-md-2 col-sm-3 col-6' placeholder="选择指派人" v-model="Bug.assignedTo_id">
+                <el-option :disabled="true">选择指派人</el-option>
                 <el-option 
                   v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
                 </el-option>
               </el-select>
               <el-select class='col-md-2 col-sm-3 col-6' placeholder="选择优先级" v-model="Bug.priority">
+                <el-option :disabled="true">请选择优先级</el-option>
                 <el-option 
                   v-for="item in bug_priority" :key="item.id" :label="item.name" :value="item.key">
                 </el-option>
               </el-select>
               <el-select class='col-md-2 col-sm-3 col-6' placeholder="选择严重程度" v-model="Bug.severity">
+                <el-option :disabled="true">选择严重程度</el-option>
                 <el-option 
                   v-for="item in bug_severity" :key="item.id" :label="item.name" :value="item.key">
                 </el-option>
               </el-select>
               <el-select class='col-md-2 col-sm-3 col-6' placeholder="选择缺陷类型" v-model="Bug.bug_type" >
+                <el-option :disabled="true">选择缺陷类型</el-option>
                 <el-option 
                   v-for="item in bug_type" :key="item.id" :label="item.name" :value="item.key">
                 </el-option>
@@ -91,7 +95,7 @@
               <div class='form-group row'>
                 <label for='bug-remark' class="col-lg-2 col-md-2 col-sm-12 bug-label">备注</label>
                 <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12" 
-                  :autosize="{ minRows: 3}" maxlength="1000" placeholder="请输入备注..." 
+                  :autosize="{ minRows: 3}" maxlength="10000" placeholder="请输入备注..." 
                   v-model.trim='Bug.remark'></el-input>
               </div>
               <div class='form-group row'>
@@ -285,7 +289,7 @@ export default {
       })
     },
     editBug (event) {
-      if (this.Bug.release.length === 0) {
+      if (!this.Bug.release) {
         this.$notify.error({title: '提示',message: '请选择版本号'})
         return
       }
@@ -293,15 +297,15 @@ export default {
         this.$notify.error({title: '提示',message: '标题的有效长度为6到100之间'})
         return 
       }
-      if (this.Bug.steps.length === 0) {
+      if (!this.Bug.steps) {
         this.$notify.error({title: '提示',message: '操作步骤不能为空哦'})
         return 
       }
-      if (this.Bug.steps.length < 10 | this.Bug.steps.length > 1000) {
-        this.$notify.error({title: '提示',message: '操作步骤有效长度为10到1000'})
+      if (this.Bug.steps.length < 10 | this.Bug.steps.length > 100000) {
+        this.$notify.error({title: '提示',message: '操作步骤有效长度为10到100000'})
         return 
       }
-      if (this.Bug.reality_result.length === 0) {
+      if (!this.Bug.reality_result) {
         this.$notify.error({title: '提示',message: '实际结果不能为空哦'})
         return 
       }
@@ -313,8 +317,8 @@ export default {
         this.$notify.error({title: '提示',message: '预期结果, 长度需小于500'})
         return 
       }
-      if (this.Bug.remark.length > 1000) {
-        this.$notify.error({title: '提示',message: '备注输入太长了,长度需要小于1000'})
+      if (this.Bug.remark.length > 10000) {
+        this.$notify.error({title: '提示',message: '备注输入太长了,长度需要小于10000'})
         return 
       }
       axios({

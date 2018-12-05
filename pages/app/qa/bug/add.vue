@@ -9,15 +9,16 @@
                 产品与模块
                 <span class="text-red">*</span>
               </label>
-              <el-select class='col-md-2 col-sm-4 col-6' placeholder="请选择产品" v-model="Bug.product_code" >
+              <el-select class='col-md-2 col-sm-4 col-6' placeholder="选择产品" v-model="Bug.product_code" >
                 <el-option 
                   v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
                 </el-option>
               </el-select>
-              <el-select class='col-md-2 col-sm-4 col-6' placeholder="请选择版本" v-model="Bug.release">
+              <el-select class='col-md-2 col-sm-4 col-6' placeholder="选择版本" v-model="Bug.release">
                 <el-option 
                   v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
                 </el-option>
+                <!-- <el-option>增加新版本</el-option> -->
               </el-select>
               <el-cascader class="col-md-2 col-sm-4 col-6 px-3" 
                 :options="modules_list" 
@@ -32,21 +33,25 @@
                 缺陷属性<span class="text-red">*</span>
               </label>
               <el-select v-model="Bug.assignedTo_id" placeholder="选择指派人" class='col-md-2 col-sm-3 col-6'>
+                <el-option :disabled="true">请选择指派人</el-option>
                 <el-option 
                   v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
                 </el-option>
               </el-select>
               <el-select v-model="Bug.priority" placeholder="选择优先级" class='col-md-2 col-sm-3 col-6'>
+                <el-option :disabled="true">请选择优先级</el-option>
                 <el-option 
                   v-for="item in BugPriorityList" :key="item.id" :label="item.name" :value="item.key">
                 </el-option>
               </el-select>
               <el-select v-model="Bug.severity" placeholder="选择严重程度" class='col-md-2 col-sm-3 col-6'>
+                <el-option :disabled="true">请选择严重程度</el-option>
                 <el-option 
                   v-for="item in BugSeverityList" :key="item.id" :label="item.name" :value="item.key">
                 </el-option>
               </el-select>
-              <el-select v-model="Bug.bug_type" placeholder="选择缺陷类型" class='col-md-2 col-sm-3 col-6'>
+              <el-select v-model="Bug.bug_type" placeholder="缺陷类型" class='col-md-2 col-sm-3 col-6'>
+                <el-option :disabled="true">请选择缺陷类型</el-option>
                 <el-option 
                   v-for="item in BugTypeList" :key="item.id" :label="item.name" :value="item.key">
                 </el-option>
@@ -100,7 +105,7 @@
               <div class='form-group row' v-if="isRemarkDisable">
                 <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
                 <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12"
-                  maxlength="1000" placeholder="请输入备注..."
+                  maxlength="10000" placeholder="请输入备注..."
                   :autosize="{ minRows: 4}" 
                   v-model.trim='Bug.remark'>
                 </el-input>
@@ -160,7 +165,7 @@ export default {
         module_id: [],
         severity: "Normal",
         priority: "P3",
-        bug_type: "other",
+        bug_type: "",
         assignedTo_id: "",
         title: "",
         steps: "",
@@ -273,7 +278,7 @@ export default {
       }
     },
     createBug(event) {
-      if (this.Bug.release.length === 0) {
+      if (!this.Bug.release) {
         this.$notify.error({
           title: "提示",
           message: "请选择版本号"
@@ -287,21 +292,21 @@ export default {
         })
         return
       }
-      if (this.Bug.steps.length === 0) {
+      if (!this.Bug.steps) {
         this.$notify.error({
           title: "提示",
           message: "操作步骤不能为空哦"
         })
         return
       }
-      if ((this.Bug.steps.length < 10) | (this.Bug.steps.length > 1000)) {
+      if ((this.Bug.steps.length < 10) | (this.Bug.steps.length > 100000)) {
         this.$notify.error({
           title: "提示",
-          message: "操作步骤，有效长度需为10到1000"
+          message: "操作步骤，有效长度需为10到100000"
         })
         return
       }
-      if (this.Bug.reality_result.length === 0) {
+      if (!this.Bug.reality_result) {
         this.$notify.error({
           title: "提示",
           message: "实际结果不能为空哦"
@@ -322,10 +327,10 @@ export default {
         })
         return
       }
-      if (this.Bug.remark.length > 1000) {
+      if (this.Bug.remark.length > 10000) {
         this.$notify.error({
           title: "提示",
-          message: "备注输入太长了,长度需要小于1000"
+          message: "备注输入太长了,长度需要小于10000"
         })
         return
       }
