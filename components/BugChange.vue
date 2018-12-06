@@ -64,7 +64,7 @@ export default {
     	axios({
     		method: "post",
     		url: "/api/qa/bug/edit",
-    		data: JSON.stringify(this.ModifyData)
+    		data: JSON.stringify(ModifyData)
     	}).then(res => {
     		if (res.data["status"] === 20000) {
     			this.$notify.success({title: "成功",message: res.data["msg"]})
@@ -82,7 +82,7 @@ export default {
       axios({
         method: "post",
         url: "/api/qa/bug/edit",
-        data: JSON.stringify(this.ModifyData)
+        data: JSON.stringify(ModifyData)
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.$notify.success({title: "成功",message: res.data["msg"]})

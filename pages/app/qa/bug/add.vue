@@ -44,13 +44,13 @@
             <el-select id="bug-priority" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.priority" placeholder="选择优先级">
               <el-option value="" :disabled="true">请选择优先级</el-option>
               <el-option 
-                v-for="item in BugPriorityList" :key="item.id" :label="item.name" :value="item.key">
+                v-for="item in BugProperty.bug_priority" :key="item.id" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
             <el-select id="bug-severity" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.severity" placeholder="选择严重程度">
               <el-option value="" :disabled="true">请选择严重程度</el-option>
               <el-option 
-                v-for="item in BugSeverityList" :key="item.id" :label="item.name" :value="item.key">
+                v-for="item in BugProperty.bug_severity" :key="item.id" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
           </div>
@@ -60,16 +60,16 @@
             <label for='bug-source-type' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷来源/类型
             </label>
-            <el-select v-model="Bug.source" placeholder="缺陷来源" class='col-lg-2 col-md-2 col-sm-3 col-6'>
+            <el-select v-model="Bug.bug_source" placeholder="缺陷来源" class='col-lg-2 col-md-2 col-sm-3 col-6'>
               <el-option value="" :disabled="true">请选择缺陷来源</el-option>
               <el-option 
-                v-for="(item,index) in BugSourceList" :key="index" :label="item.name" :value="item.key">
+                v-for="(item,index) in BugProperty.bug_source" :key="index" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
             <el-select v-model="Bug.bug_type" placeholder="缺陷类型" class='col-lg-2 col-md-2 col-sm-3 col-6'>
               <el-option value="" :disabled="true">请选择缺陷类型</el-option>
               <el-option 
-                v-for="item in BugTypeList" :key="item.id" :label="item.name" :value="item.key">
+                v-for="item in BugProperty.bug_type" :key="item.id" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
           </div>
@@ -189,7 +189,7 @@ export default {
         module_id: [],
         severity: "Normal",
         priority: "P3",
-        source: "",
+        bug_source: "tester",
         bug_type: "Function",
         assignedTo_id: "",
         title: "",
@@ -206,17 +206,8 @@ export default {
     selected_product_code () {
       return this.Bug.product_code
     },
-    BugSourceList() {
-    	return this.$store.state.BugProperty.bug_source
-    },
-    BugTypeList() {
-      return this.$store.state.BugProperty.bug_type
-    },
-    BugPriorityList() {
-      return this.$store.state.BugProperty.bug_priority
-    },
-    BugSeverityList() {
-      return this.$store.state.BugProperty.bug_severity
+    BugProperty() {
+    	return this.$store.state.BugProperty
     },
     release_list () {
       let arr = []

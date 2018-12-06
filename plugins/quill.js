@@ -15,7 +15,7 @@ import quillEditor from 'vue-quill-editor'
 Vue.use(quillEditor,{
 	modules: {
 		toolbar: [
-		  // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'header': 2 }],
 			['bold', 'italic','underline'],
 			[{ 'color': [] }, { 'background': [] }],
 			[{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -23,8 +23,6 @@ Vue.use(quillEditor,{
 			['link','image'],
 			[ 'code','code-block','blockquote','formula'],
 			[{ 'script': 'sub' }, { 'script': 'super' }],
-			// ['clean'],
-			// [{ 'direction': 'rtl' }], 
 		]
 	},
 	theme: 'snow',

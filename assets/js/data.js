@@ -49,6 +49,7 @@ export default {
         { "search_value": "title", "search_name": "缺陷标题" },
         { "search_value": "severity", "search_name": "严重程度" },
         { "search_value": "bug_type", "search_name": "缺陷类型" },
+        { "search_value": "bug_source", "search_name": "缺陷来源" },
         { "search_value": "creator_user", "search_name": "创建者" },
         { "search_value": "closed_user", "search_name": "关闭者" },
         { "search_value": "fixed_user", "search_name": "解决者" },

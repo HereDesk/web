@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     solution_list: function () {
-      return this.$store.state.BugSolutionList
+      return this.$store.state.BugProperty.bug_solution
     },
     person_list: function () {
       if (this.$store.state.ProductMemberList) {
@@ -72,11 +72,6 @@ export default {
       } else {
         return "解决缺陷";
       }
-    }
-  },
-  mounted() {
-    if (!this.$store.state.BugSolutionList) {
-      this.$store.dispatch("getBugSolution")
     }
   },
   methods: {

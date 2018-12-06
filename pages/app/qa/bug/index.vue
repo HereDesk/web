@@ -131,8 +131,8 @@
 
           <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
             :class="{ showSearch: isShowSearch }">
-            <div class="col-lg-2 col-md-4 col-sm-5 col-12 pr-0 text-center">
-              <el-dropdown id="page-query-product" class="mx-3 my-1" trigger="click">
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-6 pr-0 text-center">
+              <el-dropdown id="page-query-product" class="my-1" trigger="click">
                 <span class="el-dropdown-link bg-edown bg-white text-center">
                   {{ SearchCriteria.SearchType  | filterSearchType }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
@@ -143,7 +143,7 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-version" class="mx-3 my-1" trigger="click">
+              <el-dropdown id="page-query-version" class="mx-2 my-1" trigger="click">
                 <span class="el-dropdown-link bg-edown bg-white text-center" style="font-weight:500">
                   {{ SearchCriteria.Operators | filterOperators }}
                 </span>
@@ -154,7 +154,7 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="col-lg-9 col-md-6 col-sm-6 col-12" style="display: flex;justify-content:flex-start;">
+            <div class="col-xl-10 col-lg-9 col-md-9 col-sm-6 col-6" style="display: flex;justify-content:flex-start;">
               <input type="date" class="border-none font-size-90" 
                 v-if="SwitchSearchInput == 'date'" 
                 v-model="SearchCriteria.start_date">
@@ -166,11 +166,8 @@
                 v-model="SearchCriteria.end_date">
               <input type="text" id="bugSearchInput" class="border-none" 
               	v-else
-              	placeholder="输入关键字..."
+              	placeholder="输入关键字进行搜索..."
               	v-model="wd" autofocus />
-            </div>
-            <div class="col-lg-1 col-md-2 col-sm-1 col-12 pt-2">
-              <button type="button" class="btn btn-outline-dark font-size-90" @click="goSearch()">搜索</button>
             </div>
           </div>
 

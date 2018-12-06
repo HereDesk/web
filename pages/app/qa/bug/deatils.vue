@@ -2,10 +2,10 @@
   <div id="page">
     <div id="page-details" class="container mt-5" v-if="JSON.stringify(BugDetails) !== '{}'">
       <div id="page-details-head" class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12">
+        <div id="page-deatails-title" class="col-12">
           <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
         </div>
-        <div id="page-details-1" class="col-xl-12 col-lg-12 col-md-12 my-4">
+        <div id="page-details-opera-btn" class="col-12 my-4">
           <button type="btn" class="btn btn-gray mr-3" @click="BugDelete()" v-if="BtnRules.del">删除</button>
           <button type="btn" class="btn btn-gray" v-if="BtnRules.edit" @click="EditBug()">编辑</button>
           <div class="btn-group btn-group-toggle mx-3">
@@ -42,28 +42,29 @@
       </div>
 
       <div id="page-details-body" class="row mt-5">
-        <div id="page-details-body-main" class="col-xl-8 col-lg-8 col-md-8">
+        
+        <div id="page-details-body-main" class="col-md-8 col-sm-12">
           <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">
             <h6 class="details-minor-title">
-              <span class="standline"></span>&nbsp;&nbsp;操作步骤
+              <span class="standline"></span>&nbsp&nbsp操作步骤
             </h6>
             <pre class="details-block" v-html="BugDetails.steps"></pre>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
             <h6 class="details-minor-title">
-              <span class="redline"></span>&nbsp;&nbsp;实际结果
+              <span class="redline"></span>&nbsp&nbsp实际结果
             </h6>
             <pre class="details-block">{{ BugDetails.reality_result }}</pre>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
             <h6 class="details-minor-title">
-              <span class="successline"></span>&nbsp;&nbsp;预期结果
+              <span class="successline"></span>&nbsp&nbsp预期结果
             </h6>
             <pre class="details-block">{{ BugDetails.expected_result }}</pre>
           </div>
           <div id="bug-remark" class="height-7 mb-5" v-if="BugDetails.remark">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp;&nbsp;附加信息
+              <span class="grayline"></span>&nbsp&nbsp附加信息
             </h6>
             <div class="dropdown-divider"></div>
             <pre class="details-block">{{ BugDetails.remark }}</pre>
@@ -72,7 +73,7 @@
           <!-- 图片附件 -->
           <div id="bug-annex" class="height-7 mb-5" v-if="Annex.length > 0">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp;&nbsp;附件
+              <span class="grayline"></span>&nbsp&nbsp附件
             </h6>​
             <picture class="container-fluid">
               <div class="row">
@@ -96,7 +97,7 @@
                     </a>
                   </span>
                   <span v-else-if="['mp4','mov','mp3'].includes(p.suffix)">
-                    <a class="display-block" style="width:100%;height:100%;color:inherit;" :href="p.url" target="_blank">
+                    <a class="display-block" style="width:100%height:100%color:inherit" :href="p.url" target="_blank">
                       <i class="iconfont size-2 icon-video"></i>
                       <p class="font-size-85 font-color-757575">下载查看</p>
                     </a>
@@ -110,7 +111,7 @@
           </div>
           <div id="bug-details-history" class="height-7 mb-5 font-color-383838 font-size-93">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp;&nbsp;活动记录
+              <span class="grayline"></span>&nbsp&nbsp活动记录
             </h6>
             <div class="dropdown-divider"></div>
             <div id="bug-history-record" class="mt-3">
@@ -126,10 +127,10 @@
           </div>
         </div>
 
-        <div id="page-details-body-minor" class="col-xl-4 col-lg-4 col-md-4">
+        <div id="page-details-body-minor" class="col-md-4 col-sm-12">
           <div id="bug-details-of-basic">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp;&nbsp;详情
+              <span class="grayline"></span>&nbsp&nbsp详情
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
@@ -163,51 +164,59 @@
                   {{ BugDetails.priority_name }} <i class="iconfont icon-edit ml-3" v-if="BtnRules.edit"></i>
                 </span>
               </li>
-              <li>
+              <li id="bug-desc-solution">
                 <label>解决方案：</label>
                 {{ BugDetails.solution_name }}
               </li>
-              <li>
-                <label>最后操作：</label>
-                {{ BugDetails.last_time | date }}
+              <li id="bug-desc-type">
+              	<label>缺陷类型：</label>
+              	{{ BugDetails.bug_type_name }}问题
+              </li>
+              <li id="bug-desc-source">
+              	<label>缺陷来源：</label>
+              	{{ BugDetails.bug_source_name }}
               </li>
             </ul>
           </div>
           <div id="bug-details-of-person-date">
             <h6 class="details-minor-title pt-3">
-              <span class="grayline"></span>&nbsp;&nbsp;人员/日期
+              <span class="grayline"></span>&nbsp&nbsp人员/日期
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 mb-5 pl-3 satellite_info">
-              <li>
+              <li id="bug-last-time">
+              	<label>最后操作：</label>
+              	{{ BugDetails.last_time | date }}
+              </li>
+              <li id="bug-creator">
                 <label>创建者：</label>
                 {{ BugDetails.creator_user }}
               </li>
-              <li>
+              <li id="bug-create-time">
                 <label>创建日期：</label>
                 {{ BugDetails.create_time | date }}
               </li>
-              <li>
+              <li id="bug-assignedTo_user">
                 <label>指派给：</label>
                 {{ BugDetails.assignedTo_user }}
               </li>
-              <li>
+              <li id="bug-assignedTo_time">
                 <label>指派日期：</label>
                 {{ BugDetails.assignedTo_time | date }}
               </li>
-              <li>
+              <li id="bug-fixed_user">
                 <label>解决人：</label>
                 {{ BugDetails.fixed_user }}
               </li>
-              <li>
+              <li id="bug-fixed_time">
                 <label>解决日期：</label>
                 {{ BugDetails.fixed_time | date }}
               </li>
-              <li>
+              <li id="bug-closed_user">
                 <label>关闭：</label>
                 {{ BugDetails.closed_user }}
               </li>
-              <li>
+              <li id="bug-closed_time">
                 <label>关闭日期：</label>
                 {{ BugDetails.closed_time | date }}
               </li>
@@ -215,7 +224,7 @@
           </div>
           <div id="bug-details-of-testcase" class="pb-5" v-if="BugDetails.case_id">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp;&nbsp;关联的测试用例
+              <span class="grayline"></span>&nbsp&nbsp关联的测试用例
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
@@ -350,26 +359,26 @@
 </template>
 
 <script>
-import Vue from "vue";
-import axios from "axios";
+import Vue from "vue"
+import axios from "axios"
 
-import PageLoading from "~/components/PageLoading";
-import BugAssign from "~/components/BugAssign";
-import BugResolve from "~/components/BugResolve";
-import BugChange from "~/components/BugChange";
+import PageLoading from "~/components/PageLoading"
+import BugAssign from "~/components/BugAssign"
+import BugResolve from "~/components/BugResolve"
+import BugChange from "~/components/BugChange"
 
-import util from "~/assets/js/util.js";
-import rules from "~/assets/js/rules.js";
+import util from "~/assets/js/util.js"
+import rules from "~/assets/js/rules.js"
 
 
 export default {
   head() {
     return {
       title: "HDesk - 缺陷详情"
-    };
+    }
   },
   validate({ query }) {
-    return /\w{2,6}/.test(query.bug_id);
+    return /\w{2,6}/.test(query.bug_id)
   },
 
   layout: "head",
@@ -421,7 +430,7 @@ export default {
       bug_idOpenBy: "",
       scheme: "",
       pageSource: "page_bug_details"
-    };
+    }
   },
 
   filters: {
@@ -430,31 +439,28 @@ export default {
   },
 
   watch: {
-    BugStatus: function(val, oldVal) {
-      this.BugHistory();
-    },
     product_code: function(val, oldVal) {
       if (this.product_code) {
-        this.getMemberList();
+        this.getMemberList()
       }
     }
   },
 
   computed: {
     member_list: function() {
-      return this.$store.state.ProductMemberList ? this.$store.state.ProductMemberList["data"] : '';
+      return this.$store.state.ProductMemberList ? this.$store.state.ProductMemberList["data"] : ''
     },
     BtnRules: function() {
-      return rules.BugRules(this.BugDetails, this.$store.state.userInfo);
+      return rules.BugRules(this.BugDetails, this.$store.state.userInfo)
     },
     BID: function() {
-      return this.BugDetails["id"] ? this.BugDetails["id"] + "、" : "";
+      return this.BugDetails["id"] ? this.BugDetails["id"] + "、" : ""
     },
     BugStatus: function() {
-      return this.BugDetails ? this.BugDetails["status"] : false;
+      return this.BugDetails ? this.BugDetails["status"] : false
     },
     isShowLoading: function() {
-      return JSON.stringify(this.BugDetails) === "{}" ? "1" : null;
+      return JSON.stringify(this.BugDetails) === "{}" ? "1" : null
     }
   },
 
@@ -491,87 +497,87 @@ export default {
         .get("/api/pm/member/list?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.$store.commit("setProductMemberList", res.data);
+            this.$store.commit("setProductMemberList", res.data)
           }
         })
     },
     // 编辑缺陷
     EditBug() {
-      this.$router.push("/app/qa/bug/edit?bug_id=" + this.currentBugId);
+      this.$router.push("/app/qa/bug/edit?bug_id=" + this.currentBugId)
     },
 
     // Bug immediate Recovered
     immediateRecovered() {
-      this.ResolveData.bug_id = this.currentBugId;
-      this.ResolveData.assignedTo = this.BugDetails.creator_id;
+      this.ResolveData.bug_id = this.currentBugId
+      this.ResolveData.assignedTo = this.BugDetails.creator_id
       axios({
         method: "post",
         url: "/api/qa/bug/resolve",
         data: JSON.stringify(this.ResolveData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$router.go(-1);
-          this.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.$router.go(-1)
+          this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
-          this.$notify.error({ title: "错误", message: res.data["msg"] });
+          this.$notify.error({ title: "错误", message: res.data["msg"] })
         }
-      });
+      })
     },
 
     SkipRecovered(scheme) {
-      this.scheme = scheme;
+      this.scheme = scheme
       // this.current_product_code = this.product_code
-      $("#componentsResolve").modal("show");
+      $("#componentsResolve").modal("show")
     },
 
     // 分配
     SkipAssign() {
       // this.current_product_code = this.product_code
-      $("#componentsAssign").modal("show");
+      $("#componentsAssign").modal("show")
     },
 
     // bug delete
     BugDelete() {
       axios.get("/api/qa/bug/delete?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
-          this.$router.go(-1);
-          this.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.$router.go(-1)
+          this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
-          this.$notify.error({ title: "失败", message: res.data["msg"] });
+          this.$notify.error({ title: "失败", message: res.data["msg"] })
         }
-      });
+      })
     },
 
     // 操作：bug修改优先级
     BugPriorityDialog(data) {
       this.components_value = data
       if (this.components_value && this.BtnRules.edit) {
-        $("#modal-modify-priority").modal("show");
+        $("#modal-modify-priority").modal("show")
       }
     },
 
     // bug closed
     BugClosed() {
-      this.ClosedData.bug_id = this.currentBugId;
+      this.ClosedData.bug_id = this.currentBugId
       axios({
         method: "post",
         url: "/api/qa/bug/close",
         data: JSON.stringify(this.ClosedData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.success({ title: "成功", message: res.data["msg"] });
-          this.$router.go(-1);
+          this.$notify.success({ title: "成功", message: res.data["msg"] })
+          this.$router.go(-1)
         } else {
-          this.$notify.error({ title: "错误", message: res.data["msg"] });
+          this.$notify.error({ title: "错误", message: res.data["msg"] })
         }
-      });
+      })
     },
 
     // bug reopen
     ReOpen() {
-      this.ReOpenData.bug_id = this.currentBugId;
+      this.ReOpenData.bug_id = this.currentBugId
       if (this.ReOpenData.assignedTo === "") {
-        return this.$notify.error({ title: "错误", message: "请选择指派人" });
+        return this.$notify.error({ title: "错误", message: "请选择指派人" })
       }
       if (
         (this.ReOpenData.remark.length > 1000) |
@@ -580,7 +586,7 @@ export default {
         return this.$notify.error({
           title: "错误",
           message: "重新打开缺陷，原因不能为空哦"
-        });
+        })
       }
       axios({
         method: "post",
@@ -588,75 +594,75 @@ export default {
         data: JSON.stringify(this.ReOpenData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$router.go(-1);
-          $("#modal-reopen").modal("hide");
-          this.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.$router.go(-1)
+          $("#modal-reopen").modal("hide")
+          this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
-          this.$notify.error({ title: "错误", message: res.data["msg"] });
+          this.$notify.error({ title: "错误", message: res.data["msg"] })
         }
-      });
+      })
     },
 
     // bug hand up
     HandUp() {
-      this.HangUpData.bug_id = this.currentBugId;
+      this.HangUpData.bug_id = this.currentBugId
       axios({
         method: "post",
         url: "/api/qa/bug/hangup",
         data: JSON.stringify(this.HangUpData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$router.go(-1);
-          $("#modal-hangup").modal("hide");
+          this.$router.go(-1)
+          $("#modal-hangup").modal("hide")
           this.$notify.success({
             title: "成功",
             message: res.data["msg"]
-          });
+          })
         } else {
           this.$notify.error({
             title: "错误",
             message: res.data["msg"]
-          });
+          })
         }
-      });
+      })
     },
 
     // the bug history record
     BugHistory() {
       axios.get("/api/qa/bug/history?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
-          this.history = res.data["data"];
+          this.history = res.data["data"]
         }
-      });
+      })
     },
 
     // add notes or remark
     AddNotes() {
-      this.NotesData.bug_id = this.currentBugId;
+      this.NotesData.bug_id = this.currentBugId
       axios({
         method: "post",
         url: "/api/qa/bug/add_notes",
         data: JSON.stringify(this.NotesData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.BugHistory();
-          $("#modal-notes").modal("hide");
+          this.BugHistory()
+          $("#modal-notes").modal("hide")
           this.$notify.success({
             title: "成功",
             message: res.data["msg"]
-          });
+          })
         } else {
           this.$notify.error({
             title: "错误",
             message: res.data["msg"]
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>
-@import "~/static/static/common/css/test.css";
+  @import "~/static/static/common/css/test.css"
 </style>

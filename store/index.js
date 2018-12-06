@@ -14,7 +14,6 @@ const createStore = () => {
       ProductInfo: [],
       isProductInfo: false,
       BugProperty: {},
-      BugSolutionList: false,
       ProductMemberList: false
     },
     mutations: {
@@ -45,11 +44,6 @@ const createStore = () => {
         if (data) {
           state.ProductMemberList = data
         }
-      },
-      setBugSolution(state, data) {
-        if (data) {
-          state.BugSolutionList = data
-        }
       }
     },
     actions: {
@@ -68,10 +62,6 @@ const createStore = () => {
       async getBugProperty({ commit }) {
         const { data } = await axios.get('/api/qa/bug/bug_property')
         commit('setBugPropery', data)
-      },
-      async getBugSolution({ commit }) {
-        const { data } = await axios.get('/api/qa/bug/solution')
-        commit('setBugSolution', data['data'])
       }
     }
   })

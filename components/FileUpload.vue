@@ -20,8 +20,7 @@ export default {
   data () {
     return {
       fileList: [],
-      annex: [],
-      filetype: 'other'
+      annex: []
     }
   },
   watch: {
@@ -34,7 +33,16 @@ export default {
   },
   computed: {
     url () {
-      return "/api/support/upload?type=" + this.filetype
+      let url = this.$route.fullPath
+      let filetype
+      if (url.includes('bug')) {
+        filetype = 'bug'
+      } else if (url.includes('testcase')) {
+        filetype = 'testcase'
+      } else {
+        filetype = 'other'
+      }
+      return "/api/support/upload?type=" + filetype
     }
   },
   methods: {
