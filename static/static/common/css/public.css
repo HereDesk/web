@@ -35,25 +35,69 @@ html,body {
 }
 
 /* 
-** markdown 
+** mavon markdown 
 */
 .shadow {
-  /* box-shadow: 0 0px 4px rgba(0,0,0,0.157), 0 0px 4px rgba(0,0,0,0.227) !important; */
   box-shadow: none !important;
 } 
 
+.v-note-wrapper {
+    min-height: 7rem !important;
+ }
+ 
 .v-note-op {
-  border-top-right-radius: 5px !important;
-  border-top-left-radius: 5px !important;
+  border: 1px solid #dcdfe6 !important;
+  border-bottom: none !important;
+}
+
+.v-note-panel {
   border: 1px solid #dcdfe6 !important;
 }
 
-.v-note-panel{
-  border-bottom-right-radius: 5px !important;
-  border-bottom-left-radius: 5px !important;
-  border: 1px solid #dcdfe6 !important;
-  border-top: none !important;
+.v-note-wrapper:hover .v-note-panel {
+  border-color: #c0c4cc !important;
 }
+
+.v-radius > .v-note-panel {
+  border-radius: 5px !important;
+}
+
+.v-toolbars .v-note-top {
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+}
+
+.v-toolbars .content-input-wrapper {
+  min-height: 9rem !important;
+}
+
+.v-toolbars .v-note-panel {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.content-input-wrapper {
+  padding: 0.8rem !important;
+}
+
+.auto-textarea-input::placeholder {
+  font-weight: 300;
+  font-size: 1rem !important;
+  color: #c0c4cc !important;
+}
+
+.auto-textarea-input::-webkit-input-placeholder {
+  font-weight: 300;
+  font-size: 1rem !important;
+  color: #c0c4cc !important;
+}
+
+.auto-textarea-input::-ms-input-placeholder {
+  font-weight: 300;
+  font-size: 1rem !important;
+  color: #c0c4cc !important;
+}
+
 /*
 **
 ** 关于quill编辑器
@@ -77,43 +121,76 @@ html,body {
   }
 }
 
+.quill-md {
+  margin:0;
+}
+
+.quill-md p {
+  line-height: 1.8rem;
+  font-size:0.95rem;
+}
+
+.quill-md ol,ul{
+  padding-left: 1rem;
+  line-height: 1.8rem;
+  font-size:0.95rem;
+}
+
+/* alter quilljs */
+.ql-bubble {
+  border-radius: 5px;
+  min-height: 6rem;
+}
+
+.ql-snow .ql-editor {
+  min-height: 7rem;
+  tab-size: 2 !important;
+}
+
+.ql-snow {
+  border-top: none;
+  border-left: 1px solid rgb(220, 223, 230) !important;
+  border-right: 1px solid rgb(220, 223, 230) !important;
+  border-bottom: 1px solid rgb(220, 223, 230) !important;
+}
+
+.ql-bubble {
+  border:1px solid rgb(220, 223, 230) !important;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.ql-bubble:hover {
+  border-color: rgb(64, 158, 255) !important;
+}
+
 .ql-toolbar {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border:1px solid rgb(220, 223, 230) !important;
 }
 
-.ql-container {
-  border:1px solid rgb(220, 223, 230) !important;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  font-size: 0.95rem !important;
-  min-height: 10rem;
-}
-
 .ql-editor.ql-blank::before {
-  font-size:0.9rem;
+  font-size:0.95rem;
   color: #c0c4cc !important;
-  font-style: italic;
-  font-weight: normal;
-  font-weight: 300;
 }
 
-.ql-editor ol, .ql-editor ul {
+.ql-editor ol,ul {
   padding-left: 0rem !important;
 }
+
 .ql-editor li,p {
   line-height: 1.8rem;
+  font-size:0.95rem;
 }
 
-.ql-snow .ql-editor pre.ql-syntax {
-  background-color: rgb(246, 248, 250) !important;
+.ql-syntax {
+  margin:1rem 0;
+  background-color: rgb(250, 250, 250) !important;
   color: rgb(215, 58, 73) !important;
-}
-pre.ql-syntax {
   line-height: 1.2rem !important;
-  color: rgb(215, 58, 73) !important;
-  margin-bottom: 0 !important;
+  padding: 1rem;
+  border-radius: 5px;
 }
 
 /*
