@@ -131,7 +131,7 @@
 
           <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
             :class="{ showSearch: isShowSearch }">
-            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-6 pr-0 text-center">
+            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-6 px-0 text-center">
               <el-dropdown id="page-query-product" class="my-1" trigger="click">
                 <span class="el-dropdown-link bg-edown bg-white text-center">
                   {{ SearchCriteria.SearchType  | filterSearchType }}
@@ -143,7 +143,7 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown id="page-query-version" class="mx-2 my-1" trigger="click">
+              <el-dropdown id="page-query-version" class="my-1" trigger="click">
                 <span class="el-dropdown-link bg-edown bg-white text-center" style="font-weight:500">
                   {{ SearchCriteria.Operators | filterOperators }}
                 </span>
