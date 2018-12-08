@@ -72,9 +72,11 @@
                 <label for='CaseSteps' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                   操作步骤<span class="text-red">*</span>
                 </label>
-                <quill-editor class="col-lg-9 col-md-10 col-sm-12 quill-editor-define" 
-                  v-model.trim="CaseData.steps">
-                </quill-editor>
+                <div class="col-lg-9 col-md-10 col-sm-12">
+                  <mavon-editor class="v-toolbars" placeholder="请输入操作步骤 ~" :toolbars="mavon_md_base_toolbars"
+                    :subfield="false" v-model.trim="CaseData.steps">
+                  </mavon-editor>
+                </div>
               </div>
               <div class='form-group row mt-3'>
                 <label for='CaseInput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
@@ -141,7 +143,10 @@
 
 <script>
 import axios from 'axios'
+
 import fileutil from "~/assets/js/file.js"
+import data from '~/assets/js/data.js'
+
 import BaseNav from '~/components/BaseNav'
 import FileUpload from '~/components/FileUpload'
 
@@ -162,6 +167,7 @@ export default {
       page_type: 'testcase',
       title: '增加测试用例',
       last_url: '',
+      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       product_list: [],
       modules_list: [],
       msg: '',

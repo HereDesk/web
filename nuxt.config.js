@@ -56,7 +56,7 @@ module.exports = {
   css: [
     '~static/static/bootstrap/css/bootstrap.min.css',
     '~static/static/animate/animate.css',
-    '~static/static/common/css/public.css',
+    '~static/static/common/css/public.css'
   ],
 
   /*
@@ -67,7 +67,7 @@ module.exports = {
       ssr: true
     },
     {
-      src: '~plugins/quill.js',
+      src: '~plugins/markdown.js',
       ssr: false
     },
     {
@@ -114,7 +114,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    vender: ['axios'],
+    vender: ['axios','marked'],
     /*
      ** You can extend webpack config here
      */

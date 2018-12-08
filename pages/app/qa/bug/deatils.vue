@@ -46,25 +46,25 @@
         <div id="page-details-body-main" class="col-md-8 col-sm-12">
           <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">
             <h6 class="details-minor-title">
-              <span class="standline"></span>&nbsp&nbsp操作步骤
+              <span class="standline"></span>&nbsp;&nbsp;操作步骤
             </h6>
-            <pre class="details-block" v-html="BugDetails.steps"></pre>
+            <div class="details-block" v-html="ConvertsMd(BugDetails.steps)"></div>
           </div>
           <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
             <h6 class="details-minor-title">
-              <span class="redline"></span>&nbsp&nbsp实际结果
+              <span class="redline"></span>&nbsp;&nbsp;实际结果
             </h6>
             <pre class="details-block">{{ BugDetails.reality_result }}</pre>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
             <h6 class="details-minor-title">
-              <span class="successline"></span>&nbsp&nbsp预期结果
+              <span class="successline"></span>&nbsp;&nbsp;预期结果
             </h6>
             <pre class="details-block">{{ BugDetails.expected_result }}</pre>
           </div>
           <div id="bug-remark" class="height-7 mb-5" v-if="BugDetails.remark">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp&nbsp附加信息
+              <span class="grayline"></span>&nbsp;&nbsp;附加信息
             </h6>
             <div class="dropdown-divider"></div>
             <pre class="details-block">{{ BugDetails.remark }}</pre>
@@ -73,7 +73,7 @@
           <!-- 图片附件 -->
           <div id="bug-annex" class="height-7 mb-5" v-if="Annex.length > 0">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp&nbsp附件
+              <span class="grayline"></span>&nbsp;&nbsp;附件
             </h6>​
             <picture class="container-fluid">
               <div class="row">
@@ -111,16 +111,16 @@
           </div>
           <div id="bug-details-history" class="height-7 mb-5 font-color-383838 font-size-93">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp&nbsp活动记录
+              <span class="grayline"></span>&nbsp;&nbsp;活动记录
             </h6>
             <div class="dropdown-divider"></div>
             <div id="bug-history-record" class="mt-3">
               <ol class="pl-3">
-                <li v-for="item in history" :key="item.id" class="my-2">
-                  {{ item.create_time | date }} :
-                  <span class="log-text-user">{{ item.username }}</span>
-                  {{ item.desc }}
-                  <pre class="log-text-remark font-size-90" v-if="item.remark" v-html="item.remark"></pre>
+                <li v-for="(item,index) in history" :key="index" class="my-2">
+                  {{ item.create_time | date }} : <span class="log-text-user">{{ item.username }}</span>{{ item.desc }}
+                  <div class="log-text-remark font-size-93" 
+                    v-if="item.remark" v-html="ConvertsMd(item.remark)">
+                  </div>
                 </li>
               </ol>
             </div>
@@ -130,7 +130,7 @@
         <div id="page-details-body-minor" class="col-md-4 col-sm-12">
           <div id="bug-details-of-basic">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp&nbsp详情
+              <span class="grayline"></span>&nbsp;&nbsp;详情
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
@@ -144,13 +144,13 @@
               </li>
               <li id="bug-desc-status">
                 <label>缺陷状态：</label>
-                <span
-                  class="border-radius-5"
+                <span  class="border-radius-5"
                   :class="{ 'text-secondary': BugDetails.status === 'Closed',
-									'text-success': BugDetails.status === 'Fixed',
-									'text-urgency': ['New','Open','Reopen'].includes(BugDetails.status),
-									'text-warning': BugDetails.status === 'Hang-up'}"
-                >{{ BugDetails.status_name }}</span>
+                    'text-success': BugDetails.status === 'Fixed',
+                    'text-urgency': ['New','Open','Reopen'].includes(BugDetails.status),
+                    'text-warning': BugDetails.status === 'Hang-up'}">
+                  {{ BugDetails.status_name }}
+                </span>
               </li>
               <li id="bug-desc-severity" @click="BugPriorityDialog('severity')">
                 <label>严重程度：</label>
@@ -180,7 +180,7 @@
           </div>
           <div id="bug-details-of-person-date">
             <h6 class="details-minor-title pt-3">
-              <span class="grayline"></span>&nbsp&nbsp人员/日期
+              <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 mb-5 pl-3 satellite_info">
@@ -224,15 +224,15 @@
           </div>
           <div id="bug-details-of-testcase" class="pb-5" v-if="BugDetails.case_id">
             <h6 class="details-minor-title">
-              <span class="grayline"></span>&nbsp&nbsp关联的测试用例
+              <span class="grayline"></span>&nbsp;&nbsp;关联的测试用例
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
               <li>
                 <label>关联用例：</label>
-                <nuxt-link
-                  :to="{ path:'/app/qa/testcase/deatils',query:{'case_id':BugDetails.case_id}}"
-                >查看</nuxt-link>
+                <nuxt-link :to="{ path:'/app/qa/testcase/deatils',query:{'case_id':BugDetails.case_id}}">
+                  查看
+                </nuxt-link>
               </li>
             </ul>
           </div>
@@ -292,11 +292,8 @@
             </div>
             <div class="form-group row col-md-auto mx-3">
               <label for="remark">原因</label>
-              <textarea
-                type="text"
-                class="textarea-control form-border-bottom"
-                rows="5"
-                placeholder="请输入原因..."
+              <textarea type="text" class="textarea-control form-border-bottom"
+                rows="5" placeholder="请输入原因..."
                 v-model="ReOpenData.remark"
               ></textarea>
             </div>
@@ -317,9 +314,9 @@
             <h5 class="modal-title">添加备注</h5>
           </div>
           <div class="modal-body">
-              <quill-editor class="mx-3"
-                v-model.trim="NotesData.remark">
-              </quill-editor>
+            <mavon-editor class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false"
+              v-model.trim="NotesData.remark">
+            </mavon-editor>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
@@ -339,11 +336,8 @@
           <div class="modal-body">
             <div class="form-group row col-md-auto mx-3">
               <label for="remark">延期说明</label>
-              <textarea
-                type="text"
-                class="textarea-control form-border-bottom"
-                rows="7"
-                placeholder="请输入备注,2000字以内..."
+              <textarea type="text" class="textarea-control form-border-bottom"
+                rows="7" placeholder="请输入备注,2000字以内..."
                 v-model="HangUpData.remark"
               ></textarea>
             </div>
@@ -369,7 +363,23 @@ import BugChange from "~/components/BugChange"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
+import data from '~/assets/js/data.js'
 
+import hljs from 'highlight.js'
+import marked from 'marked'
+marked.setOptions({
+  renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    highlight: function (code) {
+      return hljs.highlightAuto(code).value
+    }
+})
 
 export default {
   head() {
@@ -392,6 +402,7 @@ export default {
 
   data() {
     return {
+      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       components_value: '',
       currentBugId: this.$route.query.bug_id || null,
       current_product_code: "",
@@ -461,6 +472,11 @@ export default {
     },
     isShowLoading: function() {
       return JSON.stringify(this.BugDetails) === "{}" ? "1" : null
+    },
+    ConvertsMd () {
+      return function(value) {
+        return value ? marked(value) : ""
+      }
     }
   },
 

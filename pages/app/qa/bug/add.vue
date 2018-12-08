@@ -90,9 +90,14 @@
             <label for='bug-steps' class="col-lg-2 col-md-2 col-sm-12 bug-label">
               发现步骤<span class="text-red">*</span>
             </label>
-            <quill-editor class="col-lg-8 col-md-10 col-sm-12 quill-editor-define" 
+            <div class="col-lg-8 col-md-10 col-sm-12">
+              <mavon-editor class="v-toolbars" placeholder="请输入发现步骤 ~" :toolbars="mavon_md_base_toolbars"
+                :subfield="false" v-model.trim="Bug.steps">
+              </mavon-editor>
+            </div>
+            <!-- <quill-editor class="col-lg-8 col-md-10 col-sm-12 quill-editor-define" 
               v-model.trim="Bug.steps">
-            </quill-editor>
+            </quill-editor> -->
           </div>
           
           <!-- bug: result -->
@@ -157,7 +162,10 @@
 
 <script>
 import axios from "axios"
+
 import fileutil from "~/assets/js/file.js"
+import data from '~/assets/js/data.js'
+
 import BaseNav from '~/components/BaseNav'
 import FileUpload from '~/components/FileUpload'
 
@@ -181,6 +189,7 @@ export default {
       modules_list: [],
       isButtonDisabled: false,
       isRemarkDisable: false,
+      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,

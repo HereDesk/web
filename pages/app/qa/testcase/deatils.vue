@@ -1,38 +1,40 @@
 <template>
   <div id="page-testcase-details" class="mt-5">
-    <div id="casedetails" class='container' v-if="JSON.stringify(CaseDetails) !== '{}'">
-      <div id="page-details-1" class='row'>
-        <div class='col-xl-12 col-lg-12 col-md-12'>
-          <h3 class="details-title">
-            {{ CID }} {{ CaseDetails.title }}
-          </h3>
-        </div>
-        <div id="page-details-1" class="col-xl-12 col-lg-12 col-md-12 my-4" v-if="CaseDetails.status === 0">
-          <button type="btn" class="btn btn-gray" 
-            @click="handleEdit()" 
-            v-if="Rules.edit">
-            编辑
-          </button>
-          <button type="button" class="btn btn-gray ml-3" 
-            @click="CaseDelete(CaseDetails.case_id)"
-            v-if="CaseDetails.isDelete === 0 && Rules.del">
-            删除
-          </button>
-          <button type="button" class="btn btn-gray ml-3" 
-            @click="handleFall(CaseDetails.case_id)"
-            v-if="Rules.fall">
-            失效
-          </button>
-          <button type="button" class="btn btn-gray ml-3" 
-            data-toggle="modal" data-target="#ModalCaseReview">
-            评审
-          </button>
-          <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">返回</button>
+
+    <div id="case-details-info" class='container' v-if="JSON.stringify(CaseDetails) !== '{}'">
+
+      <div id="page-head" class='row'>
+        <div id="case-title" class='col'>
+          <h3 class="details-title">{{ CID }} {{ CaseDetails.title }}</h3>
         </div>
       </div>
 
-      <div id="case-details-2" class="row my-5">
-        <div id="case-details-2-1" class='col-xl-8 col-lg-8 col-md-8'>
+      <div id="page-opreate" class="row">
+        <div id="case-opreate-button" class="col my-4" v-if="CaseDetails.status === 0">
+          <button id="case-edit-btn" ype="btn" class="btn btn-gray" @click="handleEdit()" v-if="Rules.edit">
+            编辑
+          </button>
+          <button id="case-del-btn" type="button" class="btn btn-gray ml-3" 
+            @click="CaseDelete(CaseDetails.case_id)" v-if="CaseDetails.isDelete === 0 && Rules.del">
+            删除
+          </button>
+          <button id="case-fall-btn" type="button" class="btn btn-gray ml-3" 
+            @click="handleFall(CaseDetails.case_id)" v-if="Rules.fall">
+            失效
+          </button>
+          <button id="case-review-btn" type="button" class="btn btn-gray ml-3" 
+            data-toggle="modal" data-target="#ModalCaseReview">
+            评审
+          </button>
+          <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">
+            返回
+          </button>
+        </div>
+      </div>
+
+      <div id="page-body" class="row my-3">
+        <div id="page-body-left" class='col-lg-8 col-md-7 col-sm-12'>
+
           <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;执行前置条件
@@ -43,7 +45,7 @@
             <h6>
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
             </h6>
-            <div class="details-block" v-html="CaseDetails.steps"></div>
+            <div class="details-block" v-html="ConvertsMd(CaseDetails.steps)"></div>
           </div>
           <div id="case-input" class="height-7 mb-3" v-if="CaseDetails.DataInput">
             <h6>
@@ -63,8 +65,7 @@
             </h6>
             <pre class="details-block">{{ CaseDetails.remark }}</pre>
           </div>
-          <!-- 图片附件 -->
-          <div id="case-steps" class="height-7 mb-5" v-if="Annex.length > 0">
+          <div id="case-steps" class="height-7 mb-5" v-if="Annex.length">
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;原型或设计图
             </h6>
@@ -75,7 +76,7 @@
                     v-if="['md','log','txt','doc','docx','pdf','json','html'].includes(p.suffix)">
                     <a class="file-link" :href="p.file_path" target="_blank">
                       <i class="iconfont size-2"
-                        :class="{
+                        :class="{ 
                           'icon-markdown': p.suffix === 'md',
                           'icon-icon-rizhi font-color-1296db': p.suffix === 'log',
                           'icon-txt font-color-00BFA5': p.suffix === 'txt',
@@ -105,79 +106,77 @@
         </div>
 
 
-        <div id="page-details-2-2" class='col-xl-4 col-lg-4 col-md-4'>
-          <div id="page-details-2-2-1">
+        <div id="page-body-right" class='col-lg-4 col-md-5 col-sm-12'>
+          <div id="case-base-info">
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;详情
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
-              <li>
+              <li id="case-product-code">
                 <label>产品：</label>{{ CaseDetails.product_code }}
               </li>
-              <li>
+              <li id="case-modules">
                 <label>模块：</label>{{ CaseDetails.m1_name }} {{ CaseDetails.m2_name }}
               </li>
-              <li>
+              <li id="case-status">
                 <label>状态：</label>{{ case_status }}
               </li>
-              <li>
+              <li id="case-priority">
                 <label>优先级：</label>{{ CaseDetails.priority }}
               </li>
             </ul>
           </div>
-          <div id="page-details-2-2-2">
+          <div id="case-operate-info">
             <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 pl-3 satellite_info">
-              <li>
+              <li id="case-creator">
                 <label>创建者：</label>{{ CaseDetails.creator }}
               </li>
-              <li>
+              <li id="case-create_time">
                 <label>创建日期：</label>{{ CaseDetails.create_time | date }}
               </li>
-              <li>
-                <label>更新日期：</label>{{ CaseDetails.update_time | date }}
-              </li>
-              <li v-if="CaseDetails.changer">
+              <li id="case-changer" v-if="CaseDetails.changer">
                 <label>修改人</label>{{ CaseDetails.changer }}
               </li>
-              <li v-if="CaseDetails.change_time">
+              <li id="case-change_time" v-if="CaseDetails.change_time">
                 <label>修改日期：</label>{{ CaseDetails.change_time | date }}
               </li>
-              <li v-if="CaseDetails.faller">
-                <label>失效：</label>{{ CaseDetails.faller }}
+              <li id="case-faller" v-if="CaseDetails.faller">
+                <label>失效操作人：</label>{{ CaseDetails.faller }}
               </li>
-              <li v-if="CaseDetails.fall_time">
+              <li id="case-fall_time" v-if="CaseDetails.fall_time">
                 <label>失效日期：</label>{{ CaseDetails.fall_time | date }}
               </li>
-              <li v-if="CaseDetails.deleter">
+              <li id="case-deleter" v-if="CaseDetails.deleter">
                 <label>删除人：</label>{{ CaseDetails.deleter }}
               </li>
-              <li v-if="CaseDetails.DeleteTime">
+              <li id="case-delete_time" v-if="CaseDetails.DeleteTime">
                 <label>删除日期：</label>{{ CaseDetails.delete_time | date }}
+              </li>
+              <li id="case-update_time">
+                <label>最后操作：</label>{{ CaseDetails.update_time | date }}
               </li>
             </ul>
           </div>
         </div>
       </div> 
 
-      <div class="row mt-3 mb-5" v-if="CaseReviewDetails.length > 0">
-        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+      <div id="case-review-record" class="row mt-3 mb-5" v-if="CaseReviewDetails.length > 0">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-12">
           <h5>评审记录</h5>
           <div class="dropdown-divider"></div>
-          <div id="testcase-record" class="mt-3">
+          <div id="case-record" class="mt-3">
             <ol class="pl-1">
               <li v-for="(item,index) in CaseReviewDetails" :key="index" class="my-2">
                 <span class="log-text-time">{{ item.create_time | date }} : </span>
                 <span class="log-text-user">{{ item.realname }}, </span>
                 <span v-if="item.result === 1">评审意见：通过</span>
                 <span v-if="item.result === 2">评审意见：不通过</span>
-                <pre v-if="item.remark" class="log-text-remark font-size-90">
-                  {{ item.remark }}
-                </pre>
+                <pre v-if="item.remark" class="log-text-remark font-size-90">{{ item.remark }}</pre>
               </li>
             </ol>
           </div>
@@ -199,8 +198,7 @@
             <div class='form-group row col-md-auto mx-3'>
               <label for="remark">评审意见</label>
               <textarea type='text' class='textarea-control form-border-bottom' 
-                rows="5" placeholder='请输入评审意见...'
-                v-model='review_data.remark'>
+                rows="5" placeholder='请输入评审意见...' v-model='review_data.remark'>
               </textarea>
             </div>
           </div>
@@ -222,6 +220,22 @@ import axios from 'axios'
 import PageLoading from '~/components/PageLoading'
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
+
+import hljs from 'highlight.js'
+import marked from 'marked'
+marked.setOptions({
+  renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    highlight: function (code) {
+      return hljs.highlightAuto(code).value
+    }
+})
 
 export default {
   head () {
@@ -270,6 +284,11 @@ export default {
     },
     case_status: function () {
       return this.CaseDetails.status === 0 ? '正常' : '已失效'
+    },
+    ConvertsMd () {
+      return function(value) {
+        return value ? marked(value) : ""
+      }
     }
   },
 
@@ -344,7 +363,7 @@ export default {
             this.$notify.error({"title":"成功","message":res.data['msg']})
           }
         })
-    },
+    }
   }
 }
 </script>

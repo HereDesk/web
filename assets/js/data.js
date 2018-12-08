@@ -64,11 +64,8 @@ export default {
       underline: true,
       ol: true,
       ul: true,
-      link: true,
       quote: true,
-      code: true,
-      imagelink: true,
-      htmlcode: true,
+      code: true
     },
     quill_md_simple_options: {
       modules: {

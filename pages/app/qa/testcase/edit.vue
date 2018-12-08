@@ -67,8 +67,11 @@
               </div>
               <div class='form-group row'>
                 <label for='CaseSteps' class="col-lg-2 col-md-2 col-sm-12 testcase-label">操作步骤</label>
-                <quill-editor class="col-lg-9 col-md-10 col-sm-12 quill-editor-define" v-model="CaseData.steps">
-                </quill-editor>
+                <div class="col-lg-9 col-md-10 col-sm-12">
+                  <mavon-editor class="v-toolbars" placeholder="请输入操作步骤 ~" :toolbars="mavon_md_base_toolbars"
+                    :subfield="false" v-model.trim="CaseData.steps">
+                  </mavon-editor>
+                </div>
               </div>
               <div class='form-group row'>
                 <label for='CaseInput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
@@ -130,7 +133,10 @@
 
 <script>
 import axios from 'axios'
+
 import fileutil from "~/assets/js/file.js"
+import data from '~/assets/js/data.js'
+
 import BaseNav from '~/components/BaseNav'
 import FileUpload from '~/components/FileUpload'
 

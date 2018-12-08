@@ -34,68 +34,50 @@ html,body {
   }
 }
 
+code {
+  line-height: 0.8rem !important;
+}
+
+/* hljs */
+.hljs {
+  background: none !important;
+}
 /* 
 ** mavon markdown 
 */
 .shadow {
   box-shadow: none !important;
-} 
+}
 
 .v-note-wrapper {
-    min-height: 7rem !important;
- }
- 
+  min-height: 12rem !important;
+  border: 1px solid rgb(220, 223, 230) !important;
+  border-radius: 5px;
+}
+
 .v-note-op {
-  border: 1px solid #dcdfe6 !important;
-  border-bottom: none !important;
-}
-
-.v-note-panel {
-  border: 1px solid #dcdfe6 !important;
-}
-
-.v-note-wrapper:hover .v-note-panel {
-  border-color: #c0c4cc !important;
-}
-
-.v-radius > .v-note-panel {
-  border-radius: 5px !important;
-}
-
-.v-toolbars .v-note-top {
-  border-top-left-radius: 5px !important;
-  border-top-right-radius: 5px !important;
-}
-
-.v-toolbars .content-input-wrapper {
-  min-height: 9rem !important;
-}
-
-.v-toolbars .v-note-panel {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-bottom: 1px solid rgb(220, 223, 230) !important;
 }
 
 .content-input-wrapper {
-  padding: 0.8rem !important;
+  padding: 1rem !important;
 }
 
-.auto-textarea-input::placeholder {
-  font-weight: 300;
-  font-size: 1rem !important;
-  color: #c0c4cc !important;
+.auto-textarea-wrapper textarea::placeholder {
+  font-size: 1rem;
+  font-weight: 200 !important;
+  color: #c0c4cc;
+  font-family: initial;
 }
-
-.auto-textarea-input::-webkit-input-placeholder {
-  font-weight: 300;
-  font-size: 1rem !important;
-  color: #c0c4cc !important;
+.auto-textarea-wrapper textarea::-webkit-input-placeholder {
+  font-size: 1rem;
+  font-weight: 200 !important;
+  color: #c0c4cc;
 }
-
-.auto-textarea-input::-ms-input-placeholder {
-  font-weight: 300;
-  font-size: 1rem !important;
-  color: #c0c4cc !important;
+.auto-textarea-wrapper textarea::ms-input-placeholder {
+  font-size: 1rem;
+  font-weight: 200 !important;
+  color: #c0c4cc;
 }
 
 /*
@@ -835,6 +817,7 @@ a:link {
 */
 pre {
   display: block;
+  margin: 0;
   white-space:pre-wrap;  
   white-space:-moz-pre-wrap;  
   white-space:-pre-wrap;  

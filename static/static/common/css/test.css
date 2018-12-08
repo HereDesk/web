@@ -214,12 +214,16 @@
 */
 .details-block {
   margin-top:1rem;
-  line-height: 2rem;
-  font-size: 0.94rem;
+  line-height: 1.5rem;
+  font-size: 0.95rem;
   color: #2b2b2b;
   background-color: #FAFAFA;
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   border-radius: 5px;
+}
+
+.details-block pre {
+  margin: 0;
 }
 
 .details-block a {
@@ -319,8 +323,12 @@
   padding: 1rem;
   margin-top:0.7rem;
   text-align: left !important;
-  white-space: pre-line;
+  /* white-space: pre-line; */
 }
+
+/* .log-text-remark pre {
+  height: 100% !important;
+} */
 
 /*
 ** 列表数据样式
