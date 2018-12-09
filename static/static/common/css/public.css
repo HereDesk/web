@@ -42,6 +42,7 @@ code {
 .hljs {
   background: none !important;
 }
+
 /* 
 ** mavon markdown 
 */
@@ -49,8 +50,20 @@ code {
   box-shadow: none !important;
 }
 
-.v-note-wrapper {
+.toolbars .v-note-wrapper {
   min-height: 12rem !important;
+  border: 1px solid rgb(220, 223, 230) !important;
+  border-radius: 5px;
+}
+
+.no-toolbars .v-note-wrapper {
+  min-height: 7rem !important;
+  border: 1px solid rgb(220, 223, 230) !important;
+  border-radius: 5px;
+}
+
+.modal-body .v-note-wrapper {
+  min-height: 11rem !important;
   border: 1px solid rgb(220, 223, 230) !important;
   border-radius: 5px;
 }

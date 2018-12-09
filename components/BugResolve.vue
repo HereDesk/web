@@ -16,13 +16,17 @@
           <div class='form-group row col-md-auto mx-3'>
             <label for="assignedTo">指派给</label>
             <select class='select-control border' v-model="ResolveData.assignedTo">
-              <option disabled value="">请选择</option>
-              <option v-for='item in person_list' :key="item.id" :value="item.user_id">{{ item.realname }}</option>
+              <option disabled value="">请选择指派给谁</option>
+              <option v-for='(item,index) in person_list' :key="index" :value="item.user_id">
+                {{ item.realname }}
+              </option>
             </select>
           </div>
           <div class='form-group row col-md-auto mx-3'>
             <label for="remark">备注</label>
-            <textarea type='text' v-model='ResolveData.remark' class='textarea-control form-border-bottom' rows="5" placeholder='请输入备注...'></textarea>
+            <mavon-editor style="width:100%;" placeholder="请输入备注 ~ "
+              :toolbarsFlag="false" :subfield="false" v-model.trim="ResolveData.remark">
+            </mavon-editor>
           </div>
         </div>
         <div class="modal-footer">

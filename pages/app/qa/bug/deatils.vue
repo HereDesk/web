@@ -54,20 +54,20 @@
             <h6 class="details-minor-title">
               <span class="redline"></span>&nbsp;&nbsp;实际结果
             </h6>
-            <pre class="details-block">{{ BugDetails.reality_result }}</pre>
+            <div class="details-block" v-html="ConvertsMd(BugDetails.reality_result)"></div>
           </div>
           <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
             <h6 class="details-minor-title">
               <span class="successline"></span>&nbsp;&nbsp;预期结果
             </h6>
-            <pre class="details-block">{{ BugDetails.expected_result }}</pre>
+            <div class="details-block" v-html="ConvertsMd(BugDetails.expected_result)"></div>
           </div>
           <div id="bug-remark" class="height-7 mb-5" v-if="BugDetails.remark">
             <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附加信息
             </h6>
             <div class="dropdown-divider"></div>
-            <pre class="details-block">{{ BugDetails.remark }}</pre>
+            <div class="details-block" v-html="ConvertsMd(BugDetails.remark)"></div>
           </div>
 
           <!-- 图片附件 -->
@@ -118,8 +118,7 @@
               <ol class="pl-3">
                 <li v-for="(item,index) in history" :key="index" class="my-2">
                   {{ item.create_time | date }} : <span class="log-text-user">{{ item.username }}</span>{{ item.desc }}
-                  <div class="log-text-remark font-size-93" 
-                    v-if="item.remark" v-html="ConvertsMd(item.remark)">
+                  <div class="log-text-remark font-size-93" v-if="item.remark" v-html="ConvertsMd(item.remark)">
                   </div>
                 </li>
               </ol>
@@ -257,18 +256,22 @@
     <!-- Bug处理操作：解决 -->
     <div id="bug-list-resolve">
       <BugResolve
-        v-bind:bug_id="currentBugId"
-        v-bind:OpenBy="BugDetails.openedBy"
-        v-bind:product_code="product_code"
-        v-bind:scheme="scheme"
-        v-bind:pageSource="pageSource"
-        v-bind:member_list="member_list"
-      ></BugResolve>
+        :bug_id="currentBugId"
+        :OpenBy="BugDetails.openedBy"
+        :product_code="product_code"
+        :scheme="scheme"
+        :pageSource="pageSource"
+        :member_list="member_list">
+      </BugResolve>
     </div>
 
     <!-- Bug处理操作：修改优先级/严重程度 -->
     <div id="bug-list-change">
-      <BugChange :data_type="components_value" :bug_id="currentBugId" @refreshList="getBugDetails()"></BugChange>
+      <BugChange 
+        :data_type="components_value" 
+        :bug_id="currentBugId" 
+        @refreshList="getBugDetails()">
+      </BugChange>
     </div>
 
     <!-- Bug处理操作：重新打开缺陷 -->
@@ -282,20 +285,15 @@
             <div class="form-group row col-md-auto mx-3">
               <label for="assignedTo">指派给</label>
               <select class="select-control border" v-model="ReOpenData.assignedTo">
-                <option disabled value>请选择</option>
-                <option
-                  v-for="item in member_list"
-                  :key="item.id"
-                  :value="item.user_id"
-                >{{ item.realname }}</option>
+                <option disabled value>请选择指派给谁</option>
+                <option v-for="item in member_list" :key="item.id" :value="item.user_id">
+                  {{ item.realname }}</option>
               </select>
             </div>
             <div class="form-group row col-md-auto mx-3">
-              <label for="remark">原因</label>
-              <textarea type="text" class="textarea-control form-border-bottom"
-                rows="5" placeholder="请输入原因..."
-                v-model="ReOpenData.remark"
-              ></textarea>
+              <mavon-editor style="width:100%;" placeholder="请输入原因 ~ "
+                :toolbarsFlag="false" :subfield="false" v-model.trim="ReOpenData.remark">
+              </mavon-editor>
             </div>
           </div>
           <div class="modal-footer">
@@ -314,7 +312,7 @@
             <h5 class="modal-title">添加备注</h5>
           </div>
           <div class="modal-body">
-            <mavon-editor class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false"
+            <mavon-editor class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false" placeholder="请输入备注 ~ "
               v-model.trim="NotesData.remark">
             </mavon-editor>
           </div>
@@ -334,13 +332,9 @@
             <h5 class="modal-title">挂起延期</h5>
           </div>
           <div class="modal-body">
-            <div class="form-group row col-md-auto mx-3">
-              <label for="remark">延期说明</label>
-              <textarea type="text" class="textarea-control form-border-bottom"
-                rows="7" placeholder="请输入备注,2000字以内..."
-                v-model="HangUpData.remark"
-              ></textarea>
-            </div>
+            <mavon-editor class="mx-3" :toolbarsFlag="false" :subfield="false" placeholder="请输入延期原因 ~ "
+              v-model.trim="HangUpData.remark">
+            </mavon-editor>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>

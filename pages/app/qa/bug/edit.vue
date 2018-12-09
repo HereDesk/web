@@ -90,8 +90,8 @@
             <label for='bug-steps' class="col-lg-2 col-md-2 col-sm-12 bug-label">
               发现步骤<span class="text-red">*</span>
             </label>
-            <div class="col-lg-8 col-md-10 col-sm-12">
-              <mavon-editor class="v-toolbars" placeholder="请输入发现步骤 ~" :toolbars="mavon_md_base_toolbars"
+            <div class="col-lg-8 col-md-10 col-sm-12 toolbars">
+              <mavon-editor placeholder="请输入发现步骤 ~" :toolbars="mavon_md_base_toolbars"
                 :subfield="false" v-model.trim="Bug.steps">
               </mavon-editor>
             </div>
@@ -105,21 +105,21 @@
             <label for='bug-reality-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">
               实际结果<span class="text-red">*</span>
             </label>
-            <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12"
-              maxlength="1000" placeholder="实际结果..."
-              :autosize="{ minRows: 4}" 
-              v-model.trim='Bug.reality_result'>
-            </el-input>
+            <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
+              <mavon-editor placeholder="请输入实际结果 ~" :toolbarsFlag="false"
+                :subfield="false" v-model.trim="Bug.reality_result">
+              </mavon-editor>
+            </div>
           </div>
           
           <!-- bug: result -->
           <div id="bug-expected-result" class='form-group row'>
             <label for='bug-expected-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">预期结果</label>
-            <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12" maxlength="1000" 
-              :autosize="{ minRows: 4}" 
-              placeholder="预期结果..." 
-              v-model.trim='Bug.expected_result'>
-            </el-input>
+            <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
+              <mavon-editor placeholder="请输入预期结果 ~" :toolbarsFlag="false"
+                :subfield="false" v-model.trim="Bug.expected_result">
+              </mavon-editor>
+            </div>
           </div>
           
           <!-- bug: file -->
@@ -133,11 +133,11 @@
           <!-- bug: remark -->
           <div id="bug-remark" class='form-group row' v-if="isRemarkDisable">
             <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
-            <el-input type="textarea" class="col-lg-8 col-md-10 col-sm-12"
-              maxlength="10000" placeholder="请输入备注..."
-              :autosize="{ minRows: 4}" 
-              v-model.trim='Bug.remark'>
-            </el-input>
+            <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
+              <mavon-editor placeholder="请输入附加信息 ~" :toolbarsFlag="false"
+                :subfield="false" v-model.trim="Bug.remark">
+              </mavon-editor>
+            </div>
           </div>
           
           <!-- 提交按钮 -->

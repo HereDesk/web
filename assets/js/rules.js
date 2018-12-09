@@ -41,7 +41,7 @@ export default {
 
   		// Bug: 挂起按钮规则
   		// 当状态为：已解决、待解决、重新打开
-  		if (bug.status === 'Open' || bug.status === 'Reopen' || bug.status === 'Fixed') {
+  		if (['Open','Reopen','Fixed'].includes(bug.status)) {
   			BtnRules.hangup = true
   		}
 
@@ -53,7 +53,7 @@ export default {
 
   		// Bug: 解决按钮规则
   		// 当状态为：非关闭状态；组：测试
-  		if (bug.status === 'Open' || bug.status === 'Reopen') {
+  		if (['Open','Reopen','Hang-up'].includes(bug.status)) {
   			BtnRules.Recovered = true
   		}
 

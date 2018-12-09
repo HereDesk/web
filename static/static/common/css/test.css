@@ -323,12 +323,13 @@
   padding: 1rem;
   margin-top:0.7rem;
   text-align: left !important;
+  line-height: 1.5rem;
   /* white-space: pre-line; */
 }
 
-/* .log-text-remark pre {
-  height: 100% !important;
-} */
+.log-text-remark p {
+  margin-bottom: 0;
+}
 
 /*
 ** 列表数据样式

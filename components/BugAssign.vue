@@ -9,15 +9,17 @@
           <div class='form-group row col-md-auto mx-3'>
             <label for="assignedTo">分配</label>
             <select class='select-control border' v-model="AssignData.assignedTo">
-              <option disabled value="">请选择</option>
-              <option v-for='item in person_list' :key="item.id" :value="item.user_id" v-if="item.realname !== '超级管理员'">
+              <option disabled value="">请选择分配给谁</option>
+              <option v-for='item in person_list' :key="item.id" :value="item.user_id" 
+                v-if="item.realname !== '超级管理员'">
                 {{ item.realname }}
               </option>
             </select>
           </div>
           <div class='form-group row col-md-auto mx-3'>
-            <label for="remark">备注</label>
-            <textarea type='text' v-model='AssignData.remark' class='textarea-control form-border-bottom' rows="5" placeholder='请输入备注...'></textarea>
+            <mavon-editor style="width:100%;" placeholder="请输入备注 ~ "
+              :toolbarsFlag="false" :subfield="false" v-model.trim="AssignData.remark">
+            </mavon-editor>
           </div>
         </div>
         <div class="modal-footer">

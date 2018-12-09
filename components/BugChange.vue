@@ -18,7 +18,7 @@
           <ul class="ul-inline mb-5 mt-3" v-if="data_type == 'priority'">
           	<li class="mr-5 font-size-150 font-weight-light"
           		v-for="(item,index) in priority_list" :key="index" @click="ModifyPriority(item.key)">
-              {{ item.name }}</span>
+              {{ item.name }}
           	</li>
           </ul>
           <p class="my-3 text-gray">备注：选择后，即实现提交，无需进行其它操作</p>

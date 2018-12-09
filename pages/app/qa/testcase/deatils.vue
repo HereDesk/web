@@ -39,7 +39,7 @@
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;执行前置条件
             </h6>
-            <pre class="details-block">{{ CaseDetails.precondition }}</pre>
+            <div class="details-block" v-html="ConvertsMd(CaseDetails.precondition)"></div>
           </div>
           <div id="case-steps" class="height-7 mb-4">
             <h6>
@@ -51,19 +51,19 @@
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;测试输入数据
             </h6>
-            <pre class="details-block">{{ CaseDetails.DataInput }}</pre>
+            <div class="details-block" v-html="ConvertsMd(CaseDetails.DataInput)"></div>
           </div>
           <div id="case-expected-result" class="height-7 mb-3">
             <h6>
               <span class="successline"></span>&nbsp;&nbsp;预期结果
             </h6>
-            <pre class="details-block">{{ CaseDetails.expected_result }}</pre>
+            <div class="details-block" v-html="ConvertsMd(CaseDetails.expected_result)"></div>
           </div>
           <div id="case-remark" class="height-7 mb-3" v-if="CaseDetails.remark">
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;附加信息
             </h6>
-            <pre class="details-block">{{ CaseDetails.remark }}</pre>
+            <div class="details-block" v-html="ConvertsMd(CaseDetails.remark)"></div>
           </div>
           <div id="case-steps" class="height-7 mb-5" v-if="Annex.length">
             <h6>
@@ -165,7 +165,7 @@
         </div>
       </div> 
 
-      <div id="case-review-record" class="row mt-3 mb-5" v-if="CaseReviewDetails.length > 0">
+      <div id="case-review-record" class="row mt-3 mb-5" v-if="CaseReviewDetails.length">
         <div class="col-lg-8 col-md-8 col-sm-12 col-12">
           <h5>评审记录</h5>
           <div class="dropdown-divider"></div>
@@ -176,7 +176,7 @@
                 <span class="log-text-user">{{ item.realname }}, </span>
                 <span v-if="item.result === 1">评审意见：通过</span>
                 <span v-if="item.result === 2">评审意见：不通过</span>
-                <pre v-if="item.remark" class="log-text-remark font-size-90">{{ item.remark }}</pre>
+                <div v-if="item.remark" class="log-text-remark font-size-90" v-html="ConvertsMd(item.remark)"></div>
               </li>
             </ol>
           </div>
@@ -196,10 +196,9 @@
           </div>
           <div class="modal-body">
             <div class='form-group row col-md-auto mx-3'>
-              <label for="remark">评审意见</label>
-              <textarea type='text' class='textarea-control form-border-bottom' 
-                rows="5" placeholder='请输入评审意见...' v-model='review_data.remark'>
-              </textarea>
+              <mavon-editor style="width:100%;" placeholder="请输入评审意见 ~ "
+                :toolbarsFlag="false" :subfield="false" v-model.trim="review_data.remark">
+              </mavon-editor>
             </div>
           </div>
           <div class="text-center mb-5">
@@ -331,10 +330,10 @@ export default {
       }).then(res => {
           if (res.data['status'] === 20000) {
             $('#ModalCaseReview').modal('hide')
-            this.$router.go(-1)
-            this.$notify.success({title: '成功',message: res.data['msg']})
+            this.getCaseDetails()
+            this.$notify.success({title: '评审操作成功',message: res.data['msg']})
           } else {
-            this.$notify.error({title: '失败',message: res.data['msg']})
+            this.$notify.error({title: '评审操作失败',message: res.data['msg']})
           }
         }
       )
