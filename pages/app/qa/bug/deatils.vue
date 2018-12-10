@@ -5,7 +5,7 @@
         <div id="page-deatails-title" class="col-12">
           <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
         </div>
-        <div id="page-details-opera-btn" class="col-12 my-4">
+        <div id="page-details-opera-btn" class="col-12 my-3">
           <button type="btn" class="btn btn-gray mr-3" @click="BugDelete()" v-if="BtnRules.del">删除</button>
           <button type="btn" class="btn btn-gray" v-if="BtnRules.edit" @click="EditBug()">编辑</button>
           <div class="btn-group btn-group-toggle mx-3">
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div id="page-details-body" class="row mt-5">
+      <div id="page-details-body" class="row mt-3">
         
         <div id="page-details-body-main" class="col-md-8 col-sm-12">
           <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">

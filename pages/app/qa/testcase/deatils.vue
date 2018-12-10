@@ -33,6 +33,7 @@
       </div>
 
       <div id="page-body" class="row my-3">
+
         <div id="page-body-left" class='col-lg-8 col-md-7 col-sm-12'>
 
           <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
@@ -105,7 +106,6 @@
           </div>
         </div>
 
-
         <div id="page-body-right" class='col-lg-4 col-md-5 col-sm-12'>
           <div id="case-base-info">
             <h6>
@@ -127,8 +127,8 @@
               </li>
             </ul>
           </div>
-          <div id="case-operate-info">
-            <h6 class="details-minor-title">
+          <div id="case-operate-info" class="mt-3">
+            <h6>
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
             </h6>
             <div class="dropdown-divider"></div>
