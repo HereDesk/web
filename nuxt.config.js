@@ -34,9 +34,10 @@ module.exports = {
       type: 'image/x-icon',
       href: '/favicon.ico'
     }],
-    script: [{
-        src: '/static/jquery/jquery-3.2.1.min.js'
-      },
+    script: [
+      // {
+      //   src: '/static/jquery/jquery-3.2.1.min.js'
+      // },
       {
         src: '/static/bootstrap/js/bootstrap.min.js'
       }
