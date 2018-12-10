@@ -1,6 +1,7 @@
 <template>
   <div id="page">
     <div id="page-details" class="container mt-5" v-if="JSON.stringify(BugDetails) !== '{}'">
+      
       <div id="page-details-head" class="row">
         <div id="page-deatails-title" class="col-12">
           <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
@@ -8,35 +9,15 @@
         <div id="page-details-opera-btn" class="col-12 my-3">
           <button type="btn" class="btn btn-gray mr-3" @click="BugDelete()" v-if="BtnRules.del">删除</button>
           <button type="btn" class="btn btn-gray" v-if="BtnRules.edit" @click="EditBug()">编辑</button>
-          <div class="btn-group btn-group-toggle mx-3">
-            <label class="btn btn-gray active" v-if="BtnRules.assign">
-              <input type="radio" name="options" id="bug-designate"
-                autocomplete="off" @click="SkipAssign()">分配
-            </label>
-            <label class="btn btn-gray" data-toggle="modal" data-target="#modal-reopen"
-              v-if="BtnRules.reopen">
-              <input type="radio" name="options" id="bug-open" autocomplete="off">重新打开
-            </label>
-          </div>
+          <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.assign" @click="SkipAssign()">分配</button>
+          <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.reopen" @click="showModal = 'ReOpen'">重新打开</button>
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-gray" @click="immediateRecovered()" v-if="BtnRules.Recovered">
-              <input type="radio" name="options" id="bug-fixed" autocomplete="off">已解决
-            </label>
-            <label class="btn btn-gray" @click="SkipRecovered('other')" v-if="BtnRules.Recovered">
-              <input type="radio" name="options" id="bug-other" autocomplete="off">其它解决方案
-            </label>
+            <label class="btn btn-gray ml-3" @click="immediateRecovered()" v-if="BtnRules.Recovered">已解决</label>
+            <label class="btn btn-gray" @click="SkipRecovered('other')" v-if="BtnRules.Recovered">其它解决方案</label>
           </div>
-          <button type="button" class="btn btn-gray ml-3" @click="BugClosed()" v-if="BtnRules.close">
-            关闭
-          </button>
-          <button type="button" class="btn btn-gray ml-3"
-            data-toggle="modal" data-target="#modal-hangup" v-if="BtnRules.hangup">
-            延期挂起
-          </button>
-          <button type="button" class="btn btn-gray ml-3"
-            data-toggle="modal" data-target="#modal-notes" v-if="BtnRules.notes">
-            备注
-          </button>
+          <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.hangup" @click="showModal = 'hangup'">延期挂起</button>
+          <button type="button" class="btn btn-gray ml-3" @click="BugClosed()" v-if="BtnRules.close">关闭</button>
+          <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.notes" @click="showModal = 'notes'">备注</button>
           <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">返回</button>
         </div>
       </div>
@@ -236,6 +217,7 @@
             </ul>
           </div>
         </div>
+        
       </div>
     </div>
 
@@ -275,74 +257,50 @@
     </div>
 
     <!-- Bug处理操作：重新打开缺陷 -->
-    <div id="modal-reopen" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">重新打开缺陷</h5>
-          </div>
-          <div class="modal-body">
-            <div class="form-group row col-md-auto mx-3">
-              <label for="assignedTo">指派给</label>
-              <select class="select-control border" v-model="ReOpenData.assignedTo">
-                <option disabled value>请选择指派给谁</option>
-                <option v-for="item in member_list" :key="item.id" :value="item.user_id">
-                  {{ item.realname }}</option>
-              </select>
-            </div>
-            <div class="form-group row col-md-auto mx-3">
-              <mavon-editor style="width:100%;" placeholder="请输入原因 ~ "
-                :toolbarsFlag="false" :subfield="false" v-model.trim="ReOpenData.remark">
-              </mavon-editor>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="ReOpen()">提交</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal id="modal-reopen" v-if="showModal == 'ReOpen'" @close="showModal = false">
+    	<h5 slot="header" class="modal-title">重新打开缺陷</h5>
+    	<div slot="body">
+    		<div class="form-group row col-md-auto mx-3">
+    			<label for="assignedTo">指派给</label>
+    			<select class="select-control border" v-model="ReOpenData.assignedTo">
+    				<option disabled value>请选择指派给谁</option>
+    				<option v-for="item in member_list" :key="item.id" :value="item.user_id">
+    					{{ item.realname }}</option>
+    			</select>
+    		</div>
+    		<div class="form-group row col-md-auto mx-3">
+    			<mavon-editor style="width:100%;" placeholder="请输入原因 ~ "
+    				:toolbarsFlag="false" :subfield="false" v-model.trim="ReOpenData.remark">
+    			</mavon-editor>
+    		</div>
+    	</div>
+    	<div slot="footer">
+    		<button slot="footer" type="submit" class="btn btn-primary" @click="ReOpen()">提交</button>
+    	</div>
+    </Modal>
 
     <!-- Bug处理操作：备注 -->
-    <div id="modal-notes" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">添加备注</h5>
-          </div>
-          <div class="modal-body">
-            <mavon-editor class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false" placeholder="请输入备注 ~ "
-              v-model.trim="NotesData.remark">
-            </mavon-editor>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="AddNotes()">提交</button>
-          </div>
-        </div>
+    <Modal id="modal-notes" v-if="showModal == 'notes'" @close="showModal = false">
+      <h5 slot="header" class="modal-title">增加备注</h5>
+      <mavon-editor slot="body" class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false" placeholder="请输入备注 ~ "
+      	v-model.trim="NotesData.remark">
+      </mavon-editor>
+      <div slot="footer">
+        <button slot="footer" type="submit" class="btn btn-primary" @click="AddNotes()">提交</button>
       </div>
-    </div>
-
+    </Modal>
+    
     <!-- Bug处理操作：延期挂起 -->
-    <div id="modal-hangup" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">挂起延期</h5>
-          </div>
-          <div class="modal-body">
-            <mavon-editor class="mx-3" :toolbarsFlag="false" :subfield="false" placeholder="请输入延期原因 ~ "
-              v-model.trim="HangUpData.remark">
-            </mavon-editor>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="HandUp()">确定延期</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal id="modal-hangup" v-if="showModal == 'hangup'" @close="showModal = false">
+    	<h5 slot="header" class="modal-title">缺陷延期操作</h5>
+      <mavon-editor slot="body" class="mx-3" :toolbarsFlag="false" :subfield="false" placeholder="请输入延期原因 ~ "
+      	v-model.trim="HangUpData.remark">
+      </mavon-editor>
+    	<div slot="footer">
+    		<button slot="footer" type="submit" class="btn btn-primary" @click="HandUp()">确定延期？</button>
+    	</div>
+    </Modal>
+
   </div>
 </template>
 
@@ -354,6 +312,7 @@ import PageLoading from "~/components/PageLoading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
+import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -391,13 +350,15 @@ export default {
     BugAssign,
     BugResolve,
     BugChange,
-    PageLoading
+    PageLoading,
+    Modal
   },
 
   data() {
     return {
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       components_value: '',
+      showModal: false,
       currentBugId: this.$route.query.bug_id || null,
       current_product_code: "",
       BugDetails: {},
@@ -502,6 +463,7 @@ export default {
           })
       }
     },
+    
     getMemberList() {
       axios
         .get("/api/pm/member/list?product_code=" + this.product_code)
@@ -511,6 +473,7 @@ export default {
           }
         })
     },
+    
     // 编辑缺陷
     EditBug() {
       this.$router.push("/app/qa/bug/edit?bug_id=" + this.currentBugId)

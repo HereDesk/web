@@ -22,13 +22,10 @@
             @click="handleFall(CaseDetails.case_id)" v-if="Rules.fall">
             失效
           </button>
-          <button id="case-review-btn" type="button" class="btn btn-gray ml-3" 
-            data-toggle="modal" data-target="#ModalCaseReview">
+          <button id="case-review-btn" type="button" class="btn btn-gray ml-3" @click="showModal = 'caseReview'">
             评审
           </button>
-          <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">
-            返回
-          </button>
+          <button type="button" class="btn btn-gray ml-3" @click="$router.back(-1)">返回</button>
         </div>
       </div>
 
@@ -187,28 +184,19 @@
     <div id="page-loading" class="col text-center" v-if='isShowLoading'>
       <PageLoading></PageLoading>
     </div>
-
-    <div id="ModalCaseReview" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">用例评审 </h5>
-          </div>
-          <div class="modal-body">
-            <div class='form-group row col-md-auto mx-3'>
-              <mavon-editor style="width:100%;" placeholder="请输入评审意见 ~ "
-                :toolbarsFlag="false" :subfield="false" v-model.trim="review_data.remark">
-              </mavon-editor>
-            </div>
-          </div>
-          <div class="text-center mb-5">
-            <button type="submit" class="btn btn-outline-success" @click="CaseReview(1)">通过</button>
-            <button type="submit" class="btn btn-outline-danger mx-3" @click="CaseReview(2)">不通过</button>
-            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">关闭</button>
-          </div>
-        </div>
+    
+    <Modal id="ModalCaseReview" v-if="showModal == 'caseReview'" @close="showModal = false">
+      <h5 slot="header">用户评审</h5>
+      <div slot="body" class='form-group row col-md-auto mx-3'>
+      	<mavon-editor style="width:100%;" placeholder="请输入评审意见 ~ "
+      		:toolbarsFlag="false" :subfield="false" v-model.trim="review_data.remark">
+      	</mavon-editor>
       </div>
-    </div>
+      <div slot="footer">
+        <button type="submit" class="btn" @click="CaseReview(1)">通过</button>
+        <button type="submit" class="btn mx-3" @click="CaseReview(2)">不通过</button>
+      </div>
+    </Modal>
 
   </div>
 </template>
@@ -217,6 +205,8 @@
 import axios from 'axios'
 
 import PageLoading from '~/components/PageLoading'
+import Modal from "~/components/Modal"
+
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
 
@@ -248,11 +238,13 @@ export default {
 
   layout: 'head',
   components: {
-    PageLoading
+    PageLoading,
+    Modal
   },
 
   data () {
     return {
+      showModal: false,
       CaseDetails: {},
       CaseReviewDetails: [],
       review_data: {
@@ -305,10 +297,7 @@ export default {
               this.Annex = res.data['annex']
               this.CaseReviewDetails = res.data['review']
             } else {
-              this.$notify.error({
-                title: '失败',
-                message: res.data['msg']
-              })
+              this.$notify.error({title: '失败',message: res.data['msg']})
             }
         })
       }
@@ -329,7 +318,6 @@ export default {
         data: JSON.stringify(this.review_data)
       }).then(res => {
           if (res.data['status'] === 20000) {
-            $('#ModalCaseReview').modal('hide')
             this.getCaseDetails()
             this.$notify.success({title: '评审操作成功',message: res.data['msg']})
           } else {
