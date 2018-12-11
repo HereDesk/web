@@ -3,16 +3,11 @@
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
-        <a class="navbar-brand">
-          {{ product_code }}&nbsp;成员
-        </a>
+        <a class="navbar-brand">{{ product_code }}&nbsp;成员</a>
       </div>
       <div class='col-auto'>
         <button type='button' class='btn btn-create' id='addRelease' 
-          data-toggle="modal" data-target="#P-Join-Members"
-          v-if="Rules.product_members" 
-          @click="getAllUser()">
-          + 增加成员
+          v-if="Rules.product_members" @click="showModal = 'addRelease'">+ 增加成员
         </button>
       </div>
     </div>
@@ -56,40 +51,34 @@
     </div>
 
     <!-- modal -->
-    <div class="modal fade" id="P-Join-Members" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">增加人员</h5>
-          </div>
-          <div class="modal-body">
-            <div class='form-group row col-md-auto'>
-              <label for="pg-product-name" class="mx-5">产品</label>
-              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9Ebackground-color:#f5f5f5">
-                <option>{{ product_code }}</option>
-              </select>
-            </div>
-            <div class='form-group row col-md-auto' @change="selectMember($event)">
-              <label for="pg-product-name" class="mx-5">选择人员</label>
-              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9Ebackground-color:#f5f5f5">
-                <option value="">请选择</option>
-                <option v-for="item in AllUser" :key="item.id" :value='item.user_id'>{{ item.realname }}</option>
-              </select>
-            </div>
-            <span class="ml-5 ms-msg" v-if="errorMsg">错误提示：{{ errorMsg }}</span>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="JoinProduct">提交</button>
-          </div>
+    <Modal v-if="showModal == 'addRelease'" @close="showModal = false">
+      <h5 slot="header">增加成员</h5>
+      <div class="form-group" slot="body">
+        <div class='row col-md-auto'>
+          <label for="pg-product-name" class="mx-5">产品</label>
+          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
+            <option>{{ product_code }}</option>
+          </select>
+        </div>
+        <div class='row col-md-auto' @change="selectMember($event)">
+          <label for="pg-product-name" class="mx-5">选择人员</label>
+          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
+            <option value="">请选择</option>
+            <option v-for="item in AllUser" :key="item.id" :value='item.user_id'>{{ item.realname }}</option>
+          </select>
         </div>
       </div>
-    </div>
+      <button type="submit" class="btn btn-primary" slot="footer" @click="JoinProduct">提交</button>
+    </Modal>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
+import Modal from "~/components/Modal"
+
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -101,6 +90,10 @@ export default {
   },
   
   layout: "head", 
+
+  components: {
+    Modal
+  },
 
   validate({ query }) {
     return /\w+/.test(query.product_code)
@@ -116,6 +109,7 @@ export default {
       release_list: "",
       tableData: [],
       AllUser: [],
+      showModal: false,
       msg: "",
       errorMsg: "",
       controlNull: false,

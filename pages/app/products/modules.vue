@@ -2,15 +2,14 @@
   <div id="page-product-module" class="container">
     <div id="module-product" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
-        <a class="navbar-brand">
-          {{ selected_product }}&nbsp;模块
-        </a>
+        <a class="navbar-brand">{{ selected_product }}&nbsp;模块</a>
       </nav>
     </div>
     <div id="module_a" class="row my-5">
       <div class="col-md-3 col-sm-12 col-12">
         <h5 class="font-weight-light">一级模块</h5>
-        <p class="add_m_a" data-toggle="modal" data-target="#add_module_a" v-if="Rules.product_modules"> + 一级模块</p>
+        <p class="add_m_a" v-if="Rules.product_modules" @click="showModal = 'addModules'">
+           + 一级模块</p>
         <p class="divider"></p>
         <ul class="pl-0 ul_module_a">
           <li v-for="item in m1_list" :key="item.id" :value="item.m1" 
@@ -32,9 +31,8 @@
             <span class="flex-grow-1 m2edit" :contenteditable="Rules.product_modules" @keyup="changeData($event,item)">
               {{ item.m2 }} &nbsp;
             </span>
-            <div v-if="Rules.product_modules" 
-              :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}"
-              @click="SaveEditM2()">
+            <div :class="{ visible: editM2.id === item.id, invisible: editM2.id !== item.id}"
+              v-if="Rules.product_modules" @click="SaveEditM2()">
               <i class="iconfont icon-duigou icon-8a8a8a size-1-5 mr-3"></i>
             </div>
             <div v-if="Rules.product_modules" @click="delM2(item)">
@@ -45,32 +43,25 @@
       </div>
     </div>
 
-    <div id="add_module_a" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ selected_product }} 添加一级模块 </h5>
-          </div>
-          <div class="modal-body my-3">
-            <div class='form-group row col-md-auto mx-3'>
-              <label for="ModuleA">模块名称</label>
-              <input type='text' class='form-control' rows="5" maxlength="20" placeholder='请输入名称...' 
-                v-model='a_module_data.ModuleA'/>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="addModuleA()">提交</button>
-          </div>
-        </div>
+    <Modal v-if="showModal == 'addModules'" @close="showModal = true">
+      <h5 slot="header">添加一级模块</h5>
+      <div class='form-group row col-md-auto mx-3' slot="body">
+        <label for="ModuleA">模块名称</label>
+        <input type='text' class='form-control' rows="5" maxlength="20" placeholder='请输入名称...' 
+          v-model='a_module_data.ModuleA'/>
       </div>
-    </div>
+      <button type="submit" class="btn btn-primary" slot="footer" @click="addModuleA()">提交</button>
+    </Modal>
+
   </div>
 </template>
 
 <script>
 import axios from "axios"
+
+import Modal from "~/components/Modal"
 import PageLoading from "~/components/PageLoading"
+
 import rules from "~/assets/js/rules.js"
 
 export default {
@@ -84,9 +75,13 @@ export default {
   },
   
   layout: "head",
+  components: {
+    Modal
+  },
 
   data() {
     return {
+      showModal: false,
       selected_product: this.$route.query.product_code || "",
       product_list: [],
       msg: "",
@@ -140,6 +135,7 @@ export default {
     this.getProductList()
     this.getModuleA()
   },
+
   methods: {
     getProductList() {
       axios.get("/api/pm/product/my_list")

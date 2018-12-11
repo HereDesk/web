@@ -3,14 +3,11 @@
 
     <div class='row mt-5'>
       <div class="col-auto mr-auto">
-        <h1 class="navbar-brand">
-          {{ product_code }}&nbsp;版本
-        </h1>
+        <h1 class="navbar-brand">{{ product_code }}&nbsp;版本</h1>
       </div>
       <div class='col-auto'>
-        <button type='button'  id='addRelease' class='btn btn-create'
-          data-toggle="modal" data-target="#modal-create-release"
-          v-if="Rules.product_release">
+        <button id='addRelease' type='button' class='btn btn-create'
+          v-if="Rules.product_release" @click="showModal = 'addRelase'">
           &nbsp;&nbsp;增加版本&nbsp;&nbsp;
         </button>
       </div>
@@ -38,39 +35,33 @@
     </div>
 
     <!-- modal -->
-    <div class="modal fade" id="modal-create-release" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">创建版本号</h5>
-          </div>
-          <div class="modal-body">
-            <div class='form-group row col-md-auto'>
-              <label for="pg-product-name" class="mx-5">选择产品</label>
-              <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
-                <option>{{ product_code }}</option>
-              </select>
-            </div>
-            <div class='form-group row col-md-auto'>
-              <label for="pg-product-name" class="mx-5">版本</label>
-              <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
-                placeholder='输入（不超20个字）' maxlength='20' required 
-                v-model='ReleaseData.release' >
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="createRelease">提交</button>
-          </div>
+    <Modal v-if="showModal == 'addRelase'" @close="showModal = true">
+      <h5 slot="header">创建版本号</h5>
+      <div class="form-group" slot="body">
+        <div class='row col-md-auto'>
+          <label for="pg-product-name" class="mx-5">选择产品</label>
+          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
+            <option>{{ product_code }}</option>
+          </select>
+        </div>
+        <div class='row col-md-auto'>
+          <label for="pg-product-name" class="mx-5">版本</label>
+          <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
+            placeholder='输入（不超20个字）' maxlength='20' required 
+            v-model='ReleaseData.release'>
         </div>
       </div>
-    </div>
+      <button type="submit" class="btn btn-primary" slot="footer" @click="createRelease()">提交</button>
+    </Modal>
 
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
+import Modal from "~/components/Modal"
+
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -85,9 +76,13 @@ export default {
   },
 
   layout: "head",
+  components: {
+    Modal
+  },
 
   data() {
     return {
+      showModal: false,
       product_code: this.$route.query.product_code || "",
       release_list: "",
       tableData: [],
@@ -138,10 +133,7 @@ export default {
       let release = this.ReleaseData.release
       this.ReleaseData.product_code = this.product_code
       if ((release.length > 20) | (release.length === 0)) {
-        this.$notify.error({
-          title: "提交失败",
-          message: "版本号的有效长度为0-8"
-        })
+        this.$notify.error({title: "提交失败",message: "版本号的有效长度为0-8"})
         return
       }
       axios({
@@ -150,18 +142,11 @@ export default {
         data: JSON.stringify(this.ReleaseData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#modal-create-release").modal("hide")
-          this.$notify.success({ 
-            title: "成功", 
-            message: res.data["msg"]
-          })
+          this.$notify.success({ title: "成功", message: res.data["msg"]})
           this.getRelease()
         }
         if (res.data["status"] !== 20000) {
-          this.$notify.error({ 
-            title: "错误", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({ title: "错误", message: res.data["msg"] })
         }
       })
     }

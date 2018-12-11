@@ -45,7 +45,7 @@
               </span>
               <span @click="getUserId(scope.row,$event)" v-if="scope.row.group !== 'admin'">
                 <button type="button" class="ml-1 btn btn-outline-dark btn-sm" 
-                  data-toggle="modal" data-target="#reset-password">密码</button>
+                  @click="showModal = 'ResetPasswd'">密码</button>
               </span>
             </template>  
           </el-table-column>
@@ -53,39 +53,32 @@
       </div>
     </div>
 
-    <div class="modal fade" id="reset-password" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">重置密码</h5>
-          </div>
-          <div class="modal-body">
-            <div class='form-group row col-md-auto'>
-              <label for="password" class="mx-5">密码</label>
-              <input type='password' id='password' class='form-control input-lg mx-5 my-1' 
-                placeholder='请输入密码' minlength="8" maxlength='16' required 
-                v-model='password.passwd'>
-            </div>
-            <div class='form-group row col-md-auto'>
-              <label for="t-password" class="mx-5">确认密码</label>
-              <input type='password' id='t-password' class='form-control input-lg mx-5 my-1' 
-                placeholder='请再次输入密码' minlength="8" maxlength='16' required 
-                v-model='password.RepeatPasswd' >
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="ResetPassword()">提交</button>
-          </div>
+    <Modal v-if="showModal == 'ResetPasswd'" @close="showModal = false">
+      <h5 slot="header">重置密码</h5>
+      <div class="form-group" slot="body">
+        <div class='row col-md-auto'>
+          <label for="password" class="mx-5">密码</label>
+          <input type='password' id='password' class='form-control input-lg mx-5 my-1' 
+            placeholder='请输入密码' minlength="8" maxlength='16' required 
+            v-model='password.passwd'>
+        </div>
+        <div class='row col-md-auto'>
+          <label for="t-password" class="mx-5">确认密码</label>
+          <input type='password' id='t-password' class='form-control input-lg mx-5 my-1' 
+            placeholder='请再次输入密码' minlength="8" maxlength='16' required 
+            v-model='password.RepeatPasswd' >
         </div>
       </div>
-    </div>
+      <button type="submit" class="btn btn-primary" slot="footer" @click="ResetPassword()">提交</button>
+    </Modal>
 
   </div>
 </template>
 
 <script>
 import axios from "axios";
+
+import Modal from "~/components/Modal";
 import util from "~/assets/js/util.js";
 import rules from "~/assets/js/rules.js";
 
@@ -96,6 +89,9 @@ export default {
     };
   },
   layout: "head",
+  components: {
+    Modal
+  },
   filters: {
     date: util.date
   },
@@ -104,6 +100,7 @@ export default {
     return {
       tableData: [],
       msg: "",
+      showModal: false,
       bannedData: {
         user_id: "",
         code: ""
@@ -172,7 +169,6 @@ export default {
         data: JSON.stringify(this.password)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#reset-password").modal("hide");
           this.$notify.success({
             title: "成功",
             message: res.data["msg"]

@@ -5,9 +5,7 @@
       </div>
       <div class='col-auto' >
         <button id='addproduct' type='button' class='btn btn-create' 
-          data-toggle="modal" data-target="#CreateProduct"
-          v-if="Rules.product_add">
-          + 增加产品
+          v-if="Rules.product_add" @click="showModal = 'AddProduct'">+ 增加产品
         </button>
       </div>
     </div>
@@ -44,35 +42,25 @@
       </div>
     </div>
 
-    <div class="modal fade" id="CreateProduct" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">创建产品</h5>
-          </div>
-          <div class="modal-body">
-            <div class='form-group row col-md-auto'>
-              <label for="pg-product-name" class="mx-5">产品名称</label>
-              <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1' 
-                placeholder='输入（不超20个字）' maxlength='20' required 
-                v-model='ProductData.product_name' >
-            </div>
-            <div class='form-group row col-md-auto'>
-              <label for="pg-product-name" class="mx-5">产品编号</label>
-              <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
-                placeholder='输入（不超20个字）' maxlength='20' required 
-                v-model='ProductData.product_code' >
-              <p class="mx-5 mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
-            </div>
-            <span class="ml-5 ms-msg" v-if="errorMsg">错误提示：{{ errorMsg }}</span>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="createProduct">提交</button>
-          </div>
+    <Modal v-if="showModal == 'AddProduct'" @close="showModal = false">
+      <h5 slot="header">创建产品</h5>
+      <div class="form-group" slot="body">
+        <div class='row col-md-auto'>
+          <label for="pg-product-name" class="mx-5">产品名称</label>
+          <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1' 
+            placeholder='输入（不超20个字）' maxlength='20' required 
+            v-model='ProductData.product_name' >
+        </div>
+        <div class='row col-md-auto'>
+          <label for="pg-product-name" class="mx-5">产品编号</label>
+          <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
+            placeholder='输入（不超20个字）' maxlength='20' required 
+            v-model='ProductData.product_code' >
+          <p class="mx-5 mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
         </div>
       </div>
-    </div>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="createProduct">提交</button>
+    </Modal>
 
     <div class='row' v-if="controlNull">
       <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
@@ -86,6 +74,9 @@
 
 <script>
 import axios from "axios"
+
+import Modal from "~/components/Modal"
+
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -96,11 +87,17 @@ export default {
     }
   },
   layout: "head",
+
+  components: {
+    Modal
+  },
+
   filters: {
     date: util.date
   },
   data() {
     return {
+      showModal: false,
       FirstPage: 1,
       LastPage: "",
       pageNumber: 1,
@@ -157,10 +154,12 @@ export default {
       let productCode = this.ProductData.product_code
       let productName = this.ProductData.product_name
       if ((productName.length > 20) | (productName.length === 0)) {
-        alert("项目名称的有效长度为1-20")
+        this.$notify.error({title: "错误",message: "项目名称的有效长度为1-20"})
+        return 
       }
       if ((productCode.length > 20) | (productCode.length === 0)) {
-        alert("项目编码的有效长度为1-20")
+        this.$notify.error({title: "错误",message: "项目编码的有效长度为1-20"})
+        return 
       }
       axios({
         method: "post",
@@ -168,17 +167,10 @@ export default {
         data: JSON.stringify(this.ProductData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#CreateProduct").modal("hide")
           this.getProductList()
-          this.$notify.success({
-            title: "成功",
-            message: res.data["msg"]
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({
-            title: "错误",
-            message: res.data["msg"]
-          })
+          this.$notify.error({title: "错误",message: res.data["msg"]})
         }
       })
     }
