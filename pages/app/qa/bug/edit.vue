@@ -1,22 +1,22 @@
 <template>
   <div id="page-bug-add">
     <BaseNav :title="title"></BaseNav>
-    <div id="page-bug-add-input" class='container mt-5'>
-      <div class='row'>
-        <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div id="edit-container" class="container mt-5">
+      <div id="edit-row" class="row">
+        <div class="col">
           
           <!-- bug: product_code and version -->
-          <div id="bug-product-version" class='form-group row'>
-            <label for='bug-product-version' class="col-md-2 col-sm-12 col-12 bug-label">
+          <div id="bug-product-version" class="form-group row">
+            <label for="bug-product-version" class="col-md-2 col-sm-12 col-12 bug-label">
               产品与模块
               <span class="text-red">*</span>
             </label>
-            <el-select id="bug-product" class='col-md-2 col-sm-4 col-6' placeholder="选择产品" v-model="Bug.product_code" >
+            <el-select id="bug-product" class="col-md-2 col-sm-4 col-6" placeholder="选择产品" v-model="Bug.product_code" >
               <el-option 
                 v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
               </el-option>
             </el-select>
-            <el-select id="bug-version" class='col-md-2 col-sm-4 col-6' placeholder="选择版本" v-model="Bug.release">
+            <el-select id="bug-version" class="col-md-2 col-sm-4 col-6" placeholder="选择版本" v-model="Bug.release">
               <el-option 
                 v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
               </el-option>
@@ -31,7 +31,7 @@
           </div>
           
           <!-- bug: assignedTo and priority and severity -->
-          <div id="bug-mini-info" class='form-group row'>
+          <div id="bug-mini-info" class="form-group row">
             <label for='bug-mini-info' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷属性<span class="text-red">*</span>
             </label>
@@ -56,7 +56,7 @@
           </div>
           
           <!-- bug: source and type -->
-          <div id="bug-source-type" class='form-group row'>
+          <div id="bug-source-type" class="form-group row">
             <label for='bug-source-type' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷来源/类型
             </label>
@@ -75,7 +75,7 @@
           </div>
 
           <!-- bug: title -->
-          <div id="bug-title" class='form-group row'>
+          <div id="bug-title" class="form-group row">
             <label for='bug-title' class="col-lg-2 col-md-2 col-sm-12 bug-label">
               缺陷标题<span class="text-red">*</span>
             </label>
@@ -86,7 +86,7 @@
           </div>
           
           <!-- bug: steps -->
-          <div id="bug-steps" class='form-group row'>
+          <div id="bug-steps" class="form-group row">
             <label for='bug-steps' class="col-lg-2 col-md-2 col-sm-12 bug-label">
               发现步骤<span class="text-red">*</span>
             </label>
@@ -101,7 +101,7 @@
           </div>
           
           <!-- bug: result -->
-          <div id="bug-reality-result" class='form-group row'>
+          <div id="bug-reality-result" class="form-group row">
             <label for='bug-reality-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">
               实际结果<span class="text-red">*</span>
             </label>
@@ -113,7 +113,7 @@
           </div>
           
           <!-- bug: result -->
-          <div id="bug-expected-result" class='form-group row'>
+          <div id="bug-expected-result" class="form-group row">
             <label for='bug-expected-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">预期结果</label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
               <mavon-editor placeholder="请输入预期结果 ~" :toolbarsFlag="false"
@@ -123,7 +123,7 @@
           </div>
           
           <!-- bug: file -->
-          <div id="bug-file" class='form-group row'>
+          <div id="bug-file" class="form-group row">
             <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
               <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
@@ -131,7 +131,7 @@
           </div> 
           
           <!-- bug: remark -->
-          <div id="bug-remark" class='form-group row' v-if="isRemarkDisable">
+          <div id="bug-remark" class="form-group row" v-if="isRemarkDisable">
             <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
               <mavon-editor placeholder="请输入附加信息 ~" :toolbarsFlag="false"
@@ -203,6 +203,7 @@ export default {
         url: null
       },
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
+      Raw_Data: false,
       Bug: {
         bug_id: null,
         priority: null,
@@ -212,7 +213,7 @@ export default {
         product_code: null,
         release: null,
         assignedTo_id: null,
-        module_id: [],
+        module_id: ['',''],
         annex: []
       }
     }
@@ -253,8 +254,10 @@ export default {
     getAnnex (data) {
       this.Bug.annex = data
     },
-    getModule () {
-      axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
+    
+		getModule () {
+      axios
+        .get('/api/pm/get_module?product_code=' + this.Bug.product_code)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.modules_list = res.data['data']
@@ -263,34 +266,20 @@ export default {
           }
         })
     },
-    // 获取缺陷详情
+    
+		// get bug_details data
     getBugDetails () {
       if (this.currentBugId) {
         axios.get('/api/qa/bug/details?bug_id=' + this.currentBugId)
           .then(res => {
             if (res.data['status'] === 20000) {
               let data = res.data['data']
-              this.Bug.title = data['title']
+              this.Raw_Data = res.data
               this.Annex = res.data['annex']
-              this.Bug.steps = data['steps']
-              this.Bug.reality_result = data['reality_result']
-              this.Bug.expected_result = data['expected_result']
-              this.Bug.remark = data['remark']
-              this.Bug.assignedTo_id = data['assignedTo_id']
-              this.Bug.bug_type = data['bug_type']
-              this.Bug.priority = data['priority']
-              this.Bug.severity = data['severity']
-              this.Bug.release = data['release']
-              this.Bug.product_code = data['product_code']
-              this.Bug.bug_id = data['bug_id']
+              Object.assign(this.Bug,data)
               data['bug_source'] ? this.Bug.bug_source = data['bug_source'] : this.Bug.bug_source = 'tester'
-              if (data['m1_id']) {
-                this.Bug.module_id[0] = data['m1_id']
-              }
-              if (data['m2_id']) {
-                this.Bug.module_id[1] = data['m2_id']
-              }
-            } else {
+              data['m1_id'] ? this.Bug.module_id[0] = data['m1_id'] : null
+              data['m2_id'] ? this.Bug.module_id[1] = data['m2_id'] : null
             }
         })
       }
@@ -319,7 +308,8 @@ export default {
         }
       })
     },
-    editBug (event) {
+    
+		editBug (event) {
       if (!this.Bug.release) {
         this.$notify.error({title: '提示',message: '请选择版本号'})
         return

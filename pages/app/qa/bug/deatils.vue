@@ -124,7 +124,7 @@
               </li>
               <li id="bug-desc-status">
                 <label>缺陷状态：</label>
-                <span  class="border-radius-5"
+                <span class="border-radius-5"
                   :class="{ 'text-secondary': BugDetails.status === 'Closed',
                     'text-success': BugDetails.status === 'Fixed',
                     'text-urgency': ['New','Open','Reopen'].includes(BugDetails.status),
@@ -452,10 +452,7 @@ export default {
               // get history
               this.BugHistory()
             } else {
-              this.$notify.error({
-                title: "错误",
-                message: res.data["msg"]
-              })
+              this.$notify.error({title: "错误",message: res.data["msg"]})
             }
           })
       }
@@ -486,6 +483,7 @@ export default {
         data: JSON.stringify(this.ResolveData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.showModal=false
           this.$router.go(-1)
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
@@ -536,14 +534,8 @@ export default {
         this.$notify.error({ title: "错误", message: "请选择指派人" })
         return 
       }
-      if (
-        (this.ReOpenData.remark.length > 1000) |
-        (this.ReOpenData.remark.length < 5)
-      ) {
-        this.$notify.error({
-          title: "错误",
-          message: "重新打开缺陷，原因不能为空哦"
-        })
+      if ((this.ReOpenData.remark.length > 1000) |(this.ReOpenData.remark.length < 5)) {
+        this.$notify.error({title: "错误",message: "重新打开缺陷，原因不能为空哦"})
         return
       }
       axios({
@@ -552,6 +544,7 @@ export default {
         data: JSON.stringify(this.ReOpenData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.showModal=false
           this.$router.go(-1)
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
@@ -569,16 +562,11 @@ export default {
         data: JSON.stringify(this.HangUpData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.showModal=false
           this.$router.go(-1)
-          this.$notify.success({
-            title: "成功",
-            message: res.data["msg"]
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({
-            title: "错误",
-            message: res.data["msg"]
-          })
+          this.$notify.error({title: "错误",message: res.data["msg"]})
         }
       })
     },
@@ -601,16 +589,11 @@ export default {
         data: JSON.stringify(this.NotesData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.showModal=false
           this.BugHistory()
-          this.$notify.success({
-            title: "成功",
-            message: res.data["msg"]
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({
-            title: "错误",
-            message: res.data["msg"]
-          })
+          this.$notify.error({title: "错误",message: res.data["msg"]})
         }
       })
     }

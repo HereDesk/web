@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <Modal v-if="showModal == 'AddProduct'" @close="showModal = false">
+    <Modal v-if="showModal == 'AddProduct'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">创建产品</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>
@@ -153,12 +153,12 @@ export default {
     createProduct() {
       let productCode = this.ProductData.product_code
       let productName = this.ProductData.product_name
-      if ((productName.length > 20) | (productName.length === 0)) {
-        this.$notify.error({title: "错误",message: "项目名称的有效长度为1-20"})
+      if ((productName.length > 20) | (productName.length < 3)) {
+        this.$notify.error({title: "错误",message: "项目名称的有效长度为3-20"})
         return 
       }
-      if ((productCode.length > 20) | (productCode.length === 0)) {
-        this.$notify.error({title: "错误",message: "项目编码的有效长度为1-20"})
+      if ((productCode.length > 20) | (productCode.length < 3)) {
+        this.$notify.error({title: "错误",message: "项目编码的有效长度为3-20"})
         return 
       }
       axios({
@@ -167,6 +167,7 @@ export default {
         data: JSON.stringify(this.ProductData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.showModal=false
           this.getProductList()
           this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {

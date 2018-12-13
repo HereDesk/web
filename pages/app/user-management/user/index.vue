@@ -1,16 +1,17 @@
 <template>
   <div id="page-user-index" class='container mt-3'>
-    <div class='row mt-5'>
+    
+		<div id="page-head" class='row mt-5'>
       <div class="col-auto mr-auto">
       </div>
-      <div class='col-auto'>
+      <div id="create-user" class='col-auto'>
         <nuxt-link to="/app/user-management/user/adduser" v-if="Rules.user_create">
           <button type="btn" class="btn btn-create">+ 增加用户</button>
         </nuxt-link>
       </div>
     </div>
 
-    <div class='row mt-3 mb-5 table_data'>
+    <div id="page-data" class='row mt-3 mb-5 table_data'>
       <div class='col-xl-12 col-lg-12 col-md-12'>
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column prop='realname' label='真实姓名' width="120"></el-table-column>
@@ -53,7 +54,7 @@
       </div>
     </div>
 
-    <Modal v-if="showModal == 'ResetPasswd'" @close="showModal = false">
+    <Modal id="modal-create-user" v-if="showModal == 'ResetPasswd'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">重置密码</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>
@@ -66,7 +67,7 @@
           <label for="t-password" class="mx-5">确认密码</label>
           <input type='password' id='t-password' class='form-control input-lg mx-5 my-1' 
             placeholder='请再次输入密码' minlength="8" maxlength='16' required 
-            v-model='password.RepeatPasswd' >
+            v-model='password.RepeatPasswd' @keyup.enter="ResetPassword()">
         </div>
       </div>
       <button type="submit" class="btn btn-primary" slot="footer" @click="ResetPassword()">提交</button>
@@ -88,19 +89,21 @@ export default {
       title: "HDesk - 用户管理"
     };
   },
+	
   layout: "head",
   components: {
     Modal
   },
+	
   filters: {
     date: util.date
   },
 
   data() {
     return {
-      tableData: [],
       msg: "",
       showModal: false,
+			tableData: [],
       bannedData: {
         user_id: "",
         code: ""
@@ -126,6 +129,7 @@ export default {
   },
 
   methods: {
+		// get all user
     getAllUser() {
       axios.get("/api/user/user_list").then(res => {
         if (res.data["status"] === 20000) {
@@ -133,34 +137,24 @@ export default {
         }
       })
     },
+		
     // getUserId
     getUserId(event) {
       this.password.user_id = event.user_id
     },
-    // 重置密码
+		
+    // reset password
     ResetPassword(event) {
       if (this.password.passwd === "") {
-        this.$notify.error({
-          title: "提交失败",
-          message: "密码不能为空"
-        })
+        this.$notify.error({title: "失败",message: "密码不能为空"})
         return
       }
       if (this.password.passwd !== this.password.RepeatPasswd) {
-        this.$notify.error({
-          title: "提交失败",
-          message: "两次密码输入的不一致"
-        })
+        this.$notify.error({title: "失败",message: "两次密码输入的不一致"})
         return
       }
-      if (
-        (this.password.passwd.length < 8) |
-        (this.password.passwd.length > 16)
-      ) {
-        this.$notify.error({
-          title: "提交失败",
-          message: "密码的有效长度为8-16位"
-        })
+      if (this.password.passwd.length < 8 | this.password.passwd.length > 16) {
+        this.$notify.error({title: "失败",message: "密码的有效长度为8-16位"})
         return
       }
       axios({
@@ -169,20 +163,16 @@ export default {
         data: JSON.stringify(this.password)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.success({
-            title: "成功",
-            message: res.data["msg"]
-          })
+					this.showModal = false
+          this.$notify.success({title: "成功",message: res.data["msg"]})
           this.getAllUser();
         } else {
-          this.$notify.error({
-            title: "失败",
-            message: res.data["msg"]
-          })
+          this.$notify.error({title: "失败",message: res.data["msg"]})
         }
       })
     },
-    // 封禁
+		
+    // banned user
     banned(rows, event) {
       this.bannedData.user_id = rows.user_id
       this.bannedData.code = event.target.value
@@ -192,16 +182,10 @@ export default {
         data: JSON.stringify(this.bannedData)
       }).then(rep => {
         if (rep.data["status"] === 10060) {
-          this.$notify.success({
-            title: "成功",
-            message: rep.data["msg"]
-          })
+          this.$notify.success({title: "成功",message: rep.data["msg"]})
           this.getAllUser();
         } else {
-          this.$notify.error({
-            title: "失败",
-            message: rep.data["msg"]
-          })
+          this.$notify.error({title: "失败",message: rep.data["msg"]})
         }
       })
     }

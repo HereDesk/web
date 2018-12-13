@@ -1,19 +1,21 @@
 <template>
   <div id="page-product-release" class='container mt-3'>
 
-    <div class='row mt-5'>
-      <div class="col-auto mr-auto">
-        <h1 class="navbar-brand">{{ product_code }}&nbsp;版本</h1>
+		<!-- page data -->
+    <div id="page-head" class='row mt-5'>
+      <div id="page-title" class="col-auto mr-auto">
+        <h1 class="navbar-brand">{{ product_code }}&nbsp;版本管理</h1>
       </div>
-      <div class='col-auto'>
-        <button id='addRelease' type='button' class='btn btn-create'
-          v-if="Rules.product_release" @click="showModal = 'addRelase'">
+      <div id="page-add-release" class='col-auto'>
+        <button id="add_btn" type='button' class='btn btn-create'
+          v-if="Rules.product_release" @click="showModal = 'add_version'">
           &nbsp;&nbsp;增加版本&nbsp;&nbsp;
         </button>
       </div>
     </div>
 
-    <div class='row mt-3 mb-5 table_data'>
+		<!-- page data -->
+    <div id="page-data" class='row mt-3 mb-5 table_data'>
       <div class='col-xl-12 col-lg-12 col-md-12'>
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column label='产品' prop='product_code'></el-table-column>
@@ -27,15 +29,17 @@
         </el-table>
       </div>
     </div>
-    <div class='row' v-if="controlNull">
+    
+		<!-- page null -->
+		<div id="page-null" class='row' v-if="controlNull">
       <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
         <img src="~/static/pic/happy.png" class="null-icon"/>
         <p class="no-hint">{{ msg }}</p>
       </div>
     </div>
 
-    <!-- modal -->
-    <Modal v-if="showModal == 'addRelase'" @close="showModal = true">
+    <!-- create version modal -->
+    <Modal id="page-modal" v-if="showModal == 'add_version'" @close="showModal = true" :isFooter="true">
       <h5 slot="header">创建版本号</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>
@@ -48,7 +52,7 @@
           <label for="pg-product-name" class="mx-5">版本</label>
           <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
             placeholder='输入（不超20个字）' maxlength='20' required 
-            v-model='ReleaseData.release'>
+            v-model='ReleaseData.release'  @keyup.enter="createRelease()" />
         </div>
       </div>
       <button type="submit" class="btn btn-primary" slot="footer" @click="createRelease()">提交</button>
@@ -83,11 +87,11 @@ export default {
   data() {
     return {
       showModal: false,
+			msg: "",
+			controlNull: false,
       product_code: this.$route.query.product_code || "",
       release_list: "",
       tableData: [],
-      msg: "",
-      controlNull: false,
       ReleaseData: {
         release: "",
         product_code: ""
@@ -118,7 +122,8 @@ export default {
     this.getRelease()
   },
   methods: {
-    // 获取版本
+		
+    // Gets all versions in the project
     getRelease() {
       axios.get("/api/pm/release/list?product_code=" + this.product_code)
         .then(res => {
@@ -129,11 +134,12 @@ export default {
           }
         })
     },
+		
     createRelease(row) {
       let release = this.ReleaseData.release
       this.ReleaseData.product_code = this.product_code
-      if ((release.length > 20) | (release.length === 0)) {
-        this.$notify.error({title: "提交失败",message: "版本号的有效长度为0-8"})
+      if (release.length > 20 | release.length < 3) {
+        this.$notify.error({title: "失败",message: "版本号的有效长度为3-20"})
         return
       }
       axios({
@@ -142,6 +148,7 @@ export default {
         data: JSON.stringify(this.ReleaseData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+					this.showModal = false
           this.$notify.success({ title: "成功", message: res.data["msg"]})
           this.getRelease()
         }

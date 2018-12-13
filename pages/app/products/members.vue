@@ -1,18 +1,18 @@
 <template>
   <div id="page-product-members" class='container mt-3'>
 
-    <div class='row mt-5'>
-      <div class="col-auto mr-auto">
-        <a class="navbar-brand">{{ product_code }}&nbsp;成员</a>
+    <div id="page-head" class='row mt-5'>
+      <div id="page-title" class="col-auto mr-auto">
+        <a class="navbar-brand">{{ product_code }}&nbsp;成员管理</a>
       </div>
-      <div class='col-auto'>
-        <button type='button' class='btn btn-create' id='addRelease' 
-          v-if="Rules.product_members" @click="showModal = 'addRelease'">+ 增加成员
+      <div  id='add-members' class='col-auto'>
+        <button type='button'  id='add-btn' class='btn btn-create' 
+          v-if="Rules.product_members" @click="showModal = 'add_members'">+ 增加成员
         </button>
       </div>
     </div>
 
-    <div class='row mt-3 mb-5 table_data'>
+    <div id="page-data" class='row mt-3 mb-5 table_data'>
       <div class='col-xl-12 col-lg-12 col-md-12'>
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column label='真实姓名' prop='realname'></el-table-column>
@@ -43,26 +43,26 @@
       </div>
     </div>
 
-    <div class='row' v-if="controlNull">
+    <div id="page-null" class='row' v-if="controlNull">
       <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
         <img src="~/static/pic/happy.png" class="null-icon"/>
         <p class="no-hint">{{ msg }}</p>
       </div>
     </div>
 
-    <!-- modal -->
-    <Modal v-if="showModal == 'addRelease'" @close="showModal = false">
+    <!-- add member modal -->
+    <Modal id="add_members" v-if="showModal == 'add_members'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">增加成员</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>
           <label for="pg-product-name" class="mx-5">产品</label>
-          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
+          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;">
             <option>{{ product_code }}</option>
           </select>
         </div>
         <div class='row col-md-auto' @change="selectMember($event)">
           <label for="pg-product-name" class="mx-5">选择人员</label>
-          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;background-color:#f5f5f5">
+          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;">
             <option value="">请选择</option>
             <option v-for="item in AllUser" :key="item.id" :value='item.user_id'>{{ item.realname }}</option>
           </select>
@@ -105,14 +105,13 @@ export default {
   
   data() {
     return {
+			showModal: false,
+			controlNull: false,
+			msg: "",
       product_code: "",
       release_list: "",
       tableData: [],
       AllUser: [],
-      showModal: false,
-      msg: "",
-      errorMsg: "",
-      controlNull: false,
       ProductMemberData: {
         user_id: "",
         product_code: ""
@@ -131,9 +130,10 @@ export default {
       return rules.RuleManges(group,PagesRules)
     }
   },
+  
   watch: {
     tableData: function(val, oldval) {
-      if (this.tableData.length > 0) {
+      if (this.tableData.length) {
         this.controlNull = false
       } else {
         this.msg = this.product_code + "产品下暂时还没有成员哦"
@@ -141,7 +141,7 @@ export default {
       }
     }
   },
-
+  
   mounted() {
     this.product_code = this.$route.query.product_code
     this.ProductMemberData.product_code = this.$route.query.product_code
@@ -151,10 +151,11 @@ export default {
     } else {
       this.$router.push("/app/products")
     }
+    this.getAllUser()
   },
 
   methods: {
-    // 获取人员
+    // get current product member
     getProductMember() {
       axios.get("/api/pm/member/list?product_code=" + this.product_code)
         .then(res => {
@@ -166,29 +167,27 @@ export default {
           }
         })
     },
-    // 获取所有人员
+
+    // get system all user
     getAllUser() {
       axios.get("/api/user/user_list").then(res => {
         if (res.data["status"] === 20000) {
           this.AllUser = res.data["data"]
         } else {
-          this.$notify.error({ 
-            title: "获取失败", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "失败",message: res.data["msg"]})
         }
       })
     },
-    // 获取user
+
+    // selected user data
     selectMember(event) {
       this.ProductMemberData.user_id = event.target.value
     },
+
+    // add users to the project
     JoinProduct(row) {
-      if (this.ProductMemberData.user_id === "") {
-        this.$notify.error({ 
-          title: "提交失败", 
-          message: "请选择用户" 
-        })
+      if (!this.ProductMemberData.user_id) {
+        this.$notify.error({title: "失败",message: "请选择用户后再提交"})
         return
       }
       axios({
@@ -197,19 +196,17 @@ export default {
         data: JSON.stringify(this.ProductMemberData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.success({ 
-            title: "加入成功", 
-            message: res.data["msg"] 
-          })
+          this.showModal=false
+          this.$notify.success({title: "成功",message: res.data["msg"]})
           this.getProductMember()
         }
         if (res.data["status"] !== 20000) {
-          this.$notify.error({ 
-            title: "加入失败", message: res.data["msg"] 
-          })
+          this.$notify.error({title: "失败", message: res.data["msg"]})
         }
       })
     },
+
+    // banned user to the product
     banned(rows, event) {
       this.bannedData.user_id = rows.user_id
       axios({
@@ -218,19 +215,15 @@ export default {
         data: JSON.stringify(this.bannedData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.success({ 
-            title: "操作成功", 
-            message: res.data["msg"] 
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
           this.getProductMember()
         } else {
-          this.$notify.error({ 
-            title: "错误", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "错误",message: res.data["msg"]})
         }
       })
     },
+
+    // rejoin user to the product
     reJoin(rows, event) {
       this.bannedData.user_id = rows.user_id
       axios({
@@ -239,16 +232,10 @@ export default {
         data: JSON.stringify(this.bannedData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.success({
-            title: "操作成功",
-            message: "此用户已重新激活"
-          })
+          this.$notify.success({title: "成功",message: "此用户已重新激活"})
           this.getProductMember()
         } else {
-          this.$notify.error({ 
-            title: "激活失败", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "失败",message: res.data["msg"]})
         }
       })
     }
