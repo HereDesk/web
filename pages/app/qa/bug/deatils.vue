@@ -9,11 +9,11 @@
         <div id="page-details-opera-btn" class="col-12 my-3">
           <button type="btn" class="btn btn-gray mr-3" @click="BugDelete()" v-if="BtnRules.del">删除</button>
           <button type="btn" class="btn btn-gray" v-if="BtnRules.edit" @click="EditBug()">编辑</button>
-          <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.assign" @click="SkipAssign()">分配</button>
+          <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.assign" @click="showModal = 'assign'">分配</button>
           <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.reopen" @click="showModal = 'ReOpen'">重新打开</button>
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-gray ml-3" @click="immediateRecovered()" v-if="BtnRules.Recovered">已解决</label>
-            <label class="btn btn-gray" @click="SkipRecovered('other')" v-if="BtnRules.Recovered">其它解决方案</label>
+            <label class="btn btn-gray" @click="showModal = 'resolve'" v-if="BtnRules.Recovered">其它解决方案</label>
           </div>
           <button type="button" class="btn btn-gray ml-3" v-if="BtnRules.hangup" @click="showModal = 'hangup'">延期挂起</button>
           <button type="button" class="btn btn-gray ml-3" @click="BugClosed()" v-if="BtnRules.close">关闭</button>
@@ -132,13 +132,13 @@
                   {{ BugDetails.status_name }}
                 </span>
               </li>
-              <li id="bug-desc-severity" @click="BugPriorityDialog('severity')">
+              <li id="bug-desc-severity" @click="BugPSDialog('severity')">
                 <label>严重程度：</label>
                 <span class="font-color-2973B7">
                   {{ BugDetails.severity_name }} <i class="iconfont icon-edit ml-3" v-if="BtnRules.edit"></i>
                 </span>
               </li>
-              <li id="bug-desc-priority" @click="BugPriorityDialog('priority')">
+              <li id="bug-desc-priority" @click="BugPSDialog('priority')">
                 <label>优先级：</label>
                 <span class="font-color-2973B7">
                   {{ BugDetails.priority_name }} <i class="iconfont icon-edit ml-3" v-if="BtnRules.edit"></i>
@@ -226,38 +226,35 @@
     </div>
 
     <!-- Bug处理操作：指派 -->
-    <div id="bug-list-assign">
-      <BugAssign
-        :bug_id="currentBugId"
-        :product_code="product_code"
-        :pageSource="pageSource"
-        :member_list="member_list"
-      ></BugAssign>
-    </div>
+    <BugAssign id="modal-assign" 
+      v-if="showModal == 'assign'" @close="showModal = false"
+      :bug_id="currentBugId"
+      :product_code="product_code"
+      :pageSource="pageSource"
+      :member_list="member_list"
+    ></BugAssign>
 
     <!-- Bug处理操作：解决 -->
-    <div id="bug-list-resolve">
-      <BugResolve
-        :bug_id="currentBugId"
-        :OpenBy="BugDetails.openedBy"
-        :product_code="product_code"
-        :scheme="scheme"
-        :pageSource="pageSource"
-        :member_list="member_list">
-      </BugResolve>
-    </div>
+    <BugResolve id="modal-resolve"
+      v-if="showModal == 'resolve'" @close="showModal = false"
+      :bug_id="currentBugId"
+      :OpenBy="BugDetails.openedBy"
+      :product_code="product_code"
+      :scheme="'other'"
+      :pageSource="pageSource"
+      :member_list="member_list">
+    </BugResolve>
 
     <!-- Bug处理操作：修改优先级/严重程度 -->
-    <div id="bug-list-change">
-      <BugChange 
-        :data_type="components_value" 
-        :bug_id="currentBugId" 
-        @refreshList="getBugDetails()">
-      </BugChange>
-    </div>
+    <BugChange id="modal-change"
+      v-if="['priority','severity'].includes(showModal)" @close="showModal = false"
+      :data_type="components_value" 
+      :bug_id="currentBugId" 
+      @refreshList="getBugDetails()">
+    </BugChange>
 
     <!-- Bug处理操作：重新打开缺陷 -->
-    <Modal id="modal-reopen" v-if="showModal == 'ReOpen'" @close="showModal = false">
+    <Modal id="modal-reopen" v-if="showModal == 'ReOpen'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">重新打开缺陷</h5>
     	<div slot="body">
     		<div class="form-group row col-md-auto mx-3">
@@ -280,7 +277,7 @@
     </Modal>
 
     <!-- Bug处理操作：备注 -->
-    <Modal id="modal-notes" v-if="showModal == 'notes'" @close="showModal = false">
+    <Modal id="modal-notes" v-if="showModal == 'notes'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">增加备注</h5>
       <mavon-editor slot="body" class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false" placeholder="请输入备注 ~ "
       	v-model.trim="NotesData.remark">
@@ -291,7 +288,7 @@
     </Modal>
     
     <!-- Bug处理操作：延期挂起 -->
-    <Modal id="modal-hangup" v-if="showModal == 'hangup'" @close="showModal = false">
+    <Modal id="modal-hangup" v-if="showModal == 'hangup'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">缺陷延期操作</h5>
       <mavon-editor slot="body" class="mx-3" :toolbarsFlag="false" :subfield="false" placeholder="请输入延期原因 ~ "
       	v-model.trim="HangUpData.remark">
@@ -497,18 +494,6 @@ export default {
       })
     },
 
-    SkipRecovered(scheme) {
-      this.scheme = scheme
-      // this.current_product_code = this.product_code
-      $("#componentsResolve").modal("show")
-    },
-
-    // 分配
-    SkipAssign() {
-      // this.current_product_code = this.product_code
-      $("#componentsAssign").modal("show")
-    },
-
     // bug delete
     BugDelete() {
       axios.get("/api/qa/bug/delete?bug_id=" + this.currentBugId).then(res => {
@@ -522,11 +507,9 @@ export default {
     },
 
     // 操作：bug修改优先级
-    BugPriorityDialog(data) {
+    BugPSDialog(data) {
       this.components_value = data
-      if (this.components_value && this.BtnRules.edit) {
-        $("#modal-modify-priority").modal("show")
-      }
+      this.showModal = data
     },
 
     // bug closed
@@ -550,16 +533,18 @@ export default {
     ReOpen() {
       this.ReOpenData.bug_id = this.currentBugId
       if (this.ReOpenData.assignedTo === "") {
-        return this.$notify.error({ title: "错误", message: "请选择指派人" })
+        this.$notify.error({ title: "错误", message: "请选择指派人" })
+        return 
       }
       if (
         (this.ReOpenData.remark.length > 1000) |
         (this.ReOpenData.remark.length < 5)
       ) {
-        return this.$notify.error({
+        this.$notify.error({
           title: "错误",
           message: "重新打开缺陷，原因不能为空哦"
         })
+        return
       }
       axios({
         method: "post",
@@ -568,7 +553,6 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.$router.go(-1)
-          $("#modal-reopen").modal("hide")
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
           this.$notify.error({ title: "错误", message: res.data["msg"] })
@@ -586,7 +570,6 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.$router.go(-1)
-          $("#modal-hangup").modal("hide")
           this.$notify.success({
             title: "成功",
             message: res.data["msg"]
@@ -619,7 +602,6 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.BugHistory()
-          $("#modal-notes").modal("hide")
           this.$notify.success({
             title: "成功",
             message: res.data["msg"]

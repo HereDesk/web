@@ -56,7 +56,7 @@
               <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜">
                 <i class="iconfont icon-search icon-8a8a8a size-1-2"></i>
               </span>
-              <span title="导入导出" class="mr-4" data-toggle="modal" data-target="#modal-import-export">
+              <span title="导入导出" class="mr-4" @click="showModal = 'export'">
                 <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
               </span>
               <span title="测试用例统计" class="mr-4" @click="myToday()">
@@ -209,47 +209,37 @@
     </div>
 
     <!-- 测试用例统计 -->
-    <div id="modal-my-today" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content pt-5">
-          <div id="test">
-            <div class="modal-body text-center pb-5" v-if="MyTodayData">
-              <h5 class="countdata-title">今日工作</h5>
-              <div class="row mt-5">
-                <div class="col">
-                  <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create || 0 }}</p>
-                  <p class="countdata-desc">我今天创建的测试用例</p>
-                </div>
-              </div>
-            </div>
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeader="true">
+      <h5 slot="header" class="modal-title">{{ selected_product }}</h5>
+      <div slot="body" class="text-center mb-3">
+        <div class="row mt-3 mb-5">
+          <div class="col">
+            <p class="countdata-num" style="color:#20C997">{{ MyTodayData.create || 0 }}</p>
+            <p class="countdata-desc">我今天创建的测试用例</p>
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
 
     <!-- 用例导入导出 -->
-    <div id="modal-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-body p-0">
-            <div class="row">
-              <div class="col-12 col-sm-6 mpy-5 bg-EEEEEE">
-                <p class="px-3">1.仅支持按照产品、模块这两个查询条件导出</p>
-                <p class="px-3">2.选择好查询条件，再点击导出</p>
-                <p class="px-3">3.导出格式：目前仅支持 xlsx</p>
-              </div>
-              <div class="col col-sm-6 mpy-5 text-center bg-white">
-                <h4 class="pt-2">{{ selected_product }} 测试用例</h4>
-                <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">数据导出</button>
-                <p v-if="JSON.stringify(ExportFile) !== '{}'">
-                  下载地址: <a :href="ExportFile.url">{{ ExportFile.filename }}</a>
-                </p>
-              </div>
-            </div>
+    <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeader="true">
+      <h5 slot="header" class="modal-title">{{ selected_product }} 测试用例</h5>
+      <div slot="body">
+        <div class="row">
+          <div class="col text-center">
+            <button type="button" class="btn btn-dark mt-3 mb-5" @click="case_export">数据导出</button>
+            <p v-if="JSON.stringify(ExportFile) !== '{}'">
+              下载地址: <a :href="ExportFile.url">{{ ExportFile.filename }}</a>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p style="font-size:0.88rem;color:#424242;">备注：仅支持按照产品、模块这两个查询条件导出; 选择好查询条件，再点击导出; 目前仅支持导出xlsx</p>
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
 
   </div>
 </template>
@@ -260,6 +250,7 @@ import axios from 'axios'
 import PageLoading from "~/components/PageLoading"
 import Pagination from "~/components/Pagination"
 import ProductModule from "~/components/ProductModule"
+import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -275,10 +266,12 @@ export default {
   components: {
     PageLoading,
     Pagination,
-    ProductModule
+    ProductModule,
+    Modal
   },
   data() {
     return {
+      showModal: false,
       ScreenWidth: 0,
       // 产品、版本
       product_list: [],
@@ -474,7 +467,6 @@ export default {
         data: JSON.stringify(this.review_data)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#ModalCaseReview").modal("hide")
            this.$router.go(-1)
            this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
@@ -511,7 +503,7 @@ export default {
 
     // my today
     myToday() {
-      $("#modal-my-today").modal("show")
+      this.showModal = 'count-today'
       if (!this.selected_product) { return }
       axios("/api/analyze/testcase/my_today?product_code=" + this.selected_product).then(res => {
         if (res.data["status"] === 20000) {
@@ -520,7 +512,7 @@ export default {
       })
     },
 
-    bug_export () {
+    case_export () {
       if (!this.selected_product) { return }
       axios.get("/api/qa/testcase/export", { params: this.QueryBuilder })
         .then( res => {

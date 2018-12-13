@@ -172,7 +172,6 @@ export default {
         data: JSON.stringify(this.TestSuiteCreate)
       }).then(res => {
         if (res.data['status'] === 20000) {
-          $('#m-create').modal('hide')
           this.getTestSuite()
           this.$notify.success({title:'成功',message:res.data['msg']})
         } else {

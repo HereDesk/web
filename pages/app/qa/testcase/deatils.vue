@@ -185,7 +185,7 @@
       <PageLoading></PageLoading>
     </div>
     
-    <Modal id="ModalCaseReview" v-if="showModal == 'caseReview'" @close="showModal = false">
+    <Modal id="ModalCaseReview" v-if="showModal == 'caseReview'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">用户评审</h5>
       <div slot="body" class='form-group row col-md-auto mx-3'>
       	<mavon-editor style="width:100%;" placeholder="请输入评审意见 ~ "

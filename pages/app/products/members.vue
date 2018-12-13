@@ -197,7 +197,6 @@ export default {
         data: JSON.stringify(this.ProductMemberData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#P-Join-Members").modal("hide")
           this.$notify.success({ 
             title: "加入成功", 
             message: res.data["msg"] 

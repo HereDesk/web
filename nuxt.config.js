@@ -38,9 +38,9 @@ module.exports = {
       // {
       //   src: '/static/jquery/jquery-3.2.1.min.js'
       // },
-      {
-        src: '/static/bootstrap/js/bootstrap.min.js'
-      }
+      // {
+      //   src: '/static/bootstrap/js/bootstrap.min.js'
+      // }
     ]
   },
 

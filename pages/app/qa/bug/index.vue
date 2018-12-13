@@ -114,7 +114,7 @@
               <span class="searchIcon mr-3" @click="clickSearch()">
                 <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
               </span>
-              <span title="导入导出" class="mr-3" data-toggle="modal" data-target="#m-import-export">
+              <span title="导入导出" class="mr-3" @click="showModal = 'export'">
                 <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
               </span>
               <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
@@ -254,7 +254,7 @@
             <!-- style: list -->
             <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
               <ul class="pl-0 ul-none-2">
-                <li id="data" v-for="(item,index) in tableData" :Key="index" :id="item.bug_id">
+                <li v-for="(item,index) in tableData" :Key="index" :id="index">
                   <p id="data-bugtitle" class="mt-3">
                     <nuxt-link style="color:#424242" 
                       :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
@@ -285,7 +285,7 @@
                     </div>
                     <div id="data-action" class="float-right display-inline" style="margin-top:-1rem;"
                       :class="{'display-none': item.status == 'Closed', 'action': item.status != 'Closed' }">
-                      <span @click="skipAssign(item)">
+                      <span @click="showModal = 'assign'">
                         <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
                       </span>
                       <span @click="skipResolve(item)" v-if="item.status != 'Fixed'">
@@ -323,108 +323,96 @@
     </div>
 
     <!-- Bug处理操作：指派 -->
-    <div id="bug-list-assign">
-      <BugAssign 
-        :bug_id="selectedBugId" 
-        :product_code="selected_product"
-        :pageSource="pageSource"
-        @refreshList="getBugList()">
-      </BugAssign>
-    </div>
+    <BugAssign
+      v-if="showModal == 'assign'" 
+      @close="showModal = false"
+      :bug_id="selectedBugId" 
+      :product_code="selected_product"
+      :pageSource="pageSource"
+      @refreshList="getBugList()"
+    ></BugAssign>
 
     <!-- Bug处理操作：解决 -->
-    <div id="bug-list-resolve">
-      <BugResolve
-        :bug_id="selectedBugId"
-        :OpenBy="HoverBugIdOpenBy"
-        :product_code="selected_product"
-        :pageSource="pageSource"
-        :scheme="scheme"
-        @refreshList="getBugList()">
-      </BugResolve>
-    </div>
+    <BugResolve id="modal-resolve"
+      v-if="showModal == 'resolve'" 
+      @close="showModal = false"
+      :bug_id="selectedBugId"
+      :OpenBy="HoverBugIdOpenBy"
+      :product_code="selected_product"
+      :pageSource="pageSource"
+      :scheme="scheme"
+      @refreshList="getBugList()">
+    </BugResolve>
 
     <!-- Bug处理操作：修改优先级 -->
-    <div id="bug-list-priority">
-      <BugChange :bug_id="selectedBugId" :data_type="'priority'" @refreshList="getBugList()"></BugChange>
-    </div>
+    <BugChange id="modal-change-priority" 
+      v-if="showModal == 'priority'"
+      @close="showModal = false"
+      :bug_id="selectedBugId" 
+      :data_type="'priority'" 
+      @refreshList="getBugList()">
+    </BugChange>
 
     <!-- Bug处理操作：关闭 -->
-    <div id="modal-bugClosed" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-body text-center mt-5 mb-3">
-            <h5 class="lead">确定关闭此缺陷?</h5>
-          </div>
-          <div class="modal-footer modal-footer-center">
-            <button type="button" class="btn btn-cancel mr-5" data-dismiss="modal">以后</button>
-            <button type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
-          </div>
-        </div>
+    <Modal id="modal-bugClosed" v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
+      <div slot="body" class="text-center mt-5 mb-3">
+        <h5 class="lead">确定关闭此缺陷?</h5>
       </div>
-    </div>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
+    </Modal>
     
     <!-- Bug处理操作: 导出 -->
-    <div id="m-import-export" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-body p-0">
-            <div class="row">
-              <div class="col-12 col-sm-6 mpy-5 bg-EEEEEE">
-                <p>1.仅支持按照产品、版本、缺陷状态这三个查询条件导出</p>
-                <p>2.选择好查询条件，再点击导出</p>
-                <p>3.导出格式：目前仅支持 xlsx</p>
-              </div>
-              <div class="col-12 col-sm-6 mpy-5 text-center bg-white">
-                <h4 class="pt-2">{{ selected_product }} 缺陷</h4>
-                <button type="button" class="btn btn-dark my-5 px-3" @click="bug_export">数据导出</button>
-                <p v-if="JSON.stringify(BugExportFile) !== '{}'">
-                  下载地址: <a :href="BugExportFile.url">{{ BugExportFile.filename }}</a>
-                </p>
-              </div>
-            </div>
+    <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeader="true">
+      <h5 slot="header" class="modal-title">{{ selected_product }} 缺陷</h5>
+      <div slot="body">
+        <div class="row">
+          <div class="col text-center">
+            <button type="button" class="btn btn-dark mt-3 mb-5" @click="bug_export">数据导出</button>
+            <p v-if="JSON.stringify(BugExportFile) !== '{}'">
+              下载地址: <a :href="BugExportFile.url">{{ BugExportFile.filename }}</a>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p style="font-size:0.88rem;color:#424242;">备注：仅支持按照产品、版本、缺陷状态这三个查询条件导出; 选择好查询条件，再点击导出; 目前仅支持导出xlsx</p>
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
+  
 
     <!-- 我的今天bug -->
-    <div id="modal-my-today" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content py-5">
-          <div id="count">
-            <div class="modal-body text-center" v-if="MyTodayData">
-              <h5 class="countdata-title" v-if="MyTodayData.group == 'test'">今日概况</h5>
-              <h5 class="countdata-title" v-else>缺陷今日概况</h5>
-              <p>{{ selected_product }}</p>
-              <div class="row mt-5">
-                <div class="col">
-                  <p class="countdata-num">{{ MyTodayData.data.create || 0 }}</p>
-                  <p class="countdata-desc">今日发现</p>
-                </div>
-                <div class="col">
-                  <p class="countdata-num text-success">{{ MyTodayData.data.fixed || 0 }}</p>
-                  <p class="countdata-desc">今日解决</p>
-                </div>
-                <div class="col">
-                  <p class="countdata-num text-success">{{ MyTodayData.data.closed || 0}}</p>
-                  <p class="countdata-desc">今日关闭</p>
-                </div>
-                <div class="col" v-if="MyTodayData.group != 'test' && MyTodayData.group != 'developer'">
-                  <p class="countdata-num text-red">{{ MyTodayData.data.hangUp || 0}}</p>
-                  <p class="countdata-desc">今日挂起</p>
-                </div>
-                <div class="col">
-                  <p class="countdata-num">{{ MyTodayData.data.residue || 0 }}</p>
-                  <p class="countdata-desc" v-if="MyTodayData.group == 'developer'">待我解决</p>
-                  <p class="countdata-desc" v-else>剩余待解决</p>
-                </div>
-              </div>
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeader="true">
+      <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
+      <div slot="body" class="text-center mb-3">
+        <div class="modal-body text-center" v-if="MyTodayData">
+          <div class="row mt-5">
+            <div class="col">
+              <p class="countdata-num">{{ MyTodayData.data.create || 0 }}</p>
+              <p class="countdata-desc">今日发现</p>
+            </div>
+            <div class="col">
+              <p class="countdata-num text-success">{{ MyTodayData.data.fixed || 0 }}</p>
+              <p class="countdata-desc">今日解决</p>
+            </div>
+            <div class="col">
+              <p class="countdata-num text-success">{{ MyTodayData.data.closed || 0}}</p>
+              <p class="countdata-desc">今日关闭</p>
+            </div>
+            <div class="col" v-if="MyTodayData.group != 'test' && MyTodayData.group != 'developer'">
+              <p class="countdata-num text-red">{{ MyTodayData.data.hangUp || 0}}</p>
+              <p class="countdata-desc">今日挂起</p>
+            </div>
+            <div class="col">
+              <p class="countdata-num">{{ MyTodayData.data.residue || 0 }}</p>
+              <p class="countdata-desc" v-if="MyTodayData.group == 'developer'">待我解决</p>
+              <p class="countdata-desc" v-else>剩余待解决</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
 
 	</div>
 </template>
@@ -438,6 +426,7 @@ import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
 import Pagination from "~/components/Pagination"
 import ProductModule from "~/components/ProductModule"
+import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
@@ -457,11 +446,13 @@ export default {
     BugResolve,
     BugChange,
     Pagination,
-    ProductModule
+    ProductModule,
+    Modal
   },
 
   data() {
     return {
+			showModal: false,
       ScreenWidth: 0,
       MyTodayData: false,
       // 产品、版本
@@ -861,23 +852,23 @@ export default {
 
     // 操作：bug修改优先级
     BugPriorityDialog(row) {
-      $("#modal-modify-priority").modal("show")
       this.selectedBugId = row.bug_id
+      this.showModal = 'priority'
     },
     // 操作: bug指派
     skipAssign(row) {
       this.selectedBugId = row.bug_id
-      $("#componentsAssign").modal("show")
+      this.showModal = 'assign'
     },
     // 操作: bug解决
     skipResolve(row) {
       this.selectedBugId = row.bug_id
-      $("#componentsResolve").modal("show")
+      this.showModal = 'resolve'
     },
     // 操作: bug关闭
     BugClosedDialog(row) {
-      $("#modal-bugClosed").modal("show")
-      this.ClosedData.bug_id = row.bug_id
+      this.selectedBugId = row.bug_id
+      this.showModal = 'closed'
     },
     ClosedBug(bug_id) {
       axios({
@@ -897,7 +888,6 @@ export default {
             message: res.data["msg"]
           })
         }
-        $("#modal-bugClosed").modal("hide")
       })
     },
     bug_export () {
@@ -917,7 +907,7 @@ export default {
     },
     // 数据统计
     myToday() {
-      $("#modal-my-today").modal("show")
+      this.showModal = 'count-today'
       if (!this.selected_product) { return }
       axios("/api/analyze/bug/my_today?product_code=" + this.selected_product).then(res => {
         if (res.data["status"] === 20000) {

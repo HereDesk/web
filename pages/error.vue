@@ -3,7 +3,7 @@
     <div class="row mt-5">
       <div class="col text-center">
         <div class="mt-5 pt-5">
-          <img src="~/static/pic/error.png">
+          <img src="~/static/pic/error.png"
         </div>
       </div>
     </div>

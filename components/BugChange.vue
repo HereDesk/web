@@ -1,13 +1,12 @@
 <template>
-  <div id="modal-modify-priority" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal modal-mask">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">{{ modal_title }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <i class="iconfont icon-close-windows size-1-5" @click="$emit('close')"></i>
         </div>
+
         <div class="modal-body text-center">
           <ul class="ul-inline mb-5 mt-3" v-if="data_type == 'severity'">
             <li class="mx-3 font-size-150 font-weight-light"
@@ -23,6 +22,7 @@
           </ul>
           <p class="my-3 text-gray">备注：选择后，即实现提交，无需进行其它操作</p>
         </div>
+
       </div>
     </div>
   </div>
@@ -67,8 +67,8 @@ export default {
     		data: JSON.stringify(ModifyData)
     	}).then(res => {
     		if (res.data["status"] === 20000) {
-    			this.$notify.success({title: "成功",message: res.data["msg"]})
-    			$("#modal-modify-priority").modal("hide")
+          this.$notify.success({title: "成功",message: res.data["msg"]})
+          this.$emit("close")
     			this.$emit("refreshList")
     		} else {
     			this.$notify.error({title: "失败",message: res.data["msg"]})
@@ -85,8 +85,7 @@ export default {
         data: JSON.stringify(ModifyData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.success({title: "成功",message: res.data["msg"]})
-          $("#modal-modify-priority").modal("hide")
+          this.$emit("close")
           this.$emit("refreshList")
         } else {
           this.$notify.error({title: "失败",message: res.data["msg"]})

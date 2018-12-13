@@ -20,7 +20,7 @@
       </div>
       <div id="permissions-management" class="col-xl-9 col-sm-12 col-12">
         <div style="display:block;">
-          <button type="btn" class="btn btn-create float-right" data-toggle="modal" data-target="#add_router">
+          <button type="btn" class="btn btn-create float-right" @click="showModal = 'page'">
             创建新页面
           </button>
         </div>
@@ -38,41 +38,34 @@
       </div>
     </div>
 
-    <div id="add_router" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">创建新页面</h5>
-          </div>
-          <div class="modal-body my-3">
-            <div class='form-group row col-md-auto mx-3'>
-              <label for="permissions_name">页面标记</label>
-              <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
-                v-model='PageData.flag' />
-            </div>
-            <div class='form-group row col-md-auto mx-3'>
-              <label for="permissions_name">页面名称</label>
-              <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
-                v-model='PageData.page_name' />
-            </div>
-             <div class='form-group row col-md-auto mx-3'>
-              <label for="permissions_url">页面地址</label>
-              <input type='text' class='form-control' maxlength="100" placeholder='请输入页面url...' 
-                v-model='PageData.page_url' />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="SavePageData()">提交</button>
-          </div>
+    <Modal id="modal-page" v-if="showModal == 'page'" @close="showModal = false" :isFooter="true">
+      <h5 slot="header" class="modal-title">创建新页面</h5>
+      <div class="my-3" slot="body">
+        <div class='form-group row col-md-auto mx-3'>
+          <label for="permissions_name">页面标记</label>
+          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
+            v-model='PageData.flag' />
+        </div>
+        <div class='form-group row col-md-auto mx-3'>
+          <label for="permissions_name">页面名称</label>
+          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
+            v-model='PageData.page_name' />
+        </div>
+          <div class='form-group row col-md-auto mx-3'>
+          <label for="permissions_url">页面地址</label>
+          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面url...' 
+            v-model='PageData.page_url' />
         </div>
       </div>
-    </div>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="SavePageData()">提交</button>
+    </Modal>
+
   </div>
 </template>
 
 <script>
 import axios from "axios"
+import Modal from "~/components/Modal"
 
 export default {
   head() {
@@ -81,8 +74,13 @@ export default {
     }
   },
 
+  components: {
+    Modal
+  },
+
   data() {
     return {
+      showModal: false,
       page_list: [],
       modules: [],
       PageData: {
@@ -116,7 +114,8 @@ export default {
       this.getPageList()
     },
     getPageList() {
-      axios.get("/api/system/page/list?group=" + this.PageData.group)
+      axios
+        .get("/api/system/page/list?group=" + this.PageData.group)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.page_list = res.data["data"]
@@ -137,7 +136,6 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.getPageList()
-          $("#add_router").modal("hide")
           this.$notify.success({ 
             title: "成功", 
             message: res.data["msg"] 

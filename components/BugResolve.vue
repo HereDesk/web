@@ -1,10 +1,11 @@
 <template>
-	<div id="componentsResolve" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal modal-mask">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">{{ mtitle }}</h5>
         </div>
+
         <div class="modal-body">
           <div class='form-group row col-md-auto mx-3'>
             <label for="solution">解决方案</label>
@@ -29,17 +30,19 @@
             </mavon-editor>
           </div>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-cancel" @click="$emit('close')">关闭</button>
           <button type="submit" class="btn btn-primary" @click="MoreRecovered()">提交</button>
         </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
 
 export default {
   props: {
@@ -96,7 +99,6 @@ export default {
           if (this.pageSource === "page_bug_details") {
             this.$router.push("/app/qa/bug");
           }
-          $("#componentsResolve").modal("hide");
           this.$notify.success({ title: "成功", message: res.data["msg"] });
         } else {
           this.$notify.error({ title: "错误", message: res.data["msg"] });

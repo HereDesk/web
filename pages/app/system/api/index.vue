@@ -20,7 +20,7 @@
       </div>
       <div id="permissions-management" class="col-xl-9 col-sm-12 col-12">
         <div style="display:block;">
-          <button type="btn" class="btn btn-create float-right" data-toggle="modal" data-target="#add_router">+ Api</button>
+          <button type="btn" class="btn btn-create float-right" @click="showModal = 'api'">+ Api</button>
         </div>
         <div v-for="item in api_list" :key="item.id" class="mb-5 mt-5">
           <h5>{{ item.flag }}</h5>
@@ -36,46 +36,40 @@
       </div>
     </div>
 
-    <div id="add_router" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">添加Api</h5>
-          </div>
-          <div class="modal-body my-3">
-            <div class='form-group row col-md-auto mx-3'>
-              <label for="api_module">所属模块</label>
-              <input type='text' maxlength="100" class='form-control' placeholder='请输入api所属模块...' 
-                v-model='ApiPermissionsData.flag' />
-            </div>
-            <div class='form-group row col-md-auto mx-3'>
-              <label for="api_name">api_name</label>
-              <input type='text' maxlength="100" class='form-control' placeholder='请输入api名称...' 
-                v-model='ApiPermissionsData.api_name' />
-            </div>
-            <div class='form-group row col-md-auto mx-3'>
-              <label for="api_code">api_code</label>
-              <input type='text' maxlength="100" class='form-control' placeholder='请输入api_code...' 
-                v-model='ApiPermissionsData.api_code' />
-            </div>
-             <div class='form-group row col-md-auto mx-3'>
-              <label for="api_url">url</label>
-              <input type='text' maxlength="100" class='form-control' placeholder='请输入api_url...' 
-                v-model='ApiPermissionsData.url' />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">关闭</button>
-            <button type="submit" class="btn btn-primary" @click="SaveApiData()">提交</button>
-          </div>
+    <Modal v-if="showModal == 'api'" @close="showModal = false" :isFooter="isFooter">
+      <h5 slot="header" class="modal-title">添加Api</h5>
+      <div class="my-3" slot="body">
+        <div class='form-group row col-md-auto mx-3'>
+          <label for="api_module">所属模块</label>
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api所属模块...' 
+            v-model='ApiPermissionsData.flag' />
+        </div>
+        <div class='form-group row col-md-auto mx-3'>
+          <label for="api_name">api_name</label>
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api名称...' 
+            v-model='ApiPermissionsData.api_name' />
+        </div>
+        <div class='form-group row col-md-auto mx-3'>
+          <label for="api_code">api_code</label>
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api_code...' 
+            v-model='ApiPermissionsData.api_code' />
+        </div>
+          <div class='form-group row col-md-auto mx-3'>
+          <label for="api_url">url</label>
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api_url...' 
+            v-model='ApiPermissionsData.url' />
         </div>
       </div>
-    </div>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="SaveApiData()">提交</button>
+    </Modal>
+
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
+import Modal from "~/components/Modal"
+
 export default {
   head() {
     return {
@@ -83,8 +77,13 @@ export default {
     }
   },
 
+  components: {
+    Modal
+  },
   data() {
     return {
+      showModal: false,
+      isFooter: true,
       api_list: [],
       modules: [],
       ApiPermissionsData: {
@@ -139,7 +138,6 @@ export default {
         data: JSON.stringify(this.ApiPermissionsData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#add_router").modal("hide")
           this.getApiList(this.ApiPermissionsData.group)
           this.$notify.success({ 
             title: "成功", 

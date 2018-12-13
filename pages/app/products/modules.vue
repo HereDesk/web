@@ -172,7 +172,6 @@ export default {
         data: JSON.stringify(this.a_module_data)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          $("#add_module_a").modal("hide")
           this.a_module_data.ModuleA = ""
           this.getModuleA()
           this.$notify.success({

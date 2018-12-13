@@ -236,7 +236,6 @@ export default {
         if (res.data["status"] === 20000) {
           this.getAddedCase()
           this.getAllCaseData()
-          $("#modal-case-data").modal("hide")
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
           this.$notify.warning({ title: "提示", message: res.data["msg"] })
