@@ -1,11 +1,13 @@
 <template>
   <div id="page-permissions" class="container">
-    <div id="module-product" class="row mt-5">
+    
+		<div id="page-head" class="row mt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand">页面管理</a>
       </nav>
     </div>
-    <div class="row mt-3">
+		
+    <div id="page-data" class="row mt-3">
       <div id="permissions-group" class="col-xl-3 col-sm-12 col-12">
         <p class="divider"></p>
         <ul class="pl-0 ul_link">
@@ -92,27 +94,28 @@ export default {
       group_list: []
     };
   },
+	
   created() {
     this.get_group_list()
     this.getPageList()
   },
+	
   methods: {
     get_group_list() {
       axios.get("/api/user/group").then(res => {
         if (res.data["status"] === 20000) {
           this.group_list = res.data["data"]
         } else {
-          this.$notify.error({ 
-            title: "提示", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "提示",message: res.data["msg"]})
         }
       })
     },
+		
     select_group(data) {
       this.PageData.group = data
       this.getPageList()
     },
+		
     getPageList() {
       axios
         .get("/api/system/page/list?group=" + this.PageData.group)
@@ -121,13 +124,11 @@ export default {
             this.page_list = res.data["data"]
           } else {
             this.page_list = []
-            this.$notify.error({ 
-              title: "提示", 
-              message: res.data["msg"] 
-            })
+            this.$notify.error({title: "提示",message: res.data["msg"]})
           }
         })
     },
+		
     SavePageData() {
       axios({
         method: "post",
@@ -135,19 +136,15 @@ export default {
         data: JSON.stringify(this.PageData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+					this.showModal = false
           this.getPageList()
-          this.$notify.success({ 
-            title: "成功", 
-            message: res.data["msg"] 
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({ 
-            title: "提示", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "提示",message: res.data["msg"]})
         }
       })
     },
+		
     PageManage(event, page_id) {
       var data = {
         is_allow: null,
@@ -164,15 +161,9 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.getPageList()
-          this.$notify.success({ 
-            title: "成功", 
-            message: res.data["msg"] 
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({ 
-            title: "提示", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "提示",message: res.data["msg"]})
         }
       })
     }
@@ -181,5 +172,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/system.css";
+  @import "~/static/static/common/css/system.css"
 </style>

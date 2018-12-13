@@ -1,11 +1,13 @@
 <template>
   <div id="page-permissions" class="container">
-    <div id="module-product" class="row mt-5">
+    
+		<div id="page-head" class="row mt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand">API权限管理</a>
       </nav>
     </div>
-    <div class="row mt-3">
+		
+    <div id="page-data" class="row mt-3">
       <div id="permissions-group" class="col-xl-3 col-sm-12 col-12">
         <p class="divider"></p>
         <ul class="pl-0 ul_link">
@@ -36,7 +38,7 @@
       </div>
     </div>
 
-    <Modal v-if="showModal == 'api'" @close="showModal = false" :isFooter="isFooter">
+    <Modal id="modal-api" v-if="showModal == 'api'" @close="showModal = false" :isFooter="isFooter">
       <h5 slot="header" class="modal-title">添加Api</h5>
       <div class="my-3" slot="body">
         <div class='form-group row col-md-auto mx-3'>
@@ -101,22 +103,22 @@ export default {
     this.getApiList("test")
   },
   methods: {
+		
     get_group_list() {
       axios.get("/api/user/group").then(res => {
         if (res.data["status"] === 20000) {
           this.group_list = res.data["data"]
         } else {
-          this.$notify.error({ 
-            title: "提示", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "提示",message: res.data["msg"]})
         }
       })
     },
+		
     select_group(data) {
       this.ApiPermissionsData.group = data
       this.getApiList(data)
     },
+		
     getApiList(data) {
       axios.get("/api/system/api/list?group=" + data)
         .then(res => {
@@ -124,13 +126,11 @@ export default {
             this.api_list = res.data["data"]
           } else {
             this.api_list = []
-            this.$notify.error({ 
-              title: "提示", 
-              message: res.data["msg"] 
-            })
+            this.$notify.error({title: "提示",message: res.data["msg"]})
           }
         })
     },
+		
     SaveApiData() {
       axios({
         method: "post",
@@ -138,19 +138,15 @@ export default {
         data: JSON.stringify(this.ApiPermissionsData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+					this.showModal = false
           this.getApiList(this.ApiPermissionsData.group)
-          this.$notify.success({ 
-            title: "成功", 
-            message: res.data["msg"] 
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({ 
-            title: "提示", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "提示",message: res.data["msg"]})
         }
       })
     },
+		
     ApiManage(event, api_id) {
       var data = {
         is_allow: null,
@@ -167,15 +163,9 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.getApiList(this.ApiPermissionsData.group)
-          this.$notify.success({ 
-            title: "成功", 
-            message: res.data["msg"] 
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({ 
-            title: "提示", 
-            message: res.data["msg"] 
-          })
+          this.$notify.error({title: "提示",message: res.data["msg"]})
         }
       })
     }
@@ -184,5 +174,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/system.css";
+  @import "~/static/static/common/css/system.css"
 </style>
