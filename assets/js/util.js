@@ -1,6 +1,7 @@
 import BasicData from "~/assets/js/data.js"
 
 export default {
+	
    txt_deal_with(txt){
     let reg = /(((https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/ig;
     let result = txt.replace(reg,function(item){
@@ -8,6 +9,7 @@ export default {
     });
     return result;
   },
+	
   getWeek (str) {
     if (!str) {
       return ''
@@ -15,6 +17,7 @@ export default {
     let date = new Date(str)
     return date.getDay()
   },
+	
   date (str, type) {
     if (!str) {
       return '';
@@ -49,6 +52,7 @@ export default {
       return add0(Y) + '/' + add0(M) + '/' + add0(D)
     } 
   },
+	
   bugStatusName (data) {
     let status_list = BasicData.bug_status_list
     for (let x in status_list) {
@@ -57,6 +61,7 @@ export default {
       }
     }
   },
+	
   getOperatorsName (data) {
     let list =  [
       {"value": "=","name":'='},
@@ -75,6 +80,7 @@ export default {
       }
     }
   },
+	
   getSearchTypeName (data) {
     let list =  BasicData.bug_search_type_list
     for (let x in list) {
@@ -83,6 +89,7 @@ export default {
       }
     }
   },
+	
   getOrderName (data) {
     let order_list = BasicData.order_list
     for (let x in order_list) {
@@ -91,6 +98,7 @@ export default {
       }
     }
   },
+	
   QuickQperationName (data) {
     let QuickQperationList = BasicData.bug_quick_operation_list
     for (let x in QuickQperationList) {
@@ -99,6 +107,7 @@ export default {
       }
     }
   },
+	
   flowdesc (type) {
     let data = [
       {'status': -1, 'name': '不涉及此项'},
@@ -123,6 +132,7 @@ export default {
       }
     }
   },
+	
   FilterCaseStatus (status_value) {
     let data = [
       { status_name: "正常", status_value: 0 },

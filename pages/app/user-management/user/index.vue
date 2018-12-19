@@ -124,6 +124,14 @@ export default {
     }
   },
 
+  watch: {
+    showModal () {
+      this.showModal ? 
+        document.body.classList.add("overflow-hidden") : 
+        document.body.classList.remove("overflow-hidden")
+    }
+  },
+
   created() {
     this.getAllUser()
   },

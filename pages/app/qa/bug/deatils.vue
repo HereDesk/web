@@ -254,7 +254,7 @@
     </BugChange>
 
     <!-- Bug处理操作：重新打开缺陷 -->
-    <Modal id="modal-reopen" v-if="showModal == 'ReOpen'" @close="showModal = false" :isFooter="true">
+    <Modal id="modal-reopen" class="no-toolbars" v-if="showModal == 'ReOpen'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">重新打开缺陷</h5>
     	<div slot="body">
     		<div class="form-group row col-md-auto mx-3">
@@ -277,7 +277,7 @@
     </Modal>
 
     <!-- Bug处理操作：备注 -->
-    <Modal id="modal-notes" v-if="showModal == 'notes'" @close="showModal = false" :isFooter="true">
+    <Modal id="modal-notes" class="toolbars" v-if="showModal == 'notes'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">增加备注</h5>
       <mavon-editor slot="body" class="mx-3" :toolbars="mavon_md_base_toolbars" :subfield="false" placeholder="请输入备注 ~ "
       	v-model.trim="NotesData.remark">
@@ -288,7 +288,7 @@
     </Modal>
     
     <!-- Bug处理操作：延期挂起 -->
-    <Modal id="modal-hangup" v-if="showModal == 'hangup'" @close="showModal = false" :isFooter="true">
+    <Modal id="modal-hangup" class="no-toolbars" v-if="showModal == 'hangup'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">缺陷延期操作</h5>
       <mavon-editor slot="body" class="mx-3" :toolbarsFlag="false" :subfield="false" placeholder="请输入延期原因 ~ "
       	v-model.trim="HangUpData.remark">
@@ -406,6 +406,11 @@ export default {
       if (this.product_code) {
         this.getMemberList()
       }
+    },
+    showModal () {
+      this.showModal ? 
+        document.body.classList.add("overflow-hidden") : 
+        document.body.classList.remove("overflow-hidden")
     }
   },
 

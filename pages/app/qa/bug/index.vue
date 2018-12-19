@@ -1,7 +1,8 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
     <div class="row">
-      <!-- 模块 -->
+      
+			<!-- 模块 -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <ProductModule v-if="isShowModules"
           :product_code="selected_product" 
@@ -19,6 +20,7 @@
       <!-- 查询以及操作相关 -->
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
         <div class="container-fluid">
+					
           <div id="bug-nav-manage" class="row justify-content-between">
             <div id="bug-query-1">
               <el-dropdown id="bug-query-product" class="mr-1 my-1">
@@ -173,7 +175,6 @@
 
           <!-- table: 数据展示 -->
           <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
-
             <!-- style: table -->
             <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
               <el-table :data='tableData' 
@@ -299,7 +300,7 @@
                 </li>
               </ul> 
             </div>
-          </div>
+					</div>
 
           <!-- table: 翻页 -->
           <Pagination :total="total" @PsPn="getPsPn"></Pagination>
@@ -323,14 +324,14 @@
     </div>
 
     <!-- Bug处理操作：指派 -->
-    <BugAssign
+    <BugAssign id="modal-assign"
       v-if="showModal == 'assign'" 
       @close="showModal = false"
       :bug_id="selectedBugId" 
       :product_code="selected_product"
       :pageSource="pageSource"
-      @refreshList="getBugList()"
-    ></BugAssign>
+      @refreshList="getBugList()">
+    </BugAssign>
 
     <!-- Bug处理操作：解决 -->
     <BugResolve id="modal-resolve"
@@ -381,7 +382,6 @@
       </div>
     </Modal>
   
-
     <!-- 我的今天bug -->
     <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeader="true">
       <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
@@ -421,17 +421,16 @@
 import axios from "axios"
 
 import PageLoading from "~/components/PageLoading"
+import ProductModule from "~/components/ProductModule"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
 import Pagination from "~/components/Pagination"
-import ProductModule from "~/components/ProductModule"
 import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
 import rules from "~/assets/js/rules.js"
-let _ = require("lodash/Collection")
 
 export default {
   head() {
@@ -439,6 +438,7 @@ export default {
       title: "HDesk - 缺陷列表"
     }
   },
+	
   layout: "head",
   components: {
     PageLoading,
@@ -455,7 +455,8 @@ export default {
 			showModal: false,
       ScreenWidth: 0,
       MyTodayData: false,
-      // 产品、版本
+
+      // product data and version data
       product_list: [],
       modules_list: [],
       modules_id: [null, null],
@@ -463,20 +464,21 @@ export default {
       m2_id: this.$route.query.m2_id || null,
       selected_product: this.$route.query.product_code || "",
       selected_release: this.$route.query.release || "全部",
-      // 缺陷状态
+      // bug status data
       status_list: data.bug_status_list,
       selected_status: this.$route.query.status || "all",
-      // 优先级列表
+      // bug priority data
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
-      // 排序
+      // bug order
       sort_text: '倒',
       order_list: data.order_list,
       selected_order: this.$route.query.order || "create_time",
-      // 更多操作:快捷操作
+      // more operate: quick operation
       operate: this.$route.query.operate || "no",
       QuickQperationList: data.bug_quick_operation_list,
-      // 搜索
+
+      // bug search
       SearchType: data.bug_search_type_list,
       SearchCriteria: {
         Operators: this.$route.query.Operators || "=",
@@ -484,7 +486,7 @@ export default {
         start_date: String(this.$route.query.SearchType).includes('time') && 
           (this.$route.query.wd).includes('#') 
             ? String(this.$route.query.wd).split('#')[0]
-            : this.$route.query.wd,
+            : null,
         end_date: String(this.$route.query.SearchType).includes('time') && 
           (this.$route.query.wd).includes('#') 
             ? String(this.$route.query.wd).split('#')[1]
@@ -492,19 +494,21 @@ export default {
       },
       wd: this.$route.query.wd || '',
       isShowSearch: this.$route.query.wd ? true : false,
-      // 表格数据
+
+      // bug table data
       total: null,
       pageNumber: parseInt(this.$route.query.pageNumber) || 1,
       pageSize: parseInt(this.$route.query.pageSize) || 10,
       tableData: [],
       Msg: false,
       img_src: null,
+
       // 控制显示
       isDisplayOperate: true,
       HoverBugId: "",
       selectedBugId: "",
       HoverBugIdOpenBy: "",
-      // 组件
+      // 组件数据传递
       scheme: "Fixed",
       pageSource: "page_bug_index",
       // close bug
@@ -533,13 +537,15 @@ export default {
   },
   
   computed: {
+		
     // page and menu rules
     Rules: function() {
       let group = this.$store.state.userInfo.group
       let PagesRules = this.$store.state.PageData
       return rules.RuleManges(group,PagesRules)
     },
-    // 版本列表
+		
+    // version list
     release_list: function() {
       let arr = [{ version: "全部" }]
       if (this.selected_product) {
@@ -552,7 +558,8 @@ export default {
         return null
       }
     },
-    // 查询条件
+		
+    // query condition
     QueryBuilder: function() {
       let Builder = {}
       let tmp_release
@@ -586,7 +593,8 @@ export default {
       }
       return Builder
     },
-    // 搜索条件
+		
+    // bug search condition
     OperatorsList: function() {
       let search_type = this.SearchCriteria.SearchType
       let OperatorsList1 = [
@@ -608,7 +616,8 @@ export default {
         return OperatorsList1
       }
     },
-    // 搜索框
+		
+    // switch search input
     SwitchSearchInput: function() {
       if (this.SearchCriteria.SearchType.includes("time")) {
         if (this.SearchCriteria.Operators == "range") {
@@ -620,6 +629,7 @@ export default {
         return "other"
       }
     },
+		
     // userinfo group
     uGroup: function() {
       let userInfo = this.$store.state.userInfo
@@ -629,6 +639,7 @@ export default {
     	let userInfo = this.$store.state.userInfo
     	return userInfo.user_id ? userInfo.user_id : null
     },
+		
     // show user config
     DataShowStyle: function() {
       let config = this.$store.state.UserConfig
@@ -638,6 +649,7 @@ export default {
         return this.ScreenWidth > 768 ? 'table' : 'list'
       }
     },
+		
     // show user config : 1: show, 0: hide
     isShowModules: function() {
       let config = this.$store.state.UserConfig
@@ -650,6 +662,11 @@ export default {
   },
 
   watch: {
+    showModal: function(val, oldVal) {
+      this.showModal ? 
+        document.body.classList.add("overflow-hidden") : 
+        document.body.classList.remove("overflow-hidden")
+    },
     wd: function(val, oldVal) {
       this.pageNumber = 1
     },
@@ -658,14 +675,6 @@ export default {
     },
     m2_id: function(val, oldVal) {
       this.pageNumber = 1
-    },
-    QueryBuilder: function(val, oldVal) {
-      if (JSON.stringify(val) != JSON.stringify(oldVal)) {
-        this.tableData = []
-        this.$route.query.product_code ? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder}) 
-          : this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
-        this.wd ? this.goSearch() : this.getBugList()
-      }
     },
     product_list: function(val, oldVal) {
       if ((this.product_list.length > 0) & !this.selected_product) {
@@ -680,7 +689,16 @@ export default {
         this.img_src = require("static/pic/happy.png")
         this.Msg = "没找到数据"
       }
-    }
+    },
+		QueryBuilder: function(val, oldVal) {
+			if (JSON.stringify(val) != JSON.stringify(oldVal)) {
+				this.tableData = []
+				this.$route.query.product_code 
+					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder}) 
+					: this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
+				this.wd ? this.goSearch() : this.getBugList()
+			}
+		}
   },
 
   created() {
@@ -705,7 +723,8 @@ export default {
       this.m1_id = m1
       this.m2_id = m2
     },
-    // get product info and release info
+    
+		/* get product info and release info */
     getProductRelease() {
       axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
@@ -715,6 +734,8 @@ export default {
         }
       })
     },
+		
+		/* get member user list */
     getMemberList() {
       if (!this.selected_product) {return}
       axios.get("/api/pm/member/list?product_code=" + this.selected_product)
@@ -724,7 +745,8 @@ export default {
           }
         })
     },
-    // 下拉相关操作
+		
+    /* 下拉相关操作 */
     handleCommand(data) {
       if ("order_name" in data) {
         this.selected_order = data["order_value"]
@@ -769,10 +791,11 @@ export default {
       this.pageNumber = 1
     },
 
-    // Bug: 列表
+    /* Bug: get bug list data */
     getBugList() {
       if (!this.selected_product) { return }
-      axios.get("/api/qa/bug/list", { params: this.QueryBuilder })
+      axios
+				.get("/api/qa/bug/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -783,11 +806,14 @@ export default {
           }
         })
     },
-    // 排序
+		
+		
+    /* bug query condition */
     SortData() {
       this.sort_text.includes('倒') ? this.sort_text = '正' : this.sort_text = '倒'
     },
-    // Bug: 搜索
+		
+		/* Bug: show search input */
     clickSearch() {
       if (this.isShowSearch) {
         this.isShowSearch = false
@@ -796,41 +822,31 @@ export default {
         this.isShowSearch = true
       }
     },
+		
+		/* bug: search */
     goSearch() {
       let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
       let data = this.QueryBuilder
       if (!data.wd && String(data.SearchType).includes("time")) {
-        this.$notify.error({ 
-          title: "提示", 
-          message: "请输入搜索内容"
-        })
+        this.$notify.error({title: "提示",message: "请输入搜索内容"})
         return
       }
       if (data.Operators === "range" && String(data.SearchType).includes("time") && String(data.wd).includes("#")) {
         let start_date = (data.wd).split("#")[0]
         let end_date = (data.wd).split("#")[1]
         if (!start_date && !end_date) {
-          this.$notify.error({
-            title: "提示",
-            message: "请输入开始日期和结束日期"
-          })
+          this.$notify.error({title: "提示",message: "请输入开始日期和结束日期"})
           return
         }
         if (!start_date.match(reg) || !end_date.match(reg)) {
-          this.$notify.error({
-            title: "提示",
-            message: "请输入有效日期范围,比如:2018-08-08 2018-10-01"
-          })
+          this.$notify.error({title: "提示",message: "请输入有效日期范围,比如:2018-08-08 2018-10-01"})
           return
         }
       }
       if (String(data.SearchType).includes("time") && data.Operators !== "range") {
         let date = data.wd
         if (!date.match(reg)) {
-          this.$notify.error({
-            title: "提示",
-            message: "请输入有效日期,比如:2018-08-08"
-          })
+          this.$notify.error({title: "提示",message: "请输入有效日期,比如:2018-08-08"})
           return
         }
       }
@@ -850,26 +866,31 @@ export default {
       })
     },
 
-    // 操作：bug修改优先级
+    /* 操作：bug修改优先级 */
     BugPriorityDialog(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'priority'
     },
-    // 操作: bug指派
+		
+    /* modal: bug assign */
     skipAssign(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'assign'
     },
-    // 操作: bug解决
+		
+    /* modal: bug resolve */
     skipResolve(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'resolve'
     },
-    // 操作: bug关闭
+		
+    /* Modal: bug closed */
     BugClosedDialog(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'closed'
     },
+		
+		/* bug: closed */
     ClosedBug(bug_id) {
       axios({
         method: "post",
@@ -878,44 +899,41 @@ export default {
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.getBugList()
-          this.$notify.success({
-            title: "成功",
-            message: res.data["msg"]
-          })
+          this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {
-          this.$notify.error({
-            title: "错误",
-            message: res.data["msg"]
-          })
+          this.$notify.error({title: "错误",message: res.data["msg"]})
         }
       })
     },
+		
+		/* bug: export */
     bug_export () {
       if (!this.selected_product) { return }
-      axios.get("/api/qa/bug/export", { params: this.QueryBuilder })
+      axios
+				.get("/api/qa/bug/export", { params: this.QueryBuilder })
         .then( res => {
           if (res.data["status"] === 20000) {
             this.BugExportFile = res.data
           } else {
-            this.$notify.warning({
-              title: "提示",
-              message: res.data["msg"]
-            })
+            this.$notify.warning({title: "提示",message: res.data["msg"]})
           }
-        }
-      )
+				})
     },
-    // 数据统计
+		
+    /* my today data: count */
     myToday() {
       this.showModal = 'count-today'
       if (!this.selected_product) { return }
-      axios("/api/analyze/bug/my_today?product_code=" + this.selected_product).then(res => {
-        if (res.data["status"] === 20000) {
-          this.MyTodayData = res.data
-        }
-      })
+      axios
+				.get("/api/analyze/bug/my_today?product_code=" + this.selected_product)
+				.then(res => {
+					if (res.data["status"] === 20000) {
+						this.MyTodayData = res.data
+					}
+				})
     },
-    // table line hover and leave
+		
+    /* table line hover and leave */
     tableHover(row) {
       this.HoverBugIdOpenBy = row.openedBy
       this.HoverBugId = row.bug_id
@@ -924,24 +942,28 @@ export default {
       this.HoverBugId = ""
     },
 
-    // is show module
+    /* is show module */
     switchModule() {
       let isDisplay = this.isShowModules ? 0 : 1
-      axios.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay).then(res => {
-        if (res.data["status"] === 20000) {
-          this.$store.dispatch('getUserInfo')
-        }
-      })
+      axios
+				.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay)
+				.then(res => {
+					if (res.data["status"] === 20000) {
+						this.$store.dispatch('getUserInfo')
+					}
+				})
     },
 
-    // switch data style
+    /* page style: switch data style */
     switchStyle() {
       let style = this.DataShowStyle == 'table' ? 'list' : 'table'
-      axios.get('/api/userconfig?BUG_DATA_SHOW_STYPE=' + style).then(res => {
-        if (res.data["status"] === 20000) {
-          this.$store.dispatch('getUserInfo')
-        }
-      })
+      axios
+				.get('/api/userconfig?BUG_DATA_SHOW_STYPE=' + style)
+				.then(res => {
+					if (res.data["status"] === 20000) {
+						this.$store.dispatch('getUserInfo')
+					}
+				})
     }
 
   }

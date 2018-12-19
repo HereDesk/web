@@ -185,9 +185,9 @@
       <PageLoading></PageLoading>
     </div>
     
-    <Modal id="ModalCaseReview" v-if="showModal == 'caseReview'" @close="showModal = false" :isFooter="true">
+    <Modal id="ModalCaseReview"  v-if="showModal == 'caseReview'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">用户评审</h5>
-      <div slot="body" class='form-group row col-md-auto mx-3'>
+      <div slot="body" class='form-group row col-md-auto mx-3 toolbars'>
       	<mavon-editor style="width:100%;" placeholder="请输入评审意见 ~ "
       		:toolbarsFlag="false" :subfield="false" v-model.trim="review_data.remark">
       	</mavon-editor>
@@ -232,6 +232,7 @@ export default {
       title: 'HDesk - ' + this.CID + '测试用例详情'
     }
   },
+  
   validate({ query }) {
     return /\w{2,6}/.test(query.case_id)
   },
@@ -256,9 +257,18 @@ export default {
     }
   },
 
+  watch: {
+    showModal () {
+      this.showModal ? 
+        document.body.classList.add("overflow-hidden") : 
+        document.body.classList.remove("overflow-hidden")
+    }
+  },
+
   filters: {
     date: util.date
   },
+  
   computed: {
     // 权限控制
     Rules: function () {

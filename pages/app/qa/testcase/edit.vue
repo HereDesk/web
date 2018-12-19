@@ -97,10 +97,10 @@
             <div id="case-annex" class='form-group row'>
               <label class="col-lg-2 col-md-2 col-sm-12 bug-label">设计图/原型图</label>
               <form class="col-lg-8 col-md-10 col-sm-12">
-                <div v-for="item in Annex" :key="item.id" class="annex" style="display:inline;">
-                  <img :src="item.file_path" :class="{ 'h-annex' : CaseData.annex.length > 0 }">
+                <div v-for="(item,index) in Annex" :key="index" class="annex">
+                  <img :src="item.file_path">
                   <span class="annex_delete" @click="annex_delete(item.file_path)">
-                    <i class="iconfont icon-bucket-del size-1-5" :class="{ 'h-annex' : CaseData.annex.length }"></i>
+                    <i class="iconfont icon-bucket-del size-1-5"></i>
                   </span>
                 </div>
                 <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
@@ -209,18 +209,18 @@ export default {
             var module = new Array()
             module[0] = data.m1_id
             module[1] = data.m2_id
-             this.CaseData.module_id = module
-             this.CaseData.product_code = data.product_code
-             this.CaseData.case_id = data.case_id
-             this.CaseData.product_code = data.product_code
-             this.CaseData.priority = data.priority
-             this.CaseData.title = data.title
-             this.CaseData.category = data.category
-             this.CaseData.precondition = data.precondition
-             this.CaseData.DataInput = data.DataInput
-             this.CaseData.steps = data.steps
-             this.CaseData.expected_result = data.expected_result
-             this.CaseData.remark = data.remark
+					  this.CaseData.module_id = module
+					  this.CaseData.product_code = data.product_code
+					  this.CaseData.case_id = data.case_id
+					  this.CaseData.product_code = data.product_code
+					  this.CaseData.priority = data.priority
+					  this.CaseData.title = data.title
+					  this.CaseData.category = data.category
+					  this.CaseData.precondition = data.precondition
+					  this.CaseData.DataInput = data.DataInput
+					  this.CaseData.steps = data.steps
+					  this.CaseData.expected_result = data.expected_result
+					  this.CaseData.remark = data.remark
           } else {
              this.$router.go(-1)
           }

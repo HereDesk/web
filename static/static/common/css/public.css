@@ -38,6 +38,11 @@ code {
   line-height: 0.8rem !important;
 }
 
+/*  */
+.overflow-hidden {
+  overflow: hidden;
+}
+
 /* hljs */
 .hljs {
   background: none !important;
@@ -51,22 +56,25 @@ code {
 }
 
 .toolbars .v-note-wrapper {
-  min-height: 12rem !important;
+  max-height: 15rem !important;
+  min-height: 13rem !important;
   border: 1px solid rgb(220, 223, 230) !important;
   border-radius: 5px;
 }
 
 .no-toolbars .v-note-wrapper {
-  min-height: 7rem !important;
+  max-height: 10rem !important;
+  min-height: 9rem !important;
   border: 1px solid rgb(220, 223, 230) !important;
   border-radius: 5px;
 }
 
-.modal-body .v-note-wrapper {
-  min-height: 11rem !important;
+/* .modal-body .v-note-wrapper {
+  max-height: 15rem !important;
+  min-height: 13rem !important;
   border: 1px solid rgb(220, 223, 230) !important;
   border-radius: 5px;
-}
+} */
 
 .v-note-op {
   border-bottom: 1px solid rgb(220, 223, 230) !important;
@@ -386,7 +394,7 @@ code {
 
 .modal-mask {
 	position: fixed;
-	z-index: 2;
+	z-index: 10;
 	top: 0;
 	left: 0;
 	width: 100%;

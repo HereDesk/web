@@ -11,16 +11,18 @@
               产品与模块
               <span class="text-red">*</span>
             </label>
-            <el-select id="bug-product" class="col-md-2 col-sm-4 col-6" placeholder="选择产品" v-model="Bug.product_code" >
-              <el-option 
+            <el-select id="bug-product" class="col-md-2 col-sm-4 col-6" placeholder="选择产品" 
+							v-model="Bug.product_code"  @visible-change="getProductRelease()">
+							<el-option value="" :disabled="true">请选择产品</el-option>
+              <el-option
                 v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
               </el-option>
             </el-select>
             <el-select id="bug-version" class="col-md-2 col-sm-4 col-6" placeholder="选择版本" v-model="Bug.release">
+							<el-option value="" :disabled="true">请选择版本号</el-option>
               <el-option 
                 v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
               </el-option>
-              <!-- <el-option>增加新版本</el-option> -->
             </el-select>
             <el-cascader id="bug-modules" class="col-md-2 col-sm-4 col-6 px-3" 
               :options="modules_list" 
@@ -126,6 +128,12 @@
           <div id="bug-file" class="form-group row">
             <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
+							<div v-for="(item,index) in Annex" :key="index" class="annex">
+								<img :src="item.url">
+								<span class="annex_delete" @click="annex_delete(item.url)">
+									<i class="iconfont icon-bucket-del size-1-5"></i>
+								</span>
+							</div>
               <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
             </form>
           </div> 
@@ -234,6 +242,7 @@ export default {
   watch: {
     selected_product_code: function (old,oldVal) {
       this.getModule()
+			this.getDeveloper()
     }
   },
 
@@ -243,7 +252,6 @@ export default {
   },
 
   mounted () {
-    this.getProductRelease()
     if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
     	this.$store.dispatch("getBugProperty")
     }
@@ -256,8 +264,7 @@ export default {
     },
     
 		getModule () {
-      axios
-        .get('/api/pm/get_module?product_code=' + this.Bug.product_code)
+      axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.modules_list = res.data['data']

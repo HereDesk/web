@@ -19,7 +19,7 @@
               >{{ item.realname }}</option>
             </select>
           </div>
-          <div class="form-group row col-md-auto mx-3">
+          <div class="form-group row col-md-auto mx-3 no-toolbars">
             <mavon-editor
               style="width:100%;"
               placeholder="请输入备注 ~ "

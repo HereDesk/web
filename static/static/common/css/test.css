@@ -270,12 +270,15 @@
 
 .annex {
   position: relative;
+	display:inline !important;
 }
 
 .annex > img {
   height: 148px;
   width:148px;
   border-radius: 5px;
+	border: 1px dashed rgb(192, 204, 218) !important;
+	box-sizing: border-box;
 }
 
 .annex:hover > img {
@@ -294,10 +297,6 @@
 .annex_delete > img {
   height: 28px;
   width:28px;
-}
-
-.h-annex {
-  margin-top:-150px;
 }
 
 .annex:hover .annex_delete {

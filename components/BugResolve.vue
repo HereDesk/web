@@ -23,7 +23,7 @@
               </option>
             </select>
           </div>
-          <div class='form-group row col-md-auto mx-3'>
+          <div class='form-group row col-md-auto mx-3 no-toolbars'>
             <label for="remark">备注</label>
             <mavon-editor style="width:100%;" placeholder="请输入备注 ~ "
               :toolbarsFlag="false" :subfield="false" v-model.trim="ResolveData.remark">

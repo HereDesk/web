@@ -3,11 +3,11 @@
     <nav class="d-flex my-5">
       <a class="navbar-brand flex-grow-1">已加入的用例</a>
       <div class="vertical-center">
-        <button type="btn" class="btn btn-create" data-toggle="modal" data-target="#modal-case-data"> + 添加</button>
+        <button type="btn" class="btn btn-create" @click="showModal = 'create'"> + 添加</button>
       </div>
     </nav>
     <div class="row" v-if="AddedTotal == 0">
-      <div class="col text-center" style="margin-top:13%;" data-toggle="modal" data-target="#modal-case-data">
+      <div class="col text-center" style="margin-top:13%;" @click="showModal = 'create'">
         <i class="iconfont icon-jiaru icon-8a8a8a size-5"></i>
         <p class="lead">还没有数据哦，点击加入</p>
       </div>
@@ -23,43 +23,39 @@
       </div>
     </div>
 
-    <div id="modal-case-data" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header testsuite-head">
-            <h5 class="modal-title">用例列表</h5>
-            <el-cascader
-              class="border-none"
-              placeholder="按模块选择测试用例"
-              :options="modules_list"
-              v-model="selected_mod_id"
-              filterable
-              change-on-select
-            ></el-cascader>
-          </div>
-          <div class="modal-body">
-            <ul class="ul-style-none mb-5">
-              <li v-for="item in TestCaseList" :key="item.id">
-                <input type="checkbox" id="item.case_id" value="item.case_id" @click="CheckedCase(item.case_id,$event)">
-                &nbsp;&nbsp;{{ item.id }}.&nbsp;&nbsp;{{ item.title }}
-              </li>
-            </ul>
-            <div class="px-4">
-              <Pagination :total="AllTotal" :isModal="isModal" @PsPn="getPsPn1"></Pagination>
-            </div>
-          </div>
-          <div class="modal-footer px-5" style="justify-content:flex-start;">
-            <button type="button" class="btn btn-cancel" @click="ReferChecked()">加入</button>
-            <button type="button" class="btn btn-cancel" @click="CaseForModuleAdd()">加入当前模块所有用例</button>
-          </div>
+    <Modal isFooter="true" v-if="showModal == 'create'" @close="showModal = false">
+      <div slot="header" class="testsuite-head">
+        <h5 class="modal-title">用例列表</h5>
+        <el-cascader class="border-none" placeholder="按模块选择测试用例"
+          :options="modules_list"
+          v-model="selected_mod_id"
+          filterable
+          change-on-select
+        ></el-cascader>
+      </div>
+      <div slot="body">
+        <ul class="ul-style-none mb-5">
+          <li v-for="(item,index) in TestCaseList" :key="index">
+            <input type="checkbox" id="item.case_id" value="item.case_id" @click="CheckedCase(item.case_id,$event)">
+            &nbsp;&nbsp;{{ item.id }}.&nbsp;&nbsp;{{ item.title }}
+          </li>
+        </ul>
+        <div class="px-4">
+          <Pagination :total="AllTotal" :isModal="isModal" @PsPn="getPsPn1"></Pagination>
         </div>
       </div>
-    </div>
+      <div slot="footer" class="px-5" style="justify-content:flex-start;">
+        <button type="button" class="btn btn-cancel" @click="ReferChecked()">加入</button>
+        <button type="button" class="btn btn-cancel" @click="CaseForModuleAdd()">加入当前模块所有用例</button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import axios from "axios"
+
+import Modal from "~/components/Modal"
 import Pagination from "~/components/Pagination"
 let _ = require("lodash/Array")
 
@@ -71,12 +67,14 @@ export default {
   
   layout: "head",
   components: {
-    Pagination
+    Pagination,
+    Modal
   },
 
   data() {
     return {
       isModal: 'Modal',
+      showModal: false,
       product_code: this.$route.query.product_code || null,
       suite_id: this.$route.query.suite_id || null,
       // right
@@ -108,6 +106,11 @@ export default {
   },
 
   watch: {
+    showModal () {
+      this.showModal ? 
+        document.body.classList.add("overflow-hidden") : 
+        document.body.classList.remove("overflow-hidden")
+    },
     selected_mod_id: {
       handler: function(val, oldVal) {
         this.AddedQueryBuilder.m1_id = this.selected_mod_id[0]
@@ -144,6 +147,8 @@ export default {
       this.NoAddQueryBuilder.pageSize = ps
       this.NoAddQueryBuilder.pageNumber = pn
     },
+
+    // get product module
     getModule(product_code) {
       axios
         .get("/api/pm/get_module?product_code=" + this.product_code)
@@ -155,8 +160,9 @@ export default {
           }
         })
     },
+
+    // get all testcase list
     getAllCaseData() {
-      // 请求所有的用例列表
       axios
         .get("/api/qa/testcase/valid_list", { params: this.AddedQueryBuilder })
         .then(res => {
@@ -168,6 +174,8 @@ export default {
           }
         })
     },
+
+
     getAddedCase() {
       axios.get("/api/qa/testsuite/cell/brief_list", {params: this.NoAddQueryBuilder})
         .then(res => {
@@ -179,6 +187,8 @@ export default {
           }
         })
     },
+
+
     CheckedCase(case_id, event) {
       let checked = event.target.checked
       var tmp = this.SaveCheckedCaseData.case_data
@@ -190,6 +200,8 @@ export default {
       this.LeftCheckedNum = tmp.length
       this.SaveCheckedCaseData.case_data = tmp
     },
+
+
     ReferChecked() {
       if (this.SaveCheckedCaseData.case_data.length === 0) {
         this.$notify.error({ title: "错误", message: "请选择后再提交" })
@@ -209,6 +221,8 @@ export default {
         }
       })
     },
+
+
     CaseForModuleAdd(event) {
       if (this.selected_mod_id.length === 0) {
         this.$notify.warning({ title: "提示", message: "请先选择模块" })
@@ -247,5 +261,5 @@ export default {
 </script>
 
 <style>
-@import "~/static/static/common/css/testsuite.css"
+  @import "~/static/static/common/css/testsuite.css"
 </style>
