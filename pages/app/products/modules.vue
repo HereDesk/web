@@ -11,7 +11,7 @@
 			
       <div id="module-a" class="col-md-3 col-sm-12 col-12">
         <h5 class="font-weight-light">一级模块</h5>
-        <p class="add_m_a" v-if="Rules.product_modules" @click="showModal = 'addModules'">
+        <p class="add_m_a" v-if="Rules.product_modules" @click="showModal = 'addmodules'">
            + 一级模块</p>
         <p class="divider"></p>
         <ul class="pl-0 ul_module_a">
@@ -50,7 +50,7 @@
     
 		</div>
 
-    <Modal id="modal-a-module" v-if="showModal == 'addModules'" @close="showModal = true" :isFooter="true">
+    <Modal id="modal-a-module" v-if="showModal == 'addmodules'" @close="showModal = true" :isFooter="true">
       <h5 slot="header">添加一级模块</h5>
       <div class='form-group row col-md-auto mx-3' slot="body">
         <label for="ModuleA">模块名称</label>

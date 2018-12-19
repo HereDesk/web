@@ -7,7 +7,7 @@
       </div>
       <div  id='add-members' class='col-auto'>
         <button type='button'  id='add-btn' class='btn btn-create' 
-          v-if="Rules.product_members" @click="showModal = 'add_members'">+ 增加成员
+          v-if="Rules.product_members" @click="showModal = 'addmembers'">+ 增加成员
         </button>
       </div>
     </div>
@@ -51,7 +51,7 @@
     </div>
 
     <!-- add member modal -->
-    <Modal id="add_members" v-if="showModal == 'add_members'" @close="showModal = false" :isFooter="true">
+    <Modal id="add_members" v-if="showModal == 'addmembers'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">增加成员</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>

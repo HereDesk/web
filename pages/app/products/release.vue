@@ -8,7 +8,7 @@
       </div>
       <div id="page-add-release" class='col-auto'>
         <button id="add_btn" type='button' class='btn btn-create'
-          v-if="Rules.product_release" @click="showModal = 'add_version'">
+          v-if="Rules.product_release" @click="showModal = 'addversion'">
           &nbsp;&nbsp;增加版本&nbsp;&nbsp;
         </button>
       </div>
@@ -39,7 +39,7 @@
     </div>
 
     <!-- create version modal -->
-    <Modal id="page-modal" v-if="showModal == 'add_version'" @close="showModal = true" :isFooter="true">
+    <Modal id="page-modal" v-if="showModal == 'addversion'" @close="showModal = true" :isFooter="true">
       <h5 slot="header">创建版本号</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>

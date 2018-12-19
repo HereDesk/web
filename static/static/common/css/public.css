@@ -933,11 +933,11 @@ pre {
 */
 
 .input-group-control > .btn-control {
-  font-weight: 300;
+  font-weight: 400;
   width: 100%;
   line-height: 2.5rem;
   outline: none;
-  border-radius: 1px;
+  border-radius: 5px;
 }
 
 .form-border-bottom {

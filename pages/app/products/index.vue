@@ -5,7 +5,7 @@
       </div>
       <div class='col-auto' >
         <button id='addproduct' type='button' class='btn btn-create' 
-          v-if="Rules.product_add" @click="showModal = 'AddProduct'">+ 增加产品
+          v-if="Rules.product_add" @click="showModal = 'Product'">+ 增加产品
         </button>
       </div>
     </div>
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <Modal v-if="showModal == 'AddProduct'" @close="showModal = false" :isFooter="true">
+    <Modal v-if="showModal == 'Product'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">创建产品</h5>
       <div class="form-group" slot="body">
         <div class='row col-md-auto'>
