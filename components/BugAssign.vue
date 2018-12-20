@@ -79,11 +79,12 @@ export default {
         data: JSON.stringify(this.AssignData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.$emit('close')
           if (this.pageSource === "page_bug_index") {
-            this.$emit("refreshList");
+            this.$emit("refreshList")
           }
           if (this.pageSource === "page_bug_details") {
-            this.$router.go(-1);
+            this.$router.go(-1)
           }
           this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {

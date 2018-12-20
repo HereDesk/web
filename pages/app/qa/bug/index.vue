@@ -1,7 +1,6 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
-    <div class="row">
-      
+    <div class="row"> 
 			<!-- 模块 -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <ProductModule v-if="isShowModules"
@@ -356,8 +355,8 @@
 
     <!-- Bug处理操作：关闭 -->
     <Modal id="modal-bugClosed" v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
-      <div slot="body" class="text-center mt-5 mb-3">
-        <h5 class="lead">确定关闭此缺陷?</h5>
+      <div slot="body" class="text-center my-5">
+        <h3 style="font-weight: 300;">确定关闭此缺陷?</h3>
       </div>
       <button slot="footer" type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
     </Modal>
@@ -511,10 +510,6 @@ export default {
       // 组件数据传递
       scheme: "Fixed",
       pageSource: "page_bug_index",
-      // close bug
-      ClosedData: {
-        bug_id: ""
-      },
       // export bug
       BugExportFile: {}
     }
@@ -653,7 +648,7 @@ export default {
     // show user config : 1: show, 0: hide
     isShowModules: function() {
       let config = this.$store.state.UserConfig
-      if ("IS_SHOW_MODULE" in config) {
+      if (config["IS_SHOW_MODULE"]) {
         return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
       } else {
         return false
@@ -891,13 +886,15 @@ export default {
     },
 		
 		/* bug: closed */
-    ClosedBug(bug_id) {
+    ClosedBug() {
+      let data = {"bug_id": this.selectedBugId}
       axios({
         method: "post",
         url: "/api/qa/bug/close",
-        data: JSON.stringify(this.ClosedData)
+        data: JSON.stringify(data)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.showModal = false
           this.getBugList()
           this.$notify.success({title: "成功",message: res.data["msg"]})
         } else {

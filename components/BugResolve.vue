@@ -93,6 +93,7 @@ export default {
         data: JSON.stringify(this.ResolveData)
       }).then(res => {
         if (res.data["status"] === 20000) {
+          this.$emit('close')
           if (this.pageSource === "page_bug_index") {
             this.$emit("refreshList");
           }
