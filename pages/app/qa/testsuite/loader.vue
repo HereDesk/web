@@ -53,9 +53,6 @@
 </template>
 
 <script>
-import axios from "axios"
-
-import Modal from "~/components/Modal"
 import Pagination from "~/components/Pagination"
 let _ = require("lodash/Array")
 
@@ -68,7 +65,6 @@ export default {
   layout: "head",
   components: {
     Pagination,
-    Modal
   },
 
   data() {
@@ -150,7 +146,7 @@ export default {
 
     // get product module
     getModule(product_code) {
-      axios
+      this.axios
         .get("/api/pm/get_module?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -163,7 +159,7 @@ export default {
 
     // get all testcase list
     getAllCaseData() {
-      axios
+      this.axios
         .get("/api/qa/testcase/valid_list", { params: this.AddedQueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -177,7 +173,7 @@ export default {
 
 
     getAddedCase() {
-      axios.get("/api/qa/testsuite/cell/brief_list", {params: this.NoAddQueryBuilder})
+      this.axios.get("/api/qa/testsuite/cell/brief_list", {params: this.NoAddQueryBuilder})
         .then(res => {
           if (res.data["status"] === 20000) {
             this.AddedCaseData = res.data["data"]
@@ -207,7 +203,7 @@ export default {
         this.$notify.error({ title: "错误", message: "请选择后再提交" })
         return
       }
-      axios({
+      this.axios({
         method: "POST",
         url: "/api/qa/testsuite/cell/add",
         data: JSON.stringify(this.SaveCheckedCaseData)
@@ -242,7 +238,7 @@ export default {
       }
       data["m1"] = this.selected_mod_id[0]
       data["m2"] = this.selected_mod_id[1]
-      axios({
+      this.axios({
         method: "POST",
         url: "/api/qa/testsuite/cell/add",
         data: JSON.stringify(data)

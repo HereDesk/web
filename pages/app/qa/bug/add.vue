@@ -81,7 +81,7 @@
             </label>
             <el-input type='text' id='bug-title-input' class='col-lg-8 col-md-10 col-sm-12'
               maxlength='100' placeholder='标题，最多100个字符 ~.' 
-              v-model.trim='Bug.title' required>
+              v-model.trim='Bug.title' required focus>
             </el-input>
           </div>
           
@@ -161,7 +161,6 @@
 </template>
 
 <script>
-import axios from "axios"
 
 import fileutil from "~/assets/js/file.js"
 import data from '~/assets/js/data.js'
@@ -257,7 +256,7 @@ export default {
     },
     // get testcase details
     getCaseDetails() {
-      axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
+      this.axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.Bug.steps = res.data["data"]["steps"]
@@ -272,7 +271,7 @@ export default {
     },
     // get product_release info
     getProductRelease() {
-      axios.get("/api/pm/product_release").then(res => {
+      this.axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
           this.product_list = res.data["data"]
           this.Bug.product_code = res.data["data"][0]["product_code"]
@@ -280,7 +279,7 @@ export default {
       })
     },
     getModule() {
-      axios.get("/api/pm/get_module?product_code=" + this.Bug.product_code)
+      this.axios.get("/api/pm/get_module?product_code=" + this.Bug.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.modules_list = res.data["data"]
@@ -290,7 +289,7 @@ export default {
         })
     },
     getDeveloper() {
-      axios.get("/api/pm/member/list?group=Developer&product_code=" + this.Bug.product_code)
+      this.axios.get("/api/pm/member/list?group=Developer&product_code=" + this.Bug.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.developer_list = res.data["data"]
@@ -362,7 +361,7 @@ export default {
         })
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/create",
         data: JSON.stringify(this.Bug),

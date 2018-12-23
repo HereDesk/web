@@ -78,9 +78,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
-import Modal from "~/components/Modal";
 import util from "~/assets/js/util.js";
 import rules from "~/assets/js/rules.js";
 
@@ -88,13 +85,10 @@ export default {
   head() {
     return {
       title: "HDesk - 用户管理"
-    };
+    }
   },
 	
   layout: "head",
-  components: {
-    Modal
-  },
 	
   filters: {
     date: util.date
@@ -140,7 +134,7 @@ export default {
   methods: {
 		// get all user
     getAllUser() {
-      axios.get("/api/user/user_list").then(res => {
+      this.axios.get("/api/user/user_list").then(res => {
         if (res.data["status"] === 20000) {
           this.tableData = res.data["data"]
         }
@@ -166,7 +160,7 @@ export default {
         this.$notify.error({title: "失败",message: "密码的有效长度为8-16位"})
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/user/reset_passwd",
         data: JSON.stringify(this.password)
@@ -185,7 +179,7 @@ export default {
     banned(rows, event) {
       this.bannedData.user_id = rows.user_id
       this.bannedData.code = event.target.value
-      axios({
+      this.axios({
         method: "post",
         url: "/api/user/banned",
         data: JSON.stringify(this.bannedData)

@@ -9,3 +9,6 @@ rm -rf client*.tar.bz2
 
 # 压缩
 tar -jcvf client.tar.bz2 client
+
+# 压缩后删除
+rm -rf client

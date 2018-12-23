@@ -166,8 +166,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import fileutil from "~/assets/js/file.js"
 import data from '~/assets/js/data.js'
 
@@ -264,7 +262,7 @@ export default {
     },
     
 		getModule () {
-      axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
+      this.axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.modules_list = res.data['data']
@@ -277,7 +275,7 @@ export default {
 		// get bug_details data
     getBugDetails () {
       if (this.currentBugId) {
-        axios.get('/api/qa/bug/details?bug_id=' + this.currentBugId)
+        this.axios.get('/api/qa/bug/details?bug_id=' + this.currentBugId)
           .then(res => {
             if (res.data['status'] === 20000) {
               let data = res.data['data']
@@ -293,7 +291,7 @@ export default {
     },
 
     getProductRelease () {
-      axios.get('/api/pm/product_release').then(res => {
+      this.axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
           this.product_list = res.data['data']
           this.release_list = res.data['data'][0]['data']
@@ -309,7 +307,7 @@ export default {
     },
     
     getDeveloper () {
-      axios.get('/api/pm/member/list?group=developer&product_code=' + this.Bug.product_code).then(res => {
+      this.axios.get('/api/pm/member/list?group=developer&product_code=' + this.Bug.product_code).then(res => {
         if (res.data['status'] === 20000) {
           this.developer_list = res.data['data']
         }
@@ -349,7 +347,7 @@ export default {
         this.$notify.error({title: '提示',message: '备注输入太长了,长度需要小于10000'})
         return 
       }
-      axios({
+      this.axios({
         method: 'post',
         url: '/api/qa/bug/edit',
         data: JSON.stringify(this.Bug),

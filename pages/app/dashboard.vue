@@ -47,6 +47,8 @@
       </div>
 
       <div id="page-data" v-if="isDisplayBody">
+
+        <!-- 图表部分 -->
         <div id="dashboard-chart" class="row align-items-center">
           <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="container">
@@ -93,6 +95,8 @@
             <div id="ChartLineBugWeek" style="width: 100%;height:100%;"></div>
           </div>
         </div>
+
+        <!-- 导航部分 -->
         <div id="dashboard-nav" class="row align-items-center">
           <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
             <nuxt-link to="/app/qa/bug" class="n-link">
@@ -126,15 +130,16 @@
 </template>
 
 <script>
-import axios from "axios";
-import util from "~/assets/js/util.js";
-import chart from "~/assets/js/chart.js";
+import util from "~/assets/js/util.js"
+import chart from "~/assets/js/chart.js"
+
 export default {
   head() {
     return {
       title: "HDesk - 首页"
-    };
+    }
   },
+
   data() {
     return {
       fullscreenLoading: false,
@@ -155,19 +160,18 @@ export default {
       img_src: ""
     };
   },
+
   computed: {
+
     familyname: function() {
       return this.$store.state.isLogin ? this.$store.state.userInfo.realname : ""
     },
+
     isDisplayBody() {
-      if (this.$store.state.userInfo.group === "admin") {
-        return true;
-      } else if (this.current_product_code) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.userInfo.group === "admin" || this.current_product_code ?
+        true : false
     },
+
     QueryBuilderBugWeek() {
       let query = {
         product_code: null,
@@ -181,13 +185,11 @@ export default {
       let daysOfThisWeek = Array.from(new Array(7)).map((_, i) => {
         let date = new Date(
           dateOfToday + (i - dayOfToday) * 1000 * 60 * 60 * 24
-        );
+        )
         return (
           date.getFullYear() +
-          "-" +
-          String(date.getMonth() + 1).padStart(2, "0") +
-          "-" +
-          String(date.getDate()).padStart(2, "0")
+          "-" + String(date.getMonth() + 1).padStart(2, "0") +
+          "-" + String(date.getDate()).padStart(2, "0")
         )
       })
       query.product_code = this.current_product_code
@@ -195,6 +197,7 @@ export default {
       query.end_date = daysOfThisWeek[6]
       return query
     },
+
     BarYdata() {
       let data = this.BugStatusData
       let ydata = [0, 0, 0, 0]
@@ -214,6 +217,7 @@ export default {
       }
       return ydata
     },
+
     LineYdata() {
       let data = this.BugWeekData
       let ydata = [0, 0, 0, 0, 0, 0, 0]
@@ -224,6 +228,7 @@ export default {
       return ydata
     }
   },
+
   watch: {
     BarYdata: function(val, oldVal) {
       let x = this.BugStatusXAxisData
@@ -232,7 +237,7 @@ export default {
       chart.ChartBar("CharBarBugStatus", x, y, width, "缺陷状态统计")
     },
     LineYdata: function(val, oldVal) {
-      let x = ["日", "一", "二", "三", "四", "五", "六"]
+      const x = ["日", "一", "二", "三", "四", "五", "六"]
       let y = this.LineYdata
       chart.ChartLine("ChartLineBugWeek", x, y, "每周新建缺陷统计")
     },
@@ -270,58 +275,63 @@ export default {
   methods: {
     // 获取数据：产品版本
     getProductRelease() {
-      axios.get("/api/pm/product_release").then(res => {
+      this.axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
-          this.product_list = res.data["data"];
-          if (res.data["data"].length) {
-            this.current_product_code = this.product_list[0]["product_code"];
+          this.product_list = res.data["data"]
+          if (res.data["data"]) {
+            this.current_product_code = this.product_list[0]["product_code"]
           }
         } else {
-          this.product_msg = res.data["msg"];
+          this.product_msg = res.data["msg"]
         }
-      });
+      })
     },
+
     // 获取数据：缺陷DashBoard
     getBugDashData() {
-      axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
+      this.axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.BugDashData.WaitPending = res.data["data"]["WaitPending"];
-            this.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"];
-            this.BugDashData.NotFixed = res.data["data"]["NotFixed"];
-            this.BugDashData.Fixed = res.data["data"]["Fixed"];
+            this.BugDashData.WaitPending = res.data["data"]["WaitPending"]
+            this.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"]
+            this.BugDashData.NotFixed = res.data["data"]["NotFixed"]
+            this.BugDashData.Fixed = res.data["data"]["Fixed"]
           }
-        });
+        })
     },
+
     // 获取数据：缺陷状态
     getBugStatusData() {
-      axios.get("/api/analyze/bug/query?type=status&product_code=" + this.current_product_code)
+      this.axios.get("/api/analyze/bug/query?type=status&product_code=" + this.current_product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.BugStatusData = res.data["data"]
           }
-        });
+        })
     },
+    
     // 获取数据：每周新建缺陷
     getBugWeekData() {
-      axios.get("/api/analyze/bug/date/create", {params: this.QueryBuilderBugWeek})
-        .then(res => {
+      this.axios.get("/api/analyze/bug/date/create", {
+        params: this.QueryBuilderBugWeek,
+       }).then(res => {
           if (res.data["status"] === 20000) {
-            this.BugWeekData = res.data["data"];
+            this.BugWeekData = res.data["data"]
           }
-        });
+        })
     },
+
     // 操作：切换产品
     handleCommand(data) {
-      this.current_product_code = data["product_code"];
+      this.current_product_code = data["product_code"]
     },
+
     // 操作：用户退出登录
     HandLogout() {
       if (process.browser) {
-        window.localStorage.removeItem("token");
-        document.cookie =
-          "token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/";
-        window.location.replace("/");
+        window.localStorage.removeItem("token")
+        document.cookie ="token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/"
+        window.location.replace("/")
       }
     }
   }

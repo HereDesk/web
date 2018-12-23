@@ -69,18 +69,11 @@
 </template>
 
 <script>
-import axios from "axios"
-import Modal from "~/components/Modal"
-
 export default {
   head() {
     return {
       title: "HDesk - 接口权限管理"
     }
-  },
-
-  components: {
-    Modal
   },
 
   data() {
@@ -115,7 +108,7 @@ export default {
   methods: {
 		
     get_group_list() {
-      axios.get("/api/user/group").then(res => {
+      this.axios.get("/api/user/group").then(res => {
         if (res.data["status"] === 20000) {
           this.group_list = res.data["data"]
         } else {
@@ -130,7 +123,7 @@ export default {
     },
 		
     getApiList(data) {
-      axios.get("/api/system/api/list?group=" + data)
+      this.axios.get("/api/system/api/list?group=" + data)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.api_list = res.data["data"]
@@ -142,7 +135,7 @@ export default {
     },
 		
     SaveApiData() {
-      axios({
+      this.axios({
         method: "post",
         url: "/api/system/api/create",
         data: JSON.stringify(this.ApiPermissionsData)
@@ -166,7 +159,7 @@ export default {
       event.target.checked ? (data.is_allow = 1) : (data.is_allow = -1)
       data.api_id = api_id
       data.group = this.ApiPermissionsData.group
-      axios({
+      this.axios({
         method: "post",
         url: "/api/system/api/manage",
         data: JSON.stringify(data)

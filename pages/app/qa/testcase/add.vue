@@ -126,8 +126,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import fileutil from "~/assets/js/file.js"
 import data from '~/assets/js/data.js'
 
@@ -204,7 +202,7 @@ export default {
 
   methods: {
     getProductList () {
-      axios.get('/api/pm/product/my_list')
+      this.axios.get('/api/pm/product/my_list')
         .then(res => {
           if (res.data['status'] === 20000) {
             this.product_list = res.data['data']
@@ -212,7 +210,7 @@ export default {
         })
     },
     getModule () {
-      axios.get('/api/pm/get_module?product_code=' + this.CaseData.product_code)
+      this.axios.get('/api/pm/get_module?product_code=' + this.CaseData.product_code)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.modules_list = res.data['data']
@@ -276,7 +274,7 @@ export default {
         })
         return
       }
-      axios({
+      this.axios({
         method: 'post',
         url: '/api/qa/testcase/add',
         data: JSON.stringify(this.CaseData),

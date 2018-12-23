@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import axios from "axios"
-
 export default {
   props: {
     bug_id: String,
@@ -98,7 +96,7 @@ export default {
             this.$emit("refreshList");
           }
           if (this.pageSource === "page_bug_details") {
-            this.$router.push("/app/qa/bug");
+            this.$router.go(-1)
           }
           this.$notify.success({ title: "成功", message: res.data["msg"] });
         } else {

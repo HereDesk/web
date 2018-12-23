@@ -66,9 +66,6 @@
 </template>
 
 <script>
-import axios from "axios"
-
-import Modal from "~/components/Modal"
 import PageLoading from "~/components/PageLoading"
 
 import rules from "~/assets/js/rules.js"
@@ -85,10 +82,6 @@ export default {
   
   layout: "head",
 	
-  components: {
-    Modal
-  },
-
   data() {
     return {
       showModal: false,
@@ -157,7 +150,7 @@ export default {
   methods: {
     
 		getProductList() {
-      axios.get("/api/pm/product/my_list")
+      this.axios.get("/api/pm/product/my_list")
         .then(res => {
           if (res.data["status"] === 20000) {
             this.product_list = res.data["data"]
@@ -169,7 +162,7 @@ export default {
     },
     
 		getModuleA() {
-      axios.get("/api/pm/module/1/list?product_code=" + this.selected_product)
+      this.axios.get("/api/pm/module/1/list?product_code=" + this.selected_product)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.m1_list = res.data["data"]
@@ -193,7 +186,7 @@ export default {
 				this.$notify.error({title: "提示",message: "模块的有效长度为2到20位"})
 				return
 			}
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/module/1/add",
         data: JSON.stringify(this.a_module_data)
@@ -210,7 +203,7 @@ export default {
     },
     
 		getModuleB() {
-      axios.get("/api/pm/module/2/list?module_a_id=" + this.selected_a_module)
+      this.axios.get("/api/pm/module/2/list?module_a_id=" + this.selected_a_module)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.m2_list = res.data["data"]
@@ -232,7 +225,7 @@ export default {
 				this.$notify.error({title: "提示",message: "模块的有效长度为2到20位"})
 				return
 			}
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/module/2/add",
         data: JSON.stringify(this.b_module_data)
@@ -259,7 +252,7 @@ export default {
       }
       let tmp = this.editM2.m2
       this.editM2.m2 = tmp.replace(/(^\s*)|(\s*$)/g, "")
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/module/2/edit",
         data: JSON.stringify(this.editM2)
@@ -274,7 +267,7 @@ export default {
     },
     
 		delM2(data) {
-      axios.get("/api/pm/module/2/del?id=" + data.id).then(res => {
+      this.axios.get("/api/pm/module/2/del?id=" + data.id).then(res => {
         if (res.data["status"] === 20000) {
           this.$notify.success({title: "成功",message: res.data["msg"]})
           this.getModuleB()

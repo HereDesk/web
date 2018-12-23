@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Pagination from "~/components/Pagination"
 import util from "~/assets/js/util.js"
 
@@ -74,7 +73,7 @@ export default {
       this.Builder.pageNumber = pn
     },
     get_log () {
-      axios.get('/api/system/user_log', {params: this.Builder}).then(res => {
+      this.axios.get('/api/system/user_log', {params: this.Builder}).then(res => {
         if (res.data['status'] === 20000) {
           this.tableData = res.data['data']
           this.total = res.data['total']

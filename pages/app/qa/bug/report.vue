@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   layout: 'head',
   data () {
@@ -69,7 +67,7 @@ export default {
 
   methods: {
     getProductRelease () {
-      axios.get('/api/pm/product_release').then(res => {
+      this.axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
           this.product_list = res.data['data']
           this.request_data.product_code = res.data['data'][0]['product_code']
@@ -89,7 +87,7 @@ export default {
         this.request_data.type = 'week'
         this.WeekReportText = '获取中'
       }
-      axios.get('/api/qa/bug/report/generate', {params: this.request_data})
+      this.axios.get('/api/qa/bug/report/generate', {params: this.request_data})
         .then(res => {
           if (res.data['status'] === 20000) {
             this.DayReportId = res.data['report_id']

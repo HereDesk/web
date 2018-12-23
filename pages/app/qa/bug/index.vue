@@ -417,15 +417,12 @@
 </template>
 
 <script>
-import axios from "axios"
-
 import PageLoading from "~/components/PageLoading"
 import ProductModule from "~/components/ProductModule"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
 import Pagination from "~/components/Pagination"
-import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
@@ -446,7 +443,6 @@ export default {
     BugChange,
     Pagination,
     ProductModule,
-    Modal
   },
 
   data() {
@@ -638,8 +634,12 @@ export default {
     // show user config
     DataShowStyle: function() {
       let config = this.$store.state.UserConfig
-      if ("BUG_DATA_SHOW_STYPE" in config) {
-        return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+      if (config) {
+        if (config["BUG_DATA_SHOW_STYPE"]) { 
+          return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+        } else {
+          return this.ScreenWidth > 768 ? 'table' : 'list' 
+        }
       } else {
         return this.ScreenWidth > 768 ? 'table' : 'list'
       }
@@ -648,7 +648,8 @@ export default {
     // show user config : 1: show, 0: hide
     isShowModules: function() {
       let config = this.$store.state.UserConfig
-      if (config["IS_SHOW_MODULE"]) {
+      if (!config) {return false}
+      if ("IS_SHOW_MODULE" in config) {
         return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
       } else {
         return false
@@ -721,7 +722,7 @@ export default {
     
 		/* get product info and release info */
     getProductRelease() {
-      axios.get("/api/pm/product_release").then(res => {
+      this.axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
           this.product_list = res.data["data"]
         } else {
@@ -733,7 +734,7 @@ export default {
 		/* get member user list */
     getMemberList() {
       if (!this.selected_product) {return}
-      axios.get("/api/pm/member/list?product_code=" + this.selected_product)
+      this.axios.get("/api/pm/member/list?product_code=" + this.selected_product)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.$store.commit("setProductMemberList", res.data)
@@ -789,7 +790,7 @@ export default {
     /* Bug: get bug list data */
     getBugList() {
       if (!this.selected_product) { return }
-      axios
+      this.axios
 				.get("/api/qa/bug/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -801,7 +802,6 @@ export default {
           }
         })
     },
-		
 		
     /* bug query condition */
     SortData() {
@@ -845,7 +845,7 @@ export default {
           return
         }
       }
-      axios({
+      this.axios({
         method: "POST",
         url: "/api/qa/bug/search?",
         data: JSON.stringify(this.QueryBuilder)
@@ -888,7 +888,7 @@ export default {
 		/* bug: closed */
     ClosedBug() {
       let data = {"bug_id": this.selectedBugId}
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/close",
         data: JSON.stringify(data)
@@ -906,7 +906,7 @@ export default {
 		/* bug: export */
     bug_export () {
       if (!this.selected_product) { return }
-      axios
+      this.axios
 				.get("/api/qa/bug/export", { params: this.QueryBuilder })
         .then( res => {
           if (res.data["status"] === 20000) {
@@ -921,7 +921,7 @@ export default {
     myToday() {
       this.showModal = 'count-today'
       if (!this.selected_product) { return }
-      axios
+      this.axios
 				.get("/api/analyze/bug/my_today?product_code=" + this.selected_product)
 				.then(res => {
 					if (res.data["status"] === 20000) {
@@ -942,7 +942,7 @@ export default {
     /* is show module */
     switchModule() {
       let isDisplay = this.isShowModules ? 0 : 1
-      axios
+      this.axios
 				.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay)
 				.then(res => {
 					if (res.data["status"] === 20000) {
@@ -954,7 +954,7 @@ export default {
     /* page style: switch data style */
     switchStyle() {
       let style = this.DataShowStyle == 'table' ? 'list' : 'table'
-      axios
+      this.axios
 				.get('/api/userconfig?BUG_DATA_SHOW_STYPE=' + style)
 				.then(res => {
 					if (res.data["status"] === 20000) {

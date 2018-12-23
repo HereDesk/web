@@ -62,10 +62,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-import Modal from "~/components/Modal"
-
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -80,9 +76,6 @@ export default {
   },
 
   layout: "head",
-  components: {
-    Modal
-  },
 
   data() {
     return {
@@ -130,7 +123,7 @@ export default {
 		
     // Gets all versions in the project
     getRelease() {
-      axios.get("/api/pm/release/list?product_code=" + this.product_code)
+      this.axios.get("/api/pm/release/list?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -147,7 +140,7 @@ export default {
         this.$notify.error({title: "失败",message: "版本号的有效长度为3-20"})
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/release/create",
         data: JSON.stringify(this.ReleaseData)

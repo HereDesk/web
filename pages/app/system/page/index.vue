@@ -66,18 +66,12 @@
 </template>
 
 <script>
-import axios from "axios"
-import Modal from "~/components/Modal"
 
 export default {
   head() {
     return {
       title: "HDesk - 页面管理"
     }
-  },
-
-  components: {
-    Modal
   },
 
   data() {
@@ -110,7 +104,7 @@ export default {
 	
   methods: {
     get_group_list() {
-      axios.get("/api/user/group").then(res => {
+      this.axios.get("/api/user/group").then(res => {
         if (res.data["status"] === 20000) {
           this.group_list = res.data["data"]
         } else {
@@ -125,7 +119,7 @@ export default {
     },
 		
     getPageList() {
-      axios
+      this.axios
         .get("/api/system/page/list?group=" + this.PageData.group)
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -138,7 +132,7 @@ export default {
     },
 		
     SavePageData() {
-      axios({
+      this.axios({
         method: "post",
         url: "/api/system/page/create",
         data: JSON.stringify(this.PageData)
@@ -162,7 +156,7 @@ export default {
       event.target.checked ? (data.is_allow = 1) : (data.is_allow = -1)
       data.page_id = page_id
       data.group = this.PageData.group
-      axios({
+      this.axios({
         method: "post",
         url: "/api/system/page/manage",
         data: JSON.stringify(data)

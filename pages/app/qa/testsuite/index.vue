@@ -85,8 +85,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Modal from "~/components/Modal"
 import Pagination from '~/components/Pagination'
 
 export default {
@@ -99,7 +97,6 @@ export default {
   layout: 'head',
   components: {
     Pagination,
-    Modal
   },
 
   data () {
@@ -153,7 +150,7 @@ export default {
 
     /* get current all test suite */
     getTestSuite () {
-      axios
+      this.axios
         .get('/api/qa/testsuite/list',{ params: this.QueryBuilder }).then(res => {
           if (res.data['status'] === 20000) {
             this.tableData = res.data['data']
@@ -183,7 +180,7 @@ export default {
         this.$notify.error({title:"提示",message:"版本的有效长度为2-20位"})
         return 
       }
-      axios({
+      this.axios({
         method: 'POST',
         url: '/api/qa/testsuite/create',
         data: JSON.stringify(this.TestSuiteCreate)

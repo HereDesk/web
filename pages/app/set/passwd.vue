@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   head() {
     return {
@@ -71,7 +70,7 @@ export default {
         })
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/user/setpasswd",
         data: JSON.stringify(this.passwdData)

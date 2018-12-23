@@ -202,10 +202,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import PageLoading from '~/components/PageLoading'
-import Modal from "~/components/Modal"
 
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
@@ -240,7 +237,6 @@ export default {
   layout: 'head',
   components: {
     PageLoading,
-    Modal
   },
 
   data () {
@@ -300,7 +296,7 @@ export default {
   methods: {
     getCaseDetails () {
       if (this.currentcase_id) {
-        axios.get('/api/qa/testcase/details?case_id=' + this.currentcase_id)
+        this.axios.get('/api/qa/testcase/details?case_id=' + this.currentcase_id)
           .then(res => {
             if (res.data['status'] === 20000) {
               this.CaseDetails = res.data['data']
@@ -322,7 +318,7 @@ export default {
     CaseReview (data) {
       this.review_data.result = data
       this.review_data.case_id = this.CaseDetails.case_id
-      axios({
+      this.axios({
         method: 'post',
         url: '/api/qa/testcase/review',
         data: JSON.stringify(this.review_data)
@@ -339,7 +335,7 @@ export default {
 
     // Testcase: delete
     CaseDelete (id) {
-      axios('/api/qa/testcase/delete?case_id=' + id).then(res => {
+      this.axios('/api/qa/testcase/delete?case_id=' + id).then(res => {
         if (res.data['status'] === 20000) {
           this.$notify.success({title: '成功',message: res.data['msg']})
           this.$router.go(-1)
@@ -351,7 +347,7 @@ export default {
 
     // Testcase: 失效操作
     handleFall (id) {
-      axios.get('/api/qa/testcase/fall?case_id=' + id)
+      this.axios.get('/api/qa/testcase/fall?case_id=' + id)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.getCaseDetails()

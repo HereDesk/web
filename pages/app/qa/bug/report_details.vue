@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import chart from "~/assets/js/chart.js"
 
 export default {
@@ -117,7 +116,7 @@ export default {
 
   methods: {
     getReportDetails() {
-      axios
+      this.axios
         .get("/api/qa/bug/report/details?report_id=" + this.report_id)
         .then(res => {
           if (res.data["status"] === 20000) {

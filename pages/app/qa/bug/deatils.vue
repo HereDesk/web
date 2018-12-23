@@ -303,13 +303,10 @@
 
 <script>
 import Vue from "vue"
-import axios from "axios"
-
 import PageLoading from "~/components/PageLoading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
-import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -348,7 +345,6 @@ export default {
     BugResolve,
     BugChange,
     PageLoading,
-    Modal
   },
 
   data() {
@@ -447,7 +443,7 @@ export default {
   methods: {
     getBugDetails() {
       if (this.currentBugId) {
-        axios
+        this.axios
           .get("/api/qa/bug/details?bug_id=" + this.currentBugId)
           .then(res => {
             if (res.data["status"] === 20000) {
@@ -464,7 +460,7 @@ export default {
     },
     
     getMemberList() {
-      axios
+      this.axios
         .get("/api/pm/member/list?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
@@ -482,7 +478,7 @@ export default {
     immediateRecovered() {
       this.ResolveData.bug_id = this.currentBugId
       this.ResolveData.assignedTo = this.BugDetails.creator_id
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/resolve",
         data: JSON.stringify(this.ResolveData)
@@ -499,7 +495,7 @@ export default {
 
     // bug delete
     BugDelete() {
-      axios.get("/api/qa/bug/delete?bug_id=" + this.currentBugId).then(res => {
+      this.axios.get("/api/qa/bug/delete?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
           this.$router.go(-1)
           this.$notify.success({ title: "成功", message: res.data["msg"] })
@@ -518,7 +514,7 @@ export default {
     // bug closed
     BugClosed() {
       this.ClosedData.bug_id = this.currentBugId
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/close",
         data: JSON.stringify(this.ClosedData)
@@ -543,7 +539,7 @@ export default {
         this.$notify.error({title: "错误",message: "重新打开缺陷，原因不能为空哦"})
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/reopen",
         data: JSON.stringify(this.ReOpenData)
@@ -561,7 +557,7 @@ export default {
     // bug hand up
     HandUp() {
       this.HangUpData.bug_id = this.currentBugId
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/hangup",
         data: JSON.stringify(this.HangUpData)
@@ -578,7 +574,7 @@ export default {
 
     // the bug history record
     BugHistory() {
-      axios.get("/api/qa/bug/history?bug_id=" + this.currentBugId).then(res => {
+      this.axios.get("/api/qa/bug/history?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
           this.history = res.data["data"]
         }
@@ -588,7 +584,7 @@ export default {
     // add notes or remark
     AddNotes() {
       this.NotesData.bug_id = this.currentBugId
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/add_notes",
         data: JSON.stringify(this.NotesData)

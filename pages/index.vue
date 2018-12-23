@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import { getUserFromLocalStorage } from "~/assets/js/auth"
 
 export default {
@@ -80,7 +79,7 @@ export default {
         })
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/user/login",
         data: JSON.stringify(this.LoginData)

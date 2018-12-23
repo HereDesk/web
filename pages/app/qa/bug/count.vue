@@ -106,7 +106,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import chart from '~/assets/js/chart.js'
   export default {
     name: "BugCount",
@@ -277,7 +276,7 @@
     methods: {
       // 数据：产品版本
       getProductRelease () {
-        axios.get('/api/pm/new_product_release')
+        this.axios.get('/api/pm/new_product_release')
           .then(res => {
             if (res.data['status'] === 20000) {
               this.product_list = res.data['data']
@@ -296,7 +295,7 @@
       },
       // 数据：按日期查询新建缺陷
       getBugCreateDaily() {
-        axios.get('/api/analyze/bug/date/create',{params: this.QueryBugCreate})
+        this.axios.get('/api/analyze/bug/date/create',{params: this.QueryBugCreate})
           .then(res => {
             this.BugCreateDailyChartData = res.data
           })
@@ -305,7 +304,7 @@
       getBugStatusData() {
         this.QueryBugStatus.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugStatus.version = this.SelectedProductReleaseInfo[1]
-        axios.get('/api/analyze/bug/query',{params: this.QueryBugStatus})
+        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugStatus})
           .then(res => {
             this.BugStatusChartData = res.data['data']
           })
@@ -314,7 +313,7 @@
       getBugSeverityData() {
         this.QueryBugSeverity.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugSeverity.version = this.SelectedProductReleaseInfo[1]
-        axios.get('/api/analyze/bug/query',{params: this.QueryBugSeverity})
+        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugSeverity})
           .then(res => {
             this.BugSeverityChartData = res.data['data']
           })
@@ -323,7 +322,7 @@
       getBugPriorityData() {
         this.QueryBugPriority.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugPriority.version = this.SelectedProductReleaseInfo[1]
-        axios.get('/api/analyze/bug/query',{params: this.QueryBugPriority})
+        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugPriority})
           .then(res => {
             this.BugPriorityChartData = res.data['data']
           })
@@ -332,7 +331,7 @@
       getBugTypeData() {
         this.QueryBugType.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugType.version = this.SelectedProductReleaseInfo[1]
-        axios.get('/api/analyze/bug/query',{params: this.QueryBugType})
+        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugType})
           .then(res => {
             this.BugTypeChartData = res.data['data']
           })
@@ -341,7 +340,7 @@
       getBugTesterData() {
         this.QueryBugTester.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugTester.version = this.SelectedProductReleaseInfo[1]
-        axios.get('/api/analyze/bug/tester',{params: this.QueryBugTester})
+        this.axios.get('/api/analyze/bug/tester',{params: this.QueryBugTester})
           .then(res => {
             this.BugTesterChartData = res.data['data']
           })
@@ -350,7 +349,7 @@
       getBugDevloperData() {
         this.QueryBugDeveloper.product_code = this.SelectedProductReleaseInfo[0]
         this.QueryBugDeveloper.version = this.SelectedProductReleaseInfo[1]
-        axios.get('/api/analyze/bug/developer',{params: this.QueryBugDeveloper})
+        this.axios.get('/api/analyze/bug/developer',{params: this.QueryBugDeveloper})
           .then(res => {
             if (res.data['status'] === 20000) {
               let tmp_data = res.data['data']

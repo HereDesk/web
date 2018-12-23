@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import axios from "axios"
 export default {
   head() {
     return {
@@ -74,7 +73,7 @@ export default {
   },
 
   created() {
-    axios.get("/api/user/group").then(res => {
+    this.axios.get("/api/user/group").then(res => {
       if (res.data["status"] === 20000) {
         this.UserGroup = res.data["data"]
       }
@@ -127,7 +126,7 @@ export default {
         })
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/user/add",
         data: JSON.stringify(this.UserData)

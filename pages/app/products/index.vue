@@ -73,10 +73,6 @@
 </template>
 
 <script>
-import axios from "axios"
-
-import Modal from "~/components/Modal"
-
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -87,10 +83,6 @@ export default {
     }
   },
   layout: "head",
-
-  components: {
-    Modal
-  },
 
   filters: {
     date: util.date
@@ -135,7 +127,7 @@ export default {
 
   methods: {
     getProductList() {
-      axios.get("/api/pm/product/all_list").then(res => {
+      this.axios.get("/api/pm/product/all_list").then(res => {
         if ((res.data["status"] === 20000) & (res.data["data"].length > 0)) {
           this.loading = false
           this.tableData = res.data["data"]
@@ -161,7 +153,7 @@ export default {
         this.$notify.error({title: "错误",message: "项目编码的有效长度为3-20"})
         return 
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/product/create",
         data: JSON.stringify(this.ProductData)

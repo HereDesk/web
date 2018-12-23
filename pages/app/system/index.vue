@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import PageLoading from "~/components/PageLoading"
 export default {
   head() {

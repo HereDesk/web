@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
 import Pagination from '~/components/Pagination'
@@ -113,7 +112,7 @@ export default {
     },
 
     getTestCaseRunList () {
-      axios.get('/api/qa/testsuite/cell/list',{ params: this.QueryBuilder }).then(res => {
+      this.axios.get('/api/qa/testsuite/cell/list',{ params: this.QueryBuilder }).then(res => {
         if (res.data['status'] === 20000) {
           this.tableData = res.data['data']
           this.total = res.data['total']
@@ -125,7 +124,7 @@ export default {
     run (result,cell_id,case_id) {
       this.RunData.result = result
       this.RunData.cell_id = cell_id
-      axios({
+      this.axios({
         method: 'post',
         url: '/api/qa/testsuite/cell/run',
         data: JSON.stringify(this.RunData)

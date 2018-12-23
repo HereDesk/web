@@ -123,8 +123,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import fileutil from "~/assets/js/file.js"
 import data from '~/assets/js/data.js'
 
@@ -201,7 +199,7 @@ export default {
       this.CaseData.annex = data
     },
     getCaseDetails () {
-      axios.get('/api/qa/testcase/details?case_id=' + this.case_id)
+      this.axios.get('/api/qa/testcase/details?case_id=' + this.case_id)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.Annex = res.data['annex']
@@ -228,7 +226,7 @@ export default {
     },
 
     getModule () {
-      axios.get('/api/pm/get_module?product_code=' + this.seleted_product)
+      this.axios.get('/api/pm/get_module?product_code=' + this.seleted_product)
         .then(res => {
           if (res.data['status'] === 20000) {
              this.modules_list = res.data['data']
@@ -286,7 +284,7 @@ export default {
       if (!this.CaseData.module_id[0] && !this.CaseData.module_id[1]){
          this.CaseData.module_id = []
       }
-      axios({
+      this.axios({
         method: 'post',
         url: '/api/qa/testcase/edit',
         data: JSON.stringify(this.CaseData),

@@ -75,10 +75,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-import Modal from "~/components/Modal"
-
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 
@@ -90,10 +86,6 @@ export default {
   },
   
   layout: "head", 
-
-  components: {
-    Modal
-  },
 
   validate({ query }) {
     return /\w+/.test(query.product_code)
@@ -162,7 +154,7 @@ export default {
   methods: {
     // get current product member
     getProductMember() {
-      axios.get("/api/pm/member/list?product_code=" + this.product_code)
+      this.axios.get("/api/pm/member/list?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -175,7 +167,7 @@ export default {
 
     // get system all user
     getAllUser() {
-      axios.get("/api/user/user_list").then(res => {
+      this.axios.get("/api/user/user_list").then(res => {
         if (res.data["status"] === 20000) {
           this.AllUser = res.data["data"]
         } else {
@@ -195,7 +187,7 @@ export default {
         this.$notify.error({title: "失败",message: "请选择用户后再提交"})
         return
       }
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/member/join",
         data: JSON.stringify(this.ProductMemberData)
@@ -214,7 +206,7 @@ export default {
     // banned user to the product
     banned(rows, event) {
       this.bannedData.user_id = rows.user_id
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/member/ban",
         data: JSON.stringify(this.bannedData)
@@ -231,7 +223,7 @@ export default {
     // rejoin user to the product
     reJoin(rows, event) {
       this.bannedData.user_id = rows.user_id
-      axios({
+      this.axios({
         method: "post",
         url: "/api/pm/member/rejoin",
         data: JSON.stringify(this.bannedData)

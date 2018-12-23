@@ -245,12 +245,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 import PageLoading from "~/components/PageLoading"
 import Pagination from "~/components/Pagination"
 import ProductModule from "~/components/ProductModule"
-import Modal from "~/components/Modal"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -267,7 +264,6 @@ export default {
     PageLoading,
     Pagination,
     ProductModule,
-    Modal
   },
   data() {
     return {
@@ -336,8 +332,12 @@ export default {
     // show user config: about data style:  table and list
     DataShowStyle: function() {
       let config = this.$store.state.UserConfig
-      if ("CASE_DATA_SHOW_STYPE" in config) {
-        return this.ScreenWidth > 768 ? config["CASE_DATA_SHOW_STYPE"] : 'list'
+      if (config) {
+        if (config["CASE_DATA_SHOW_STYPE"]) {
+          return this.ScreenWidth > 768 ? config["CASE_DATA_SHOW_STYPE"] : 'list'
+        } else {
+          return this.ScreenWidth > 768 ? 'table' : 'list' 
+        }
       } else {
         return this.ScreenWidth > 768 ? 'table' : 'list'
       }
@@ -345,6 +345,7 @@ export default {
     // show user config : 1: show, 0: hide
     isShowModules: function() {
       let config = this.$store.state.UserConfig
+      if (!config) {return false}
       if ("IS_SHOW_MODULE" in config) {
         return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
       } else {
@@ -407,7 +408,7 @@ export default {
     },
     // get product info and release info
     getProductRelease() {
-      axios.get("/api/pm/product_release")
+      this.axios.get("/api/pm/product_release")
         .then(res => {
           if (res.data["status"] === 20000) {
              this.product_list = res.data["data"]
@@ -431,7 +432,7 @@ export default {
     // TestCase: 数据列表
     getCaseList() {
       if (!this.selected_product) { return }
-      axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
+      this.axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
              this.tableData = res.data["data"]
@@ -445,7 +446,7 @@ export default {
     // Testcase: 失效操作
     handleFall(data) {
       let case_id = data.case_id
-      axios.get("/api/qa/testcase/fall?case_id=" + case_id)
+      this.axios.get("/api/qa/testcase/fall?case_id=" + case_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.getCaseList()
@@ -466,7 +467,7 @@ export default {
     CaseReview(data) {
       this.review_data.result = data
       this.review_data.case_id = this.CaseDetails.case_id
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/testcase/review",
         data: JSON.stringify(this.review_data)
@@ -492,7 +493,7 @@ export default {
     },
 
     goSearch() {
-      axios.get("/api/qa/testcase/search", { params: this.QueryBuilder })
+      this.axios.get("/api/qa/testcase/search", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -510,7 +511,7 @@ export default {
     myToday() {
       this.showModal = 'count-today'
       if (!this.selected_product) { return }
-      axios("/api/analyze/testcase/my_today?product_code=" + this.selected_product).then(res => {
+      this.axios("/api/analyze/testcase/my_today?product_code=" + this.selected_product).then(res => {
         if (res.data["status"] === 20000) {
           this.MyTodayData = res.data["data"]
         }
@@ -519,7 +520,7 @@ export default {
 
     case_export () {
       if (!this.selected_product) { return }
-      axios.get("/api/qa/testcase/export", { params: this.QueryBuilder })
+      this.axios.get("/api/qa/testcase/export", { params: this.QueryBuilder })
         .then( res => {
           if (res.data["status"] === 20000) {
             this.ExportFile = res.data
@@ -544,7 +545,7 @@ export default {
     // switch data style
     switchStyle() {
       let style = this.DataShowStyle == 'table' ? 'list' : 'table'
-      axios.get('/api/userconfig?CASE_DATA_SHOW_STYPE=' + style).then(res => {
+      this.axios.get('/api/userconfig?CASE_DATA_SHOW_STYPE=' + style).then(res => {
         if (res.data["status"] === 20000) {
           this.$store.dispatch('getUserInfo')
         }
@@ -553,7 +554,7 @@ export default {
     // is show module
     switchModule() {
       let isDisplay = this.isShowModules ? 0 : 1
-      axios.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay).then(res => {
+      this.axios.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay).then(res => {
         if (res.data["status"] === 20000) {
           this.$store.dispatch('getUserInfo')
         }
