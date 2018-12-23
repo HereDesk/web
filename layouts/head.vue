@@ -1,6 +1,6 @@
 <template>
   <div id="page" style="height:100%;">
-    <nav id="page-head" class="navbar navbar-expand-lg navbar-light bg-white page-head">
+    <nav id="page-head" class="navbar navbar-expand-lg page-head">
       <a id="navbar-brand" class="navbar-brand" href="#">HDesk</a>
       <button class="navbar-toggler" type="button" 
         data-toggle="collapse" data-target="#navbarSupportedContent" 
