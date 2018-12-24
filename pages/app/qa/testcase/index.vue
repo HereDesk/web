@@ -251,7 +251,6 @@ import ProductModule from "~/components/ProductModule"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
-let _ = require("lodash/Collection")
 
 export default {
   head() {

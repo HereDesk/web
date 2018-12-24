@@ -48,7 +48,7 @@
 
       <div id="page-data" v-if="isDisplayBody">
 
-        <!-- 图表部分 -->
+        <!-- page chart -->
         <div id="dashboard-chart" class="row align-items-center">
           <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="container">
@@ -96,7 +96,7 @@
           </div>
         </div>
 
-        <!-- 导航部分 -->
+        <!-- page nav -->
         <div id="dashboard-nav" class="row align-items-center">
           <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
             <nuxt-link to="/app/qa/bug" class="n-link">
@@ -147,12 +147,7 @@ export default {
       chartData: {},
       product_list: [],
       chartSettings: {},
-      BugDashData: {
-        WaitPending: "-",
-        CreatedByMe: "-",
-        NotFixed: "-",
-        Fixed: "-"
-      },
+      BugDashData: {},
       BugStatusXAxisData: ["待解决", "已解决", "已关闭", "延期"],
       BugStatusData: {},
       BugWeekData: {},
@@ -178,14 +173,12 @@ export default {
         type: "section",
         start_date: null,
         end_date: null
-      };
+      }
       // date
-      let dateOfToday = Date.now();
-      let dayOfToday = (new Date().getDay() + 7 - 1) % 7;
+      let dateOfToday = Date.now()
+      let dayOfToday = (new Date().getDay() + 7 - 1) % 7
       let daysOfThisWeek = Array.from(new Array(7)).map((_, i) => {
-        let date = new Date(
-          dateOfToday + (i - dayOfToday) * 1000 * 60 * 60 * 24
-        )
+        let date = new Date(dateOfToday + (i - dayOfToday) * 1000 * 60 * 60 * 24)
         return (
           date.getFullYear() +
           "-" + String(date.getMonth() + 1).padStart(2, "0") +
@@ -236,11 +229,13 @@ export default {
       let width = chart.CharBarWidth(y)
       chart.ChartBar("CharBarBugStatus", x, y, width, "缺陷状态统计")
     },
+    
     LineYdata: function(val, oldVal) {
       const x = ["日", "一", "二", "三", "四", "五", "六"]
       let y = this.LineYdata
       chart.ChartLine("ChartLineBugWeek", x, y, "每周新建缺陷统计")
     },
+    
     current_product_code: function(val, oldVal) {
       if (this.current_product_code) {
         this.$router.replace({
@@ -252,6 +247,7 @@ export default {
         this.getBugWeekData()
       }
     },
+    
     product_msg: function(val, oldVal) {
       if (this.product_msg) {
         this.img_src = require("static/pic/smiley.png");
@@ -273,7 +269,8 @@ export default {
   },
 
   methods: {
-    // 获取数据：产品版本
+    
+    // get data：product and version
     getProductRelease() {
       this.axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
@@ -287,20 +284,17 @@ export default {
       })
     },
 
-    // 获取数据：缺陷DashBoard
+    // get data：bug DashBoard
     getBugDashData() {
       this.axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.BugDashData.WaitPending = res.data["data"]["WaitPending"]
-            this.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"]
-            this.BugDashData.NotFixed = res.data["data"]["NotFixed"]
-            this.BugDashData.Fixed = res.data["data"]["Fixed"]
+            this.BugDashData = res.data["data"]
           }
         })
     },
 
-    // 获取数据：缺陷状态
+    // get data：bug status data
     getBugStatusData() {
       this.axios.get("/api/analyze/bug/query?type=status&product_code=" + this.current_product_code)
         .then(res => {
@@ -310,7 +304,7 @@ export default {
         })
     },
     
-    // 获取数据：每周新建缺陷
+    // get data：week bug
     getBugWeekData() {
       this.axios.get("/api/analyze/bug/date/create", {
         params: this.QueryBuilderBugWeek,
@@ -321,12 +315,12 @@ export default {
         })
     },
 
-    // 操作：切换产品
+    // click：switch prodocut
     handleCommand(data) {
       this.current_product_code = data["product_code"]
     },
 
-    // 操作：用户退出登录
+    // click: user logout
     HandLogout() {
       if (process.browser) {
         window.localStorage.removeItem("token")

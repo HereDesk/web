@@ -1,7 +1,7 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
     <div class="row"> 
-			<!-- 模块 -->
+			<!-- Data: Module -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <ProductModule v-if="isShowModules"
           :product_code="selected_product" 
@@ -10,13 +10,14 @@
         </ProductModule>
       </div>
 
-      <div id="product-modules-switch" style="position: absolute;z-index: 9;" class="pl-4 mt-2 medium-devices-no" 
+      <!-- Action: let Module switch -->
+      <div id="product-modules-switch" class="pl-4 mt-2 medium-devices-no" style="position: absolute;z-index: 9;"  
         @click="switchModule()">
         <i class="iconfont bg-EEEEEE py-2" style="visibility:hidden;"
           :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
       </div>
 
-      <!-- 查询以及操作相关 -->
+      <!-- Action: Bug Query and Bug Search -->
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
         <div class="container-fluid">
 					
@@ -322,7 +323,7 @@
       </div>
     </div>
 
-    <!-- Bug处理操作：指派 -->
+    <!-- Action：Bug Assign -->
     <BugAssign id="modal-assign"
       v-if="showModal == 'assign'" 
       @close="showModal = false"
@@ -332,7 +333,7 @@
       @refreshList="getBugList()">
     </BugAssign>
 
-    <!-- Bug处理操作：解决 -->
+    <!-- Action：Bug Resolve -->
     <BugResolve id="modal-resolve"
       v-if="showModal == 'resolve'" 
       @close="showModal = false"
@@ -344,7 +345,7 @@
       @refreshList="getBugList()">
     </BugResolve>
 
-    <!-- Bug处理操作：修改优先级 -->
+    <!-- Action：Bug Change Priority -->
     <BugChange id="modal-change-priority" 
       v-if="showModal == 'priority'"
       @close="showModal = false"
@@ -353,7 +354,7 @@
       @refreshList="getBugList()">
     </BugChange>
 
-    <!-- Bug处理操作：关闭 -->
+    <!-- Action：Bug Closed -->
     <Modal id="modal-bugClosed" v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
       <div slot="body" class="text-center my-5">
         <h3 style="font-weight: 300;">确定关闭此缺陷?</h3>
@@ -361,7 +362,7 @@
       <button slot="footer" type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
     </Modal>
     
-    <!-- Bug处理操作: 导出 -->
+    <!-- Action: Bug Expoert -->
     <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeader="true">
       <h5 slot="header" class="modal-title">{{ selected_product }} 缺陷</h5>
       <div slot="body">
@@ -381,7 +382,7 @@
       </div>
     </Modal>
   
-    <!-- 我的今天bug -->
+    <!-- Data: Bug Count -->
     <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeader="true">
       <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
@@ -442,16 +443,31 @@ export default {
     BugResolve,
     BugChange,
     Pagination,
-    ProductModule,
+    ProductModule
   },
 
   data() {
     return {
 			showModal: false,
       ScreenWidth: 0,
+      isDisplayOperate: true,
+      
+      // Page Body Data
+      total: null,
+      pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+      pageSize: parseInt(this.$route.query.pageSize) || 10,
+      tableData: [],
+      HoverBugId: "",
+      selectedBugId: "",
+      HoverBugIdOpenBy: "",
       MyTodayData: false,
-
-      // product data and version data
+      BugExportFile: {},
+      
+      // Other
+      Msg: false,
+      img_src: null,
+      
+      // Define Data: Query and Search field
       product_list: [],
       modules_list: [],
       modules_id: [null, null],
@@ -459,21 +475,25 @@ export default {
       m2_id: this.$route.query.m2_id || null,
       selected_product: this.$route.query.product_code || "",
       selected_release: this.$route.query.release || "全部",
-      // bug status data
+      
+      // Define Data: Bug-Status
       status_list: data.bug_status_list,
       selected_status: this.$route.query.status || "all",
-      // bug priority data
+      
+      // Define Data: Bug-priority
       priority_list: data.priority_list,
       selected_priority: this.$route.query.priority || "all",
-      // bug order
+      
+      // Define Data: Bug-Order
       sort_text: '倒',
       order_list: data.order_list,
       selected_order: this.$route.query.order || "create_time",
-      // more operate: quick operation
+      
+      // Define Data: Bug-more-quick-operate
       operate: this.$route.query.operate || "no",
       QuickQperationList: data.bug_quick_operation_list,
 
-      // bug search
+      // Define Data: Bug-Search
       SearchType: data.bug_search_type_list,
       SearchCriteria: {
         Operators: this.$route.query.Operators || "=",
@@ -489,25 +509,10 @@ export default {
       },
       wd: this.$route.query.wd || '',
       isShowSearch: this.$route.query.wd ? true : false,
-
-      // bug table data
-      total: null,
-      pageNumber: parseInt(this.$route.query.pageNumber) || 1,
-      pageSize: parseInt(this.$route.query.pageSize) || 10,
-      tableData: [],
-      Msg: false,
-      img_src: null,
-
-      // 控制显示
-      isDisplayOperate: true,
-      HoverBugId: "",
-      selectedBugId: "",
-      HoverBugIdOpenBy: "",
-      // 组件数据传递
+      
+      // Define components Data
       scheme: "Fixed",
       pageSource: "page_bug_index",
-      // export bug
-      BugExportFile: {}
     }
   },
 
@@ -519,11 +524,7 @@ export default {
     QuickQperationName: util.QuickQperationName,
     filterOrder: util.getOrderName,
     FilterVersion: function(value) {
-      if (value == "all") {
-        return "全部"
-      } else {
-        return value
-      }
+      return value == "all" ? "全部" : value
     }
   },
   
@@ -861,7 +862,7 @@ export default {
       })
     },
 
-    /* 操作：bug修改优先级 */
+    /* Acction：bug change priority */
     BugPriorityDialog(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'priority'
