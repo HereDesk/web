@@ -159,7 +159,7 @@ export default {
   computed: {
 
     familyname: function() {
-      return this.$store.state.isLogin ? this.$store.state.userInfo.realname : ""
+      return this.$store.state.userInfo ? this.$store.state.userInfo.realname : ""
     },
 
     isDisplayBody() {
@@ -256,7 +256,7 @@ export default {
   },
 
   beforeCreate () {
-    if (!this.$store.state.isLogin) {
+    if (!this.$store.state.userInfo) {
       this.$store.dispatch("getUserInfo")
       if (this.$store.state.userInfo.group != 'admin') {
         this.$store.dispatch("getPageData")

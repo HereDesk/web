@@ -91,7 +91,7 @@
       }
     },
     beforeCreate () {
-      if (!this.$store.state.isLogin) {
+      if (!this.$store.state.userInfo) {
         this.$store.dispatch('getUserInfo')
       }
       if (this.$store.state.userInfo.group != 'admin' & !this.$store.state.PageData) {

@@ -17,9 +17,13 @@ const createStore = () => {
       ProductMemberList: false
     },
     mutations: {
-      setUserInfo(state, data) {
+      setLoginInfo(state, data) {
         if (data) {
           state.isLogin = true
+        }
+      },
+      setUserInfo(state, data) {
+        if (data) {
           state.userInfo = data['data']
           state.UserConfig = data['config']
         }

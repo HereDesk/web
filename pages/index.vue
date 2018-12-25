@@ -93,7 +93,8 @@ export default {
               exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000)
               document.cookie = "token=" + token + ";" + "expires=" + exp.toGMTString() + ";" + "path=/"
             }
-            this.$store.commit("setUserInfo", res.data)
+            this.$store.commit("setLoginInfo", res.data)
+            this.$store.dispatch('getUserInfo')
             if (res.data["data"]["group"] !== "admin") {
               this.$store.dispatch("getPageData")
             }

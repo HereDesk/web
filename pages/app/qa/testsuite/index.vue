@@ -133,7 +133,7 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.isProduwctInfo) {
+    if (!this.$store.state.isProductInfo) {
       this.$store.dispatch('getProductRelease')
     }
   },
@@ -150,8 +150,8 @@ export default {
 
     /* get current all test suite */
     getTestSuite () {
-      this.axios
-        .get('/api/qa/testsuite/list',{ params: this.QueryBuilder }).then(res => {
+      this.axios.get('/api/qa/testsuite/list',{ params: this.QueryBuilder })
+        .then(res => {
           if (res.data['status'] === 20000) {
             this.tableData = res.data['data']
             this.total = res.data['total']
