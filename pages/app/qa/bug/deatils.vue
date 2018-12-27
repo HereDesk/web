@@ -531,12 +531,16 @@ export default {
     // bug reopen
     ReOpen() {
       this.ReOpenData.bug_id = this.currentBugId
-      if (this.ReOpenData.assignedTo === "") {
+      if (!this.ReOpenData.assignedTo) {
         this.$notify.error({ title: "错误", message: "请选择指派人" })
         return 
       }
+      if (!this.ReOpenData.remark) {
+        this.$notify.error({title: "错误",message: "重新打开缺陷，原因不能为空"})
+        return
+      }
       if ((this.ReOpenData.remark.length > 1000) |(this.ReOpenData.remark.length < 5)) {
-        this.$notify.error({title: "错误",message: "重新打开缺陷，原因不能为空哦"})
+        this.$notify.error({title: "错误",message: "原因的有效长度为：5到1000字符"})
         return
       }
       this.axios({
