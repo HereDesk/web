@@ -4,14 +4,24 @@
       <div class='col-xl-4 col-lg-4 col-md-4 col-12 offset-xl-4 col-lg-4 offset-md-4'>
   	    <div class='form-group input-group-control'>
           <label for='oldPassword'>旧密码</label>
-          <input type='password' class='form-control' id='oldPassword' name="oldPassword" placeholder='旧密码' maxlength='16' minlength="8" required v-model.trim='passwdData.oldPassword'>
+          <input type='password' id='oldPassword' name="oldPassword" class='form-control'  
+            maxlength='16' minlength="8" placeholder='旧密码'
+            required autofocus
+            v-model.trim='passwdData.oldPassword' />
         </div>
         <div class='form-group input-group-control'>
         	<label for='newPassword'>新密码</label>
-        	<input type='password' class='form-control' id='newPassword' name="newPassword" placeholder='新密码不能为纯数字' maxlength='16' minlength="8" required v-model.trim='passwdData.newPassword' />
+        	<input type='password' id='newPassword' name="newPassword"  class='form-control' 
+            maxlength='16' minlength="8" placeholder='新密码不能为纯数字' 
+            required autofocus
+            v-model.trim='passwdData.newPassword' />
       	</div>
-      	<div class='form-group input-group-control mt-5'>
-        	<input type="submit" class="btn btn-control" @click="SubmitPasswd" v-bind:class="{ 'btn-secondary': !isButtonStatus, 'btn-primary': isButtonStatus }" v-bind:disabled="!isButtonStatus">
+        <p class="my-3 font-size-85 text-gray">备注：密码有效长度8到16位，且首尾不能使用空格</p>
+      	<div class='form-group input-group-control'>
+        	<input type="submit" class="btn btn-control"
+            :class="{ 'btn-secondary': !isButtonStatus, 'btn-primary': isButtonStatus }" 
+            :disabled="!isButtonStatus"
+            @click="SubmitPasswd" />
       	</div>
       </div>
     </div>
