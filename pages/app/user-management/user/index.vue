@@ -60,15 +60,17 @@
         <div class='row col-md-auto'>
           <label for="password" class="ml-5">密码</label>
           <input type='password' id='password' class='form-control input-lg mx-5 my-1' 
-            placeholder='请输入密码' minlength="8" maxlength='16' required 
-            v-model='password.passwd'>
+            placeholder='请输入密码' minlength="8" maxlength='16'
+            v-model.trim='password.passwd'
+            required autofocus />
         </div>
         <div class='row col-md-auto'>
           <label for="t-password" class="ml-5">确认密码</label>
           <input type='password' id='t-password' class='form-control input-lg mx-5 my-1' 
             placeholder='请再次输入密码' minlength="8" maxlength='16' required 
-            v-model='password.RepeatPasswd' @keyup.enter="ResetPassword()">
-          <p class="mb-0 ml-5 mt-3 font-size-85 text-gray">备注：密码有效长度8到16位</p>
+            v-model.trim='password.RepeatPasswd' 
+            @keyup.enter="ResetPassword()">
+          <p class="mb-0 ml-5 mt-3 font-size-85 text-gray">备注：密码有效长度8到16位,且不能使用空格</p>
         </div>
       </div>
       <button type="submit" class="btn btn-primary" slot="footer" @click="ResetPassword()">提交</button>
@@ -148,7 +150,7 @@ export default {
 		
     // reset password
     ResetPassword(event) {
-      if (this.password.passwd === "") {
+      if (!this.password.passwd) {
         this.$notify.error({title: "失败",message: "密码不能为空"})
         return
       }
