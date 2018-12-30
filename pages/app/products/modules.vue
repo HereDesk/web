@@ -55,7 +55,7 @@
       <div class='form-group row col-md-auto mx-3' slot="body">
         <label for="ModuleA">模块名称</label>
         <input type='text' class='form-control' rows="5" maxlength="20" placeholder='请输入名称...' 
-          v-model='a_module_data.ModuleA'  @keyup.enter="addModuleA()"/>
+          v-model='a_module_data.ModuleA'  @keyup.enter="addModuleA()" autofocus/>
       </div>
       <button slot="footer" type="submit" class="btn btn-primary" @click="addModuleA()">
 				提交
