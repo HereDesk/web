@@ -8,15 +8,16 @@
           <!-- bug: product_code and version -->
           <div id="bug-product-version" class='form-group row'>
             <label for='bug-product-version' class="col-md-2 col-sm-12 col-12 bug-label">
-              产品与模块
-              <span class="text-red">*</span>
+              产品与模块<span class="text-red">*</span>
             </label>
-            <el-select id="bug-product" class='col-md-2 col-sm-4 col-6' placeholder="选择产品" v-model="Bug.product_code" >
+            <el-select id="bug-product" class='col-md-2 col-sm-4 col-6' placeholder="选择产品" 
+              v-model="Bug.product_code" >
               <el-option 
                 v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
               </el-option>
             </el-select>
-            <el-select id="bug-version" class='col-md-2 col-sm-4 col-6' placeholder="选择版本" v-model="Bug.release">
+            <el-select id="bug-version" class='col-md-2 col-sm-4 col-6' placeholder="选择版本" 
+              v-model="Bug.release">
               <el-option 
                 v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
               </el-option>
@@ -35,19 +36,22 @@
             <label for='bug-mini-info' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷属性<span class="text-red">*</span>
             </label>
-            <el-select id="bug-assignedTo" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.assignedTo_id" placeholder="选择指派人">
+            <el-select id="bug-assignedTo" class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              placeholder="选择指派人" v-model="Bug.assignedTo_id">
               <el-option value="" :disabled="true">请选择指派人</el-option>
               <el-option 
                 v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
               </el-option>
             </el-select>
-            <el-select id="bug-priority" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.priority" placeholder="选择优先级">
+            <el-select id="bug-priority" class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              placeholder="选择优先级" v-model="Bug.priority">
               <el-option value="" :disabled="true">请选择优先级</el-option>
               <el-option 
                 v-for="item in BugProperty.bug_priority" :key="item.id" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
-            <el-select id="bug-severity" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.severity" placeholder="选择严重程度">
+            <el-select id="bug-severity" class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              placeholder="选择严重程度" v-model="Bug.severity">
               <el-option value="" :disabled="true">请选择严重程度</el-option>
               <el-option 
                 v-for="item in BugProperty.bug_severity" :key="item.id" :label="item.name" :value="item.key">
@@ -60,14 +64,19 @@
             <label for='bug-source-type' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷来源/类型
             </label>
-            <el-select v-model="Bug.bug_source" placeholder="缺陷来源" class='col-lg-2 col-md-2 col-sm-3 col-6'>
-              <el-option value="" :disabled="true">请选择缺陷来源</el-option>
+            <el-select class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              placeholder="缺陷来源" v-model="Bug.bug_source">
+              <el-option value="" :disabled="true">
+                请选择缺陷来源
+              </el-option>
               <el-option 
                 v-for="(item,index) in BugProperty.bug_source" :key="index" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
-            <el-select v-model="Bug.bug_type" placeholder="缺陷类型" class='col-lg-2 col-md-2 col-sm-3 col-6'>
-              <el-option value="" :disabled="true">请选择缺陷类型</el-option>
+            <el-select class='col-lg-2 col-md-2 col-sm-3 col-6' placeholder="缺陷类型" v-model="Bug.bug_type"> 
+              <el-option value="" :disabled="true">
+                请选择缺陷类型
+              </el-option>
               <el-option 
                 v-for="item in BugProperty.bug_type" :key="item.id" :label="item.name" :value="item.key">
               </el-option>
@@ -81,7 +90,7 @@
             </label>
             <el-input type='text' id='bug-title-input' class='col-lg-8 col-md-10 col-sm-12'
               maxlength='100' placeholder='标题，最多100个字符 ~.' 
-              v-model.trim='Bug.title' required focus>
+              v-model.trim='Bug.title' required autofocus>
             </el-input>
           </div>
           
@@ -91,8 +100,11 @@
               发现步骤<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 toolbars">
-              <mavon-editor placeholder="请输入发现步骤 ~" :toolbars="mavon_md_base_toolbars"
-                :subfield="false" v-model.trim="Bug.steps">
+              <mavon-editor placeholder="请输入发现步骤 ~" 
+                :toolbars="mavon_md_base_toolbars"
+                :subfield="false"
+                :autofocus="false"
+                v-model.trim="Bug.steps">
               </mavon-editor>
             </div>
             <!-- <quill-editor class="col-lg-8 col-md-10 col-sm-12 quill-editor-define" 
@@ -106,18 +118,26 @@
               实际结果<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入实际结果 ~" :toolbarsFlag="false"
-                :subfield="false" v-model.trim="Bug.reality_result">
+              <mavon-editor placeholder="请输入实际结果 ~" 
+                :toolbarsFlag="false"
+                :subfield="false"
+                :autofocus="false"
+                v-model.trim="Bug.reality_result">
               </mavon-editor>
             </div>
           </div>
           
           <!-- bug: result -->
           <div id="bug-expected-result" class='form-group row'>
-            <label for='bug-expected-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">预期结果</label>
+            <label for='bug-expected-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+              预期结果
+            </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入预期结果 ~" :toolbarsFlag="false"
-                :subfield="false" v-model.trim="Bug.expected_result">
+              <mavon-editor placeholder="请输入预期结果 ~" 
+                :toolbarsFlag="false"
+                :subfield="false"
+                :autofocus="false"
+                v-model.trim="Bug.expected_result">
               </mavon-editor>
             </div>
           </div>
@@ -134,15 +154,20 @@
           <div id="bug-remark" class='form-group row' v-if="isRemarkDisable">
             <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入附加信息 ~" :toolbarsFlag="false"
-                :subfield="false" v-model.trim="Bug.remark">
+              <mavon-editor placeholder="请输入附加信息 ~" 
+                :toolbarsFlag="false"
+                :subfield="false" 
+                :autofocus="false"
+                v-model.trim="Bug.remark">
               </mavon-editor>
             </div>
           </div>
   
           <!-- bug: about button -->
           <div id="bug-btn" class='d-flex justify-content-center my-5'>
-            <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
+            <button type='button' class='btn btn-accessories' @click="isShowRemark">
+              添加备注
+            </button>
             <button type='button' class='btn btn-submit mx-3' value="only-once-commit" 
               :disabled="isButtonDisabled" @click='createBug($event)'>
               保存提交

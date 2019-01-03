@@ -239,6 +239,10 @@
   margin-bottom: 0 !important;
 }
 
+.details-block img {
+  width:100%;
+}
+
 /*
 **
 **  以下是关于testcase相关页面的CSS

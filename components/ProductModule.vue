@@ -110,6 +110,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scope>
+  .el-active {
+    color: rgb(21, 101, 192);
+  }
 </style>

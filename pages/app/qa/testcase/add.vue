@@ -1,15 +1,15 @@
 <template>
   <div id="page-testcase-add">
     <BaseNav :title="title"></BaseNav>
-    <div id='page-testcase-add-input' class='container mt-5 pg-test-edit'>
+    <div id='page-testcase-add' class='container mt-5 pg-test-edit'>
       <div class="row m-0">
-
         <div id="page-body" class='col-lg-10 col-md-12 col-sm-12 col-12 offset-xl-1 offset-lg-1'>
           <div id="case-product" class='form-group row'>
             <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
               产品与模块<span class="text-red">*</span>
             </label>
-            <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" v-model="CaseData.product_code">
+            <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" 
+              v-model="CaseData.product_code">
               <el-option v-for="item in product_list" :key="item.id" 
                 :label="item.product_name" :value="item.product_code">
               </el-option>
@@ -37,8 +37,7 @@
               <el-option value="P3">P3</el-option>
             </el-select>
           </div>
-
-          <!-- 测试用例：功能测试用例 -->
+          
           <div id="t-testcase-functional">
             <div id="case-title" class='form-group row'>
               <label for='CaseTitle' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
@@ -49,64 +48,83 @@
                 v-model.trim='CaseData.title'>
               </el-input>
             </div>
+            
             <div id="case-precondition" class='form-group row'>
               <label for='CasePrecondition' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 执行前置条件<p class="label-desc">(选填)</p>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="测试用例执行前置条件 ~" :toolbarsFlag="false"
-                  :subfield="false" v-model.trim="CaseData.precondition">
+                <mavon-editor placeholder="测试用例执行前置条件 ~" 
+                  :toolbarsFlag="false"
+                  :subfield="false" 
+                  v-model.trim="CaseData.precondition">
                 </mavon-editor>
               </div>
             </div>
+            
             <div id="case-steps" class='form-group row'>
               <label for='CaseSteps' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 操作步骤<span class="text-red">*</span>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 toolbars">
-                <mavon-editor placeholder="请输入操作步骤 ~" :toolbars="mavon_md_base_toolbars"
-                  :subfield="false" v-model.trim="CaseData.steps">
+                <mavon-editor placeholder="请输入操作步骤 ~" 
+                  :toolbars="mavon_md_base_toolbars"
+                  :subfield="false" 
+                  v-model.trim="CaseData.steps">
                 </mavon-editor>
               </div>
             </div>
+            
             <div id="case-data-input" class='form-group row mt-3'>
               <label for='CaseInput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 测试数据<p class="label-desc">(选填)</p>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="需要使用的测试数据 ~" :toolbarsFlag="false"
-                  :subfield="false" v-model.trim="CaseData.DataInput">
+                <mavon-editor placeholder="需要使用的测试数据 ~" 
+                  :toolbarsFlag="false"
+                  :subfield="false"
+                  :autofocus="false"
+                  v-model.trim="CaseData.DataInput">
                 </mavon-editor>
               </div>
             </div>
-            <div id="case-ExpectedResult" class='form-group row'>
+            
+           <div id="case-ExpectedResult" class='form-group row'>
               <label for='CaseOutput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 预期结果<span class="text-red">*</span>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="测试用例预期结果 ~" :toolbarsFlag="false"
-                  :subfield="false" v-model.trim="CaseData.ExpectedResult">
+                <mavon-editor placeholder="测试用例预期结果 ~" 
+                  :toolbarsFlag="false"
+                  :subfield="false"
+                  :autofocus="false"
+                  v-model.trim="CaseData.ExpectedResult">
                 </mavon-editor>
               </div>
             </div>
+            
             <div id="case-annex" class='form-group row'>
-              <label for='case-file' class="col-lg-2 col-md-2 col-sm-12 testcase-label">设计图/原型图</label>
+              <label for='case-file' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
+                设计图/原型图
+              </label>
               <form id="case-file" class="col-lg-9 col-md-10 col-sm-12">
                 <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
               </form>
             </div>
+            
             <div id="case-remark" class='form-group row' v-show="isRemarkDisable">
               <label for='CaseOutput' class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 备注<p class="label-desc">(选填)</p>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="请输入备注 ~" :toolbarsFlag="false"
-                  :subfield="false" v-model.trim="CaseData.remark">
+                <mavon-editor placeholder="请输入备注 ~" 
+                  :toolbarsFlag="false"
+                  :subfield="false" 
+                  v-model.trim="CaseData.remark">
                 </mavon-editor>
               </div>
             </div>
-
-            <!-- 提交按钮 -->
+            
             <div class='d-flex justify-content-center my-5'>
               <button type='button' class='btn btn-accessories' @click="isShowRemark">添加备注</button>
               <button type='button' class='btn btn-submit mx-3' value="only-once-commit" 
@@ -118,7 +136,6 @@
               <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>

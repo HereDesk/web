@@ -48,13 +48,15 @@
         <div class='row col-md-auto'>
           <label for="pg-product-name" class="mx-5">产品名称</label>
           <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1' 
-            placeholder='输入（不超20个字）' maxlength='20' required 
+            placeholder='输入（不超20个字）' maxlength='20' 
+            required autofocus
             v-model='ProductData.product_name' >
         </div>
         <div class='row col-md-auto'>
           <label for="pg-product-name" class="mx-5">产品编号</label>
           <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
-            placeholder='输入（不超20个字）' maxlength='20' required 
+            placeholder='输入（不超20个字）' maxlength='20' 
+            required autofocus
             v-model='ProductData.product_code' >
           <p class="mx-5 mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
         </div>
