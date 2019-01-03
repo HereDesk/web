@@ -1,131 +1,133 @@
 <template>
-  <div id="page-dashboard" class="container" style="height:100vh;display:flex;align-items:center;"> 
-    <div id="page" style="margin:auto !important;width:100%;">
-      
-      <div id="page-head-head" class="row pb-5 mb-5" v-if="isDisplayBody">
-        <nav class="navbar navbar-expand-lg mr-auto">
-          <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
-          <el-dropdown class="ml-3">
-            <span class="dashboard-product">
-              <span class="el-dropdown-link" v-if="current_product_code"> 
-                {{ current_product_code || '' }}&nbsp;&nbsp;
-                <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
-              </span>
+  <div id="page-dashboard" class="container"> 
+    
+    <div id="page-head" class="row" style="height:20vh;" v-if="isDisplayBody">
+      <nav class="navbar navbar-expand-lg mr-auto">
+        <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
+        <el-dropdown class="ml-3">
+          <span class="dashboard-product">
+            <span class="el-dropdown-link" v-if="current_product_code"> 
+              {{ current_product_code || '' }}&nbsp;&nbsp;
+              <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
             </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for='item in product_list' :key="item.id">
-                <span @click="handleCommand(item)">{{ item.product_code }}</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </nav>
-        <div class="navbar">
-          <span class="dashboard-username">{{ familyname || '' }}</span>
-          <el-dropdown class="ml-3" trigger="click">
-            <span id="dashboard-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="iconfont icon-menu size-2 icon-8a8a8a"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <nuxt-link to="/app/help" target="_blank">
-                <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
-                </nuxt-link>
-              </el-dropdown-item>
-              <el-dropdown-item divided>
-                <nuxt-link to="/app/set/passwd">
-                  <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
-                </nuxt-link>
-              </el-dropdown-item>
-              <el-dropdown-item divided>
-                <a @click="HandLogout()">
-                  <i class="iconfont icon-logout"></i>&nbsp;&nbsp;退出登录
-                </a>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-      </div>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for='item in product_list' :key="item.id">
+              <span @click="handleCommand(item)">{{ item.product_code }}</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </nav>
+      <div class="navbar">
+        <span class="dashboard-username">{{ familyname || '' }}</span>
+        <el-dropdown class="ml-3" trigger="click">
+          <span id="dashboard-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="iconfont icon-menu size-2 icon-8a8a8a"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <nuxt-link to="/app/help" target="_blank">
+              <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
+              </nuxt-link>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <nuxt-link to="/app/set/passwd">
+                <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
+              </nuxt-link>
+            </el-dropdown-item>
+            <el-dropdown-item divided>
+              <a @click="HandLogout()">
+                <i class="iconfont icon-logout"></i>&nbsp;&nbsp;退出登录
+              </a>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>   
+    </div>
 
-      <div id="page-data" v-if="isDisplayBody">
+    <div id="page-body" class= "row" style="height:80vh;display:flex;align-items:center;">
+      <div style="margin:auto !important;width:100%;">
+        <div id="page-data" v-if="isDisplayBody">
 
-        <!-- page chart -->
-        <div id="dashboard-chart" class="row align-items-center">
-          <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="container">
-              <div class="row pt-3">
-                <div class="col-6 border-right">
-                  <div class="board-view">
-                    <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'WaitPending', 'product_code': current_product_code } }">
-                      <p class="v-num">{{ BugDashData.WaitPending || '0' }}</p>
-                      <p class="v-desc">待我处理</p>
-                    </nuxt-link>
+          <!-- page chart -->
+          <div id="dashboard-chart" class="row align-items-center">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+              <div class="container">
+                <div class="row pt-3">
+                  <div class="col-6 border-right">
+                    <div class="board-view">
+                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'WaitPending', 'product_code': current_product_code } }">
+                        <p class="v-num">{{ BugDashData.WaitPending || '0' }}</p>
+                        <p class="v-desc">待我处理</p>
+                      </nuxt-link>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6">
-                  <div class="board-view">
-                    <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'NotResolved', 'product_code': current_product_code } }">
-                      <p class="v-num">{{ BugDashData.NotFixed || '0' }}</p>
-                      <p class="v-desc">所有未解决的</p>
-                    </nuxt-link>
+                  <div class="col-6">
+                    <div class="board-view">
+                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'NotResolved', 'product_code': current_product_code } }">
+                        <p class="v-num">{{ BugDashData.NotFixed || '0' }}</p>
+                        <p class="v-desc">所有未解决的</p>
+                      </nuxt-link>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6 border-right border-top">
-                  <div class="board-view">
-                    <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'CreatedByMe', 'product_code': current_product_code } }">
-                      <p class="v-num">{{ BugDashData.CreatedByMe || '0' }}</p>
-                      <p class="v-desc">我创建的</p>
-                    </nuxt-link>
+                  <div class="col-6 border-right border-top">
+                    <div class="board-view">
+                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'CreatedByMe', 'product_code': current_product_code } }">
+                        <p class="v-num">{{ BugDashData.CreatedByMe || '0' }}</p>
+                        <p class="v-desc">我创建的</p>
+                      </nuxt-link>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6 border-top">
-                  <div class="board-view">
-                    <nuxt-link :to="{ path: '/app/qa/bug', query: { 'status': 'Fixed', 'product_code': current_product_code } }">
-                      <p class="v-num">{{ BugDashData.Fixed || '0' }}</p>
-                      <p class="v-desc">已解决,待关闭</p>
-                    </nuxt-link>
+                  <div class="col-6 border-top">
+                    <div class="board-view">
+                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'status': 'Fixed', 'product_code': current_product_code } }">
+                        <p class="v-num">{{ BugDashData.Fixed || '0' }}</p>
+                        <p class="v-desc">已解决,待关闭</p>
+                      </nuxt-link>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 px-0 text-center my-3" style="height:18rem;">
+              <div id="CharBarBugStatus" style="width: 100%;height:100%;"></div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 px-0 text-center my-3" style="height:18rem;">
+              <div id="ChartLineBugWeek" style="width: 100%;height:100%;"></div>
+            </div>
           </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 px-0 text-center my-3" style="height:18rem;">
-            <div id="CharBarBugStatus" style="width: 100%;height:100%;"></div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 px-0 text-center my-3" style="height:18rem;">
-            <div id="ChartLineBugWeek" style="width: 100%;height:100%;"></div>
+
+          <!-- page nav -->
+          <div id="dashboard-nav" class="row align-items-center">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
+              <nuxt-link to="/app/qa/bug" class="n-link">
+                <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
+              </nuxt-link>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
+              <nuxt-link to="/app/qa/testcase" class="n-link">
+                <h5><i class="iconfont icon-T size-2 pr-3"></i>测试用例</h5>
+              </nuxt-link>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF7919">
+              <nuxt-link to="/app/products" class="n-link">
+                <h5><i class="iconfont icon-jingxuanchanpinku size-2 pr-3"></i>产品管理</h5>
+              </nuxt-link>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FFA726">
+              <nuxt-link to="/app/user-management/user" class="n-link">
+                <h5><i class="iconfont icon-user-manage size-2 pr-3"></i>用户管理</h5>
+              </nuxt-link>
+            </div>
           </div>
         </div>
-
-        <!-- page nav -->
-        <div id="dashboard-nav" class="row align-items-center">
-          <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
-            <nuxt-link to="/app/qa/bug" class="n-link">
-              <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
-            </nuxt-link>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
-            <nuxt-link to="/app/qa/testcase" class="n-link">
-              <h5><i class="iconfont icon-T size-2 pr-3"></i>测试用例</h5>
-            </nuxt-link>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF7919">
-            <nuxt-link to="/app/products" class="n-link">
-              <h5><i class="iconfont icon-jingxuanchanpinku size-2 pr-3"></i>产品管理</h5>
-            </nuxt-link>
-          </div>
-          <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FFA726">
-            <nuxt-link to="/app/user-management/user" class="n-link">
-              <h5><i class="iconfont icon-user-manage size-2 pr-3"></i>用户管理</h5>
-            </nuxt-link>
-          </div>
+        <div id="page-msg" class="text-center" v-else>
+          <img :src="img_src" style="height:72px;width:72px;" v-show="img_src">
+          <p class="mt-5">{{ product_msg }}</p>
         </div>
-      </div>
-
-      <div id="page-msg" class="text-center" v-else>
-        <img :src="img_src" style="height:72px;width:72px;" v-show="img_src">
-        <p class="mt-5">{{ product_msg }}</p>
-      </div>
+      </div> 
     </div>
+
   </div>
 </template>
 
@@ -143,7 +145,7 @@ export default {
   data() {
     return {
       fullscreenLoading: false,
-      current_product_code: null,
+      current_product_code: this.$route.query.product_code || null,
       chartData: {},
       product_list: [],
       chartSettings: {},
@@ -223,6 +225,7 @@ export default {
   },
 
   watch: {
+
     BarYdata: function(val, oldVal) {
       let x = this.BugStatusXAxisData
       let y = this.BarYdata
@@ -268,6 +271,12 @@ export default {
     this.getProductRelease()
   },
 
+  mounted() {
+    this.getBugDashData()
+    this.getBugStatusData()
+    this.getBugWeekData()
+  },
+
   methods: {
     
     // get data：product and version
@@ -275,7 +284,7 @@ export default {
       this.axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
           this.product_list = res.data["data"]
-          if (res.data["data"]) {
+          if (res.data["data"] && !this.$route.query.product_code) {
             this.current_product_code = this.product_list[0]["product_code"]
           }
         } else {
