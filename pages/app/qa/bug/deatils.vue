@@ -56,39 +56,7 @@
             <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附件
             </h6>​
-            <picture class="container-fluid">
-              <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-4 images" v-for="p in Annex" :key="p.id" v-viewer>
-                  <span class="file-card text-center pt-2" 
-                    v-if="['md','log','txt','doc','docx','pdf','json','html'].includes(p.suffix)">
-                    <a class="file-link" :href="p.url" target="_blank">
-                      <i class="iconfont size-2"
-                        :class="{
-                          'icon-markdown': p.suffix === 'md',
-                          'icon-icon-rizhi font-color-1296db': p.suffix === 'log',
-                          'icon-txt font-color-00BFA5': p.suffix === 'txt',
-                          'icon-jsonfile': p.suffix === 'json',
-                          'icon-html font-color-00BFA5': p.suffix === 'html',
-                          'icon-PDF font-color-d81e06': p.suffix === 'pdf',
-                          'icon-WORD font-color-007BFF': ['doc','docx'].includes(p.suffix),
-                          'icon-excel font-color-00BFA5': ['xls','xlsx'].includes(p.suffix),
-                          'icon-PPT font-color-d81e06': ['ppt','pptx'].includes(p.suffix)
-                        }"></i>
-                      <p class="font-size-85 font-color-757575">下载查看</p>
-                    </a>
-                  </span>
-                  <span v-else-if="['mp4','mov','mp3'].includes(p.suffix)">
-                    <a class="display-block" style="width:100%height:100%color:inherit" :href="p.url" target="_blank">
-                      <i class="iconfont size-2 icon-video"></i>
-                      <p class="font-size-85 font-color-757575">下载查看</p>
-                    </a>
-                  </span>
-                  <span v-else>
-                    <img class="img-thumbnail" alt="..." :src="p.url">
-                  </span>
-                </div>
-              </div>
-            </picture>
+            <FileShow :Annex="Annex"></FileShow>
           </div>
           <div id="bug-details-history" class="height-7 mb-5 font-color-383838 font-size-93">
             <h6 class="details-minor-title">
@@ -303,6 +271,7 @@
 
 <script>
 import Vue from "vue"
+import FileShow from '~/components/FileShow'
 import PageLoading from "~/components/PageLoading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
@@ -345,6 +314,7 @@ export default {
     BugResolve,
     BugChange,
     PageLoading,
+    FileShow
   },
 
   data() {

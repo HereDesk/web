@@ -17,7 +17,10 @@
               </el-option>
             </el-select>
             <el-cascader class="col-md-3 col-sm-4 col-6" placeholder="选择模块"
-              :options="modules_list" v-model="CaseData.module_id" filterable ></el-cascader>
+              :options="modules_list" 
+              v-model="CaseData.module_id" f
+              ilterable >
+            </el-cascader>
           </div>
 
           <div id="case-info" class='form-group row'>
@@ -158,6 +161,7 @@ export default {
         product_code: null,
         category: null,
         priority: null,
+        module_id: [],
         annex: []
       },
       fileList: [],
@@ -199,34 +203,24 @@ export default {
       this.CaseData.annex = data
     },
     getCaseDetails () {
-      this.axios.get('/api/qa/testcase/details?case_id=' + this.case_id)
+      this.axios
+        .get('/api/qa/testcase/details?case_id=' + this.case_id)
         .then(res => {
           if (res.data['status'] === 20000) {
+            let data = res.data['data']
             this.Annex = res.data['annex']
-            var data = res.data['data']
-            var module = new Array()
-            module[0] = data.m1_id
-            module[1] = data.m2_id
-					  this.CaseData.module_id = module
-					  this.CaseData.product_code = data.product_code
-					  this.CaseData.case_id = data.case_id
-					  this.CaseData.product_code = data.product_code
-					  this.CaseData.priority = data.priority
-					  this.CaseData.title = data.title
-					  this.CaseData.category = data.category
-					  this.CaseData.precondition = data.precondition
-					  this.CaseData.DataInput = data.DataInput
-					  this.CaseData.steps = data.steps
-					  this.CaseData.expected_result = data.expected_result
-					  this.CaseData.remark = data.remark
+            Object.assign(this.CaseData,data)
+            data['m1_id'] ? this.CaseData.module_id[0] = data['m1_id'] : null
+            data['m2_id'] ? this.CaseData.module_id[1] = data['m2_id'] : null
           } else {
-             this.$router.go(-1)
+            this.$router.go(-1)
           }
       })
     },
 
     getModule () {
-      this.axios.get('/api/pm/get_module?product_code=' + this.seleted_product)
+      this.axios
+        .get('/api/pm/get_module?product_code=' + this.seleted_product)
         .then(res => {
           if (res.data['status'] === 20000) {
              this.modules_list = res.data['data']
@@ -241,10 +235,10 @@ export default {
     },
 
     EditTestCase (event) {
-      var title =  this.CaseData.title
-      var DataInput =  this.CaseData.DataInput
-      var expected_result =  this.CaseData.expected_result
-      var steps =  this.CaseData.steps
+      let title =  this.CaseData.title
+      let DataInput =  this.CaseData.DataInput
+      let expected_result =  this.CaseData.expected_result
+      let steps =  this.CaseData.steps
 
       if (title.length < 5 | title.length > 50) {
         this.$notify.error({

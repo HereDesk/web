@@ -32,7 +32,6 @@
       <div id="page-body" class="row my-3">
 
         <div id="page-body-left" class='col-lg-8 col-md-7 col-sm-12'>
-
           <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;执行前置条件
@@ -63,43 +62,11 @@
             </h6>
             <div class="details-block" v-html="ConvertsMd(CaseDetails.remark)"></div>
           </div>
-          <div id="case-steps" class="height-7 mb-5" v-if="Annex.length">
+          <div id="case-annex" class="height-7 mb-5" v-if="Annex.length">
             <h6>
               <span class="grayline"></span>&nbsp;&nbsp;原型或设计图
             </h6>
-            ​<picture class="container-fluid">
-              <div class="row">
-                <div class="col-lg-2 col-md-3 col-sm-4 images" v-for="p in Annex" :key="p.id" v-viewer>
-                  <span class="file-card text-center pt-2" 
-                    v-if="['md','log','txt','doc','docx','pdf','json','html'].includes(p.suffix)">
-                    <a class="file-link" :href="p.file_path" target="_blank">
-                      <i class="iconfont size-2"
-                        :class="{ 
-                          'icon-markdown': p.suffix === 'md',
-                          'icon-icon-rizhi font-color-1296db': p.suffix === 'log',
-                          'icon-txt font-color-00BFA5': p.suffix === 'txt',
-                          'icon-jsonfile': p.suffix === 'json',
-                          'icon-html font-color-00BFA5': p.suffix === 'html',
-                          'icon-PDF font-color-d81e06': p.suffix === 'pdf',
-                          'icon-WORD font-color-007BFF': ['doc','docx'].includes(p.suffix),
-                          'icon-excel font-color-00BFA5': ['xls','xlsx'].includes(p.suffix),
-                          'icon-PPT font-color-d81e06': ['ppt','pptx'].includes(p.suffix)
-                        }"></i>
-                      <p class="font-size-85 font-color-757575">下载查看</p>
-                    </a>
-                  </span>
-                  <span v-else-if="['mp4','mov','mp3'].includes(p.suffix)">
-                    <a class="file-link" :href="p.file_path" target="_blank">
-                      <i class="iconfont size-2 icon-video"></i>
-                      <p class="font-size-85 font-color-757575">下载查看</p>
-                    </a>
-                  </span>
-                  <span v-else>
-                    <img class="img-thumbnail" alt="..." :src="p.file_path">
-                  </span>
-                </div>
-              </div>
-            </picture>
+            <FileShow :Annex="Annex"></FileShow>
           </div>
         </div>
 
@@ -203,6 +170,7 @@
 
 <script>
 import PageLoading from '~/components/PageLoading'
+import FileShow from '~/components/FileShow'
 
 import util from '~/assets/js/util.js'
 import rules from '~/assets/js/rules.js'
@@ -237,6 +205,7 @@ export default {
   layout: 'head',
   components: {
     PageLoading,
+    FileShow
   },
 
   data () {

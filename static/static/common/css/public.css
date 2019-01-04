@@ -1285,6 +1285,12 @@ textarea::-webkit-input-placeholder {
   width: 99px;
   height: 99px;
   display: flex;
+  text-align: center;
+}
+
+.file-card .file-float-text {
+  font-size: 0.85rem;
+  color: #757577;
 }
 
 .file-link {
