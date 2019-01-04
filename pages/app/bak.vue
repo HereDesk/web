@@ -145,7 +145,7 @@ export default {
   data() {
     return {
       fullscreenLoading: false,
-      current_product_code: null,
+      current_product_code: this.$route.query.product_code || null,
       chartData: {},
       product_list: [],
       chartSettings: {},
@@ -181,9 +181,9 @@ export default {
         start_date: null,
         end_date: null
       }
-      // computed date
+      // date
       let dateOfToday = Date.now()
-      let dayOfToday = (new Date().getDay() + 7 - 1) % 7;
+      let dayOfToday = (new Date().getDay() + 7 - 1) % 7
       let daysOfThisWeek = Array.from(new Array(7)).map((_, i) => {
         let date = new Date(dateOfToday + (i - dayOfToday) * 1000 * 60 * 60 * 24)
         return (
@@ -237,13 +237,13 @@ export default {
       let width = chart.CharBarWidth(y)
       chart.ChartBar("CharBarBugStatus", x, y, width, "缺陷状态统计")
     },
-
+    
     LineYdata: function(val, oldVal) {
       const x = ["日", "一", "二", "三", "四", "五", "六"]
       let y = this.LineYdata
       chart.ChartLine("ChartLineBugWeek", x, y, "每周新建缺陷统计")
     },
-
+    
     current_product_code: function(val, oldVal) {
       if (this.current_product_code) {
         this.$router.replace({
@@ -255,7 +255,7 @@ export default {
         this.getBugWeekData()
       }
     },
-
+    
     product_msg: function(val, oldVal) {
       if (this.product_msg) {
         this.img_src = require("static/pic/smiley.png");
@@ -281,22 +281,18 @@ export default {
       this.getBugDashData()
       this.getBugStatusData()
       this.getBugWeekData()
-    } 
+    }
   },
 
   methods: {
-
+    
     // get data：product and version
     getProductRelease() {
       this.axios.get("/api/pm/product_release").then(res => {
         if (res.data["status"] === 20000) {
           this.product_list = res.data["data"]
-          if (res.data["data"]) {
-            if (this.$route.query.product_code) {
-              this.current_product_code = this.$route.query.product_code
-            } else {
-              this.current_product_code = this.product_list[0]["product_code"]
-            }
+          if (res.data["data"] && !this.current_product_code) {
+            this.current_product_code = this.product_list[0]["product_code"]
           }
         } else {
           this.product_msg = res.data["msg"]
@@ -309,10 +305,7 @@ export default {
       this.axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.BugDashData.WaitPending = res.data["data"]["WaitPending"]
-            this.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"]
-            this.BugDashData.NotFixed = res.data["data"]["NotFixed"]
-            this.BugDashData.Fixed = res.data["data"]["Fixed"]
+            this.BugDashData = res.data["data"]
           }
         })
     },
@@ -321,7 +314,7 @@ export default {
     getBugStatusData() {
       this.axios.get("/api/analyze/bug/query?type=status&product_code=" + this.current_product_code)
         .then(res => {
-          if (res.data["status"] === 20000) {
+          if (res.data["status"] === 20000 && res.data["data"]) {
             this.BugStatusData = res.data["data"]
           }
         })
@@ -352,7 +345,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style>
