@@ -61,7 +61,8 @@ export default {
     FileBeforeAvatarUpload(file) {
       const allow_file_format_list = ["jpg","png","jpeg","gif","bmp",
       	"docx","docx","xls","xlsx","ppt","pptx","pdf","txt","log","md","html","json",
-      	"mp4","mp3","mov"]
+        "mp4","mp3","mov",
+        "zip","rar","tar","7z","bz2","gz"]
       const tmp = file.name.split(".")
       const FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()
       const isLt20M = file.size / 1024 / 1024 < 20
