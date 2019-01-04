@@ -1,7 +1,7 @@
 <template>
   <div id="page-dashboard" class="container"> 
     
-    <div id="page-head" class="row" style="height:20vh;" v-if="isDisplayBody">
+    <div id="page-head" class="row" style="height:18vh;" v-if="isDisplayBody">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
         <el-dropdown class="ml-3">
@@ -13,7 +13,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for='item in product_list' :key="item.id">
-              <span @click="handleCommand(item)">{{ item.product_code }}</span>
+              <span @click="current_product_code = item.product_code">{{ item.product_code }}</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -45,12 +45,12 @@
       </div>   
     </div>
 
-    <div id="page-body" class= "row" style="height:80vh;display:flex;align-items:center;">
+    <div id="page-body" class= "row" style="height:82vh;display:flex;align-items:center;">
       <div style="margin:auto !important;width:100%;">
-        <div id="page-data" v-if="isDisplayBody">
+        <div id="page-data" class="pb-5" v-if="isDisplayBody">
 
           <!-- page chart -->
-          <div id="dashboard-chart" class="row align-items-center">
+          <div id="dashboard-chart" class="row mb-3 align-items-center">
             <div class="col-lg-4 col-md-4 col-sm-12">
               <div class="container">
                 <div class="row pt-3">
@@ -149,12 +149,7 @@ export default {
       chartData: {},
       product_list: [],
       chartSettings: {},
-      BugDashData: {
-        WaitPending: "-",
-        CreatedByMe: "-",
-        NotFixed: "-",
-        Fixed: "-"
-      },
+      BugDashData: {},
       BugStatusXAxisData: ["待解决", "已解决", "已关闭", "延期"],
       BugStatusData: {},
       BugWeekData: {},
@@ -309,10 +304,7 @@ export default {
       this.axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.BugDashData.WaitPending = res.data["data"]["WaitPending"]
-            this.BugDashData.CreatedByMe = res.data["data"]["CreatedByMe"]
-            this.BugDashData.NotFixed = res.data["data"]["NotFixed"]
-            this.BugDashData.Fixed = res.data["data"]["Fixed"]
+            this.BugDashData = res.data["data"]
           }
         })
     },
@@ -336,11 +328,6 @@ export default {
             this.BugWeekData = res.data["data"]
           }
         })
-    },
-
-    // click：switch prodocut
-    handleCommand(data) {
-      this.current_product_code = data["product_code"]
     },
 
     // click: user logout
