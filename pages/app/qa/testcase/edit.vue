@@ -106,7 +106,7 @@
                     <i class="iconfont icon-bucket-del size-1-5"></i>
                   </span>
                 </div>
-                <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
+                <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
               </form>
             </div> 
 

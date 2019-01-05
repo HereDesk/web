@@ -108,7 +108,7 @@
                 设计图/原型图
               </label>
               <form id="case-file" class="col-lg-9 col-md-10 col-sm-12">
-                <FileUpload :filetype="page_type" @annex="getAnnex"></FileUpload>
+                <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
               </form>
             </div>
             

@@ -273,16 +273,17 @@
 */
 
 .annex {
-  position: relative;
-	display:inline !important;
+  display:inline !important;
+  margin-right: -20.44px;
 }
 
 .annex > img {
+  border-radius: 5px;
   height: 148px;
   width:148px;
-  border-radius: 5px;
 	border: 1px dashed rgb(192, 204, 218) !important;
-	box-sizing: border-box;
+  box-sizing: border-box;
+  vertical-align: top;
 }
 
 .annex:hover > img {

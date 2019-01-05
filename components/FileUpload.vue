@@ -6,23 +6,31 @@
     :action="url"
     list-type="picture-card"
     :with-credentials=true 
-    :limit="3" 
     :on-success="ImageSuccess" 
     :on-remove="handleRemove" 
     :beforeUpload="FileBeforeAvatarUpload" 
-    :file-list="fileList">
+    :file-list="fileList"
+    :limit="fileLimit"
+    :on-exceed="handleExceed"
+    multiple>
     <i class="el-icon-plus"></i>
   </el-upload>
 </template>
 
 <script>
 export default {
+  props: {
+    fileLimit: Number,
+    identification: String
+  },
+
   data () {
     return {
       fileList: [],
       annex: []
     }
   },
+
   watch: {
     annex:{
       handler: function(old,oldVal) {
@@ -31,6 +39,7 @@ export default {
       deep: true
     }
   },
+
   computed: {
     url () {
       let url = this.$route.fullPath
@@ -45,7 +54,10 @@ export default {
       return "/api/support/upload?type=" + filetype
     }
   },
+
   methods: {
+
+    // file remove
     handleRemove(file,fileList) {
       let data = this.annex
       let beDeleted = file.response["name"]
@@ -55,18 +67,29 @@ export default {
         }
       }
     },
+    handleExceed(file,fileList) {
+      this.$notify.error({
+        title: "上传失败",
+        message: "最多只能上传" + this.fileLimit + "个文件"
+      })
+    },
     ImageSuccess(response, fileList) {
       this.annex.push(response["name"])
     },
+
+    /*
+    * File Before Upload
+    */
     FileBeforeAvatarUpload(file) {
+      // check: file size and file format
       const allow_file_format_list = ["jpg","png","jpeg","gif","bmp",
       	"docx","docx","xls","xlsx","ppt","pptx","pdf","txt","log","md","html","json",
         "mp4","mp3","mov",
         "zip","rar","tar","7z","bz2","gz"]
-      const tmp = file.name.split(".")
-      const FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()
-      const isLt20M = file.size / 1024 / 1024 < 20
-      const isFile = allow_file_format_list.includes(FileSuffix)
+      let tmp = file.name.split(".")
+      let FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()
+      let isLt20M = file.size / 1024 / 1024 < 20
+      let isFile = allow_file_format_list.includes(FileSuffix)
       if (!isFile) {
         this.$notify.error({
           title: "上传失败",
