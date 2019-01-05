@@ -54,9 +54,33 @@
 </template>
 
 <script>
-export default {
-  props: {
-    Annex: {}
+  export default {
+    props: {
+      Annex: {}
+    }
   }
-}
 </script>
+
+<style scoped>
+  .file-card {
+    border: 1px dashed rgb(192, 204, 218);
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 99px;
+    height: 99px;
+    display: flex;
+    text-align: center;
+  }
+
+  .file-card .file-float-text {
+    font-size: 0.85rem;
+    color: #757577;
+  }
+
+  .file-link {
+    display: block;
+    width:100%;
+    height:100%;
+    color:inherit;
+  }
+</style>

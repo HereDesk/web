@@ -377,3 +377,19 @@
     }
   }
 </script>
+
+<style scoped>
+  #count_date_input input {
+    line-height: 2rem;
+    height: 2rem;
+    text-align: center;
+    border:none;
+    border-radius: 0;
+    border-bottom: 1px solid #E0E0E0;
+    outline: none;
+  }
+  .SelectedType {
+    color: #304FFE !important;
+    background-color: #fff !important;
+  }
+</style>

@@ -1,6 +1,7 @@
 /*
 **全局CSS
 */
+
 html,body {
   width: 100%;
   height: 100%;
@@ -68,13 +69,6 @@ code {
   border: 1px solid rgb(220, 223, 230) !important;
   border-radius: 5px;
 }
-
-/* .modal-body .v-note-wrapper {
-  max-height: 15rem !important;
-  min-height: 13rem !important;
-  border: 1px solid rgb(220, 223, 230) !important;
-  border-radius: 5px;
-} */
 
 .v-note-op {
   border-bottom: 1px solid rgb(220, 223, 230) !important;
@@ -1102,15 +1096,6 @@ textarea::-webkit-input-placeholder {
   font-weight: 300;
 }
 
-/*
-** 分页相关
-*/
-.pagination span {
-  margin:0 0.5rem;
-  font-size:1rem;
-  color: #424242;
-}
-
 /* 
 **
 ** Pubilc: iconfont size and text color style
@@ -1189,15 +1174,6 @@ textarea::-webkit-input-placeholder {
   display: none;
 }
 
-/* 
-**
-** 关于float
-**
-*/
-.float-right {
-  float: right;
-}
-
 /*
 **
 ** Public: border;
@@ -1236,14 +1212,6 @@ textarea::-webkit-input-placeholder {
 **
 */
 
-/* 
-  Public 统计： 数据选中
-*/
-.SelectedType {
-  color: #304FFE !important;
-  background-color: #fff !important;
-}
-
 /*
   内容块
 */
@@ -1257,47 +1225,9 @@ textarea::-webkit-input-placeholder {
   border-radius: 5px;
 }
 
-/* 
-  Bug统计页面
-*/
-#count_date_input input {
-  line-height: 2rem;
-  height: 2rem;
-  text-align: center;
-  border:none;
-  border-radius: 0;
-  border-bottom: 1px solid #E0E0E0;
-  outline: none;
-}
-
 /*
-  关于图片预览插件v-viewer
+* 关于图片预览插件v-viewer
 */
 .viewer-navbar {
   display: none;
-}
-
-/* 
-  file card
-*/
-.file-card {
-  border: 1px dashed rgb(192, 204, 218);
-  border-radius: 6px;
-  box-sizing: border-box;
-  width: 99px;
-  height: 99px;
-  display: flex;
-  text-align: center;
-}
-
-.file-card .file-float-text {
-  font-size: 0.85rem;
-  color: #757577;
-}
-
-.file-link {
-  display: block;
-  width:100%;
-  height:100%;
-  color:inherit;
 }

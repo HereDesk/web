@@ -127,3 +127,12 @@ export default {
 }
 </script>
 
+<style scoped>
+  .pagination span {
+    margin:0 0.5rem;
+    font-size:1rem;
+    color: #424242;
+  }
+</style>
+
+
