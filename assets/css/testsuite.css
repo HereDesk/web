@@ -1,4 +1,4 @@
-.testsuite-head .modal-title,.select-module {
+.testsuite-head .modal-title,.select-module,i {
     display: inline !important;
     line-height: 3rem;    
 }
@@ -20,6 +20,9 @@
 .case_list li {
     font-size:0.9rem;
     line-height: 2.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .case_list li:hover {
