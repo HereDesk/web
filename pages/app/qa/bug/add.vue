@@ -433,5 +433,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/test.css"
+  @import "~/assets/css/test.css"
 </style>

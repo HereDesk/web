@@ -281,5 +281,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/module.css"
+  @import "~/assets/css/module.css"
 </style>

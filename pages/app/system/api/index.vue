@@ -177,5 +177,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/system.css"
+  @import "~/assets/css/system.css"
 </style>

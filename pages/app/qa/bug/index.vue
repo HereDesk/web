@@ -683,7 +683,7 @@ export default {
     },
     total: function() {
       if (this.total === 0) {
-        this.img_src = require("static/pic/happy.png")
+        this.img_src = require("static/images/happy.png")
         this.Msg = "没找到数据"
       }
     },
@@ -969,5 +969,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/test.css"
+  @import "~/assets/css/test.css"
 </style>

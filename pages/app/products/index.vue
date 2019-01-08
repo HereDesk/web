@@ -66,7 +66,7 @@
 
     <div class='row' v-if="controlNull">
       <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
-        <img src="~/static/pic/happy.png" class="null-icon"/>
+        <img src="~/static/images/happy.png" class="null-icon"/>
         <p class="no-hint">暂时没有项目,快去增加一个项目吧</p>
       </div>
     </div>

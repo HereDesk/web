@@ -32,22 +32,22 @@ export default {
       LinkData: [
         {
           url: "/app/system/page",
-          img: require("~/static/pic/system_perm.png"),
+          img: require("~/static/images/system_perm.png"),
           text: "页面权限"
         },
         {
           url: "/app/system/api",
-          img: require("~/static/pic/system_perm.png"),
+          img: require("~/static/images/system_perm.png"),
           text: "接口权限"
         },
         {
           url: "/app/system/bug",
-          img: require("~/static/pic/system_bug.png"),
+          img: require("~/static/images/system_bug.png"),
           text: "缺陷设置"
         },
         {
           url: "/app/system/log",
-          img: require("~/static/pic/system_log.png"),
+          img: require("~/static/images/system_log.png"),
           text: "日志记录"
         }
       ]
@@ -57,5 +57,5 @@ export default {
 </script>
 
 <style>
-@import "~/static/static/common/css/system.css";
+@import "~/assets/css/system.css";
 </style>

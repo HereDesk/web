@@ -253,7 +253,7 @@ export default {
 
     product_msg: function(val, oldVal) {
       if (this.product_msg) {
-        this.img_src = require("static/pic/smiley.png");
+        this.img_src = require("static/images/smiley.png");
       }
     }
   },
@@ -343,5 +343,5 @@ export default {
 </script>
 
 <style>
-  @import "~/static/static/common/css/main.css"
+  @import "~/assets/css/main.css"
 </style>
