@@ -284,6 +284,8 @@ export default {
       this.axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
         .then(res => {
           if (res.data["status"] === 20000) {
+            this.Bug.product_code = res.data["data"]["product_code"]
+            this.Bug.title = res.data["data"]["title"]
             this.Bug.steps = res.data["data"]["steps"]
             this.Bug.expected_result = res.data["data"]["expected_result"]
           } else {
