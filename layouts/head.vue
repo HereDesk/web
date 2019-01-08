@@ -76,6 +76,7 @@
   import rules from '~/assets/js/rules.js'
 
   export default {
+
     computed: {
       currentRoute: function () {
         return String(this.$route.path)
@@ -90,6 +91,7 @@
         return rules.RuleManges(this.$store.state.userInfo)
       }
     },
+
     beforeCreate () {
       if (!this.$store.state.userInfo) {
         this.$store.dispatch('getUserInfo')
@@ -98,13 +100,13 @@
         this.$store.dispatch("getPageData")
       }
     },
+    
     methods: {
       HandLogout () {
         if (process.browser) {
-        	window.localStorage.removeItem("token");
-        	document.cookie =
-        		"token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/";
-        	window.location.replace("/");
+        	window.localStorage.removeItem("token")
+        	document.cookie = "token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/"
+        	window.location.replace("/")
         }
       }
     }
@@ -112,5 +114,5 @@
 </script>
 
 <style>
-  @import 'static/static/common/css/main.css';
+  @import '~/assets/css/main.css'
 </style>

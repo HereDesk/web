@@ -35,14 +35,17 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' width='100'>
+          <el-table-column label='操作' width='130'>
             <template slot-scope="scope">
               <div :class="{ 'invisible': scope.row.result !== 0 }">
-                <span title="运行成功" class="mr-2" @click="run('1',scope.row.cell_id,case_id)">
+                <span title="运行成功" @click="run('1',scope.row.cell_id,case_id)">
                   <i class="iconfont icon-check-circle-fill size-1-5 text-success"></i>
                 </span>
-                <span title="运行失败" @click="run('-1',scope.row.cell_id,scope.row.case_id)">
+                <span title="运行失败" class="mx-2" @click="run('-1',scope.row.cell_id,scope.row.case_id)">
                   <i class="iconfont icon-close-circle-fill size-1-5"></i>
+                </span>
+                <span title="提交bug" @click="run('-2',scope.row.cell_id,scope.row.case_id)">
+                  <i class="iconfont icon-bug text-secondary size-1-5"></i>
                 </span>
               </div>
             </template>
@@ -57,90 +60,105 @@
 </template>
 
 <script>
-import util from '~/assets/js/util.js'
-import rules from '~/assets/js/rules.js'
-import Pagination from '~/components/Pagination'
+  import util from '~/assets/js/util.js'
+  import rules from '~/assets/js/rules.js'
+  import Pagination from '~/components/Pagination'
 
-export default {
-  layout: 'head',
-  components: {
-    Pagination
-  },
+  export default {
+    layout: 'head',
+    components: {
+      Pagination
+    },
 
-  validate({ query }) {
-    return /\w{2,6}/.test(query.suite_id)
-  },
+    validate({
+      query
+    }) {
+      return /\w{2,6}/.test(query.suite_id)
+    },
 
-  data () {
-    return {
-      tableData: [],
-      total: null,
-      product_code: this.$route.query.product_code || null,
+    data() {
+      return {
+        tableData: [],
+        total: null,
+        product_code: this.$route.query.product_code || null,
+        QueryBuilder: {
+          pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+          pageSize: parseInt(this.$route.query.pageSize) || 10,
+          suite_id: this.$route.query.suite_id || null
+        },
+        RunData: {
+          cell_id: null,
+          result: null
+        }
+      }
+    },
+
+    watch: {
       QueryBuilder: {
-        pageNumber: parseInt(this.$route.query.pageNumber) || 1,
-        pageSize: parseInt(this.$route.query.pageSize) || 10,
-        suite_id: this.$route.query.suite_id || null
+        handler: function(val, oldVal) {
+          this.getTestCaseRunList()
+        },
+        deep: true
+      }
+    },
+
+    filters: {
+      date: util.date
+    },
+
+    mounted() {
+      this.getTestCaseRunList()
+    },
+
+    methods: {
+
+      getPsPn: function(ps, pn) {
+        this.QueryBuilder.pageSize = ps
+        this.QueryBuilder.pageNumber = pn
       },
-      RunData: {
-        cell_id: null,
-        result: null
+
+      getTestCaseRunList() {
+        this.axios
+          .get('/api/qa/testsuite/cell/list', {params: this.QueryBuilder})
+          .then(res => {
+            if (res.data['status'] === 20000) {
+              this.tableData = res.data['data']
+              this.total = res.data['total']
+            } else {
+              this.$notify.error({
+                title: '提示',
+                message: res.data['msg']
+              })
+            }
+          })
+      },
+
+      run(result, cell_id, case_id) {
+        this.RunData.result = result
+        this.RunData.cell_id = cell_id
+        this.axios({
+          method: 'post',
+          url: '/api/qa/testsuite/cell/run',
+          data: JSON.stringify(this.RunData)
+        }).then(res => {
+          if (res.data['status'] === 20000) {
+            this.getTestCaseRunList()
+            this.$notify.success({
+              title: '成功',
+              message: res.data['msg']
+            })
+            if (result === '-2') {
+              let href = '/app/qa/bug/add?case_id=' + case_id + '&cell_id=' + cell_id
+              this.$router.push(href)
+            }
+          } else {
+            this.$notify.error({
+              title: '错误',
+              message: res.data['msg']
+            })
+          }
+        })
       }
     }
-  },
-
-  watch: {
-    QueryBuilder: {
-      handler: function (val, oldVal) {
-        this.getTestCaseRunList()
-      },
-      deep: true
-    }
-  },
-
-  filters: {
-    date: util.date
-  },
-
-  mounted () {
-    this.getTestCaseRunList()
-  },
-
-  methods: {
-    getPsPn:function (ps,pn) {
-      this.QueryBuilder.pageSize = ps
-      this.QueryBuilder.pageNumber = pn
-    },
-
-    getTestCaseRunList () {
-      this.axios.get('/api/qa/testsuite/cell/list',{ params: this.QueryBuilder }).then(res => {
-        if (res.data['status'] === 20000) {
-          this.tableData = res.data['data']
-          this.total = res.data['total']
-        } else {
-          this.$notify.error({title:'提示',message:res.data['msg']})
-        }
-      })
-    },
-    run (result,cell_id,case_id) {
-      this.RunData.result = result
-      this.RunData.cell_id = cell_id
-      this.axios({
-        method: 'post',
-        url: '/api/qa/testsuite/cell/run',
-        data: JSON.stringify(this.RunData)
-      }).then(res => {
-        if (res.data['status'] === 20000) {
-          this.getTestCaseRunList()
-          this.$notify.success({title: '成功',message: res.data['msg']})
-          if (result === '-1') {
-            let href = '/app/qa/bug/add?case_id=' + case_id + '&cell_id=' + cell_id
-            this.$router.push(href)
-          }
-        } else {
-          this.$notify.error({title: '错误',message: res.data['msg']})
-        }
-      })
-    },
   }
-}
 </script>

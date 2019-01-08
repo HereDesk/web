@@ -51,7 +51,7 @@ module.exports = {
   css: [
     '~static/static/bootstrap/css/bootstrap.min.css',
     '~static/static/animate/animate.css',
-    '~static/static/common/css/public.css'
+    '~assets/css/public.css'
   ],
 
   /*

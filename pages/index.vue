@@ -118,5 +118,5 @@ export default {
 </script>
 
 <style>
-  @import "../static/static/common/css/login.css"
+  @import "~/assets/css/login.css"
 </style>
