@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <Modal :isFooter="true" :isHeader="true" :modalSize="'lg'" :footerDirection="'start'" 
+    <Modal :isFooter="true" :isHeaderClose="true" :modalSize="'lg'" :footerDirection="'start'" 
       v-if="showModal == 'create'" @close="showModal = false">
       <div slot="header" class="testsuite-head">
         <h5 class="modal-title">用例列表</h5>

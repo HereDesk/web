@@ -363,7 +363,7 @@
     </Modal>
     
     <!-- Action: Bug Expoert -->
-    <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeader="true">
+    <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }} 缺陷</h5>
       <div slot="body">
         <div class="row">
@@ -383,7 +383,7 @@
     </Modal>
   
     <!-- Data: Bug Count -->
-    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeader="true">
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
         <div class="modal-body text-center" v-if="MyTodayData">

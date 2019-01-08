@@ -6,7 +6,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <slot name="header"></slot>
-              <i v-if="isHeader" class="iconfont icon-close-windows size-1-5" @click="$emit('close')"></i>
+              <i v-if="isHeaderClose" class="iconfont icon-close-windows size-1-5" @click="$emit('close')"></i>
             </div>
 
             <div class="modal-body">
@@ -28,7 +28,7 @@
 export default {
   props: {
     isFooter: Boolean,
-    isHeader: Boolean,
+    isHeaderClose: Boolean,
     modalSize: String,
     footerDirection: String
   }

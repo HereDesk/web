@@ -209,7 +209,7 @@
     </div>
 
     <!-- 测试用例统计 -->
-    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeader="true">
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
         <div class="row mt-3 mb-5">
@@ -222,7 +222,7 @@
     </Modal>
 
     <!-- 用例导入导出 -->
-    <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeader="true">
+    <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }} 测试用例</h5>
       <div slot="body">
         <div class="row">
