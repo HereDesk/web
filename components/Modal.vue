@@ -2,7 +2,7 @@
   <div id="modal-template">
     <transition name="modal">
       <div class="modal modal-mask">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered" :class="{ 'modal-lg':  modalSize === 'lg'}">
           <div class="modal-content">
             <div class="modal-header">
               <slot name="header"></slot>
@@ -13,7 +13,7 @@
               <slot name="body"></slot>
             </div>
 
-            <div class="modal-footer" v-if="isFooter">
+            <div class="modal-footer" :class="{ 'footer-start': footerDirection === 'start' }" v-if="isFooter">
               <button type="button" class="btn btn-cancel" @click="$emit('close')">关闭</button>
               <slot name="footer"></slot>
             </div>
@@ -28,7 +28,18 @@
 export default {
   props: {
     isFooter: Boolean,
-    isHeader: Boolean
+    isHeader: Boolean,
+    modalSize: String,
+    footerDirection: String
   }
 }
 </script>
+
+<style scope>
+  .footer-start {
+    justify-content: flex-start !important;
+  }
+  .footer-start > .btn-cancel {
+    display: none;
+  }
+</style>
