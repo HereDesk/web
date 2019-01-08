@@ -6,6 +6,7 @@
         <button type="btn" class="btn btn-create" @click="showModal = 'create'"> + 添加</button>
       </div>
     </nav>
+    
     <div class="row" v-if="AddedTotal == 0">
       <div class="col text-center" style="margin-top:13%;" @click="showModal = 'create'">
         <i class="iconfont icon-jiaru icon-8a8a8a size-5"></i>
@@ -14,11 +15,20 @@
     </div>
     <div class="row" v-else>
       <div class="col">
-        <ul class="ul-style-none">
-          <li v-for="item in AddedCaseData"  :key="item.id" :id="item.case_id" >
+        <!-- <ul class="ul-style-none">
+          <li v-for="item in HasJoinedCaseData"  :key="item.id" :id="item.case_id" >
             {{ item.id }}. &nbsp;&nbsp;{{ item.title }}
           </li>
-        </ul>
+        </ul> -->
+        <el-table :data='HasJoinedCaseData' :default-sort="{prop: 'date', order: 'descending'}">
+          <el-table-column label='用例标题' prop='title'></el-table-column>
+          <el-table-column label='创建者' prop='creator' width="100"></el-table-column>
+          <el-table-column label='创建日期'  width="175">
+            <template slot-scope="scope">
+              <span>{{ scope.row.create_time | date }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
         <Pagination :total="AddedTotal" @PsPn="getPsPn2"></Pagination>
       </div>
     </div>
@@ -56,6 +66,7 @@
 
 <script>
   import Pagination from "~/components/Pagination"
+  import util from '~/assets/js/util.js'
   let _ = require("lodash/Array")
 
   export default {
@@ -76,7 +87,7 @@
         product_code: this.$route.query.product_code || null,
         suite_id: this.$route.query.suite_id || null,
         // right
-        AddedCaseData: [],
+        HasJoinedCaseData: [],
         NoAddQueryBuilder: {
           suite_id: this.$route.query.suite_id,
           pageSize: 10,
@@ -102,7 +113,11 @@
         }
       }
     },
-
+    
+    filters: {
+      date: util.date
+    },
+    
     watch: {
       showModal () {
         this.showModal ? 
@@ -124,7 +139,7 @@
       },
       NoAddQueryBuilder: {
         handler: function(val, oldVal) {
-          this.getAddedCase()
+          this.getHasJoinedCase()
         },
         deep: true
       }
@@ -132,7 +147,7 @@
 
     created() {
       this.getModule()
-      this.getAddedCase()
+      this.getHasJoinedCase()
       this.getAllCaseData()
     },
 
@@ -173,12 +188,12 @@
           })
       },
 
-
-      getAddedCase() {
+      // get added testcase list
+      getHasJoinedCase() {
         this.axios.get("/api/qa/testsuite/cell/brief_list", {params: this.NoAddQueryBuilder})
           .then(res => {
             if (res.data["status"] === 20000) {
-              this.AddedCaseData = res.data["data"]
+              this.HasJoinedCaseData = res.data["data"]
               this.AddedTotal = res.data["total"]
             } else {
               this.$notify.error({ title: "提示", message: res.data["msg"] })
@@ -211,7 +226,7 @@
           data: JSON.stringify(this.SaveCheckedCaseData)
         }).then(res => {
           if (res.data["status"] === 20000) {
-            this.getAddedCase()
+            this.getHasJoinedCase()
             this.getAllCaseData()
             this.$notify.success({ title: "成功", message: res.data["msg"] })
           } else {
@@ -246,7 +261,7 @@
           data: JSON.stringify(data)
         }).then(res => {
           if (res.data["status"] === 20000) {
-            this.getAddedCase()
+            this.getHasJoinedCase()
             this.getAllCaseData()
             this.$notify.success({ title: "成功", message: res.data["msg"] })
           } else {
