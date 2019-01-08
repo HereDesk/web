@@ -1,25 +1,15 @@
-
-.suitepart {
-    border: 1px solid #eee;
-    border-radius: 8px;
-    min-height: 35rem;
-}
-
-/* .testsuite-head {
+.testsuite-head .modal-title,.select-module {
     display: inline !important;
+    line-height: 3rem;    
 }
 
-.testsuite-title {
-    display: inline;
-    line-height: 60px;
-    font-size:1.15rem;
-    padding:0 1rem;
-} */
+.testsuite-head .select-module {
+    float: right !important;
+}
 
 .testsuite-head .el-input__inner {
     border: none !important;
     border-radius: 0 !important;
-    /* border-bottom: 1px solid #BDBDBD !important; */
 }
 
 .testsuite-head .el-cascader__label {
