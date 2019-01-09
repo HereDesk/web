@@ -1,21 +1,23 @@
 <template>
-  <div class="container-fluid" v-cloak>
+  <div id="components-pagination" class="container-fluid" v-cloak>
     <div id="data-paging" class="row" :class="{ 'my-5' : !isModal }">
       <div class="col-auto mr-auto">
         <nav aria-label="Page navigation" v-if="total > pageSize">
           <ul class="pagination pl-0">
-            <li class="page-item" v-if="FirstPage != pageNumber & LastPage > 5">
+            <li id="p-prev" class="page-item" v-if="FirstPage != pageNumber & LastPage > 5">
               <a class="page-link" aria-label="Previous" @click="handleChange('pn',$event)">
                 <span aria-hidden="true">&lt;</span>
               </a>
             </li>
-            <li class="page-item" 
+            <li :id="'p-' + String(item)" class="page-item" 
               :class="{ active: item === parseInt(pageNumber),disabled: item == '...'}" 
-              v-for="item in PageList" :key="item.id" 
+              v-for="(item,index) in PageList" :key="index" 
               @click="handleChange('pn',$event)">
-              <a class="page-link">{{ item }}</a>
+              <a class="page-link">
+                <span aria-hidden="true">{{ item }}</span>
+              </a>
             </li>
-            <li class="page-item" v-if="LastPage != pageNumber & LastPage > 5">
+            <li id="p-next" class="page-item" v-if="LastPage != pageNumber & LastPage > 5">
               <a class="page-link" aria-label="Next"  @click="handleChange('pn',$event)">
                 <span aria-hidden="true">&gt;</span>
               </a>
@@ -24,11 +26,11 @@
         </nav>
       </div>
       <div class="col-auto pagination pt-2" v-if="total">
-        <span v-if="total > 0">
+        <span id="data-total" v-if="total > 0">
           共&nbsp;{{ total }}&nbsp;条
         </span>
-        <span v-if="total >= 10 && isModal !== 'Modal'" @click="handleChange('ps',$event)">
-          每页<span class="font-color-007BFF" style="text-decoration:underline;">{{ pageSize }}</span>条
+        <span id="data-pageSize" v-if="total >= 10 && isModal !== 'Modal'" @click="handleChange('ps',$event)">
+          每页<span class="pageSizeText">{{ pageSize }}</span>条
         </span>
       </div>
     </div>
@@ -129,9 +131,13 @@ export default {
 
 <style scoped>
   .pagination span {
-    margin:0 0.5rem;
+    margin:0 0.1rem;
     font-size:1rem;
     color: #424242;
+  }
+  .pagination .pageSizeText {
+    color: #007BFF;
+    text-decoration: underline;
   }
 </style>
 
