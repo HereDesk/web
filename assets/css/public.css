@@ -274,7 +274,8 @@ code {
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
-  margin: 0.4rem 0;
+  margin: 0.4rem 0 !important;
+  padding: 0 !important;
 }
 
 .el-table__empty-block {

@@ -62,6 +62,11 @@
 </script>
 
 <style scoped>
+  .img-thumbnail {
+    height: 8rem !important;
+    width: 100% !important;
+  }
+
   .file-card {
     border: 1px dashed rgb(192, 204, 218);
     border-radius: 6px;
