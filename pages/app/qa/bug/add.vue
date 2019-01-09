@@ -261,6 +261,9 @@ export default {
       this.Bug.release = ''
       this.getModule()
       this.getDeveloper()
+    },
+    release_list: function(old,oldVal) {
+      this.release_list ? this.Bug.release = this.release_list[0]["version"] : false
     }
   },
 
@@ -415,7 +418,6 @@ export default {
             this.Bug.steps = ""
             this.Bug.expected_result = ""
             this.Bug.reality_result = ""
-            this.Bug.assignedTo = ""
             this.Bug.remark = ""
             this.Bug.severity = "Normal"
             this.Bug.priority = "P2"
