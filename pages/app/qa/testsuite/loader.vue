@@ -305,6 +305,6 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
   @import "~/assets/css/testsuite.css"
 </style>
