@@ -3,11 +3,11 @@
     <div class="row"> 
 			<!-- Data: Module -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
-        <ProductModule v-if="isShowModules"
+        <PageModules v-if="isShowModules"
           :product_code="selected_product" 
           :Rules="Rules"
           @getM1M2="getM1M2">
-        </ProductModule>
+        </PageModules>
       </div>
 
       <!-- Action: let Module switch -->
@@ -419,7 +419,7 @@
 
 <script>
 import PageLoading from "~/components/PageLoading"
-import ProductModule from "~/components/ProductModule"
+import PageModules from "~/components/PageModules"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
@@ -443,7 +443,7 @@ export default {
     BugResolve,
     BugChange,
     Pagination,
-    ProductModule
+    PageModules
   },
 
   data() {

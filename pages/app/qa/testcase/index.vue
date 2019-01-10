@@ -4,11 +4,11 @@
 
       <!-- 模块 -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
-        <ProductModule 
+        <PageModules 
           :product_code="selected_product" 
           :Rules="Rules"
           @getM1M2="getM1M2" v-if="isShowModules">
-        </ProductModule>
+        </PageModules>
       </div>
 
       <div id="product-modules-switch" style="position: absolute;z-index: 9;" class="pl-4 mt-2 medium-devices-no" 
@@ -247,7 +247,7 @@
 <script>
 import PageLoading from "~/components/PageLoading"
 import Pagination from "~/components/Pagination"
-import ProductModule from "~/components/ProductModule"
+import PageModules from "~/components/PageModules"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -262,7 +262,7 @@ export default {
   components: {
     PageLoading,
     Pagination,
-    ProductModule,
+    PageModules,
   },
   data() {
     return {
