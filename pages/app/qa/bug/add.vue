@@ -2,101 +2,92 @@
   <div id="page-bug-add">
     <BaseNav :title="title"></BaseNav>
     <div id="page-bug-add-input" class='container mt-5'>
-      <div class='row'>
-        <div class='col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           
           <!-- bug: product_code and version -->
-          <div id="bug-product-version" class='form-group row'>
-            <label for='bug-product-version' class="col-md-2 col-sm-12 col-12 bug-label">
+          <div id="bug-product-version" class="form-group row">
+            <label for='bug-product-version' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               产品与模块<span class="text-red">*</span>
             </label>
-            <el-select id="bug-product" class='col-md-2 col-sm-4 col-6' placeholder="选择产品" 
-              v-model="Bug.product_code" >
-              <el-option 
-                v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
-              </el-option>
-            </el-select>
-            <el-select id="bug-version" class='col-md-2 col-sm-4 col-6' placeholder="选择版本" 
-              v-model="Bug.release">
-              <el-option 
-                v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
-              </el-option>
-              <!-- <el-option>增加新版本</el-option> -->
-            </el-select>
-            <el-cascader id="bug-modules" class="col-md-2 col-sm-4 col-6 px-3" 
-              :options="modules_list" 
-              v-model="Bug.module_id" 
-              filterable change-on-select 
-              placeholder="选择模块" >
-            </el-cascader>
+            <div class="col-lg-6 col-md-10 col-sm-12 col-12">
+              <ProductInfo :type="'bug'" :showVersionInfo="true" @ProductInfo="GetProductInfo"></ProductInfo>
+            </div>
           </div>
           
           <!-- bug: assignedTo and priority and severity -->
-          <div id="bug-mini-info" class='form-group row'>
+          <div id="bug-mini-info" class="form-group row">
             <label for='bug-mini-info' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷属性<span class="text-red">*</span>
             </label>
-            <el-select id="bug-assignedTo" class='col-lg-2 col-md-2 col-sm-3 col-6' 
-              placeholder="选择指派人" v-model="Bug.assignedTo_id">
-              <el-option value="" :disabled="true">请选择指派人</el-option>
-              <el-option 
-                v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
-              </el-option>
-            </el-select>
-            <el-select id="bug-priority" class='col-lg-2 col-md-2 col-sm-3 col-6' 
-              placeholder="选择优先级" v-model="Bug.priority">
-              <el-option value="" :disabled="true">请选择优先级</el-option>
-              <el-option 
-                v-for="item in BugProperty.bug_priority" :key="item.id" :label="item.name" :value="item.key">
-              </el-option>
-            </el-select>
-            <el-select id="bug-severity" class='col-lg-2 col-md-2 col-sm-3 col-6' 
-              placeholder="选择严重程度" v-model="Bug.severity">
-              <el-option value="" :disabled="true">请选择严重程度</el-option>
-              <el-option 
-                v-for="item in BugProperty.bug_severity" :key="item.id" :label="item.name" :value="item.key">
-              </el-option>
-            </el-select>
+            <div class="col-lg-6 col-md-10 col-sm-12 col-12">
+              <div class="container-fluid px-0">
+                <div class="row">
+                  <el-select id="bug-assignedTo" class="col" 
+                    placeholder="选择指派人" v-model="Bug.assignedTo_id">
+                    <el-option value="" :disabled="true">请选择指派人</el-option>
+                    <el-option 
+                      v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
+                    </el-option>
+                  </el-select>
+                  <el-select id="bug-priority" class="col" 
+                    placeholder="选择优先级" v-model="Bug.priority">
+                    <el-option value="" :disabled="true">请选择优先级</el-option>
+                    <el-option 
+                      v-for="item in BugProperty.bug_priority" :key="item.id" :label="item.name" :value="item.key">
+                    </el-option>
+                  </el-select>
+                  <el-select id="bug-severity" class="col" 
+                    placeholder="选择严重程度" v-model="Bug.severity">
+                    <el-option value="" :disabled="true">请选择严重程度</el-option>
+                    <el-option 
+                      v-for="item in BugProperty.bug_severity" :key="item.id" :label="item.name" :value="item.key">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+            </div>
           </div>
           
           <!-- bug: source and type -->
-          <div id="bug-source-type" class='form-group row'>
-            <label for='bug-source-type' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
+          <div id="bug-source-type" class="form-group row">
+            <label for="bug-source-type" class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷来源/类型
             </label>
-            <el-select class='col-lg-2 col-md-2 col-sm-3 col-6' 
-              placeholder="缺陷来源" v-model="Bug.bug_source">
-              <el-option value="" :disabled="true">
-                请选择缺陷来源
-              </el-option>
-              <el-option 
-                v-for="(item,index) in BugProperty.bug_source" :key="index" :label="item.name" :value="item.key">
-              </el-option>
-            </el-select>
-            <el-select class='col-lg-2 col-md-2 col-sm-3 col-6' placeholder="缺陷类型" v-model="Bug.bug_type"> 
-              <el-option value="" :disabled="true">
-                请选择缺陷类型
-              </el-option>
-              <el-option 
-                v-for="item in BugProperty.bug_type" :key="item.id" :label="item.name" :value="item.key">
-              </el-option>
-            </el-select>
+            <div class="col-lg-4 col-md-10 col-sm-12 col-12">
+              <div class="container-fluid px-0">
+                <div class="row">
+                  <el-select class="col" placeholder="缺陷来源" v-model="Bug.bug_source">
+                    <el-option value="" :disabled="true">请选择缺陷来源</el-option>
+                    <el-option v-for="(item,index) in BugProperty.bug_source" 
+                      :key="index" :label="item.name" :value="item.key">
+                    </el-option>
+                  </el-select>
+                  <el-select class="col" placeholder="缺陷类型" v-model="Bug.bug_type"> 
+                    <el-option value="" :disabled="true">请选择缺陷类型</el-option>
+                    <el-option v-for="item in BugProperty.bug_type" 
+                      :key="item.id" :label="item.name" :value="item.key">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- bug: title -->
-          <div id="bug-title" class='form-group row'>
-            <label for='bug-title' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+          <div id="bug-title" class="form-group row">
+            <label for="bug-title" class="col-lg-2 col-md-2 col-sm-12 bug-label">
               缺陷标题<span class="text-red">*</span>
             </label>
-            <el-input type='text' id='bug-title-input' class='col-lg-8 col-md-10 col-sm-12'
-              maxlength='100' placeholder='标题，最多100个字符 ~.' 
-              v-model.trim='Bug.title' required autofocus>
+            <el-input type="text" id="bug-title-input" class="col-lg-8 col-md-10 col-sm-12"
+              maxlength="100" placeholder="标题，最多100个字符 ~." 
+              v-model.trim="Bug.title" required autofocus>
             </el-input>
           </div>
           
           <!-- bug: steps -->
-          <div id="bug-steps" class='form-group row'>
-            <label for='bug-steps' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+          <div id="bug-steps" class="form-group row">
+            <label for="bug-steps" class="col-lg-2 col-md-2 col-sm-12 bug-label">
               发现步骤<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 toolbars">
@@ -107,14 +98,11 @@
                 v-model.trim="Bug.steps">
               </mavon-editor>
             </div>
-            <!-- <quill-editor class="col-lg-8 col-md-10 col-sm-12 quill-editor-define" 
-              v-model.trim="Bug.steps">
-            </quill-editor> -->
           </div>
           
           <!-- bug: result -->
-          <div id="bug-reality-result" class='form-group row'>
-            <label for='bug-reality-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+          <div id="bug-reality-result" class="form-group row">
+            <label for="bug-reality-result'" class="col-lg-2 col-md-2 col-sm-12 bug-label">
               实际结果<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
@@ -128,8 +116,8 @@
           </div>
           
           <!-- bug: result -->
-          <div id="bug-expected-result" class='form-group row'>
-            <label for='bug-expected-result' class="col-lg-2 col-md-2 col-sm-12 bug-label">
+          <div id="bug-expected-result" class="form-group row">
+            <label for="bug-expected-result" class="col-lg-2 col-md-2 col-sm-12 bug-label">
               预期结果
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
@@ -143,16 +131,16 @@
           </div>
           
           <!-- bug: file -->
-          <div id="bug-file" class='form-group row'>
-            <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
+          <div id="bug-file" class="form-group row">
+            <label for="bug-file" class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
               <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
             </form>
           </div> 
           
           <!-- bug: remark -->
-          <div id="bug-remark" class='form-group row' v-if="isRemarkDisable">
-            <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
+          <div id="bug-remark" class="form-group row" v-if="isRemarkDisable">
+            <label for="bug-remark" class="col-md-2 col-sm-12 bug-label">备注</label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
               <mavon-editor placeholder="请输入附加信息 ~" 
                 :toolbarsFlag="false"
@@ -164,19 +152,21 @@
           </div>
   
           <!-- bug: about button -->
-          <div id="bug-btn" class='d-flex justify-content-center my-5'>
-            <button type='button' class='btn btn-accessories' @click="isShowRemark">
+          <div id="bug-btn" class="d-flex justify-content-center my-5">
+            <button type="button" class="btn btn-accessories" @click="isShowRemark">
               添加备注
             </button>
-            <button type='button' class='btn btn-submit mx-3' value="only-once-commit" 
+            <button type="button" class="btn btn-submit mx-3" value="only-once-commit" 
               :disabled="isButtonDisabled" @click='createBug($event)'>
               保存提交
             </button>
-            <button type='button' class='btn btn-accessories' value="continue-commit" 
+            <button type="button" class="btn btn-accessories" value="continue-commit" 
               :disabled="isButtonDisabled" @click='createBug($event)'>
               继续添加
             </button>
-            <button type='button' class='btn btn-accessories' @click="$router.go(-1)">返回</button>
+            <button type="button" class="btn btn-accessories" @click="$router.go(-1)">
+              返回
+            </button>
           </div>
           
         </div>
@@ -192,6 +182,8 @@ import data from '~/assets/js/data.js'
 
 import BaseNav from '~/components/BaseNav'
 import FileUpload from '~/components/FileUpload'
+import ProductInfo from '~/components/ProductInfo'
+
 
 export default {
   head() {
@@ -199,18 +191,19 @@ export default {
       title: "HDesk - 创建缺陷"
     }
   },
+  
   components: {
     BaseNav,
-    FileUpload
+    FileUpload,
+    ProductInfo
   },
+  
   data() {
     return {
       title: '创建缺陷',
       page_type: 'bug',
       fileList: [],
       developer_list: [],
-      product_list: [],
-      modules_list: [],
       isButtonDisabled: false,
       isRemarkDisable: false,
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
@@ -239,36 +232,18 @@ export default {
     selected_product_code () {
       return this.Bug.product_code
     },
-    BugProperty() {
+    BugProperty () {
     	return this.$store.state.BugProperty
-    },
-    release_list () {
-      let arr = []
-      if (this.Bug.product_code) {
-        for (let i in this.product_list) {
-          if (this.Bug.product_code === this.product_list[i]["product_code"]) {
-            return arr.concat(this.product_list[i]["data"])
-          }
-        }
-      } else {
-        return null
-      }
-    },
+    }
   },
 
   watch: {
     selected_product_code: function(old, oldVal) {
-      this.Bug.release = ''
-      this.getModule()
       this.getDeveloper()
-    },
-    release_list: function(old,oldVal) {
-      this.release_list ? this.Bug.release = this.release_list[0]["version"] : false
     }
   },
 
   created() {
-    this.getProductRelease()
     if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
       this.$store.dispatch("getBugProperty")
     }
@@ -278,10 +253,18 @@ export default {
   },
 
   methods: {
+    // get $emit data
+    GetProductInfo (data)  {
+      this.Bug.product_code = data.product_code
+      this.Bug.release = data.release
+      this.Bug.module_id = data.module_id
+    },
+    
     // get commponents fileupload data
     getAnnex (data) {
       this.Bug.annex = data
     },
+    
     // get testcase details
     getCaseDetails() {
       this.axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
@@ -299,25 +282,8 @@ export default {
           }
         })
     },
-    // get product_release info
-    getProductRelease() {
-      this.axios.get("/api/pm/product_release").then(res => {
-        if (res.data["status"] === 20000) {
-          this.product_list = res.data["data"]
-          this.Bug.product_code = res.data["data"][0]["product_code"]
-        }
-      })
-    },
-    getModule() {
-      this.axios.get("/api/pm/get_module?product_code=" + this.Bug.product_code)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.modules_list = res.data["data"]
-          } else {
-            this.Msg = res.data["msg"]
-          }
-        })
-    },
+    
+    // get this product developer member
     getDeveloper() {
       this.axios.get("/api/pm/member/list?group=Developer&product_code=" + this.Bug.product_code)
         .then(res => {
@@ -326,6 +292,7 @@ export default {
           }
         })
     },
+    
     isShowRemark () {
       if (this.isRemarkDisable) {
         this.isRemarkDisable = false
@@ -334,6 +301,7 @@ export default {
         this.isRemarkDisable = true
       }
     },
+    
     createBug(event) {
       if (!this.Bug.release) {
         this.$notify.error({
