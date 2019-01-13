@@ -7,35 +7,35 @@
           <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
         </div>
         <div id="page-details-opera-btn" class="col-12 my-3">
-          <button type="button" class="btn-bug" @click="BugDelete()" v-if="BtnRules.del">
+          <button type="button" class="btn-op" @click="BugDelete()" v-if="BtnRules.del">
             删除
           </button>
-          <button type="button" class="btn-bug" v-if="BtnRules.edit" @click="EditBug()">
+          <button type="button" class="btn-op" @click="EditBug()" v-if="BtnRules.edit">
             编辑
           </button>
-          <button type="button" class="btn-bug" v-if="BtnRules.assign" @click="showModal = 'assign'">
+          <button type="button" class="btn-op" @click="showModal = 'assign'" v-if="BtnRules.assign" >
             分配
           </button>
-          <button type="button" class="btn-bug" v-if="BtnRules.reopen" @click="showModal = 'ReOpen'">
+          <button type="button" class="btn-op" @click="showModal = 'ReOpen'" v-if="BtnRules.reopen" >
             重新打开
           </button>
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-bug mr-0" @click="immediateRecovered()" v-if="BtnRules.Recovered">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-op mr-0" @click="immediateRecovered()" v-if="BtnRules.Recovered">
               已解决
             </label>
-            <label class="btn btn-bug" @click="showModal = 'resolve'" v-if="BtnRules.Recovered">
+            <label class="btn btn-op" @click="showModal = 'resolve'" v-if="BtnRules.Recovered">
               其它解决方案
             </label>
           </div>
-          <button type="button" class="btn-bug" v-if="BtnRules.hangup" @click="showModal = 'hangup'">
+          <button type="button" class="btn-op" @click="showModal = 'hangup'" v-if="BtnRules.hangup" >
             延期挂起
           </button>
-          <button type="button" class="btn-bug" v-if="BtnRules.close" @click="BugClosed()">
+          <button type="button" class="btn-op" @click="BugClosed()" v-if="BtnRules.close">
             关闭
           </button>
-          <button type="button" class="btn-bug" v-if="BtnRules.notes" @click="showModal = 'notes'">
+          <button type="button" class="btn-op" @click="showModal = 'notes'" v-if="BtnRules.notes" >
             备注</button>
-          <button type="button" class="btn-bug" @click="$router.back(-1)">
+          <button type="button" class="btn-op" @click="$router.back(-1)">
             返回
           </button>
         </div>
