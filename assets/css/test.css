@@ -190,6 +190,26 @@
 **
 */
 
+.btn-bug {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  border-radius: .25rem;
+  background-color: rgb(245, 245, 245);
+  border-color: rgb(189, 189, 189);
+  color: rgb(51, 51, 51);
+  padding: 5px 1rem;
+  margin: 0.4rem;
+  font-size: 0.95rem;
+}
+
 .details-title {
   font-size:1.35rem;
   font-weight: 400 !important;
@@ -328,6 +348,7 @@
   margin-top:0.7rem;
   text-align: left !important;
   line-height: 1.5rem;
+  font-size:0.93rem;
   /* white-space: pre-line; */
 }
 
