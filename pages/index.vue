@@ -10,16 +10,20 @@
         <h2 class="p-user-login-title">欢迎登录</h2>
         <div id="input-email" class="input-group input-group-lg">
           <input type="email" id="user_name" name="email" class="form-control" 
-            maxlength="30" minlength="6" placeholder="电子邮件"
+            maxlength="30" minlength="6" 
+            placeholder="电子邮件"
             v-model.trim="LoginData.username" />
         </div>
         <div id="input-passwd" class="input-group input-group-lg passwd">
           <input type="password" id="user_passwd" name="user_passwd" class="form-control" 
-            maxlength="30" minlength="6" placeholder="输入密码" 
-            v-model.trim="LoginData.password" @keyup.enter="goLogin" />
+            maxlength="30" minlength="6" 
+            placeholder="输入密码" 
+            v-model.trim="LoginData.password"
+            @keyup.enter="goLogin" />
         </div>
         <div class="login-btn">
-          <button id="user_login_btn" class="btn btn-login btn-lg btn-block" type="button" @click="goLogin">登录</button>
+          <button type="button" id="user_login_btn" class="btn btn-login btn-lg btn-block"  @click="goLogin">
+            登录</button>
         </div>
       </div>
     </div>
@@ -85,11 +89,11 @@ export default {
       }).then(res => {
           if (res.data["status"] === 10000) {
             // set localStorage and token
-            var token = res.data["data"]["token"]
+            let token = res.data["data"]["token"]
             if (process.browser) {
               window.localStorage.setItem("token", token)
-              var Days = 30
-              var exp = new Date()
+              let Days = 30
+              let exp = new Date()
               exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000)
               document.cookie = "token=" + token + ";" + "expires=" + exp.toGMTString() + ";" + "path=/"
             }
