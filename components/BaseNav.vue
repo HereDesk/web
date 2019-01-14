@@ -1,7 +1,7 @@
 <template>
    <div id="page-nav-title" class="container-fluid">
-    <div class='row'>
-      <div class='col text-center page-pure-title'>
+    <div class="row">
+      <div class="col text-center page-pure-title">
         <span @click="$router.go(-1)">
           <i class="iconfont icon-close-windows size-2 icon-8a8a8a"></i>
         </span>
