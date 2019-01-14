@@ -1,6 +1,7 @@
 <template>
   <div id="components-product-info">
-    <div id="type-edit" class="container-fluid px-0" v-if="type === 'bug'">
+    <div id="product-version-module" class="container-fluid px-0" 
+      v-if="['bug_add','case_add'].includes(type)">
       <div class="row">
         <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
           <el-option 
@@ -10,7 +11,8 @@
             :value="item.product_code">
           </el-option>
         </el-select>
-        <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" v-if="type === 'bug'">
+        <el-select id="info-version" class="col" placeholder="选择版本" 
+          v-model="release" v-if="['bug_add'].includes(type)">
           <el-option 
             v-for="(item,index) in release_list" 
             :key="index" 
@@ -35,6 +37,7 @@ export default {
   props: {
     type: String,
     showVersionInfo: Boolean,
+    fillData: {}
   },
   
   data () {
@@ -62,9 +65,10 @@ export default {
       if (this.product_code) {
         for (let i in data) {
           if (this.product_code === data[i]["product_code"]) {
-            return arr.concat(data[i]["data"])
+            arr = [...data[i]["data"]]
           }
         }
+        return arr.length > 0 ? arr : false
       }
     }
   },
@@ -76,14 +80,27 @@ export default {
       },
       deep: true
     },
+    
     product_code: function (val, oldVal) {
       if (this.product_code) {
+        this.$router.replace( this.$route.path + "?product_code=" + this.product_code)
         if (process.browser) {
           window.localStorage.setItem("last_visited_product", this.product_code)
         }
-        this.getModule()
+        const ProductModulesInfo = this.$store.state.ProductModulesInfo
+        if (JSON.stringify(ProductModulesInfo) !== '{}') {
+          console.log("oooo")
+          if (ProductModulesInfo.product_code === this.product_code) {
+            this.modules_list = ProductModulesInfo.data
+          } else {
+            this.getModule()
+          }
+        } else {
+          this.getModule()
+        }
       }
     },
+    
     product_list: {
       handler: function (val, oldVal) {
         let route = this.$route.query
@@ -100,9 +117,10 @@ export default {
       },
       deep: true
     },
+    
     release_list: {
       handler: function (val,oldVal) {
-        JSON.stringify(this.release_list) ? 
+        this.release_list ? 
           this.release = this.release_list[0]['version'] : this.release = ''
       },
       deep: true
@@ -110,7 +128,11 @@ export default {
   },
   
   created() {
-    this.getProductRelease()
+    if (JSON.stringify(this.$store.state.ProductVersionInfo) !== '{}') {
+      this.product_list = this.$store.state.ProductVersionInfo
+    } else {
+      this.getProductRelease()
+    }
   },
   
   methods: {
@@ -121,6 +143,7 @@ export default {
         .then(res => {
           if (res.data["status"] === 20000) {
             this.product_list = res.data["data"]
+            this.$store.commit("setProductVersionInfo", res.data["data"])
           } else {
             this.PageMsg = res.data["msg"]
           }
@@ -133,7 +156,11 @@ export default {
       this.axios.get("/api/pm/get_module?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.modules_list = res.data["data"]
+            const data = res.data["data"]
+            this.modules_list = data
+            if (data.length > 0) {
+              this.$store.commit("setProductModulesInfo", res.data)
+            }
           } else {
             this.ModuleMsg = res.data["msg"]
           }

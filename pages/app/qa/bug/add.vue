@@ -11,7 +11,7 @@
               产品与模块<span class="text-red">*</span>
             </label>
             <div class="col-lg-6 col-md-10 col-sm-12 col-12">
-              <ProductInfo :type="'bug'" :showVersionInfo="true" @ProductInfo="GetProductInfo"></ProductInfo>
+              <ProductInfo :type="'bug_add'" :showVersionInfo="true" @ProductInfo="GetProductInfo"></ProductInfo>
             </div>
           </div>
           
@@ -157,11 +157,11 @@
               添加备注
             </button>
             <button type="button" class="btn btn-submit mx-3" value="only-once-commit" 
-              :disabled="isButtonDisabled" @click='createBug($event)'>
+              :disabled="isButtonDisabled" @click="createBug($event)">
               保存提交
             </button>
             <button type="button" class="btn btn-accessories" value="continue-commit" 
-              :disabled="isButtonDisabled" @click='createBug($event)'>
+              :disabled="isButtonDisabled" @click="createBug($event)">
               继续添加
             </button>
             <button type="button" class="btn btn-accessories" @click="$router.go(-1)">
@@ -184,7 +184,6 @@ import BaseNav from '~/components/BaseNav'
 import FileUpload from '~/components/FileUpload'
 import ProductInfo from '~/components/ProductInfo'
 
-
 export default {
   head() {
     return {
@@ -201,12 +200,12 @@ export default {
   data() {
     return {
       title: '创建缺陷',
-      page_type: 'bug',
-      fileList: [],
-      developer_list: [],
       isButtonDisabled: false,
       isRemarkDisable: false,
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
+      page_type: 'bug',
+      fileList: [],
+      developer_list: [],
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
@@ -227,7 +226,7 @@ export default {
       }
     }
   },
-
+  
   computed: {
     selected_product_code () {
       return this.Bug.product_code
@@ -363,12 +362,10 @@ export default {
         method: "post",
         url: "/api/qa/bug/create",
         data: JSON.stringify(this.Bug),
-        transformRequest: [
-          (data) => {
-            this.isButtonDisabled = true
-            return data
-          }
-        ]
+        transformRequest: [(data) => {
+          this.isButtonDisabled = true
+          return data
+        }]
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.$notify.success({
@@ -376,7 +373,7 @@ export default {
             message: res.data["msg"]
           })
           if (event.target.value === "only-once-commit") {
-            this.$router.go(-1)
+            this.$router.push({path: "/app/qa/bug"})
           }
           if (event.target.value === "continue-commit") {
             $(document).scrollTop(0)
@@ -400,6 +397,7 @@ export default {
         }
       })
     }
+    
   }
 }
 </script>
