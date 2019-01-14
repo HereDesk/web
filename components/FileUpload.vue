@@ -4,11 +4,13 @@
     style="display:inline; padding-left:0;"
     name="files" 
     :action="url"
+    ref="upload"
     list-type="picture-card"
     :with-credentials=true 
     :on-success="ImageSuccess" 
     :on-remove="handleRemove" 
-    :beforeUpload="FileBeforeAvatarUpload" 
+    :beforeUpload="FileBeforeAvatarUpload"
+    :on-error="FileUploadError" 
     :file-list="fileList"
     :limit="fileLimit"
     :on-exceed="handleExceed"
@@ -32,6 +34,12 @@ export default {
   },
 
   watch: {
+    fileList: {
+      handler: function(old,oldVal) {
+        console.log(this.fileList)
+      },
+      deep: true
+    },
     annex:{
       handler: function(old,oldVal) {
         this.$emit('annex',this.annex)
@@ -67,14 +75,48 @@ export default {
         }
       }
     },
+
+    // 当上传图片，服务器未返回成功时，清除本地filelist
+    ResErrorRemove(file,fileList) {
+      let beDeleted = file["name"]
+      for (var i = 0 ;i < fileList.length;i++) {
+        if (fileList[i]["name"] == beDeleted) {
+          fileList = fileList.splice(i, 1)
+        }
+      }
+    },
+
+    /*
+    * File Upload Limit
+    */
     handleExceed(file,fileList) {
       this.$notify.error({
         title: "上传失败",
         message: "最多只能上传" + this.fileLimit + "个文件"
       })
     },
-    ImageSuccess(response, fileList) {
-      this.annex.push(response["name"])
+
+    /*
+    * File Upload success
+    */
+    ImageSuccess(response, file,fileList) {
+      if (response.status === 20000) {
+        this.annex.push(response["name"])
+      } else {
+        // this.$refs.upload.clearFiles()
+        this.ResErrorRemove(file,fileList)
+        this.$notify.error({
+          title: "上传失败",
+          message: response.msg
+        })
+      }
+    },
+
+    /*
+    * File Upload error
+    */
+    FileUploadError(err, file, fileList) {
+      this.$notify.error({title: "上传失败","message":error})
     },
 
     /*
@@ -82,10 +124,12 @@ export default {
     */
     FileBeforeAvatarUpload(file) {
       // check: file size and file format
-      const allow_file_format_list = ["jpg","png","jpeg","gif","bmp",
-      	"docx","docx","xls","xlsx","ppt","pptx","pdf","txt","log","md","html","json",
-        "mp4","mp3","mov",
-        "zip","rar","tar","7z","bz2","gz"]
+      const video = ["mp4","mp3","mov","m4v","wmv","ts","3gp","avi","flv","mkv","mpeg"]
+      const zip = ["zip","rar","tar","7z","bz2","gz"]
+      const doc = ["docx","docx","xls","xlsx","ppt","pptx","pdf",
+        "txt","log","md","html","json","ini","yaml"]
+      const img = ["jpg","png","jpeg","gif","bmp","svg","psd","tif","tga","ai"]
+      const allow_file_format_list = [...video,...zip,...doc,...img]
       let tmp = file.name.split(".")
       let FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()
       let isLt20M = file.size / 1024 / 1024 < 20
@@ -93,7 +137,7 @@ export default {
       if (!isFile) {
         this.$notify.error({
           title: "上传失败",
-          message: "不允许上传" + FileSuffix + "格式的文件"
+          message: "不允许上传" + FileSuffix + "格式的文件; 若要上传, 请压缩后在上传！"
         })
       }
       if (!isLt20M) {
