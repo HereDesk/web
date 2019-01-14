@@ -14,9 +14,21 @@ const createStore = () => {
       ProductInfo: [],
       isProductInfo: false,
       BugProperty: {},
-      ProductMemberList: false
+      ProductMemberList: false,
+      ProductVersionInfo: {},
+      ProductModulesInfo: {},
     },
     mutations: {
+      setProductVersionInfo(state, data) {
+        if (data) {
+          state.ProductVersionInfo = data
+        }
+      },
+      setProductModulesInfo(state, data) {
+        if (data) {
+          state.ProductModulesInfo = data
+        }
+      },
       setLoginInfo(state, data) {
         if (data) {
           state.isLogin = true
