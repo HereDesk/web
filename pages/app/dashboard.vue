@@ -4,19 +4,13 @@
     <div id="page-head" class="row" style="height:18vh;" v-if="isDisplayBody">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
-        <el-dropdown class="ml-3">
-          <span class="dashboard-product">
-            <span class="el-dropdown-link" v-if="current_product_code"> 
-              {{ current_product_code || '' }}&nbsp;&nbsp;
-              <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
-            </span>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for='item in product_list' :key="item.id">
-              <span @click="current_product_code = item.product_code">{{ item.product_code }}</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <div class="ml-3">
+          <ProductInfo 
+            :showStyle="'no-border-dropdown'"
+            :type="'only-product-name'"
+           @ProductInfo="GetProductInfo">
+          </ProductInfo>
+        </div>
       </nav>
       <div class="navbar">
         <span class="dashboard-username">{{ familyname || '' }}</span>
@@ -56,7 +50,9 @@
                 <div class="row pt-3">
                   <div class="col-6 border-right">
                     <div class="board-view">
-                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'WaitPending', 'product_code': current_product_code } }">
+                      <nuxt-link :to="{ 
+                          path: '/app/qa/bug', 
+                          query: { 'operate': 'WaitPending', 'product_code': current_product_code } }">
                         <p class="v-num">{{ BugDashData.WaitPending || '0' }}</p>
                         <p class="v-desc">待我处理</p>
                       </nuxt-link>
@@ -64,7 +60,9 @@
                   </div>
                   <div class="col-6">
                     <div class="board-view">
-                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'NotResolved', 'product_code': current_product_code } }">
+                      <nuxt-link :to="{ 
+                          path: '/app/qa/bug', 
+                          query: { 'operate': 'NotResolved', 'product_code': current_product_code } }">
                         <p class="v-num">{{ BugDashData.NotFixed || '0' }}</p>
                         <p class="v-desc">所有未解决的</p>
                       </nuxt-link>
@@ -72,7 +70,9 @@
                   </div>
                   <div class="col-6 border-right border-top">
                     <div class="board-view">
-                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'operate': 'CreatedByMe', 'product_code': current_product_code } }">
+                      <nuxt-link :to="{ 
+                          path: '/app/qa/bug', 
+                          query: { 'operate': 'CreatedByMe', 'product_code': current_product_code } }">
                         <p class="v-num">{{ BugDashData.CreatedByMe || '0' }}</p>
                         <p class="v-desc">我创建的</p>
                       </nuxt-link>
@@ -80,7 +80,9 @@
                   </div>
                   <div class="col-6 border-top">
                     <div class="board-view">
-                      <nuxt-link :to="{ path: '/app/qa/bug', query: { 'status': 'Fixed', 'product_code': current_product_code } }">
+                      <nuxt-link :to="{ 
+                          path: '/app/qa/bug', 
+                          query: { 'status': 'Fixed', 'product_code': current_product_code } }">
                         <p class="v-num">{{ BugDashData.Fixed || '0' }}</p>
                         <p class="v-desc">已解决,待关闭</p>
                       </nuxt-link>
@@ -134,12 +136,17 @@
 <script>
 import util from "~/assets/js/util.js"
 import chart from "~/assets/js/chart.js"
+import ProductInfo from "~/components/ProductInfo"
 
 export default {
   head() {
     return {
       title: "HDesk - 首页"
     }
+  },
+
+  components: {
+    ProductInfo
   },
 
   data() {
@@ -267,10 +274,6 @@ export default {
     }
   },
 
-  created() {
-    this.getProductRelease()
-  },
-
   mounted() {
     if (this.current_product_code) {
       this.getBugDashData()
@@ -280,23 +283,9 @@ export default {
   },
 
   methods: {
-
-    // get data：product and version
-    getProductRelease() {
-      this.axios.get("/api/pm/product_release").then(res => {
-        if (res.data["status"] === 20000) {
-          this.product_list = res.data["data"]
-          if (res.data["data"]) {
-            if (this.$route.query.product_code) {
-              this.current_product_code = this.$route.query.product_code
-            } else {
-              this.current_product_code = this.product_list[0]["product_code"]
-            }
-          }
-        } else {
-          this.product_msg = res.data["msg"]
-        }
-      })
+    // get $emit data
+    GetProductInfo (data)  {
+      this.current_product_code = data.product_code
     },
 
     // get data：bug DashBoard
