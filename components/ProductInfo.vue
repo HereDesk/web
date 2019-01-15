@@ -63,7 +63,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="(item,index) in product_list" :key="index">
-            <span @click="handleCommand(item)">{{ item.product_code }}</span>
+            <span @click="product_code = item.product_code">{{ item.product_code }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -77,7 +77,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="(item,index) in release_list" :key="index">
-            <span @click="handleCommand(item)">{{ item.version }}</span>
+            <span @click="release = item.version">{{ item.version }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -149,7 +149,7 @@ export default {
         if (process.browser) {
           window.localStorage.setItem("last_visited_product", this.product_code)
         }
-        if (this.type !== 'only-product-name' && this.type !== 'case_index') {  
+        if (this.type !== 'only-product-name' && this.type !== 'case_index' && this.type !== 'bug_index') {  
           const ProductModulesInfo = this.$store.state.ProductModulesInfo
           if (JSON.stringify(ProductModulesInfo) !== '{}') {
             if (ProductModulesInfo.product_code === this.product_code) {

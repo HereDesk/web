@@ -23,33 +23,10 @@
 					
           <div id="bug-nav-manage" class="row justify-content-between">
             <div id="bug-query-1">
-              <el-dropdown id="bug-query-product" class="mr-1 my-1">
-                <span>
-                  <span class="el-dropdown-desc">产品:</span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_product }}<i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for='item in product_list' :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.product_code }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <el-dropdown id="bug-query-version" class="mr-1 my-1">
-                <span>
-                  <span class="el-dropdown-desc">版本:</span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_release | FilterVersion }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in release_list" :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.version }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              
+              <ProductInfo :type="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
+              </ProductInfo>
+
               <el-dropdown id="bug-query-status" class="mr-1 my-1">
                 <span>
                   <span class="el-dropdown-desc">状态:</span>
@@ -424,6 +401,7 @@ import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
 import Pagination from "~/components/Pagination"
+import ProductInfo from '~/components/ProductInfo'
 
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
@@ -443,7 +421,8 @@ export default {
     BugResolve,
     BugChange,
     Pagination,
-    PageModules
+    PageModules,
+    ProductInfo
   },
 
   data() {
@@ -699,7 +678,6 @@ export default {
   },
 
   created() {
-    this.getProductRelease()
     if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
     	this.$store.dispatch("getBugProperty")
     }
@@ -712,6 +690,11 @@ export default {
   },
 
   methods: {
+    // get $emit data
+    GetProductInfo (data)  {
+      this.selected_product = data.product_code
+      this.selected_release = data.release
+    },
     getPsPn: function(ps, pn) {
       this.pageSize = ps
       this.pageNumber = pn
@@ -719,17 +702,6 @@ export default {
     getM1M2: function(m1, m2) {
       this.m1_id = m1
       this.m2_id = m2
-    },
-    
-		/* get product info and release info */
-    getProductRelease() {
-      this.axios.get("/api/pm/product_release").then(res => {
-        if (res.data["status"] === 20000) {
-          this.product_list = res.data["data"]
-        } else {
-          this.BoxMsg = res.data["msg"]
-        }
-      })
     },
 		
 		/* get member user list */
@@ -760,12 +732,6 @@ export default {
         this.pageNumber = 1
         this.selected_status = "all"
         this.selected_priority = "all"
-      }
-      if ("product_code" in data) {
-        this.selected_product = data["product_code"]
-      }
-      if ("version" in data) {
-        this.selected_release = data["version"]
       }
       if ("OperatorsName" in data) {
         this.SearchCriteria.start_date = null

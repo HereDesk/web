@@ -24,29 +24,21 @@
           <!-- 测试用例查询相关 -->
           <div id="testcase-data-head" class="row justify-content-between">
             <div id="testcase-query">
-              <el-dropdown id="testcase-query-product" class="pl-3" trigger="click">
-                <span>
-                  <span class="el-dropdown-desc">产品：</span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_product }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for='item in product_list' :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.product_code }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              
+              <ProductInfo :type="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
+              </ProductInfo>
+              
               <el-dropdown id="testcase-query-status" class="pt-2 pl-3" trigger="click">
                 <span>
                   <span class="el-dropdown-desc">状态：</span>
                   <span class="el-dropdown-link bg-edown">
-                    {{ selected_status | FilterCaseStatus }}<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{ selected_status | FilterCaseStatus }}
+                    <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for='item in status_list' :key="item.id" :value="item.status_value">
+                  <el-dropdown-item 
+                    v-for="(item,index) in status_list" :key="index" :value="item.status_value">
                     <span @click="handleCommand(item)">{{ item.status_name }}</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -66,7 +58,9 @@
                 <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
               </span>
               <span>
-                <nuxt-link :to="{ path: '/app/qa/testcase/add' ,query: { 'product_code': selected_product }}">
+                <nuxt-link :to="{ 
+                    path: '/app/qa/testcase/add' ,
+                    query: { 'product_code': selected_product }}">
                   <button type="btn" class="btn btn-create"> + 创建 </button>
                 </nuxt-link>
               </span>
@@ -97,7 +91,10 @@
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
                     <span class="circle-content" 
-                      :class="{ 'text-deadly': scope.row.priority == 'P1','text-urgency': scope.row.priority == 'P2' }">
+                      :class="{ 
+                        'text-deadly': scope.row.priority == 'P1',
+                        'text-urgency': scope.row.priority == 'P2' 
+                      }">
                       {{ scope.row.priority }}
                     </span>
                   </template>
@@ -137,7 +134,8 @@
                 </el-table-column>
                 <el-table-column label='' width="40">
                   <template slot-scope="scope">
-                    <div class="display-none pt-2" :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                    <div class="display-none pt-2" 
+                      :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <button v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
                       </button>
@@ -248,6 +246,7 @@
 import PageLoading from "~/components/PageLoading"
 import Pagination from "~/components/Pagination"
 import PageModules from "~/components/PageModules"
+import ProductInfo from '~/components/ProductInfo'
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -258,12 +257,15 @@ export default {
       title: "HDesk - 测试用例" 
     }
   },
+  
   layout: "head",
   components: {
     PageLoading,
     Pagination,
     PageModules,
+    ProductInfo
   },
+  
   data() {
     return {
       showModal: false,
@@ -387,16 +389,16 @@ export default {
     }
   },
 
-  created() {
-    this.getProductRelease()
-  },
-
   mounted() {
     this.wd ? this.goSearch() : this.getCaseList()
     this.ScreenWidth = process.server ? 0 : document.body.clientWidth
   },
 
   methods: {
+    // get $emit data
+    GetProductInfo (data)  {
+      this.selected_product = data.product_code
+    },
     getPsPn: function(ps, pn) {
       this.pageSize = ps
       this.pageNumber = pn
@@ -404,18 +406,6 @@ export default {
     getM1M2: function(m1, m2) {
       this.m1_id = m1
       this.m2_id = m2
-    },
-    // get product info and release info
-    getProductRelease() {
-      this.axios.get("/api/pm/product_release")
-        .then(res => {
-          if (res.data["status"] === 20000) {
-             this.product_list = res.data["data"]
-          } else {
-             this.Msg = res.data["msg"]
-          }
-        })
-        .catch(res => {})
     },
 
     // 下拉相关操作
