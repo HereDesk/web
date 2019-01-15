@@ -5,8 +5,7 @@
     <div id="product-version-module" class="container-fluid px-0" 
       v-if="['bug_add','case_add'].includes(type)">
       <div class="row">
-        <el-select id="info-product" class="col" placeholder="选择产品" 
-          v-model="product_code" >
+        <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
           <el-option 
             v-for="(item,index) in product_list" 
             :key="index" 
@@ -14,8 +13,8 @@
             :value="item.product_code">
           </el-option>
         </el-select>
-        <el-select id="info-version" class="col" placeholder="选择版本" 
-          v-model="release" v-if="['bug_add'].includes(type)">
+        <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" 
+          v-if="['bug_add'].includes(type)">
           <el-option 
             v-for="(item,index) in release_list" 
             :key="index" 
@@ -37,7 +36,7 @@
     <div v-if="showStyle === 'no-border-dropdown' & type === 'only-product-name'">
       <el-dropdown>
         <span class="dashboard-product">
-          <span class="el-dropdown-link" v-if="product_code"> 
+          <span class="el-dropdown-link"> 
             {{ product_code || '' }}&nbsp;&nbsp;
             <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
           </span>
@@ -58,7 +57,8 @@
         <span>
           <span class="el-dropdown-desc">产品:</span>
           <span class="el-dropdown-link bg-edown">
-            {{ product_code }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{ product_code }}
+            <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -116,18 +116,20 @@ export default {
 
     // emit info
     EmitInfo: function() {
-      let { product_code, release, module_id } = this
-      return {product_code, release, module_id}
+      let { product_code, release, module_id, PageMsg } = this
+      return {product_code, release, module_id,PageMsg}
     },
 
     // version list
     release_list: function() {
-      let arr = [{ version: "全部" }]
+      let arr = []
+      let tmp = []
+      this.type.includes('index') ? tmp = [{ version: "全部" }] : undefined
       let data = this.product_list
       if (this.product_code) {
         for (let i in data) {
           if (this.product_code === data[i]["product_code"]) {
-            arr = [...data[i]["data"]]
+            arr = [...tmp, ...data[i]["data"]]
           }
         }
         return arr.length > 0 ? arr : false
@@ -149,14 +151,13 @@ export default {
         if (process.browser) {
           window.localStorage.setItem("last_visited_product", this.product_code)
         }
-        if (this.type !== 'only-product-name' && this.type !== 'case_index' && this.type !== 'bug_index') {  
+        
+        if (!['only-product-name','case_index','bug_index'].includes(type)) {  
           const ProductModulesInfo = this.$store.state.ProductModulesInfo
           if (JSON.stringify(ProductModulesInfo) !== '{}') {
-            if (ProductModulesInfo.product_code === this.product_code) {
-              this.modules_list = ProductModulesInfo.data
-            } else {
-              this.getModule()
-            }
+            ProductModulesInfo.product_code === this.product_code 
+              ? this.modules_list = ProductModulesInfo.data
+              : this.getModule()
           } else {
             this.getModule()
           }
@@ -168,6 +169,7 @@ export default {
       handler: function (val, oldVal) {
         let route = this.$route.query
         const last_visited_product = process.browser ? window.localStorage.last_visited_product : undefined
+        
         if (JSON.stringify(this.product_list) !== '[]') {
           if (route.product_code) {
             this.product_code = route.product_code
@@ -191,8 +193,9 @@ export default {
   },
   
   created() {
-    if (JSON.stringify(this.$store.state.ProductVersionInfo) !== '{}') {
-      this.product_list = this.$store.state.ProductVersionInfo
+    const ProductVersionInfo = this.$store.state.ProductVersionInfo
+    if (JSON.stringify(ProductVersionInfo) !== '{}') {
+      this.product_list = ProductVersionInfo
     } else {
       this.getProductRelease()
     }
@@ -220,18 +223,23 @@ export default {
     * get product module info 
     */
     getModule() {
-      this.axios.get("/api/pm/get_module?product_code=" + this.product_code)
+      this.axios
+        .get("/api/pm/get_module?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             const data = res.data["data"]
-            this.modules_list = data
             if (data.length > 0) {
+              this.modules_list = data
               this.$store.commit("setProductModulesInfo", res.data)
             }
           } else {
-            this.ModuleMsg = res.data["msg"]
+           this.$notify.error({
+             title: "上传失败",
+             message: res.data["msg"]
+           })
           }
-        })
+        }
+      )
     }
     
   }
