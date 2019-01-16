@@ -85,8 +85,6 @@
 </template>
 
 <script>
-import Pagination from '~/components/Pagination'
-
 export default {
   head () {
     return {
@@ -95,9 +93,6 @@ export default {
   },
 
   layout: 'head',
-  components: {
-    Pagination,
-  },
 
   data () {
     return {

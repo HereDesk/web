@@ -301,7 +301,6 @@
 <script>
 import Vue from "vue"
 import FileShow from '~/components/FileShow'
-import PageLoading from "~/components/PageLoading"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
@@ -342,7 +341,6 @@ export default {
     BugAssign,
     BugResolve,
     BugChange,
-    PageLoading,
     FileShow
   },
 

@@ -25,7 +25,7 @@
           <div id="testcase-data-head" class="row justify-content-between">
             <div id="testcase-query">
               
-              <ProductInfo :type="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
+              <ProductInfo :ptype="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
               
               <el-dropdown id="testcase-query-status" class="pt-2 pl-3" trigger="click">
@@ -39,7 +39,7 @@
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item 
                     v-for="(item,index) in status_list" :key="index" :value="item.status_value">
-                    <span @click="handleCommand(item)">{{ item.status_name }}</span>
+                    <span @click="selected_status = item.status_value">{{ item.status_name }}</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -68,8 +68,7 @@
           </div>
 
           <!-- 测试用例搜索 -->
-          <div id="testcase-search" class="row ml-2 mr-5 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
-            :class="{ showSearch: isShowSearch }">
+          <div id="testcase-search" class="row ml-2 mr-5 hiddenSearch" :class="{ showSearch: isShowSearch }">
             <div class="col-md-10 col-10">
               <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
                 placeholder="请输入ID或标题关键字进行搜索..." 
@@ -91,10 +90,8 @@
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
                     <span class="circle-content" 
-                      :class="{ 
-                        'text-deadly': scope.row.priority == 'P1',
-                        'text-urgency': scope.row.priority == 'P2' 
-                      }">
+                      :class="{ 'text-deadly': scope.row.priority == 'P1',
+                        'text-urgency': scope.row.priority == 'P2' }">
                       {{ scope.row.priority }}
                     </span>
                   </template>
@@ -207,7 +204,8 @@
     </div>
 
     <!-- 测试用例统计 -->
-    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeaderClose="true">
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'" 
+      @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
         <div class="row mt-3 mb-5">
@@ -233,7 +231,9 @@
         </div>
         <div class="row">
           <div class="col">
-            <p style="font-size:0.88rem;color:#424242;">备注：仅支持按照产品、模块这两个查询条件导出; 选择好查询条件，再点击导出; 目前仅支持导出xlsx</p>
+            <p style="font-size:0.88rem;color:#424242;">
+              备注：仅支持按照产品、模块这两个查询条件导出; 选择好查询条件，再点击导出; 目前仅支持导出xlsx
+            </p>
           </div>
         </div>
       </div>
@@ -243,10 +243,7 @@
 </template>
 
 <script>
-import PageLoading from "~/components/PageLoading"
-import Pagination from "~/components/Pagination"
 import PageModules from "~/components/PageModules"
-import ProductInfo from '~/components/ProductInfo'
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -260,10 +257,7 @@ export default {
   
   layout: "head",
   components: {
-    PageLoading,
-    Pagination,
-    PageModules,
-    ProductInfo
+    PageModules
   },
   
   data() {
@@ -373,7 +367,8 @@ export default {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch() : this.getCaseList()
-      this.$route.query.product_code ? this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
+      this.$route.query.product_code 
+        ? this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
       	: this.$router.replace({path: "/app/qa/testcase",query: this.QueryBuilder})
     },
     product_list: function(val, oldVal) {
@@ -406,16 +401,6 @@ export default {
     getM1M2: function(m1, m2) {
       this.m1_id = m1
       this.m2_id = m2
-    },
-
-    // 下拉相关操作
-    handleCommand(data) {
-      if ("product_code" in data) {
-        this.selected_product = data["product_code"]
-      }
-      if ("status_value" in data) {
-        this.selected_status = data["status_value"]
-      }
     },
 
     // TestCase: 数据列表

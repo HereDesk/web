@@ -125,6 +125,7 @@
 .showSearch {
   display: flex;
   visibility: visible;
+  border-bottom:1px solid #C5CAE9;
 }
 
 .searchIcon img {

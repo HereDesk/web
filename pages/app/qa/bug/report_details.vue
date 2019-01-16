@@ -6,6 +6,7 @@
           <h1>{{ Details.product_code }}日报</h1>
           <span>{{ Details.datetime }}</span>
         </div>
+        
         <div class="container-fluid mt-5">
           <h5 class="text-center">今日缺陷</h5>
           <div class="row">
@@ -20,18 +21,21 @@
             </div>
           </div>
         </div>
+        
         <div class="container-fluid mt-5">
           <h5 class="text-center">未解决缺陷</h5>
           <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="height:20rem;">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12" style="height:20rem;">
               <div id="bug-chart-surplus" style="width: 100%;height:100%;"></div>
             </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pt-5" style="height:20rem;">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-5" style="height:20rem;">
               <p>如图所示: <br></p>
-              <p class="font-size-93">在所有未解决的缺陷中，{{ surplus_bug.name }}类bug，占大多数，共计{{ surplus_bug.value }}个</p>
+              <p class="font-size-93">
+                在所有未解决的缺陷中，{{ surplus_bug.name }}类bug，占大多数，共计{{ surplus_bug.value }}个</p>
             </div>
           </div>
         </div>
+        
         <div id="report_bug_fatal" class="my-5">
           <h5 class="mb-5 text-center">一级致命Bug</h5>
           <table class="table">
@@ -43,6 +47,7 @@
             </tbody>
           </table>
         </div>
+        
       </div>
     </div>
   </div>
@@ -69,8 +74,8 @@ export default {
     },
     chart1Y: function() {
       let data = this.Details.status_data
-      var ydata = [0, 0, 0, 0]
-      for (var i in data) {
+      let ydata = [0, 0, 0, 0]
+      for (let i in data) {
         if (data[i]["create"]) {
           ydata[0] = data[i]["create"]
         }
@@ -87,14 +92,14 @@ export default {
       return ydata
     },
     chart2: function() {
-      let data = this.Details.surplus_bug
-      return data
+      return this.Details.surplus_bug
     },
     surplus_bug: function() {
-      var data = { name: null, value: "" }
-      if (this.Details.surplus_bug) {
-        data.name = this.Details.surplus_bug[0]["name"]
-        data.value = this.Details.surplus_bug[0]["value"]
+      let data = { name: null, value: "" }
+      let surplus_bug = this.Details.surplus_bug || []
+      if (surplus_bug.length > 0) {
+        data.name = surplus_bug[0]["name"]
+        data.value = surplus_bug[0]["value"]
       }
       return data
     }
@@ -120,7 +125,7 @@ export default {
         .get("/api/qa/bug/report/details?report_id=" + this.report_id)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.Details = JSON.parse(res.data["data"])
+            this.Details = res.data["data"]
           } else {
             this.$notify.error({
               title: "错误",

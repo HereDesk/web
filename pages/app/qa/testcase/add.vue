@@ -11,7 +11,7 @@
               产品与模块<span class="text-red">*</span>
             </label>
             <div class="col-md-6 col-sm-8 col-12">
-              <ProductInfo :type="'case_add'" :showVersionInfo="true" @ProductInfo="GetProductInfo">
+              <ProductInfo :ptype="'case_add'" :showVersionInfo="true" @ProductInfo="GetProductInfo">
               </ProductInfo>
             </div>
           </div>
@@ -135,9 +135,7 @@
 import fileutil from "~/assets/js/file.js"
 import data from '~/assets/js/data.js'
 
-import BaseNav from '~/components/BaseNav'
 import FileUpload from '~/components/FileUpload'
-import ProductInfo from '~/components/ProductInfo'
 
 export default {  
   head () {
@@ -147,9 +145,7 @@ export default {
   },
 
   components: {
-    BaseNav,
-    FileUpload,
-    ProductInfo
+    FileUpload
   },
 
   data () {

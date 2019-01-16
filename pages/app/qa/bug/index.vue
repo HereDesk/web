@@ -24,7 +24,7 @@
           <div id="bug-nav-manage" class="row justify-content-between">
             <div id="bug-query-1">
               
-              <ProductInfo :type="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
+              <ProductInfo :ptype="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
 
               <el-dropdown id="bug-query-status" class="mr-1 my-1">
@@ -395,13 +395,10 @@
 </template>
 
 <script>
-import PageLoading from "~/components/PageLoading"
 import PageModules from "~/components/PageModules"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
-import Pagination from "~/components/Pagination"
-import ProductInfo from '~/components/ProductInfo'
 
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
@@ -416,13 +413,10 @@ export default {
 	
   layout: "head",
   components: {
-    PageLoading,
     BugAssign,
     BugResolve,
     BugChange,
-    Pagination,
-    PageModules,
-    ProductInfo
+    PageModules
   },
 
   data() {

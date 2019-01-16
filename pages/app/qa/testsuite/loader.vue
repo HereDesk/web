@@ -67,7 +67,6 @@
 </template>
 
 <script>
-import Pagination from "~/components/Pagination"
 import util from '~/assets/js/util.js'
 let _ = require("lodash/Array")
 
@@ -78,9 +77,6 @@ export default {
   },
 
   layout: "head",
-  components: {
-    Pagination,
-  },
 
   data() {
     return {

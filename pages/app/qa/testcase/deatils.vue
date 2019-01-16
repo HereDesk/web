@@ -169,7 +169,6 @@
 </template>
 
 <script>
-import PageLoading from '~/components/PageLoading'
 import FileShow from '~/components/FileShow'
 
 import util from '~/assets/js/util.js'
@@ -204,7 +203,6 @@ export default {
 
   layout: 'head',
   components: {
-    PageLoading,
     FileShow
   },
 

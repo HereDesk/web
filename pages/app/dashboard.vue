@@ -7,7 +7,7 @@
         <div class="ml-3">
           <ProductInfo 
             :showStyle="'no-border-dropdown'"
-            :type="'only-product-name'"
+            :ptype="'only-product-name'"
            @ProductInfo="GetProductInfo">
           </ProductInfo>
         </div>
@@ -136,17 +136,12 @@
 <script>
 import util from "~/assets/js/util.js"
 import chart from "~/assets/js/chart.js"
-import ProductInfo from "~/components/ProductInfo"
 
 export default {
   head() {
     return {
       title: "HDesk - 首页"
     }
-  },
-
-  components: {
-    ProductInfo
   },
 
   data() {

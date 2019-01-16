@@ -3,7 +3,7 @@
 
     <!-- 缺陷/用例：创建、编辑 -->
     <div id="product-version-module" class="container-fluid px-0" 
-      v-if="['bug_add','case_add'].includes(type)">
+      v-if="['bug_add','case_add'].includes(ptype)">
       <div class="row">
         <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
           <el-option 
@@ -14,7 +14,7 @@
           </el-option>
         </el-select>
         <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" 
-          v-if="['bug_add'].includes(type)">
+          v-if="['bug_add'].includes(ptype)">
           <el-option 
             v-for="(item,index) in release_list" 
             :key="index" 
@@ -33,7 +33,7 @@
     </div>
 
     <!-- Only ProductNameList, no border dropdown -->
-    <div v-if="showStyle === 'no-border-dropdown' & type === 'only-product-name'">
+    <div class="display-inline" v-if="showStyle === 'no-border-dropdown' & ptype === 'only-product-name'">
       <el-dropdown>
         <span class="dashboard-product">
           <span class="el-dropdown-link"> 
@@ -50,9 +50,21 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    
+    <!-- Only ProductNameList, no border dropdown -->
+    <div class="display-inline" v-if="showStyle === 'select' & ptype === 'only-product-name'">
+      <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
+        <el-option 
+          v-for="(item,index) in product_list" 
+          :key="index" 
+          :label="item.product_code" 
+          :value="item.product_code">
+        </el-option>
+      </el-select>
+    </div>
 
     <!-- Dropdown style -->
-    <div class="display-inline" v-if="showStyle === 'dropdown' & ['bug_index','case_index'].includes(type)">
+    <div class="display-inline" v-if="showStyle === 'dropdown' & ['bug_index','case_index'].includes(ptype)">
       <el-dropdown id="query-product" class="mr-1 my-1">
         <span>
           <span class="el-dropdown-desc">产品:</span>
@@ -67,7 +79,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-dropdown id="query-release" class="mr-1 my-1" v-if="type === 'bug_index'">
+      <el-dropdown id="query-release" class="mr-1 my-1" v-if="ptype === 'bug_index'">
         <span>
           <span class="el-dropdown-desc">版本:</span>
           <span class="el-dropdown-link bg-edown">
@@ -89,7 +101,7 @@
 export default {
   props: {
     showStyle: String,
-    type: String,
+    ptype: String,
     showVersionInfo: Boolean,
     fillData: {}
   },
@@ -124,7 +136,7 @@ export default {
     release_list: function() {
       let arr = []
       let tmp = []
-      this.type.includes('index') ? tmp = [{ version: "全部" }] : undefined
+      this.ptype.includes('index') ? tmp = [{ version: "全部" }] : undefined
       let data = this.product_list
       if (this.product_code) {
         for (let i in data) {
@@ -152,7 +164,7 @@ export default {
           window.localStorage.setItem("last_visited_product", this.product_code)
         }
         
-        if (!['only-product-name','case_index','bug_index'].includes(type)) {  
+        if (!['only-product-name','case_index','bug_index'].includes(this.ptype)) {  
           const ProductModulesInfo = this.$store.state.ProductModulesInfo
           if (JSON.stringify(ProductModulesInfo) !== '{}') {
             ProductModulesInfo.product_code === this.product_code 

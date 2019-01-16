@@ -46,17 +46,9 @@ export default {
     }
   },
 
-  // computed: {
-  //   isShowModules: function() {
-  //     let config = this.$store.state.UserConfig
-  //     return _.find(config, function(o) {
-  //       return (o.code == "IS_SHOW_MODULE") & (o.code_value == 1)}) ? true : false
-  //   }
-  // },
-
   watch: {
     product_code: function(val, oldVal) {
-      this.getModule()
+      this.isRequestModuleData()
     },
     m1_id () {
       this.$emit('getM1M2',this.m1_id,this.m2_id) 
@@ -64,22 +56,33 @@ export default {
     m2_id () {
       this.$emit('getM1M2',this.m1_id,this.m2_id) 
     },
-    // isShowModules () {
-    //   this.$emit('getM1M2',this.m1_id,this.m2_id)
-    // }
   },
 
   mounted() {
-    this.getModule()
+    this.isRequestModuleData()
   },
   methods: {
+    isRequestModuleData() {
+      const ProductModulesInfo = this.$store.state.ProductModulesInfo
+      if (JSON.stringify(ProductModulesInfo) !== '{}') {
+        ProductModulesInfo.product_code === this.product_code 
+          ? this.modules_list = ProductModulesInfo.data
+          : this.getModule()
+      } else {
+        this.getModule()
+      }
+    },
     // 获取所有模块
     getModule() {
       if (!this.product_code) {return}
       axios.get("/api/pm/get_module?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
-             this.modules_list = res.data["data"]
+            const data = res.data["data"]
+            if (data.length > 0) {
+              this.modules_list = data
+              this.$store.commit("setProductModulesInfo", res.data)
+            }
           } else {
              this.Msg = res.data["msg"]
           }
