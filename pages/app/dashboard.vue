@@ -1,7 +1,7 @@
 <template>
   <div id="page-dashboard" class="container"> 
     
-    <div id="page-head" class="row" style="height:18vh;" v-if="isDisplayBody">
+    <div id="page-head" class="row" style="height:18vh;">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand" href="/app/dashboard">测试管理系统</a>
         <div class="ml-3">
@@ -42,7 +42,6 @@
     <div id="page-body" class= "row" style="height:82vh;display:flex;align-items:center;">
       <div style="margin:auto !important;width:100%;">
         <div id="page-data" class="pb-5" v-if="isDisplayBody">
-
           <!-- page chart -->
           <div id="dashboard-chart" class="row mb-3 align-items-center">
             <div class="col-lg-4 col-md-4 col-sm-12">
@@ -280,6 +279,8 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
+      console.log(data.PageMsg);
+      this.product_msg = data.PageMsg
       this.current_product_code = data.product_code
     },
 
@@ -318,6 +319,7 @@ export default {
     HandLogout() {
       if (process.browser) {
         window.localStorage.removeItem("token")
+        window.localStorage.removeItem("last_visited_product")
         document.cookie ="token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/"
         window.location.replace("/")
       }

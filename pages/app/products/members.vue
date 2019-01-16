@@ -1,35 +1,36 @@
-<template>
-  <div id="page-product-members" class='container mt-3'>
 
-    <div id="page-head" class='row mt-5'>
+<template>
+  <div id="page-product-members" class="container mt-3">
+
+    <div id="page-head" class="row mt-5">
       <div id="page-title" class="col-auto mr-auto">
         <a class="navbar-brand">{{ product_code }}&nbsp;成员管理</a>
       </div>
-      <div  id='add-members' class='col-auto'>
-        <button type='button'  id='add-btn' class='btn btn-create' 
+      <div  id="add-members" class="col-auto">
+        <button type="button"  id="add-btn" class="btn btn-create mt-2"
           v-if="Rules.product_members" @click="showModal = 'addmembers'">+ 增加成员
         </button>
       </div>
     </div>
 
-    <div id="page-data" class='row mt-3 mb-5 table_data'>
-      <div class='col-xl-12 col-lg-12 col-md-12'>
-        <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
-          <el-table-column label='真实姓名' prop='realname'></el-table-column>
-          <el-table-column label='群组' prop='group'></el-table-column>
-          <el-table-column label='岗位/职位' prop='position'></el-table-column>
-          <el-table-column label='状态'>
+    <div id="page-data" class="row mt-3 mb-5 table_data">
+      <div class="col-xl-12 col-lg-12 col-md-12">
+        <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}">
+          <el-table-column label="真实姓名" prop="realname"></el-table-column>
+          <el-table-column label="群组" prop="group"></el-table-column>
+          <el-table-column label="岗位/职位" prop="position"></el-table-column>
+          <el-table-column label="状态">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 1" class="text-deadly">禁用</span>
               <span v-if="scope.row.status === 0">启用</span>
             </template>
           </el-table-column>
-          <el-table-column label='加入时间'>
+          <el-table-column label="加入时间">
             <template slot-scope="scope">
               <span>{{ scope.row.join_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' v-if="Rules.product_members">
+          <el-table-column label="操作" v-if="Rules.product_members">
             <template slot-scope="scope">
               <span @click="banned(scope.row,$event)" v-if="scope.row.status === 0">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="1">禁用</button>
@@ -43,29 +44,32 @@
       </div>
     </div>
 
-    <div id="page-null" class='row' v-if="controlNull">
-      <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
+    <div id="page-null" class="row" v-if="controlNull">
+      <div class="col text-center mt-5">
         <img src="~/static/images/happy.png" class="null-icon"/>
         <p class="no-hint">{{ msg }}</p>
       </div>
     </div>
 
     <!-- add member modal -->
-    <Modal id="add_members" v-if="showModal == 'addmembers'" @close="showModal = false" :isFooter="true">
+    <Modal id="add_members" v-if="showModal === 'addmembers'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">增加成员</h5>
       <div class="form-group" slot="body">
-        <div class='row col-md-auto'>
-          <label for="pg-product-name" class="mx-5">产品</label>
-          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;">
-            <option>{{ product_code }}</option>
-          </select>
+        <div class="row col-md-auto m-3">
+          <span>产品</span>
+          <div style="width:100%;">
+            <ProductInfo
+              :showStyle="'select'" :ptype="'only-product-name'" @ProductInfo="GetProductInfo">
+            </ProductInfo>
+          </div>
         </div>
-        <div class='row col-md-auto' @change="selectMember($event)">
-          <label for="pg-product-name" class="mx-5">选择人员</label>
-          <select class='form-control mx-5 my-1' style="border:1px solid #9E9E9E;">
-            <option value="">请选择</option>
-            <option v-for="item in AllUser" :key="item.id" :value='item.user_id'>{{ item.realname }}</option>
-          </select>
+        <div class="row col-md-auto mx-3" @change="selectMember($event)">
+          <span>人员</span>
+          <el-select id="info-product" placeholder="选择人员" style="width:100%;" v-model="MemberJoin.user_id">
+            <el-option v-for="(item,index) in AllUser" 
+              :key="index" :label="item.realname" :value="item.user_id">
+            </el-option>
+          </el-select>
         </div>
       </div>
       <button type="submit" class="btn btn-primary" slot="footer" @click="JoinProduct">提交</button>
@@ -101,14 +105,14 @@ export default {
 			controlNull: false,
 			msg: "",
       product_code: "",
-      release_list: "",
       tableData: [],
       AllUser: [],
-      ProductMemberData: {
+      MemberJoin: {
+        user_name: "",
         user_id: "",
         product_code: ""
       },
-      bannedData: {
+      MemberBanned: {
         user_id: "",
         product_code: ""
       }
@@ -141,8 +145,8 @@ export default {
   
   mounted() {
     this.product_code = this.$route.query.product_code
-    this.ProductMemberData.product_code = this.$route.query.product_code
-    this.bannedData.product_code = this.$route.query.product_code
+    this.MemberJoin.product_code = this.$route.query.product_code
+    this.MemberBanned.product_code = this.$route.query.product_code
     if (this.$route.query.product_code) {
       this.getProductMember()
     } else {
@@ -152,6 +156,11 @@ export default {
   },
 
   methods: {
+    // get $emit data
+    GetProductInfo (data)  {
+      this.product_code = data.product_code
+    },
+
     // get current product member
     getProductMember() {
       this.axios.get("/api/pm/member/list?product_code=" + this.product_code)
@@ -176,21 +185,16 @@ export default {
       })
     },
 
-    // selected user data
-    selectMember(event) {
-      this.ProductMemberData.user_id = event.target.value
-    },
-
-    // add users to the project
+    //  users to Join the project
     JoinProduct(row) {
-      if (!this.ProductMemberData.user_id) {
+      if (!this.MemberJoin.user_id) {
         this.$notify.error({title: "失败",message: "请选择用户后再提交"})
         return
       }
       this.axios({
         method: "post",
         url: "/api/pm/member/join",
-        data: JSON.stringify(this.ProductMemberData)
+        data: JSON.stringify(this.MemberJoin)
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.showModal=false
@@ -205,11 +209,11 @@ export default {
 
     // banned user to the product
     banned(rows, event) {
-      this.bannedData.user_id = rows.user_id
+      this.MemberBanned.user_id = rows.user_id
       this.axios({
         method: "post",
         url: "/api/pm/member/ban",
-        data: JSON.stringify(this.bannedData)
+        data: JSON.stringify(this.MemberBanned)
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.$notify.success({title: "成功",message: res.data["msg"]})
@@ -222,11 +226,11 @@ export default {
 
     // rejoin user to the product
     reJoin(rows, event) {
-      this.bannedData.user_id = rows.user_id
+      this.MemberBanned.user_id = rows.user_id
       this.axios({
         method: "post",
         url: "/api/pm/member/rejoin",
-        data: JSON.stringify(this.bannedData)
+        data: JSON.stringify(this.MemberBanned)
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.$notify.success({title: "成功",message: "此用户已重新激活"})

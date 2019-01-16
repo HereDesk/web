@@ -1,18 +1,18 @@
 <template>
-  <div id="page-user-index" class='container mt-3'>
+  <div id="page-user-index" class="container mt-3">
     
-		<div id="page-head" class='row mt-5'>
+		<div id="page-head" class="row mt-5">
       <div class="col-auto mr-auto">
       </div>
-      <div id="create-user" class='col-auto'>
+      <div id="create-user" class="col-auto">
         <nuxt-link to="/app/user-management/user/adduser" v-if="Rules.user_create">
           <button type="btn" class="btn btn-create">+ 增加用户</button>
         </nuxt-link>
       </div>
     </div>
 
-    <div id="page-data" class='row mt-3 mb-5 table_data'>
-      <div class='col-xl-12 col-lg-12 col-md-12'>
+    <div id="page-data" class="row mt-3 mb-5 table_data">
+      <div class="col">
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column prop='realname' label='真实姓名' width="120"></el-table-column>
           <el-table-column prop='email' label='E-mail'></el-table-column>
@@ -57,18 +57,18 @@
     <Modal id="modal-create-user" v-if="showModal == 'ResetPasswd'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">重置密码</h5>
       <div class="form-group" slot="body">
-        <div class='row col-md-auto'>
+        <div class="row col-md-auto">
           <label for="password" class="ml-5">密码</label>
-          <input type='password' id='password' class='form-control input-lg mx-5 my-1' 
-            placeholder='请输入密码' minlength="8" maxlength='16'
-            v-model.trim='password.passwd'
+          <input type="password" id="password" class="form-control input-lg mx-5 my-1" 
+            placeholder='请输入密码' minlength="8" maxlength="16"
+            v-model.trim="password.passwd"
             required autofocus />
         </div>
-        <div class='row col-md-auto'>
+        <div class="row col-md-auto">
           <label for="t-password" class="ml-5">确认密码</label>
-          <input type='password' id='t-password' class='form-control input-lg mx-5 my-1' 
-            placeholder='请再次输入密码' minlength="8" maxlength='16' required 
-            v-model.trim='password.RepeatPasswd' 
+          <input type="password" id="t-password" class="form-control input-lg mx-5 my-1" 
+            placeholder="请再次输入密码" minlength="8" maxlength="16" required 
+            v-model.trim="password.RepeatPasswd" 
             @keyup.enter="ResetPassword()">
           <p class="mb-0 ml-5 mt-3 font-size-85 text-gray">备注：密码有效长度8到16位,且不能使用空格</p>
         </div>

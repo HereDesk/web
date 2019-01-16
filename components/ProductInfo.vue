@@ -52,16 +52,16 @@
     </div>
     
     <!-- Only ProductNameList, no border dropdown -->
-    <div class="display-inline" v-if="showStyle === 'select' & ptype === 'only-product-name'">
-      <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
-        <el-option 
-          v-for="(item,index) in product_list" 
-          :key="index" 
-          :label="item.product_code" 
-          :value="item.product_code">
-        </el-option>
-      </el-select>
-    </div>
+    <el-select id="info-product" style="width:100%;" placeholder="选择产品" v-model="product_code" 
+      v-if="showStyle === 'select' & ptype === 'only-product-name'">
+      <el-option
+        v-for="(item,index) in product_list" 
+        :key="index" 
+        :label="item.product_code" 
+        :value="item.product_code">
+      </el-option>
+    </el-select>
+    
 
     <!-- Dropdown style -->
     <div class="display-inline" v-if="showStyle === 'dropdown' & ['bug_index','case_index'].includes(ptype)">
@@ -129,6 +129,7 @@ export default {
     // emit info
     EmitInfo: function() {
       let { product_code, release, module_id, PageMsg } = this
+      console.log({product_code, release, module_id,PageMsg});
       return {product_code, release, module_id,PageMsg}
     },
 
