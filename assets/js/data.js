@@ -16,7 +16,8 @@ export default {
       { "status_value": "Reopen", "status_name": "重新打开" },
       { "status_value": "Hang-up", "status_name": "挂起延期" },
       { "status_value": "Fixed", "status_name": "已解决" },
-      { "status_value": "Closed", "status_name": "已关闭" }
+      { "status_value": "Closed", "status_name": "已关闭" },
+      { "status_value": "notClosed", "status_name": "未关闭" }
     ],
     severity_list: [
       { "severity_name":"致命","severity_value":"Fatal" },

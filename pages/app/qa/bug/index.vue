@@ -123,7 +123,7 @@
                 </el-dropdown-menu>
               </el-dropdown>
               <el-dropdown id="page-query-version" class="my-1" trigger="click">
-                <span class="el-dropdown-link bg-edown bg-white text-center" style="font-weight:500">
+                <span class="el-dropdown-link bg-edown text-center" style="font-weight:500">
                   {{ SearchCriteria.Operators | filterOperators }}
                 </span>
                 <el-dropdown-menu slot="dropdown">
@@ -181,17 +181,19 @@
                   <template slot-scope="scope">
                     <div @click="BugPriorityDialog(scope.row)">
                       <span class="circle-content font-color-757575"
-                        :class="{'text-deadly': scope.row.priority == 'P1', 'text-urgency': scope.row.priority == 'P2'}">
-                        {{ scope.row.priority }}
+                        :class="{
+                          'text-deadly': scope.row.priority === 'P1', 
+                          'text-urgency': scope.row.priority === 'P2'
+                        }">{{ scope.row.priority }}
                       </span>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column label='创建' prop='creator_user' align="center" sortable width='85' show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column label='创建时间' width='100'>
+                <el-table-column label="最后更新" align="center" width="110">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.create_time | date(5) }}</span>
+                    <span>{{ scope.row.last_time | date(5) }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label='指派' prop='assignedTo_user' align="center" sortable width='85' show-overflow-tooltip>
@@ -207,9 +209,9 @@
                 </el-table-column>
                 <el-table-column label='' width="50">
                   <template slot-scope="scope">
-                    <div class="display-none"
-                      :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 'hideText': scope.row.status == 'Closed'}">
-                      <button v-if="scope.row.creator_id == myUID">
+                    <div class="display-none":class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 
+                      'hideText': scope.row.status == 'Closed'}">
+                      <button v-if="scope.row.creator_id === myUID">
                         <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
                           <i class="iconfont icon-edit icon-8a8a8a size-1-3"></i>
                         </nuxt-link>
@@ -353,7 +355,9 @@
         </div>
         <div class="row">
           <div class="col">
-            <p style="font-size:0.88rem;color:#424242;">备注：仅支持按照产品、版本、缺陷状态这三个查询条件导出; 选择好查询条件，再点击导出; 目前仅支持导出xlsx</p>
+            <p style="font-size:0.88rem;color:#424242;">
+              备注：仅支持按照产品、版本、缺陷状态这三个查询条件导出; 选择好查询条件，再点击导出; 目前仅支持导出xlsx
+            </p>
           </div>
         </div>
       </div>
@@ -451,7 +455,7 @@ export default {
       
       // Define Data: Bug-Status
       status_list: data.bug_status_list,
-      selected_status: this.$route.query.status || "all",
+      selected_status: this.$route.query.status || "notClosed",
       
       // Define Data: Bug-priority
       priority_list: data.priority_list,
