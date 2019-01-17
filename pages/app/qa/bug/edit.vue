@@ -11,25 +11,10 @@
               产品与模块
               <span class="text-red">*</span>
             </label>
-            <el-select id="bug-product" class="col-md-2 col-sm-4 col-6" placeholder="选择产品" 
-							v-model="Bug.product_code"  @visible-change="getProductRelease()">
-							<el-option value="" :disabled="true">请选择产品</el-option>
-              <el-option
-                v-for="item in product_list" :key="item.id" :label="item.product_code" :value="item.product_code">
-              </el-option>
-            </el-select>
-            <el-select id="bug-version" class="col-md-2 col-sm-4 col-6" placeholder="选择版本" v-model="Bug.release">
-							<el-option value="" :disabled="true">请选择版本号</el-option>
-              <el-option 
-                v-for="item in release_list" :key="item.id" :label="item.version" :value="item.version">
-              </el-option>
-            </el-select>
-            <el-cascader id="bug-modules" class="col-md-2 col-sm-4 col-6 px-3" 
-              :options="modules_list" 
-              v-model="Bug.module_id" 
-              filterable change-on-select 
-              placeholder="选择模块" >
-            </el-cascader>
+            <div class="col-lg-6 col-md-10 col-sm-12 col-12">
+              <ProductInfo :ptype="'bug_edit'" :editData="Bug" :showVersionInfo="true" @ProductInfo="GetProductInfo">
+              </ProductInfo>
+            </div>
           </div>
           
           <!-- bug: assignedTo and priority and severity -->
@@ -256,7 +241,14 @@ export default {
   },
 
   methods: {
-    // get commponents fileupload data
+    // get $emit data
+    GetProductInfo (data)  {
+      this.Bug.product_code = data.product_code
+      this.Bug.release = data.release
+      this.Bug.module_id = data.module_id
+    },
+
+    // get $emit commponents fileupload data
     getAnnex (data) {
       this.Bug.annex = data
     },

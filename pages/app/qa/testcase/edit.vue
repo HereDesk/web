@@ -2,25 +2,22 @@
   <div id="page-testcase-edit">
     <BaseNav :title="title"></BaseNav>
 
-    <div id='page-testcase-edit-input' class='container pg-test-edit mt-5'>
-      <div id="page-body" class='row' style='margin:0;'>
+    <div id='page-testcase-edit-input' class="container mt-5 pg-test-edit ">
+      <div id="page-body" class="row m-0">
 
-        <div class='col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 offset-xl-1 offset-lg-1'>
+        <div class="col-lg-10 col-md-12 offset-lg-1">
           <div id="case-product" class='form-group row'>
             <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
               产品与模块
             </label>
-            <el-select class='col-md-3 col-sm-4 col-6' placeholder="请选择产品" 
-              v-model="CaseData.product_code" disabled>
-              <el-option v-for="item in product_list" :key="item.product_code" 
-                :label="item.product_code" :value="item.product_code">
-              </el-option>
-            </el-select>
-            <el-cascader class="col-md-3 col-sm-4 col-6" placeholder="选择模块"
-              :options="modules_list" 
-              v-model="CaseData.module_id" f
-              ilterable >
-            </el-cascader>
+            <div class="col-md-6 col-sm-8 col-12">
+              <ProductInfo
+                :ptype="'case_add'" 
+                :editData="CaseData" 
+                :showVersionInfo="true" 
+                @ProductInfo="GetProductInfo">
+              </ProductInfo>
+            </div>
           </div>
 
           <div id="case-info" class='form-group row'>
@@ -197,9 +194,15 @@ export default {
   },
 
   methods: {
+    // get $emit data
+    GetProductInfo (data)  {
+      this.CaseData.product_code = data.product_code
+      this.CaseData.module_id = data.module_id
+    },
     getAnnex (data) {
       this.CaseData.annex = data
     },
+    
     getCaseDetails () {
       this.axios
         .get('/api/qa/testcase/details?case_id=' + this.case_id)

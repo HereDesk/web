@@ -3,7 +3,7 @@
 
     <!-- 缺陷/用例：创建、编辑 -->
     <div id="product-version-module" class="container-fluid px-0" 
-      v-if="['bug_add','case_add'].includes(ptype)">
+      v-if="['bug_edit','case_add'].includes(ptype)">
       <div class="row">
         <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
           <el-option 
@@ -14,7 +14,7 @@
           </el-option>
         </el-select>
         <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" 
-          v-if="['bug_add'].includes(ptype)">
+          v-if="['bug_edit'].includes(ptype)">
           <el-option 
             v-for="(item,index) in release_list" 
             :key="index" 
@@ -103,7 +103,7 @@ export default {
     showStyle: String,
     ptype: String,
     showVersionInfo: Boolean,
-    fillData: {}
+    editData: Object
   },
   
   data () {
@@ -129,7 +129,6 @@ export default {
     // emit info
     EmitInfo: function() {
       let { product_code, release, module_id, PageMsg } = this
-      console.log({product_code, release, module_id,PageMsg});
       return {product_code, release, module_id,PageMsg}
     },
 
@@ -160,11 +159,10 @@ export default {
     
     product_code: function (val, oldVal) {
       if (this.product_code) {
-        this.$router.replace( this.$route.path + "?product_code=" + this.product_code)
+        // this.$router.replace(this.$route.path + "?product_code=" + this.product_code)
         if (process.browser) {
           window.localStorage.setItem("last_visited_product", this.product_code)
         }
-        
         if (!['only-product-name','case_index','bug_index'].includes(this.ptype)) {  
           const ProductModulesInfo = this.$store.state.ProductModulesInfo
           if (JSON.stringify(ProductModulesInfo) !== '{}') {
@@ -178,12 +176,25 @@ export default {
       }
     },
     
+    editData: {
+      handler: function (val, oldVal) {
+        const isEdit = Boolean(JSON.stringify(this.editData))
+        if (isEdit) {
+          this.product_code = this.editData.product_code
+          this.module_id = this.editData.module_id
+          this.release = this.editData.release
+        }
+      },
+      deep: true
+    },
     product_list: {
       handler: function (val, oldVal) {
-        let route = this.$route.query
-        const last_visited_product = process.browser ? window.localStorage.last_visited_product : undefined
-        
-        if (JSON.stringify(this.product_list) !== '[]') {
+        const isEdit = Boolean(JSON.stringify(this.editData))
+        const route = this.$route.query
+        const last_visited_product = process.browser & isEdit 
+          ? window.localStorage.last_visited_product 
+          : undefined
+        if (JSON.stringify(this.product_list) !== '[]' & !isEdit) {
           if (route.product_code) {
             this.product_code = route.product_code
           } else if (last_visited_product) {
@@ -198,8 +209,11 @@ export default {
     
     release_list: {
       handler: function (val,oldVal) {
-        this.release_list ? 
+        const isEdit = Boolean(JSON.stringify(this.editData))
+        if (!isEdit) {
+          this.release_list ? 
           this.release = this.release_list[0]['version'] : this.release = ''
+        }
       },
       deep: true
     }

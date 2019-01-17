@@ -106,19 +106,17 @@
                 </el-table-column>
                 <el-table-column label='评审' width='70'>
                   <template slot-scope="scope">
-                    <span>
-                      {{ scope.row.isReview === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
-                    </span>
+                    {{ scope.row.isReview === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
                   </template>
                 </el-table-column>
                 <el-table-column label='状态' width='65'>
                   <template slot-scope="scope">
-                    <span>{{ scope.row.status === 1 ? '无效' : '' }}</span>
+                    {{ scope.row.status === 1 ? '无效' : '' }}
                   </template>
                 </el-table-column>
                 <el-table-column label='变更' width='60'>
                   <template slot-scope="scope">
-                    <span>{{ scope.row.isChange === 1 ? '是' : '-' }}</span>
+                    {{ scope.row.isChange === 1 ? '是' : '-' }}
                   </template>
                 </el-table-column>
                 <el-table-column label='创建' prop="creator" sortable width='100'></el-table-column>
@@ -133,12 +131,14 @@
                   <template slot-scope="scope">
                     <div class="display-none pt-2" 
                       :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
-                      <button v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
+                      <span v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
-                      </button>
-                      <button v-if="scope.row.status === 0 && CaseRules.edit" @click="handleEdit(scope.row)">
-                        <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
-                      </button>
+                      </span>
+                      <span class="ml-3" v-if="scope.row.status === 0 && CaseRules.edit" @click="handleEdit(scope.row)">
+                        <nuxt-link :to="{path:'/app/qa/testcase/edit',query:{'case_id':scope.row.case_id}}">
+                          <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
+                        </nuxt-link>
+                      </span>
                     </div>
                   </template>
                 </el-table-column>

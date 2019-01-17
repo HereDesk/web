@@ -157,7 +157,7 @@ export default {
         if (res.data["status"] === 20000) {
 					this.showModal = false
           this.$notify.success({ title: "成功", message: res.data["msg"]})
-          this.getRelease()
+          this.getReleaseList()
         }
         if (res.data["status"] !== 20000) {
           this.$notify.error({ title: "错误", message: res.data["msg"] })

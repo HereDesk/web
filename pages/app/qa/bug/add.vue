@@ -11,7 +11,7 @@
               产品与模块<span class="text-red">*</span>
             </label>
             <div class="col-lg-6 col-md-10 col-sm-12 col-12">
-              <ProductInfo :ptype="'bug_add'" :showVersionInfo="true" @ProductInfo="GetProductInfo"></ProductInfo>
+              <ProductInfo :ptype="'bug_edit'" :showVersionInfo="true" @ProductInfo="GetProductInfo"></ProductInfo>
             </div>
           </div>
           
