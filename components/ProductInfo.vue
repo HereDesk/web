@@ -21,6 +21,11 @@
             :label="item.version" 
             :value="item.version">
           </el-option>
+          <!-- <el-option value="create">
+            <a :href="'/app/products/release?product_code=' + product_code">
+              创建新版本
+            </a>
+          </el-option> -->
         </el-select>
         <el-cascader id="info-modules" class="col" 
           :options="modules_list" 

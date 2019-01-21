@@ -17,40 +17,91 @@ export default {
     let date = new Date(str)
     return date.getDay()
   },
-	
+  
   date (str, type) {
     if (!str) {
       return '';
     }
+    let dd = new Date("2019-02-01 23:59:59")
+    var preDate = new Date(dd.getTime() - 24*60*60*1000)
+    console.log(preDate)
+
     let date = new Date(str);
-    let Y = date.getFullYear();
-    let M = date.getMonth() + 1;
-    let D = date.getDate();
-    let h = date.getHours();
-    let m = date.getMinutes();
-    let s = date.getSeconds();
-    let add0 = function (number) {
+    // 换算为时间戳
+    let param_timestamp = date.getTime();
+    let param_year = date.getFullYear();
+    let param_month = date.getMonth() + 1;
+    let param_day = date.getDate();
+    let param_hours = date.getHours();
+    let param_minutes = date.getMinutes();
+    let param_seconds = date.getSeconds();
+
+    let now = Date.now();
+    let current_datetimt = new Date(now);
+
+    let currdate_year = current_datetimt.getFullYear();
+    let currdate_month = current_datetimt.getMonth() + 1;
+    let currdate_day = current_datetimt.getDate();
+    let currdate_hours = current_datetimt.getHours();
+    let currdate_min = current_datetimt.getMinutes();
+    let currdate_sec = current_datetimt.getSeconds();
+    // 得到昨天的日期
+    let get_curr_pre_datetime = new Date(current_datetimt.getTime() - 24*60*60*1000)
+    let current_pre_date = get_curr_pre_datetime.getDate()
+
+    let diff_seconds = Math.floor((now - param_timestamp) / 1000);
+    let diff_minutes = Math.floor(diff_seconds / 60);
+    let diff_hours = Math.floor(diff_minutes / 60);
+    let diff_days = Math.floor(diff_hours / 24);
+    let diff_months = Math.floor(diff_days / 30);
+    let diff_years = Math.floor(diff_months / 12);
+    
+    let format_date = function (number) {
       return /^\d$/.test(number) ? '0' + number : number;
     };
     // 显示全部
     if (!type || type == 1) {
-      return Y + '-' + add0(M) + '-' + add0(D) + ' ' + add0(h) + ':' + add0(m) + ':' + add0(s);
+      return param_year + '-' + format_date(param_month) + '-' + format_date(param_day) + ' ' 
+        + format_date(param_hours) + ':' + format_date(param_minutes) + ':' + format_date(param_seconds);
     }
-    // 去年去秒
+    // 显示：01/01 01:01
     else if (type == 2) {
-      return add0(M) + '/' + add0(D) + ' ' + add0(h) + ':' + add0(m);
+      return format_date(param_month) + '/' + format_date(param_day) + ' ' 
+        + format_date(param_hours) + ':' + format_date(param_minutes);
     }
-    // 去年去秒
+    // 只显示年月日
     else if (type == 3) {
-      return Y + '-' + add0(M) + '-' + add0(D)
+      return param_year + '-' + format_date(param_month) + '-' + format_date(param_day)
     }
     // 只显示时分秒
     else if (type == 4) {
-      return add0(h) + ':' + add0(m) + ':' + add0(s)
+      return format_date(param_hours) + ':' + format_date(param_minutes) + ':' + format_date(param_seconds)
     }
     else if (type == 5) {
-      return add0(Y) + '/' + add0(M) + '/' + add0(D)
+      return format_date(param_year) + '/' + format_date(param_month) + '/' + format_date(param_day)
     } 
+    else if (type == 6) {
+      if (diff_days === 0 & currdate_day === param_day) {
+        if (diff_hours === 0) {
+          if (diff_minutes > 0) {
+            return diff_minutes + "分钟前"
+          } else {
+            diff_seconds === 0 ? (diff_seconds = 1) : diff_seconds
+            return diff_seconds + "秒前"
+          }
+        } else {
+          return diff_hours + "小时前"
+        }
+      } else if(currdate_day !== param_day & current_pre_date === param_day){
+        return "昨天"
+      } else {
+        if (currdate_year === param_year) {
+          return format_date(param_month) + '-' + format_date(param_day)
+        } else {
+          return param_year + '-' + format_date(param_month) + '-' + format_date(param_day)
+        }
+      }
+    }
   },
 	
   bugStatusName (data) {

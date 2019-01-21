@@ -157,8 +157,8 @@
               <el-table :data='tableData' 
                 :default-sort="{prop: 'date', order: 'descending'}" 
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
-                <el-table-column label='ID' prop='id' sortable width='63'></el-table-column>
-                <el-table-column label='状态' prop="status" align="center" width='100' sortable>
+                <el-table-column label='ID' prop='id' sortable width='50' show-overflow-tooltip></el-table-column>
+                <el-table-column label='状态' width='85' show-overflow-tooltip sortable>
                   <template slot-scope="scope">
                     <span class="circle-content" 
                       :class="{ 'text-secondary': scope.row.status === 'Closed',
@@ -189,16 +189,25 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label='创建' prop='creator_user' align="center" sortable width='85' show-overflow-tooltip>
+                <el-table-column label='创建' prop='creator_user' align="center" 
+                  sortable width='85' show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label='指派' prop='assignedTo_user' align="center"
+                  sortable width='85' show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column label="最后更新" align="center" width="110">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.last_time | date(5) }}</span>
+                    <span>{{ scope.row.last_time | date(6) }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label='指派' prop='assignedTo_user' align="center" sortable width='85' show-overflow-tooltip>
+                <el-table-column label="最后操作" align="center" width='85' show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <span :class="{'display-none': scope.row.bug_id == HoverBugId}">
+                      {{scope.row.last_operation_user}}
+                    </span>
+                  </template>
                 </el-table-column>
-                <el-table-column label='解决方案' width='91' align="center">
+                <!-- <el-table-column label='解决方案' width='91' align="center">
                   <template slot-scope="scope">
                     <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
                       <span :class="[ scope.row.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
@@ -206,25 +215,25 @@
                       </span>
                     </div>
                   </template>
-                </el-table-column>
-                <el-table-column label='' width="50">
+                </el-table-column> -->
+                <el-table-column label='' width="48">
                   <template slot-scope="scope">
-                    <div class="display-none":class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 
+                    <div class="display-none" :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 
                       'hideText': scope.row.status == 'Closed'}">
-                      <button v-if="scope.row.creator_id === myUID">
+                      <span v-if="scope.row.creator_id === myUID">
                         <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
-                          <i class="iconfont icon-edit icon-8a8a8a size-1-3"></i>
+                          <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1"></i>
                         </nuxt-link>
-                      </button>
-                      <button @click="skipAssign(scope.row)">
-                        <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
-                      </button>
-                      <button @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
-                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6"></i>
-                      </button>
-                      <button @click="BugClosedDialog(scope.row)" v-if="uGroup">
+                      </span>
+                      <span @click="BugClosedDialog(scope.row)">
                         <i class="iconfont icon-close-opera icon-8a8a8a size-1-5"></i>
-                      </button>
+                      </span>
+                      <span @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
+                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6"></i>
+                      </span>
+                      <span @click="skipAssign(scope.row)">
+                        <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
+                      </span>
                     </div>
                   </template>
                 </el-table-column>
@@ -261,7 +270,7 @@
                           :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
                         {{ item.solution_name }}</p>
                       </span> 
-                      <span>最后更新: {{ item.last_time | date(5) }}</span>
+                      <span>最后更新: {{ item.last_time | date(6) }}</span>
                     </div>
                     <div id="data-action" class="float-right display-inline" style="margin-top:-1rem;"
                       :class="{'display-none': item.status == 'Closed', 'action': item.status != 'Closed' }">
@@ -464,7 +473,7 @@ export default {
       // Define Data: Bug-Order
       sort_text: '倒',
       order_list: data.order_list,
-      selected_order: this.$route.query.order || "create_time",
+      selected_order: this.$route.query.order || "last_time",
       
       // Define Data: Bug-more-quick-operate
       operate: this.$route.query.operate || "no",
@@ -602,7 +611,7 @@ export default {
     // userinfo group
     uGroup: function() {
       let userInfo = this.$store.state.userInfo
-      return userInfo.group === "test" ? userInfo.group : null
+      return userInfo.group !== "test" ? true : false
     },
     myUID: function() {
     	let userInfo = this.$store.state.userInfo
@@ -933,5 +942,17 @@ export default {
 </script>
 
 <style>
-  @import "~/assets/css/test.css"
+  @import "~/assets/css/test.css";
+
+  .table-operate-icon {
+    display: inline;
+    position:absolute;
+    margin-left: -7rem;
+    margin-top: -1rem;
+  }
+  .table-operate-icon span {
+    display:inline-block;
+    z-index: 9999;
+    padding: 0 0.2rem;
+  }
 </style>

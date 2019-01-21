@@ -123,7 +123,7 @@
                 <el-table-column label='最后更新时间' sortable width='165'>
                   <template slot-scope="scope">
                     <span :class="{ 'hideText' : scope.row.case_id === HoverTestcase_id }">
-                      {{ scope.row.update_time | date }}
+                      {{ scope.row.update_time | date(6) }}
                     </span>
                   </template>
                 </el-table-column>

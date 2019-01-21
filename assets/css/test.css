@@ -143,21 +143,19 @@
 .showBugOpreate {
   position: absolute;
   display: inline;
-  margin-left: -7rem;
+  margin-left: -5.5rem;
   margin-top: -1rem;
+  float: right !important;
   background-color: inherit;
 }
 
-.showBugOpreate button {
-  outline: none;
-  background: inherit;
-  border: none;
+.showBugOpreate span {
   display: inline-block;
   z-index: 9999;
-  padding: 0 0.2rem;
+  padding-left: 0.15rem;
 }
 
-.showBugOpreate button:last-child {
+.showBugOpreate span:last-child {
   padding-right: 0;
 }
 
