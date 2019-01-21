@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import data from "~/assets/js/data.js"
 
 export default {
@@ -61,7 +60,7 @@ export default {
     	let ModifyData = {}
     	ModifyData.bug_id = this.bug_id
     	ModifyData.severity = data
-    	axios({
+    	this.axios({
     		method: "post",
     		url: "/api/qa/bug/edit",
     		data: JSON.stringify(ModifyData)
@@ -79,7 +78,7 @@ export default {
       let ModifyData = {}
       ModifyData.bug_id = this.bug_id
       ModifyData.priority = data
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/edit",
         data: JSON.stringify(ModifyData)

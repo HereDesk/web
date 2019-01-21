@@ -85,7 +85,7 @@ export default {
       this.ResolveData.bug_id = this.bug_id;
       // this.ResolveData.assignedTo = this.PageData.openedBy
       this.ResolveData.solution = this.scheme;
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/resolve",
         data: JSON.stringify(this.ResolveData)

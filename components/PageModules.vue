@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import axios from "axios"
 // let _ = require("lodash/Collection")
 
 export default {
@@ -75,7 +74,7 @@ export default {
     // 获取所有模块
     getModule() {
       if (!this.product_code) {return}
-      axios.get("/api/pm/get_module?product_code=" + this.product_code)
+      this.axios.get("/api/pm/get_module?product_code=" + this.product_code)
         .then(res => {
           if (res.data["status"] === 20000) {
             const data = res.data["data"]

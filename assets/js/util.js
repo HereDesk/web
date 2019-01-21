@@ -22,9 +22,6 @@ export default {
     if (!str) {
       return '';
     }
-    let dd = new Date("2019-02-01 23:59:59")
-    var preDate = new Date(dd.getTime() - 24*60*60*1000)
-    console.log(preDate)
 
     let date = new Date(str);
     // 换算为时间戳

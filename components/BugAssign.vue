@@ -40,8 +40,6 @@
 </template>
  
 <script>
-import axios from "axios"
-
 export default {
   props: {
     bug_id: String,
@@ -73,7 +71,7 @@ export default {
         return
       }
       this.AssignData.bug_id = this.bug_id
-      axios({
+      this.axios({
         method: "post",
         url: "/api/qa/bug/assign",
         data: JSON.stringify(this.AssignData)

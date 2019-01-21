@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -55,7 +54,7 @@ export default {
   methods: {
     // get product info and release info 
     getProductRelease () {
-      axios.get('/api/pm/product_release').then(res => {
+      this.axios.get('/api/pm/product_release').then(res => {
         if (res.data['status'] === 20000) {
           this.product_list = res.data['data']
           this.loading = false
