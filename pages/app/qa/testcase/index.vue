@@ -11,9 +11,8 @@
         </PageModules>
       </div>
 
-      <div id="product-modules-switch" style="position: absolute;z-index: 9;" class="pl-4 mt-2 medium-devices-no" 
-        @click="switchModule()">
-        <i class="iconfont bg-EEEEEE py-2" style="visibility:hidden;"
+      <div id="product-modules-switch" class="pl-4 mt-2 dataModule" @click="switchModule()">
+        <i class="iconfont Bg-EEEEEE py-2" style="visibility:hidden;"
           :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
       </div>
 
