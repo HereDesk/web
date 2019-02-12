@@ -21,12 +21,12 @@
         <div class="container-fluid">
 					
           <div id="bug-nav-manage" class="row">
-            <div id="bug-query-1" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 my-2">
+            <div id="bug-query-1" class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 my-2">
               
               <ProductInfo :ptype="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
 
-              <el-dropdown id="bug-query-status" class="mr-1 my-1">
+              <el-dropdown id="bug-query-status" class="mr-1 my-1" :class="{ 'd-none': isShowAdSearch === 'yes' }">
                 <span>
                   <span class="el-dropdown-desc">状态:</span>
                   <span class="el-dropdown-link bg-edown">
@@ -35,61 +35,16 @@
                   </span>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in status_list" :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.status_name }}</span>
+                  <el-dropdown-item v-for="(item,index) in status_list" :key="index">
+                    <span @click="handleCommand(item)">
+                      {{ item.status_name }}</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <!-- <el-dropdown id="bug-query-quick" class="mr-1 my-1">
-                <span>
-                  <span class="el-dropdown-desc">快捷操作:</span>
-                  <span class="el-dropdown-link bg-edown" :class="{ '2973B7': operate != 'no' }">
-                    {{ operate | QuickQperationName }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
-                    <span :id="item.quick_value" @click="handleCommand(item)">
-                      {{ item.quick_name }}
-                    </span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown> -->
-              
-              <!-- <el-dropdown id="bug-query-priority" class="mr-1 my-1">
-                <span>
-                  <span class="el-dropdown-desc">优先级:</span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_priority == 'all' ? "全部" : selected_priority }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in priority_list" :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.priority_name }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <el-dropdown id="bug-query-order" class="bug-sort mr-1 my-1">
-                <span>
-                  <span class="el-dropdown-desc" @click="SortData($event)">
-                    按<span class="sort_text">{{sort_text}}</span>序:
-                  </span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_order.replace('-','') | filterOrder }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in order_list" :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.order_name }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+
               <el-dropdown id="bug-query-quick" class="mr-1 my-1">
                 <span>
-                  <span class="el-dropdown-desc">快捷操作:</span>
+                  <span class="el-dropdown-desc">快捷:</span>
                   <span class="el-dropdown-link bg-edown" :class="{ '2973B7': operate != 'no' }">
                     {{ operate | QuickQperationName }}
                     <i class="el-icon-arrow-down el-icon--right"></i>
@@ -102,109 +57,195 @@
                     </span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
-              </el-dropdown> -->
+              </el-dropdown>
             </div>
-
-            <div id="bug-query-2" class="col-xl-4 col-lg-8 col-md-8 col-sm-8 col-12 pt-1 my-2">
+            <div id="bug-query-2" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12 pt-1 px-0 my-2">
               <div class="input-group align-items-center">
-                <input type="text" 
-                  class="form-control border-radius-5" 
+                <div id="ordinary-search" class="input-group-prepend">
+                  <span id="basic-addon" class="input-group-text" style="height: calc(2.05rem + 2px);">
+                    <i class="iconfont icon-search icon-E0E0E0"></i>
+                  </span>
+                </div>
+                <input id="id-title-search" type="text" 
+                  class="form-control search-control" 
                   placeholder="搜索ID、或标题..." 
-                  v-model="wd"
-                  aria-label="Recipient's username" 
-                  aria-describedby="basic-addon2" 
-                  style="height: calc(2.05rem + 2px);">
-                <div>
-                  <span id="basic-addon" class="mx-3" style="height: calc(2.05rem + 2px);">高级搜索</span>
+                  v-model="wd">
+                <div id="advanced-search" @click="unfoldAdvancedSearch()">
+                  <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
                 </div>
               </div>
             </div>
             <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12 vertical-center my-2">
+              <nuxt-link to='/app/qa/bug/add' id="bug-create" class="ml-3">
+                <button type="btn" class="btn btn-create">+ 创建</button>
+              </nuxt-link>
               <el-dropdown trigger="click">
                 <span id="bug-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="iconfont icon-40 size-1-5"></i>
+                  <i class="iconfont icon-more-z size-1-5 mx-2" title="更多操作"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
+                  <el-dropdown-item id="bug-style-switch" class="px-2">
                     <span class="searchIcon" title="切换样式" @click="switchStyle()">
                       <i class="iconfont icon-table-list icon-8a8a8a size-1-2 mr-2"></i>切换样式
                     </span>
                   </el-dropdown-item>
-                  <el-dropdown-item>
+                  <el-dropdown-item id="bug-export" class="px-2">
                     <span title="导入导出" @click="showModal = 'export'">
                       <i class="iconfont icon-import-export icon-8a8a8a size-1-2 mr-2"></i>导入导出
                     </span>
                   </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <nuxt-link to='/app/qa/bug/add' class="ml-3">
-                <!-- <i class="iconfont icon-add1 icon-8a8a8a size-1-8"></i> -->
-                <button type="btn" class="btn btn-create">+ 创建</button>
-              </nuxt-link>
-              
-              <!-- <span class="searchIcon mr-3" @click="clickSearch()">
-                <i class="iconfont icon-search size-1-3 icon-8a8a8a"></i>
-              </span>-->
-              <!-- 
-              <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
-                <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
-              </span> -->
-            </div>
-          </div>
-
-          <div id="about-search-input" class="row pt-3 hiddenSearch" style="border-bottom:1px solid #C5CAE9"
-            :class="{ showSearch: isShowSearch }">
-            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-6 px-0 text-center">
-              <el-dropdown id="page-query-product" class="my-1" trigger="click">
-                <span class="el-dropdown-link bg-edown bg-white text-center">
-                  {{ SearchCriteria.SearchType  | filterSearchType }}
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for='item in SearchType' :key="item.id">
-                    <span @click="handleCommand(item)">{{ item.search_name }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <el-dropdown id="page-query-version" class="my-1" trigger="click">
-                <span class="el-dropdown-link bg-edown text-center" style="font-weight:500">
-                  {{ SearchCriteria.Operators | filterOperators }}
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in OperatorsList" :key="item.id">
-                    <span @click="handleCommand(item)">
-                      {{ item.OperatorsName }}
+                  <el-dropdown-item id="bug-today-count" class="px-2">
+                    <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
+                      <i class="iconfont icon-web-icon- icon-8a8a8a size-1-5"></i> 今日数据
                     </span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div class="col-xl-10 col-lg-9 col-md-9 col-sm-6 col-6" style="display: flex;justify-content:flex-start;">
-              <input type="date" class="border-none font-size-90" 
-                v-if="SwitchSearchInput == 'date'" 
-                v-model="SearchCriteria.start_date">
-              <input type="date" class="border-none font-size-90" 
-                v-else-if="SwitchSearchInput == 'date_range'"
-                v-model="SearchCriteria.start_date">
-              <input type="date" class="border-none font-size-90" 
-                v-else-if="SwitchSearchInput == 'date_range'" 
-                v-model="SearchCriteria.end_date">
-              <input type="text" id="bugSearchInput" class="border-none" 
-              	v-else
-              	placeholder="输入关键字进行搜索..."
-              	v-model="wd" autofocus />
+          </div>
+
+          <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }">
+            <div id="bug-search-sort" class="col-12 sa-grid-item">
+              <span class="sa-desc">顺序：</span>
+              <div class="d-inline sc-context">
+                <span>
+                  <input type="radio" name="sort" :value="'-'" v-model="advanced_search.sort">
+                  <label>倒序</label>
+                </span>
+                <span>
+                  <input type="radio" name="sort" :value="'+'" v-model="advanced_search.sort">
+                  <label>正序</label>
+                </span>
+              </div>
+            </div>
+            <div id="bug-search-sort-field" class="col-12 sa-grid-item">
+              <span class="sa-desc">排序字段：</span>
+              <div class="d-inline sc-context">
+                <div class="d-inline" v-for="(item,index) in order_list" :key="index">
+                  <span>
+                    <input type="radio" :value="item.order_value" 
+                      v-model="sort_field">
+                    <label>{{item.order_name}}</label>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div id="bug-search-status" class="col-12 sa-grid-item">
+              <span class="sa-desc">状态：</span>
+              <div class="d-inline sc-context">
+                <div class="d-inline" v-for="(item,index) in status_list" :key="index">
+                  <span v-if="!['all','notClosed'].includes(item.status_value)">
+                    <input type="checkbox" :value="item.status_value" 
+                      v-model="advanced_search.status_list">
+                    <label>{{item.status_name}}</label>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div id="bug-search-severity" class="col-12 sa-grid-item">
+              <span class="sa-desc">严重程度：</span>
+              <div class="d-inline sc-context">
+                <span v-for="(item,index) in severity_list" :key="index">
+                  <input type="checkbox" :value="item.severity_value"
+                    v-model="advanced_search.severity_list">
+                  <label>{{item.severity_name}}</label>
+                </span>
+              </div>
+            </div>
+            <div id="bug-search-priority" class="col-12 sa-grid-item">
+              <span class="sa-desc">优先级：</span>
+              <div class="d-inline sc-context">
+                <div class="d-inline" v-for="(item,index) in priority_list" :key="index">
+                  <span v-if="!['all'].includes(item.priority_value)">
+                    <input type="checkbox" :value="item.priority_name" 
+                      v-model="advanced_search.priority_list">
+                    <label>{{item.priority_name}}</label>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="w-100"></div>
+            <div id="bug-search-creator" class="col-12 sa-grid-item">
+              <span class="sa-desc">创建人员：</span>
+              <el-input v-model="advanced_search.creator" placeholder="输入名字，多个以空格分割..."></el-input>
+            </div>
+            <div id="bug-search-creator" class="col-12 sa-grid-item">
+              <span class="sa-desc">指派给谁：</span>
+              <el-input v-model="advanced_search.assignedTo_user" placeholder="输入名字，多个以空格分割..."></el-input>
+            </div>
+            <div class="w-100"></div>
+            <div id="bug-search-creator" class="col-12 sa-grid-item">
+              <span class="sa-desc">谁解决的：</span>
+              <el-input v-model="advanced_search.fixed_user" placeholder="输入名字，多个以空格分割..."></el-input>
+            </div>
+            <div id="bug-search-creator" class="col-12 sa-grid-item">
+              <span class="sa-desc">谁关闭的：</span>
+              <el-input v-model="advanced_search.closed_user" placeholder="输入名字，多个以空格分割..."></el-input>
+            </div>
+            <div class="w-100"></div>
+            
+            <div id="bug-search-create-time" class="col-12 sa-grid-item">
+              <span class="sa-desc">创建时间：</span>
+              <el-date-picker
+                v-model="advanced_search.create_time"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </div>
+            <div id="bug-search-create-time" class="col-12 sa-grid-item">
+              <span class="sa-desc">解决时间：</span>
+              <el-date-picker
+                v-model="advanced_search.fixed_time"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss">
+              </el-date-picker>
+            </div>
+            <div id="bug-search-assignedTo-time" class="col-12 sa-grid-item">
+              <span class="sa-desc">指派时间：</span>
+              <el-date-picker
+                v-model="advanced_search.assignedTo_time"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </div>
+            <div id="bug-search-closed-time" class="col sa-grid-item">
+              <span class="sa-desc">关闭时间：</span>
+              <el-date-picker
+                v-model="advanced_search.closed_time"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </div>
+
+            <div class="col-12 text-center mt-3">
+              <button type="button" class="btn-ad-search" @click="isShowAdSearch = 'no'">隐藏</button>
+              <button type="button" class="btn-ad-search" @click="resetAdvancedSearch()">重置</button>
+              <button type="button" class="btn-ad-search" @click="getAdvancedSearch()">高级搜索</button>
             </div>
           </div>
 
           <!-- table: 数据展示 -->
-          <div id="bug-data-list" class='row mt-3 mb-5 table_data'>
+          <div id="bug-data-list" class="row mt-3 mb-5 table_data">
             <!-- style: table -->
-            <div id="bug-table-style" class='col px-0' v-if="DataShowStyle == 'table'">
+            <div id="bug-table-style" class="col px-0" v-if="DataShowStyle == 'table'">
               <el-table :data='tableData' 
                 :default-sort="{prop: 'date', order: 'descending'}" 
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
-                <el-table-column label='ID' prop='id' sortable width='50' show-overflow-tooltip></el-table-column>
-                <el-table-column label='状态' width='85' show-overflow-tooltip sortable>
+                <el-table-column label="ID" prop="id" width="50" show-overflow-tooltip sortable>
+                </el-table-column>
+                <el-table-column label="状态" width="85" show-overflow-tooltip sortable>
                   <template slot-scope="scope">
                     <span class="circle-content" 
                       :class="{ 'text-secondary': scope.row.status === 'Closed',
@@ -215,15 +256,15 @@
                     </span>
                   </template>
                 </el-table-column>
-                <el-table-column label='标题' show-overflow-tooltip>
+                <el-table-column label="标题" show-overflow-tooltip>
                   <template slot-scope="scope">
-                    <nuxt-link 
-                      :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}" style="color:#424242">
+                    <nuxt-link style="color:#424242"
+                      :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}">
                     {{ scope.row.title }}
                     </nuxt-link>
                   </template>
                 </el-table-column>
-                <el-table-column label='优先级' prop="priority" align="center" width='95' sortable>
+                <el-table-column label="优先级" prop="priority" align="center" width="95" sortable>
                   <template slot-scope="scope">
                     <div @click="BugPriorityDialog(scope.row)">
                       <span class="circle-content font-color-757575"
@@ -235,18 +276,18 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label='创建' prop='creator_user' align="center" 
-                  sortable width='85' show-overflow-tooltip>
+                <el-table-column label="创建" prop="creator_user" align="center" width="85"
+                  sortable  show-overflow-tooltip>
                 </el-table-column>
-                <el-table-column label='指派' prop='assignedTo_user' align="center"
-                  sortable width='85' show-overflow-tooltip>
+                <el-table-column label="指派" prop="assignedTo_user" align="center" width="85"
+                  sortable show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column label="最后更新" align="center" width="110">
                   <template slot-scope="scope">
                     <span>{{ scope.row.last_time | date(6) }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="最后操作" align="center" width='85' show-overflow-tooltip>
+                <el-table-column label="最后操作" align="center" width="85" show-overflow-tooltip>
                   <template slot-scope="scope">
                     <span :class="{'display-none': scope.row.bug_id == HoverBugId}">
                       {{scope.row.last_operation_user}}
@@ -262,23 +303,24 @@
                     </div>
                   </template>
                 </el-table-column> -->
-                <el-table-column label='' width="48">
+                <el-table-column label="" width="48">
                   <template slot-scope="scope">
-                    <div class="display-none" :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 
-                      'hideText': scope.row.status == 'Closed'}">
-                      <span v-if="scope.row.creator_id === myUID">
+                    <div class="display-none" 
+                      :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 
+                        'hideText': scope.row.status == 'Closed'}">
+                      <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID">
                         <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
-                          <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1"></i>
+                          <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
                         </nuxt-link>
                       </span>
-                      <span @click="BugClosedDialog(scope.row)">
-                        <i class="iconfont icon-close-opera icon-8a8a8a size-1-5"></i>
+                      <span id="icon-bug-close" @click="BugClosedDialog(scope.row)">
+                        <i class="iconfont icon-close-opera icon-8a8a8a size-1-5" title="关闭缺陷"></i>
                       </span>
-                      <span @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
-                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6"></i>
+                      <span id="icon-bug-resolve" @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
+                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6" title="解决缺陷"></i>
                       </span>
-                      <span @click="skipAssign(scope.row)">
-                        <i class="iconfont icon-assign icon-8a8a8a size-2"></i>
+                      <span id="icon-bug-assign" @click="skipAssign(scope.row)">
+                        <i class="iconfont icon-assign icon-8a8a8a size-2" title="指派给他人"></i>
                       </span>
                     </div>
                   </template>
@@ -297,7 +339,7 @@
                     </nuxt-link>
                   </p>
                   <div id="data-buginfo" class="my-2">
-                    <div id="data-detailed-information" class="display-inline data-liststyle-satellite">
+                    <div id="data-detailed-information" class="d-inline data-liststyle-satellite">
                       <span class="circle-content" @click="BugPriorityDialog(item)"
                         :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
                         {{ item.priority }}
@@ -312,13 +354,14 @@
                       <span>@指派: {{ item.assignedTo_user }}</span>
                       <span v-if="item.fixed_user">
                         @解决: {{ item.fixed_user }}&nbsp;|&nbsp;
-                        <p class="display-inline" 
+                        <p class="d-inline" 
                           :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
-                        {{ item.solution_name }}</p>
+                          {{ item.solution_name }}
+                        </p>
                       </span> 
                       <span>最后更新: {{ item.last_time | date(6) }}</span>
                     </div>
-                    <div id="data-action" class="float-right display-inline" style="margin-top:-1rem;"
+                    <div id="data-action" class="float-right d-inline" style="margin-top:-1rem;"
                       :class="{'display-none': item.status == 'Closed', 'action': item.status != 'Closed' }">
                       <span @click="showModal = 'assign'">
                         <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
@@ -393,7 +436,9 @@
       <div slot="body" class="text-center my-5">
         <h3 style="font-weight: 300;">确定关闭此缺陷?</h3>
       </div>
-      <button slot="footer" type="submit" class="btn btn-primary" @click="ClosedBug()">确定</button>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="ClosedBug()">
+        确定
+      </button>
     </Modal>
     
     <!-- Action: Bug Expoert -->
@@ -402,7 +447,9 @@
       <div slot="body">
         <div class="row">
           <div class="col text-center">
-            <button type="button" class="btn btn-dark mt-3 mb-5" @click="bug_export">数据导出</button>
+            <button type="button" class="btn btn-dark mt-3 mb-5" @click="bug_export">
+              数据导出
+            </button>
             <p v-if="JSON.stringify(BugExportFile) !== '{}'">
               下载地址: <a :href="BugExportFile.url">{{ BugExportFile.filename }}</a>
             </p>
@@ -419,7 +466,8 @@
     </Modal>
   
     <!-- Data: Bug Count -->
-    <Modal id="modal-my-today" v-if="showModal == 'count-today'" @close="showModal = false" :isHeaderClose="true">
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'" 
+      @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
         <div class="modal-body text-center" v-if="MyTodayData">
@@ -510,38 +558,42 @@ export default {
       
       // Define Data: Bug-Status
       status_list: data.bug_status_list,
-      selected_status: this.$route.query.status || "notClosed",
+      selected_status: this.$route.query.status || "all",
       
       // Define Data: Bug-priority
       priority_list: data.priority_list,
-      selected_priority: this.$route.query.priority || "all",
+      selected_priority: [],
+
+      // Define Data: Bug-severity_list
+      severity_list: data.severity_list,
+      selected_severity: [],
       
       // Define Data: Bug-Order
-      sort_text: '倒',
+      sort_field: this.$route.query.sort_field || "last_time",
       order_list: data.order_list,
-      selected_order: this.$route.query.order || "last_time",
       
       // Define Data: Bug-more-quick-operate
       operate: this.$route.query.operate || "no",
       QuickQperationList: data.bug_quick_operation_list,
 
-      // Define Data: Bug-Search
-      SearchType: data.bug_search_type_list,
-      SearchCriteria: {
-        Operators: this.$route.query.Operators || "=",
-        SearchType: this.$route.query.SearchType || "ID",
-        start_date: String(this.$route.query.SearchType).includes('time') && 
-          (this.$route.query.wd).includes('#') 
-            ? String(this.$route.query.wd).split('#')[0]
-            : null,
-        end_date: String(this.$route.query.SearchType).includes('time') && 
-          (this.$route.query.wd).includes('#') 
-            ? String(this.$route.query.wd).split('#')[1]
-            : null,
-      },
       wd: this.$route.query.wd || '',
-      isShowSearch: this.$route.query.wd ? true : false,
+      isShowAdSearch: this.$route.query.isShowAdSearch || "no",
       
+      // advanced-search
+      advanced_search: {
+        sort: '-',
+        status_list: [],
+        priority_list: [],
+        severity_list: [],
+        create_time: [],
+        closed_time: [],
+        fiexed_time: [],
+        assignedTo_time: [],
+        fixed_user: '',
+        creator: '',
+        closed_user: '',
+        assignedTo_user: ''
+      },
       // Define components Data
       scheme: "Fixed",
       pageSource: "page_bug_index",
@@ -569,51 +621,30 @@ export default {
       return rules.RuleManges(group,PagesRules)
     },
 		
-    // version list
-    release_list: function() {
-      let arr = [{ version: "全部" }]
-      if (this.selected_product) {
-        for (let i in this.product_list) {
-          if (this.selected_product === this.product_list[i]["product_code"]) {
-            return arr.concat(this.product_list[i]["data"])
-          }
-        }
-      } else {
-        return null
-      }
-    },
-		
     // query condition
     QueryBuilder: function() {
+      const patternNumber = new RegExp("[0-9]+")
       let Builder = {}
       let tmp_release
-      let sort_symbol
-      this.sort_text.includes('倒') ? sort_symbol = '-' : sort_symbol = ''
       this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
       Builder["pageNumber"] = this.pageNumber
       Builder["pageSize"] = this.pageSize
+      Builder["isShowAdSearch"] = this.isShowAdSearch 
       Builder["product_code"] = this.selected_product
       Builder["release"] = tmp_release
-      Builder["status"] = this.selected_status
+      this.selected_status ? (Builder["status"] = this.selected_status) : undefined
       Builder["priority"] = this.selected_priority
-      Builder["order"] = sort_symbol + String(this.selected_order).replace('-','')
+      Builder["sort"] = this.advanced_search.sort
+      Builder["sort_field"] = this.sort_field
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
       if (this.operate != "no") {
         Builder["operate"] = this.operate
       }
-      if (this.isShowSearch) {
-        if (this.SearchCriteria.start_date && this.SearchCriteria.end_date) {
-          this.wd = this.SearchCriteria.start_date + '#' + this.SearchCriteria.end_date
-        } 
-        if (this.SearchCriteria.start_date && !this.SearchCriteria.end_date) {
-          this.wd = this.SearchCriteria.start_date
-        }
-        if (this.wd) {
-          Builder["Operators"] = this.SearchCriteria.Operators
-          Builder["SearchType"] = this.SearchCriteria.SearchType
-          Builder["wd"] = this.wd
-        }
+      if (this.wd) {
+        patternNumber.test(this.wd) ? Builder["SearchType"] = "ID" : Builder["SearchType"] = "title"
+        Builder["Operators"] = "like"
+        Builder["wd"] = this.wd
       }
       return Builder
     },
@@ -725,7 +756,9 @@ export default {
 				this.$route.query.product_code 
 					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder}) 
 					: this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
-				this.wd ? this.goSearch() : this.getBugList()
+        this.wd 
+          ? this.goSearch() 
+          : (this.isShowAdSearch === 'yes' ?  this.getAdvancedSearch() : this.getBugList())
 			}
 		}
   },
@@ -771,10 +804,7 @@ export default {
     /* 下拉相关操作 */
     handleCommand(data) {
       if ("order_name" in data) {
-        this.selected_order = data["order_value"]
-      }
-      if ("priority_name" in data) {
-        this.selected_priority = data["priority_value"]
+        this.sort_field = data["order_value"]
       }
       if ("status_name" in data) {
         this.operate = "no"
@@ -823,21 +853,60 @@ export default {
         })
     },
 		
-    /* bug query condition */
-    SortData() {
-      this.sort_text.includes('倒') ? this.sort_text = '正' : this.sort_text = '倒'
-    },
-		
 		/* Bug: show search input */
-    clickSearch() {
-      if (this.isShowSearch) {
-        this.isShowSearch = false
-        this.wd = ""
+    unfoldAdvancedSearch() {
+      if (this.isShowAdSearch == 'no') {
+        this.isShowAdSearch = 'yes'
       } else {
-        this.isShowSearch = true
+        this.isShowAdSearch = 'no'
+        this.wd = ""
       }
     },
-		
+    
+    /* bug adv search reset */
+    resetAdvancedSearch () {
+      this.advanced_search.sort = '-'
+      this.advanced_search.status_list = []
+      this.advanced_search.priority_list = []
+      this.advanced_search.severity_list = []
+    },
+
+    /* bug adv search */
+		getAdvancedSearch() {
+      let release
+      this.wd = ""
+      this.selected_release == "全部" ? (release = "all") : (release = this.selected_release)
+      let basic_query = {
+        "pageNumber": this.pageNumber,
+        "pageSize": this.pageSize,
+        "product_code": this.selected_product,
+        "release": release,
+        "sort_field": this.sort_field,
+        "isShowAdSearch": 'yes'
+      }
+      if (JSON.stringify(this.advanced_search.status_list) !== '[]') {
+        this.selected_status = 'all'
+      }
+      
+      let advanced_search = this.advanced_search
+      const merge_search = Object.assign(this.advanced_search, basic_query)
+
+      this.axios({
+        method: "POST",
+        url: "/api/qa/bug/search",
+        data: JSON.stringify(merge_search)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          this.tableData = res.data["data"]
+          this.total = res.data["total"]
+        } else {
+          this.tableData = []
+          this.total = 0
+          this.Msg = res.data["msg"]
+        }
+      })
+    },
+    
 		/* bug: search */
     goSearch() {
       let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
@@ -867,7 +936,7 @@ export default {
       }
       this.axios({
         method: "POST",
-        url: "/api/qa/bug/search?",
+        url: "/api/qa/bug/search",
         data: JSON.stringify(this.QueryBuilder)
       }).then(res => {
         if (res.data["status"] === 20000) {
@@ -955,6 +1024,7 @@ export default {
       this.HoverBugIdOpenBy = row.openedBy
       this.HoverBugId = row.bug_id
     },
+    
     tableLeave(row) {
       this.HoverBugId = ""
     },
@@ -987,18 +1057,68 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
   @import "~/assets/css/test.css";
 
-  .table-operate-icon {
-    display: inline;
-    position:absolute;
-    margin-left: -7rem;
-    margin-top: -1rem;
+  .input-group-text {
+    border:1px solid #eee !important;
+    border-right: none !important;
+    background-color: #FFF !important;
   }
-  .table-operate-icon span {
-    display:inline-block;
-    z-index: 9999;
-    padding: 0 0.2rem;
+  .search-control {
+    height: calc(2.05rem + 2px) !important;
+    box-shadow: none !important;
+    outline:none !important;
+    border:1px solid #eee !important;
+    border-left: none !important;
+    border-top-right-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+    padding-left: 0.1rem !important;
+  }
+  
+  .sa-grid-item {
+    line-height: 1.8rem;
+    font-size:0.92rem;
+  }
+  .sa-grid-item .el-input {
+    width: 50% !important;
+    height: 2.2rem !important;
+  }
+
+  .sa-grid-item  .el-input__inner {
+    width: 50% !important;
+    border:none !important;
+    border-bottom: 1px solid rgb(229, 229, 229) !important;
+    height: 2.2rem !important;
+    border-radius: 0px !important;
+  }
+
+  .sa-desc {
+    width: 5rem;
+    display: inline-block;
+    font-weight:400;
+    color: #5E6D82;
+  }
+  .sc-context span {
+    margin-right: 0.8rem;
+    color: #5E6D82;
+  }
+  .sc-context span > input {
+    margin-right: 0.3rem;
+  }
+  .btn-ad-search {
+    font-size:0.88rem;
+    color: #5E6D82;
+    background-color: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 5px;
+    padding: 4px 8px;
+    margin: 9px;
+  }
+  .ad-search-input{
+    display: inline;
+    border: none;
+    border-bottom: 1px solid rgb(220, 223, 230);
+    outline: none;
   }
 </style>

@@ -147,14 +147,10 @@
   }
 }
 
-.tableOpreate {
-  display: none;
-}
-
 .showBugOpreate {
   position: absolute;
   display: inline;
-  margin-left: -5.5rem;
+  margin-left: -6rem;
   margin-top: -1rem;
   float: right !important;
   background-color: inherit;

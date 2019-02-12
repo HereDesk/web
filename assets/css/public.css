@@ -205,7 +205,7 @@ code {
   display: inline-block;
   color: #4C4C4C;
   background-color: #F5F5F5;
-  padding:0.5rem 0.5rem 0.5rem 0.88rem;
+  padding:0.5rem 0.4rem 0.5rem 0.6rem;
   border-radius: 16px !important;
 }
 
@@ -1129,21 +1129,35 @@ textarea::-webkit-input-placeholder {
   font-size:1rem !important;
 }
 
+.icon-E0E0E0 {
+  color: #E0E0E0;
+}
 .icon-00BFA5 {
-  color: #00BFA5 !important;
+  color: #00BFA5;
 }
 
 .icon-E53935 {
-  color: #E53935 !important;
+  color: #E53935;
 }
 
 .icon-8a8a8a {
-  color: #8a8a8a !important;
+  color: #8a8a8a;
 }
 
-.icon-8a8a8a:hover {
-  color: #000 !important;
+.icon-hover {
+  /* padding: 3px; */
+  border-radius: 20px;
+  transform: translate3d(0,-2px,0);
+  box-shadow: 0 7px 7px rgba(0,0,0,0.1);
 }
+/* .iconfont:hover {
+  color: #3385FF !important;
+  transform: translate3d(0,-2px,0);
+  box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+  padding: 3px;
+  border: 1px solid #3385FF;
+  border-radius: 20px;
+} */
 
 /* 垂直居中 */
 .vertical-center {
@@ -1163,6 +1177,10 @@ textarea::-webkit-input-placeholder {
 
 .display-block {
   display: block;
+}
+
+.d-none {
+  display: none !important;
 }
 
 .display-none {

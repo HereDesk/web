@@ -150,7 +150,7 @@ export default {
   methods: {
     
 		getProductList() {
-      this.axios.get("/api/pm/product/my_list")
+      this.axios.get("/api/pm/product/my")
         .then(res => {
           if (res.data["status"] === 20000) {
             this.product_list = res.data["data"]
