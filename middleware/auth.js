@@ -20,11 +20,11 @@ export default function ({
   const visted_path = process.server ? route.path : ''
   if (token) {
     const PageData = store.state.PageData
-    const UserGroup = store.state.userInfo.group
-    if (visted_path == '/' | visted_path == 1) {
+    const identity = store.state.userInfo.identity
+    if (visted_path == '/' || visted_path == 1) {
       return redirect('/app/dashboard')
     } else {
-      if (UserGroup != 'admin' & PageData) {
+      if (identity !== 0 && PageData) {
         for (let v of PageData) {
           if (v.url == route.path & v.is_allow == -1) {
             return redirect('/app/page_auth')
