@@ -5,12 +5,12 @@
     <div id="product-version-module" class="container-fluid px-0" 
       v-if="['bug_edit','case_add'].includes(ptype)">
       <div class="row">
-        <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_code" >
+        <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_id" >
           <el-option 
             v-for="(item,index) in product_list" 
             :key="index" 
             :label="item.product_code" 
-            :value="item.product_code">
+            :value="item.product_id">
           </el-option>
         </el-select>
         <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" 
@@ -48,7 +48,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="(item,index) in product_list" :key="index">
-            <span @click="product_code = item.product_code">
+            <span @click="product_id = item.product_id">
               {{ item.product_code }}
             </span>
           </el-dropdown-item>
@@ -115,6 +115,7 @@ export default {
     return {
       product_list: [],
       product_code: "",
+      product_id: "",
       release: "全部",
       modules_list: [],
       module_id: [],
@@ -133,8 +134,8 @@ export default {
 
     // emit info
     EmitInfo: function() {
-      let { product_code, release, module_id, PageMsg } = this
-      return {product_code, release, module_id,PageMsg}
+      let { product_id, product_code, release, module_id, PageMsg } = this
+      return { product_id, product_code, release, module_id,PageMsg }
     },
 
     // version list
@@ -143,9 +144,9 @@ export default {
       let tmp = []
       this.ptype.includes('index') ? tmp = [{ version: "全部" }] : undefined
       let data = this.product_list
-      if (this.product_code) {
+      if (this.product_id) {
         for (let i in data) {
-          if (this.product_code === data[i]["product_code"]) {
+          if (this.product_id === data[i]["product_id"]) {
             arr = [...tmp, ...data[i]["data"]]
           }
         }
@@ -162,16 +163,22 @@ export default {
       deep: true
     },
     
-    product_code: function (val, oldVal) {
-      if (this.product_code) {
-        // this.$router.replace(this.$route.path + "?product_code=" + this.product_code)
+    product_id: function (val, oldVal) {
+      if (this.product_id) {
+        // save product_id to localStorage
         if (process.browser) {
-          window.localStorage.setItem("last_visited_product", this.product_code)
+          window.localStorage.setItem("last_visited_product_id", this.product_id)
+        }
+        // get product_code, used for page show
+        for (const item of this.product_list) {
+          if (this.product_id === item.product_id) {
+            this.product_code = item.product_code
+          }
         }
         if (!['only-product-name','case_index','bug_index'].includes(this.ptype)) {  
           const ProductModulesInfo = this.$store.state.ProductModulesInfo
           if (JSON.stringify(ProductModulesInfo) !== '{}') {
-            ProductModulesInfo.product_code === this.product_code 
+            ProductModulesInfo.product_id === this.product_id 
               ? this.modules_list = ProductModulesInfo.data
               : this.getModule()
           } else {
@@ -185,7 +192,7 @@ export default {
       handler: function (val, oldVal) {
         const isEdit = Boolean(JSON.stringify(this.editData))
         if (isEdit) {
-          this.product_code = this.editData.product_code
+          this.product_id = this.editData.product_id
           this.module_id = this.editData.module_id
           this.release = this.editData.release
         }
@@ -200,13 +207,14 @@ export default {
           ? window.localStorage.last_visited_product 
           : undefined
         if (JSON.stringify(this.product_list) !== '[]' & !isEdit) {
-          if (route.product_code) {
-            this.product_code = route.product_code
+          if (route.product_id) {
+            this.product_id = route.product_id
           } else if (last_visited_product) {
-            this.product_code = last_visited_product
+            this.product_id = last_visited_product_id
           } else {
-            this.product_code = this.product_list[0]['product_code']
+            this.product_id = this.product_list[0]['product_id']
           }
+          this.$store.dispatch("getPageData",this.product_id)
         }
       },
       deep: true
@@ -256,7 +264,7 @@ export default {
     */
     getModule() {
       this.axios
-        .get("/api/pm/get_module?product_code=" + this.product_code)
+        .get("/api/pm/module/all/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             const data = res.data["data"]
