@@ -4,7 +4,7 @@
 			<!-- Data: Module -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <PageModules v-if="isShowModules"
-          :product_code="selected_product" 
+          :product_id="visited_product_id" 
           :Rules="Rules"
           @getM1M2="getM1M2">
         </PageModules>
@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12 vertical-center my-2">
-              <nuxt-link to='/app/qa/bug/add' id="bug-create" class="ml-3">
+              <nuxt-link to='/app/qa/bug/add' id="bug-create" class="ml-3" v-if="Rules.bug_create">
                 <button type="btn" class="btn btn-create">+ 创建</button>
               </nuxt-link>
               <el-dropdown trigger="click">
@@ -203,7 +203,7 @@
                 range-separator="-"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                value-format="yyyy-MM-dd HH:mm:ss">
+                value-format="yyyy-MM-dd">
               </el-date-picker>
             </div>
             <div id="bug-search-assignedTo-time" class="col-12 sa-grid-item">
@@ -306,9 +306,9 @@
                 <el-table-column label="" width="48">
                   <template slot-scope="scope">
                     <div class="display-none" 
-                      :class="{ 'showBugOpreate' : scope.row.bug_id == HoverBugId, 
+                      :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId, 
                         'hideText': scope.row.status == 'Closed'}">
-                      <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID">
+                      <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || Rules.bug_edit">
                         <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
                           <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
                         </nuxt-link>
@@ -361,18 +361,6 @@
                       </span> 
                       <span>最后更新: {{ item.last_time | date(6) }}</span>
                     </div>
-                    <div id="data-action" class="float-right d-inline" style="margin-top:-1rem;"
-                      :class="{'display-none': item.status == 'Closed', 'action': item.status != 'Closed' }">
-                      <span @click="showModal = 'assign'">
-                        <i class="iconfont icon-assign icon-8a8a8a size-1-8 mx-2"></i>
-                      </span>
-                      <span @click="skipResolve(item)" v-if="item.status != 'Fixed'">
-                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6 mx-2"></i>
-                      </span>
-                      <span @click="BugClosedDialog(item)" v-if="uGroup">
-                        <i class="iconfont icon-close-opera icon-8a8a8a size-1-5 mx-2"></i>
-                      </span>
-                    </div>
                   </div>
                 </li>
               </ul> 
@@ -405,7 +393,7 @@
       v-if="showModal == 'assign'" 
       @close="showModal = false"
       :bug_id="selectedBugId" 
-      :product_code="selected_product"
+      :product_id="visited_product_id"
       :pageSource="pageSource"
       @refreshList="getBugList()">
     </BugAssign>
@@ -416,7 +404,7 @@
       @close="showModal = false"
       :bug_id="selectedBugId"
       :OpenBy="HoverBugIdOpenBy"
-      :product_code="selected_product"
+      :product_id="visited_product_id"
       :pageSource="pageSource"
       :scheme="scheme"
       @refreshList="getBugList()">
@@ -548,11 +536,11 @@ export default {
       img_src: null,
       
       // Define Data: Query and Search field
-      product_list: [],
       modules_list: [],
       modules_id: [null, null],
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
+      visited_product_id: this.$route.query.product_id || "",
       selected_product: this.$route.query.product_code || "",
       selected_release: this.$route.query.release || "全部",
       
@@ -616,9 +604,9 @@ export default {
 		
     // page and menu rules
     Rules: function() {
-      let group = this.$store.state.userInfo.group
+      let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
+      return rules.RuleManges(userInfo,PagesRules)
     },
 		
     // query condition
@@ -630,7 +618,7 @@ export default {
       Builder["pageNumber"] = this.pageNumber
       Builder["pageSize"] = this.pageSize
       Builder["isShowAdSearch"] = this.isShowAdSearch 
-      Builder["product_code"] = this.selected_product
+      Builder["product_id"] = this.visited_product_id
       Builder["release"] = tmp_release
       this.selected_status ? (Builder["status"] = this.selected_status) : undefined
       Builder["priority"] = this.selected_priority
@@ -736,12 +724,7 @@ export default {
     m2_id: function(val, oldVal) {
       this.pageNumber = 1
     },
-    product_list: function(val, oldVal) {
-      if ((this.product_list.length > 0) & !this.selected_product) {
-        this.selected_product = this.product_list[0]["product_code"]
-      }
-    },
-    selected_product: function(val, oldVal) {
+    visited_product_id: function(val, oldVal) {
       this.getMemberList()
     },
     total: function() {
@@ -753,7 +736,7 @@ export default {
 		QueryBuilder: function(val, oldVal) {
 			if (JSON.stringify(val) != JSON.stringify(oldVal)) {
 				this.tableData = []
-				this.$route.query.product_code 
+				this.$route.query.product_id 
 					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder}) 
 					: this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
         this.wd 
@@ -778,7 +761,7 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      this.selected_product = data.product_code
+      this.visited_product_id = data.product_id
       this.selected_release = data.release
     },
     getPsPn: function(ps, pn) {
@@ -792,8 +775,8 @@ export default {
 		
 		/* get member user list */
     getMemberList() {
-      if (!this.selected_product) {return}
-      this.axios.get("/api/pm/member/list?product_code=" + this.selected_product)
+      if (!this.visited_product_id) {return}
+      this.axios.get("/api/pm/member/list?product_id=" + this.visited_product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.$store.commit("setProductMemberList", res.data)
@@ -839,7 +822,7 @@ export default {
 
     /* Bug: get bug list data */
     getBugList() {
-      if (!this.selected_product) { return }
+      if (!this.visited_product_id) { return }
       this.axios
 				.get("/api/qa/bug/list", { params: this.QueryBuilder })
         .then(res => {
@@ -869,6 +852,14 @@ export default {
       this.advanced_search.status_list = []
       this.advanced_search.priority_list = []
       this.advanced_search.severity_list = []
+      this.advanced_search.create_time = []
+      this.advanced_search.closed_time = []
+      this.advanced_search.fiexed_time = []
+      this.advanced_search.assignedTo_time = []
+      this.advanced_search.fixed_user = ''
+      this.advanced_search.creator = ''
+      this.advanced_search.closed_user = ''
+      this.advanced_search.assignedTo_user = ''
     },
 
     /* bug adv search */
@@ -879,7 +870,7 @@ export default {
       let basic_query = {
         "pageNumber": this.pageNumber,
         "pageSize": this.pageSize,
-        "product_code": this.selected_product,
+        "product_id": this.visited_product_id,
         "release": release,
         "sort_field": this.sort_field,
         "isShowAdSearch": 'yes'
@@ -994,7 +985,7 @@ export default {
 		
 		/* bug: export */
     bug_export () {
-      if (!this.selected_product) { return }
+      if (!this.visited_product_id) { return }
       this.axios
 				.get("/api/qa/bug/export", { params: this.QueryBuilder })
         .then( res => {
@@ -1009,9 +1000,9 @@ export default {
     /* my today data: count */
     myToday() {
       this.showModal = 'count-today'
-      if (!this.selected_product) { return }
+      if (!this.visited_product_id) { return }
       this.axios
-				.get("/api/analyze/bug/my_today?product_code=" + this.selected_product)
+				.get("/api/analyze/bug/my_today?product_id=" + this.visited_product_id)
 				.then(res => {
 					if (res.data["status"] === 20000) {
 						this.MyTodayData = res.data
@@ -1058,24 +1049,7 @@ export default {
 </script>
 
 <style scope>
-  @import "~/assets/css/test.css";
-
-  .input-group-text {
-    border:1px solid #eee !important;
-    border-right: none !important;
-    background-color: #FFF !important;
-  }
-  .search-control {
-    height: calc(2.05rem + 2px) !important;
-    box-shadow: none !important;
-    outline:none !important;
-    border:1px solid #eee !important;
-    border-left: none !important;
-    border-top-right-radius: 0.25rem !important;
-    border-bottom-right-radius: 0.25rem !important;
-    padding-left: 0.1rem !important;
-  }
-  
+  @import "~/assets/css/test.css";  
   .sa-grid-item {
     line-height: 1.8rem;
     font-size:0.92rem;

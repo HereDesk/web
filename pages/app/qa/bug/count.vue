@@ -124,35 +124,35 @@
           type: 'month',
           start_date: null,
           end_date: null,
-          product_code: null,
+          product_id: null,
           version: null,
         },
         QueryBugStatus: {
           type: 'status',
-          product_code: null,
+          product_id: null,
           version: null
         },
         QueryBugType: {
           type: 'bug_type',
-          product_code: null,
+          product_id: null,
           version: null
         },
         QueryBugSeverity: {
           type: 'severity',
-          product_code: null,
+          product_id: null,
           version: null
         },
         QueryBugPriority: {
           type: 'priority',
-          product_code: null,
+          product_id: null,
           version: null
         },
         QueryBugTester: {
-          product_code: null,
+          product_id: null,
           version: null
         },
         QueryBugDeveloper: {
-          product_code: null,
+          product_id: null,
           version: null
         },
         BugCreateDailyChartData: [],
@@ -192,8 +192,8 @@
       SelectedProductReleaseInfo: {
         handler: function (val, oldVal) {
           let q = this.SelectedProductReleaseInfo
-          this.$router.push({'path':'/app/qa/bug/count',query:{product_code:q[0],version:q[1]}})
-          this.QueryBugCreate.product_code = q[0]
+          this.$router.push({'path':'/app/qa/bug/count',query:{product_id:q[0],version:q[1]}})
+          this.QueryBugCreate.product_id = q[0]
           this.QueryBugCreate.version = q[1]
           this.getBugStatusData()
           this.getBugSeverityData()
@@ -268,15 +268,16 @@
       }
     },
     created () {
-      if (this.$route.query.product_code) {
-        this.SelectedProductReleaseInfo.push(this.$route.query.product_code)
+      if (this.$route.query.product_id) {
+        this.SelectedProductReleaseInfo.push(this.$route.query.product_id)
       }
       this.getProductRelease()
     },
     methods: {
       // 数据：产品版本
       getProductRelease () {
-        this.axios.get('/api/pm/new_product_release')
+        this.axios
+          .get('/api/pm/product/cascader/my')
           .then(res => {
             if (res.data['status'] === 20000) {
               this.product_list = res.data['data']
@@ -289,67 +290,70 @@
           }
         )
       },
-      // 操作级联下拉框：切换产品与版本
-      handleCommand (data) {
-        this.current_product_code = data['product_code']
-      },
       // 数据：按日期查询新建缺陷
       getBugCreateDaily() {
-        this.axios.get('/api/analyze/bug/date/create',{params: this.QueryBugCreate})
+        this.axios
+          .get('/api/analyze/bug/date/create',{params: this.QueryBugCreate})
           .then(res => {
             this.BugCreateDailyChartData = res.data
           })
       },
       // 数据：缺陷状态
       getBugStatusData() {
-        this.QueryBugStatus.product_code = this.SelectedProductReleaseInfo[0]
+        this.QueryBugStatus.product_id = this.SelectedProductReleaseInfo[0]
         this.QueryBugStatus.version = this.SelectedProductReleaseInfo[1]
-        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugStatus})
+        this.axios
+          .get('/api/analyze/bug/query',{params: this.QueryBugStatus})
           .then(res => {
             this.BugStatusChartData = res.data['data']
           })
       },
       // 数据：严重程度
       getBugSeverityData() {
-        this.QueryBugSeverity.product_code = this.SelectedProductReleaseInfo[0]
+        this.QueryBugSeverity.product_id = this.SelectedProductReleaseInfo[0]
         this.QueryBugSeverity.version = this.SelectedProductReleaseInfo[1]
-        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugSeverity})
+        this.axios
+          .get('/api/analyze/bug/query',{params: this.QueryBugSeverity})
           .then(res => {
             this.BugSeverityChartData = res.data['data']
           })
       },
       // 数据：优先级
       getBugPriorityData() {
-        this.QueryBugPriority.product_code = this.SelectedProductReleaseInfo[0]
+        this.QueryBugPriority.product_id = this.SelectedProductReleaseInfo[0]
         this.QueryBugPriority.version = this.SelectedProductReleaseInfo[1]
-        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugPriority})
+        this.axios
+          .get('/api/analyze/bug/query',{params: this.QueryBugPriority})
           .then(res => {
             this.BugPriorityChartData = res.data['data']
           })
       },
       // 数据：类型
       getBugTypeData() {
-        this.QueryBugType.product_code = this.SelectedProductReleaseInfo[0]
+        this.QueryBugType.product_id = this.SelectedProductReleaseInfo[0]
         this.QueryBugType.version = this.SelectedProductReleaseInfo[1]
-        this.axios.get('/api/analyze/bug/query',{params: this.QueryBugType})
+        this.axios
+          .get('/api/analyze/bug/query',{params: this.QueryBugType})
           .then(res => {
             this.BugTypeChartData = res.data['data']
           })
       },
       // 数据：测试人员
       getBugTesterData() {
-        this.QueryBugTester.product_code = this.SelectedProductReleaseInfo[0]
+        this.QueryBugTester.product_id = this.SelectedProductReleaseInfo[0]
         this.QueryBugTester.version = this.SelectedProductReleaseInfo[1]
-        this.axios.get('/api/analyze/bug/tester',{params: this.QueryBugTester})
+        this.axios
+          .get('/api/analyze/bug/tester',{params: this.QueryBugTester})
           .then(res => {
             this.BugTesterChartData = res.data['data']
           })
       },
       // 数据：开发人员
       getBugDevloperData() {
-        this.QueryBugDeveloper.product_code = this.SelectedProductReleaseInfo[0]
+        this.QueryBugDeveloper.product_id = this.SelectedProductReleaseInfo[0]
         this.QueryBugDeveloper.version = this.SelectedProductReleaseInfo[1]
-        this.axios.get('/api/analyze/bug/developer',{params: this.QueryBugDeveloper})
+        this.axios
+          .get('/api/analyze/bug/developer',{params: this.QueryBugDeveloper})
           .then(res => {
             if (res.data['status'] === 20000) {
               let tmp_data = res.data['data']

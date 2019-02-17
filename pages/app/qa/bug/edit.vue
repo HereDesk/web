@@ -82,9 +82,6 @@
                 :subfield="false" v-model.trim="Bug.steps">
               </mavon-editor>
             </div>
-            <!-- <quill-editor class="col-lg-8 col-md-10 col-sm-12 quill-editor-define" 
-              v-model.trim="Bug.steps">
-            </quill-editor> -->
           </div>
           
           <!-- bug: result -->
@@ -108,6 +105,16 @@
               </mavon-editor>
             </div>
           </div>
+
+          <!-- bug: remark -->
+          <div id="bug-remark" class="form-group row">
+            <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
+            <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
+              <mavon-editor placeholder="请输入附加信息 ~" :toolbarsFlag="false"
+                :subfield="false" v-model.trim="Bug.remark">
+              </mavon-editor>
+            </div>
+          </div>
           
           <!-- bug: file -->
           <div id="bug-file" class="form-group row">
@@ -122,16 +129,6 @@
               <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
             </form>
           </div> 
-          
-          <!-- bug: remark -->
-          <div id="bug-remark" class="form-group row" v-if="isRemarkDisable">
-            <label for='bug-remark' class="col-md-2 col-sm-12 bug-label">备注</label>
-            <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入附加信息 ~" :toolbarsFlag="false"
-                :subfield="false" v-model.trim="Bug.remark">
-              </mavon-editor>
-            </div>
-          </div>
           
           <!-- 提交按钮 -->
           <div id="bug-btn" class='d-flex justify-content-center my-5'>
@@ -188,7 +185,7 @@ export default {
       isButtonDisabled: false,
       isRemarkDisable: false,
       BugDetails: {},
-      product_code: '',
+      product_id: '',
       Annex: [],
       AnnexDelData: {
         url: null
@@ -201,7 +198,7 @@ export default {
         severity: null,
         bug_source: null,
         bug_type: null,
-        product_code: null,
+        product_id: null,
         release: null,
         assignedTo_id: null,
         module_id: ['',''],
@@ -214,8 +211,8 @@ export default {
     uploadDisabled() {
       return this.fileList.length > 3
     },
-    selected_product_code() {
-      return this.Bug.product_code
+    selected_product_id() {
+      return this.Bug.product_id
     },
     BugProperty() {
     	return this.$store.state.BugProperty
@@ -223,7 +220,7 @@ export default {
   },
 
   watch: {
-    selected_product_code: function (old,oldVal) {
+    selected_product_id: function (old,oldVal) {
       this.getModule()
 			this.getDeveloper()
     }
@@ -243,7 +240,7 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      this.Bug.product_code = data.product_code
+      this.Bug.product_id = data.product_id
       this.Bug.release = data.release
       this.Bug.module_id = data.module_id
     },
@@ -254,7 +251,7 @@ export default {
     },
     
 		getModule () {
-      this.axios.get('/api/pm/get_module?product_code=' + this.Bug.product_code)
+      this.axios.get('/api/pm/module/all/list?product_id=' + this.Bug.product_id)
         .then(res => {
           if (res.data['status'] === 20000) {
             this.modules_list = res.data['data']
@@ -282,24 +279,13 @@ export default {
       }
     },
 
-    getProductRelease () {
-      this.axios.get('/api/pm/product_release').then(res => {
-        if (res.data['status'] === 20000) {
-          this.product_list = res.data['data']
-          this.release_list = res.data['data'][0]['data']
-          this.Bug.product_code = res.data['data'][0]['product_code']
-          this.getDeveloper()
-        }
-      })
-    },
-
     annex_delete (file_path) {
       this.AnnexDelData.url = file_path
       fileutil.AnnexDelete("bug",file_path,this.AnnexDelData,this.Annex)
     },
     
     getDeveloper () {
-      this.axios.get('/api/pm/member/list?group=developer&product_code=' + this.Bug.product_code).then(res => {
+      this.axios.get('/api/pm/member/list?group=developer&product_id=' + this.Bug.product_id).then(res => {
         if (res.data['status'] === 20000) {
           this.developer_list = res.data['data']
         }

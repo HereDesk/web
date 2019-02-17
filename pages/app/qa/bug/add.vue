@@ -205,7 +205,7 @@ export default {
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
-        product_code: "",
+        product_id: "",
         release: "",
         module_id: [],
         severity: "Normal",
@@ -224,8 +224,8 @@ export default {
   },
   
   computed: {
-    selected_product_code () {
-      return this.Bug.product_code
+    selected_product_id () {
+      return this.Bug.product_id
     },
     BugProperty () {
     	return this.$store.state.BugProperty
@@ -233,7 +233,7 @@ export default {
   },
 
   watch: {
-    selected_product_code: function(old, oldVal) {
+    selected_product_id: function(old, oldVal) {
       this.getDeveloper()
     }
   },
@@ -250,7 +250,7 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      this.Bug.product_code = data.product_code
+      this.Bug.product_id = data.product_id
       this.Bug.release = data.release
       this.Bug.module_id = data.module_id
     },
@@ -265,7 +265,7 @@ export default {
       this.axios.get("/api/qa/testcase/details?case_id=" + this.$route.query.case_id)
         .then(res => {
           if (res.data["status"] === 20000) {
-            this.Bug.product_code = res.data["data"]["product_code"]
+            this.Bug.product_id = res.data["data"]["product_id"]
             this.Bug.title = res.data["data"]["title"]
             this.Bug.steps = res.data["data"]["steps"]
             this.Bug.expected_result = res.data["data"]["expected_result"]
@@ -280,7 +280,7 @@ export default {
     
     // get this product developer member
     getDeveloper() {
-      this.axios.get("/api/pm/member/list?group=Developer&product_code=" + this.Bug.product_code)
+      this.axios.get("/api/pm/member/list?group=Developer&product_id=" + this.Bug.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.developer_list = res.data["data"]

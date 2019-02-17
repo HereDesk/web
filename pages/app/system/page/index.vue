@@ -13,8 +13,7 @@
         <ul class="pl-0 ul_link">
           <li v-for="item in group_list" 
             :key="item.id" :value="item.group" 
-            :class="{ 'selected_data' : PageData.group == item.group }" 
-            v-if="item.group != 'admin'"
+            :class="{ 'selected_data' : PageData.group == item.group }"
             @click="select_group(item.group)">
             {{ item.name }}
           </li>
@@ -33,7 +32,8 @@
             <li v-for="p in item.data" :key="p.id" class="mr-3">
               <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1" 
                 @click="PageManage($event,p.id)">
-                {{ p.page_name }}
+              <span>{{ p.page_name }} &nbsp;&nbsp;</span>
+              <span v-if="p.desc" style="color:#666666;font-size:0.85rem;">{{ p.desc }}</span> 
             </li>
           </ul>
         </div>

@@ -41,7 +41,7 @@ export default {
       WeekReportText: '周报',
       request_data: {
         type: null,
-        product_code: null
+        product_id: null
       },
       DayReportId: null
     }
@@ -57,7 +57,7 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      this.request_data.product_code = data.product_code
+      this.request_data.product_id = data.product_id
     },
     
     lookReport (data) {

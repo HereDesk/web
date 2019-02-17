@@ -17,8 +17,7 @@
       <div class="col-xl-12 col-lg-12 col-md-12">
         <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column label="真实姓名" prop="realname"></el-table-column>
-          <el-table-column label="群组" prop="group"></el-table-column>
-          <el-table-column label="岗位/职位" prop="position"></el-table-column>
+          <el-table-column label="权限" prop="role_name"></el-table-column>
           <el-table-column label="状态">
             <template slot-scope="scope">
               <span v-if="scope.row.status === 1" class="text-deadly">禁用</span>
@@ -28,6 +27,11 @@
           <el-table-column label="加入时间">
             <template slot-scope="scope">
               <span>{{ scope.row.join_time | date }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="禁用时间">
+            <template slot-scope="scope">
+              <span>{{ scope.row.banned_time | date }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" v-if="Rules.product_members">
@@ -55,7 +59,7 @@
     <Modal id="add_members" v-if="showModal === 'addmembers'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">增加成员</h5>
       <div class="form-group" slot="body">
-        <div class="row col-md-auto m-3">
+        <div class="row col-md-auto mx-3">
           <span>产品</span>
           <div style="width:100%;">
             <ProductInfo
@@ -63,11 +67,19 @@
             </ProductInfo>
           </div>
         </div>
-        <div class="row col-md-auto mx-3" @change="selectMember($event)">
+        <div class="row col-md-auto m-3" @change="selectMember($event)">
           <span>人员</span>
-          <el-select id="info-product" placeholder="选择人员" style="width:100%;" v-model="MemberJoin.user_id">
+          <el-select id="info-product" style="width:100%;" placeholder="选择人员" v-model="MemberJoin.user_id">
             <el-option v-for="(item,index) in AllUser" 
               :key="index" :label="item.realname" :value="item.user_id">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="row col-md-auto mx-3" @change="selectMember($event)">
+          <span>权限</span>
+          <el-select id="info-perm" style="width:100%;" placeholder="选择权限" v-model="MemberJoin.role">
+            <el-option v-for="(item,index) in group_list" 
+              :key="index" :label="item.name" :value="item.group">
             </el-option>
           </el-select>
         </div>
@@ -92,7 +104,7 @@ export default {
   layout: "head", 
 
   validate({ query }) {
-    return /\w+/.test(query.product_code)
+    return /[A-Za-z0-9]+/.test(query.product_id)
   },
 
   filters: {
@@ -103,27 +115,29 @@ export default {
     return {
 			showModal: false,
 			controlNull: false,
-			msg: "",
+      msg: "",
       product_code: "",
+      product_id: "",
       tableData: [],
       AllUser: [],
+      group_list: [],
       MemberJoin: {
-        user_name: "",
         user_id: "",
-        product_code: ""
+        product_id: "",
+        role: ""
       },
       MemberBanned: {
         user_id: "",
-        product_code: ""
+        product_id: ""
       }
     }
   },
 
   computed: {
     Rules: function() {
-      let group = this.$store.state.userInfo.group
+      let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
+      return rules.RuleManges(userInfo,PagesRules)
     }
   },
   
@@ -137,18 +151,38 @@ export default {
       if (this.tableData.length) {
         this.controlNull = false
       } else {
-        this.msg = this.product_code + "产品下暂时还没有成员哦"
+        this.msg = "该产品下暂时还没有成员哦"
         this.controlNull = true
       }
+    },
+    MemberJoin: {
+      handler: function(val,oldVal) {
+        let user_id = this.MemberJoin.user_id
+        for (const item1 of this.AllUser) {
+          if (user_id === item1.user_id) {
+            for (const item2 of this.group_list) {
+              let tmp = item2.name + item2.group
+              console.log(tmp,item1.position)
+              if (tmp.includes(item1.position)) {
+                console.log(tmp,item1.position)
+                this.MemberJoin.role = item2.group
+              }
+            }
+          }
+        }
+      },
+      deep: true
     }
   },
   
   mounted() {
-    this.product_code = this.$route.query.product_code
-    this.MemberJoin.product_code = this.$route.query.product_code
-    this.MemberBanned.product_code = this.$route.query.product_code
-    if (this.$route.query.product_code) {
+    const product_id = this.$route.query.product_id
+    this.product_id = product_id
+    this.MemberJoin.product_id = product_id
+    this.MemberBanned.product_id = product_id
+    if (product_id) {
       this.getProductMember()
+      this.get_group_list()
     } else {
       this.$router.push("/app/products")
     }
@@ -158,12 +192,12 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      this.product_code = data.product_code
+      this.product_id = data.product_id
     },
 
     // get current product member
     getProductMember() {
-      this.axios.get("/api/pm/member/list?product_code=" + this.product_code)
+      this.axios.get("/api/pm/member/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -172,6 +206,17 @@ export default {
             this.controlNull = true
           }
         })
+    },
+
+    // group
+    get_group_list() {
+      this.axios.get("/api/user/group").then(res => {
+        if (res.data["status"] === 20000) {
+          this.group_list = res.data["data"]
+        } else {
+          this.$notify.error({title: "提示",message: res.data["msg"]})
+        }
+      })
     },
 
     // get system all user

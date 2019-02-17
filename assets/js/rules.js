@@ -13,17 +13,17 @@ export default {
 
   	if (bug && userinfo) {
   		let uid = userinfo.user_id
-  		let group = userinfo.group
+  		let identity = userinfo.identity
   		// Bug: 删除按钮规则
 		  // 1）Bug创建者、测试人员
 		  // 2）Bug状态为New时才能删除，已分配他人的缺陷不能删除
-  		if ((bug.status === 'New') && (bug.creator_id === uid || group === 'test')) {
+  		if ((bug.status === 'New') && (bug.creator_id === uid || identity === 0)) {
   			BtnRules.del = true
   		}
 
   		// Bug: 编辑按钮规则
       // Bug创建者、测试人员
-  		if ((bug.status !== 'Closed') && (group === 'test' || group === 'admin' || bug.creator_id === uid)) {
+  		if ((bug.status !== 'Closed') && (identity === 0 || bug.creator_id === uid)) {
   			BtnRules.edit = true
   		}
 
@@ -35,7 +35,7 @@ export default {
 
   		// Bug: 重新打开按钮规则
   		// 当状态为：已解决、已关闭，并且组为：测试
-  		if ((bug.status === 'Fixed' || bug.status === 'Closed') && (group === 'test' || group === 'admin' || bug.creator_id === uid)) {
+  		if ((bug.status === 'Fixed' || bug.status === 'Closed') && (identity === 0 || bug.creator_id === uid)) {
   			BtnRules.reopen = true
   		}
 
@@ -47,7 +47,7 @@ export default {
 
   		// Bug: 关闭按钮规则
   		// 当状态为：非关闭状态；组：测试
-  		if ((bug.status !== 'Closed') && (group === 'test' || group === 'admin' || bug.creator_id === uid)) {
+  		if ((bug.status !== 'Closed') && (identity === 0 || bug.creator_id === uid)) {
   			BtnRules.close = true
   		}
 
@@ -60,16 +60,25 @@ export default {
   	}
   	return BtnRules
   },
-  RuleManges (UserGroup,PagesRules) {
+  RuleManges (userInfo,PagesRules) {
+    const identity = userInfo.identity
     let rules = {
       user_create: false,
+      bug_create: false,
+      bug_edit: false,
+      case_create: false,
+      case_edit: false,
       product_add: false,
       product_members: false,
       product_release: false,
       product_modules: false,
     }
-    if (UserGroup == 'admin') {
+    if (identity === 0) {
       rules.user_create = true
+      rules.bug_create = true
+      rules.bug_edit = true
+      rules.case_create = true
+      rules.case_edit = true
       rules.product_add = true
       rules.product_members = true
       rules.product_release = true
@@ -77,6 +86,18 @@ export default {
     }
     if (PagesRules) {
       for (let item of PagesRules) {
+        if (item['url'] == '/app/qa/bug/add' && item['is_allow'] == 1) {
+          rules.bug_create = true
+        }
+        if (item['url'] == '/app/qa/bug/edit' && item['is_allow'] == 1) {
+          rules.bug_edit = true
+        }
+        if (item['url'] == '/app/qa/testcase/add' && item['is_allow'] == 1) {
+          rules.case_create = true
+        }
+        if (item['url'] == '/app/qa/testcase/edit' && item['is_allow'] == 1) {
+          rules.case_edit = true
+        }
         if (item['url'] == '/app/user-management/user/adduser' && item['is_allow'] == 1) {
           rules.user_create = true
         }
@@ -101,13 +122,13 @@ export default {
   // Page: 测试用例
   TestCaseRules (data) {
     let rules = {
-      add: true,
+      add: false,
       edit: false, 
       del: false,
       fall: false
     }
-    let group = data.group
-    if (group === 'admin' || group === 'test') {
+    let identity = data.identity
+    if (identity === 0) {
       rules.edit = true
       rules.del = true
       rules.fall = true

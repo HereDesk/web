@@ -158,7 +158,7 @@ export default {
       isButtonDisabled: false,
       isRemarkDisable: false,
       CaseData: {
-        product_code: null,
+        product_id: null,
         title: '',
         precondition: '',
         DataInput: '',
@@ -188,7 +188,7 @@ export default {
 
     // get $emit data
     GetProductInfo (data)  {
-      this.CaseData.product_code = data.product_code
+      this.CaseData.product_id = data.product_id
       this.CaseData.module_id = data.module_id
     },
     

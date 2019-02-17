@@ -20,19 +20,33 @@
               <span>{{ scope.row.create_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop='creator' label='创建人'></el-table-column>
+          <el-table-column prop="creator" label="创建人"></el-table-column>
+          <el-table-column label="是否本人创建">
+            <template slot-scope="scope">
+              <span>{{ scope.row.isCreator ? '是' : '否' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column label='操作' align="center" 
             v-if="Rules.product_members || Rules.product_release || Rules.product_modules">
             <template slot-scope="scope">
-              <nuxt-link :to="{ path: '/app/products/members', query: { 'product_code': scope.row.product_code } }"
+              <nuxt-link 
+                :to="{ 
+                  path: '/app/products/members', 
+                  query: { 'product_id': scope.row.product_id } }"
                 v-if="Rules.product_members">
                 <button type="button" class="btn btn-outline-primary btn-sm">成员</button>
               </nuxt-link>
-              <nuxt-link :to="{ path: '/app/products/release', query: { 'product_code': scope.row.product_code } }"
+              <nuxt-link 
+                :to="{ 
+                  path: '/app/products/release', 
+                  query: { 'product_id': scope.row.product_id } }"
                 v-if="Rules.product_release">
                 <button type="button" class="btn btn-outline-primary btn-sm ml-3">版本</button>
               </nuxt-link>
-              <nuxt-link :to="{ path: '/app/products/modules', query: { 'product_code': scope.row.product_code } }"
+              <nuxt-link 
+                :to="{ 
+                  path: '/app/products/modules', 
+                  query: { 'product_id': scope.row.product_id } }"
                 v-if="Rules.product_modules">
                 <button type="button" class="btn btn-outline-primary btn-sm ml-3">模块</button>
               </nuxt-link>
@@ -53,7 +67,7 @@
             v-model='ProductData.product_name' >
         </div>
         <div class='row col-md-auto'>
-          <label for="pg-product-name" class="mx-5">产品编号</label>
+          <label for="pg-product-name" class="mx-5">产品编号/简称</label>
           <input type='text' id='pg-product-name' class='form-control input-lg mx-5 my-1'
             placeholder='输入（不超20个字）' maxlength='20' 
             required autofocus
@@ -117,9 +131,9 @@ export default {
 
   computed: {
     Rules: function() {
-      let group = this.$store.state.userInfo.group
+      let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
+      return rules.RuleManges(userInfo,PagesRules)
     }
   },
 

@@ -82,6 +82,7 @@ export default {
     return {
       isModal: 'Modal',
       showModal: false,
+      product_id: this.$route.query.product_id || null,
       product_code: this.$route.query.product_code || null,
       suite_id: this.$route.query.suite_id || null,
       // all test case list
@@ -94,7 +95,7 @@ export default {
         case_data: []
       },
       QueryBuilder: {
-        product_code: this.$route.query.product_code,
+        product_id: null,
         m1_id: null,
         m2_id: null,
         pageSize: 10,
@@ -167,7 +168,7 @@ export default {
     // get product module
     getModule(product_code) {
       this.axios
-        .get("/api/pm/get_module?product_code=" + this.product_code)
+        .get("/api/pm/module/all/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.modules_list = res.data["data"]
@@ -179,6 +180,7 @@ export default {
 
     // get all testcase list
     getAllCaseData() {
+      this.QueryBuilder.product_id = this.product_id
       this.axios
         .get("/api/qa/testcase/valid_list", {params: this.QueryBuilder})
         .then(res => {

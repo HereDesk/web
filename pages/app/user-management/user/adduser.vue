@@ -40,20 +40,6 @@
           />
         </div>
         <div class="form-group row input-group-control">
-          <label for="user_group"> 
-            选择群组角色: 权限<span class="text-red">*</span> 
-          </label>
-          <select class="select-control form-border-bottom"
-            v-model="UserData.group" @change="isCheckInput($event)">
-            <option v-for="item in UserGroup" :key="item.id" :value="item.group">
-              {{ item.name }}
-            </option>
-          </select>
-          <p class="mb-0 font-size-85 text-gray">
-            备注：群组角色，跟权限相关，请慎重选择
-          </p>
-        </div>
-        <div class="form-group row input-group-control">
           <label for="user_position"> 
             岗位/职位<span class="text-red">*</span>
           </label>
@@ -108,7 +94,7 @@ export default {
       UserGroup: [],
       position_list: [
         { name: "管理层", value: "manager" },
-        { name: "研发", value: "devloper" },
+        { name: "研发", value: "developer" },
         { name: "测试", value: "test" },
         { name: "android", value: "android" },
         { name: "ios", value: "ios" },
@@ -124,18 +110,12 @@ export default {
         email: "",
         password: "",
         realname: "",
-        group: "",
         position: ""
       }
     }
   },
 
   created() {
-    this.axios.get("/api/user/group").then(res => {
-      if (res.data["status"] === 20000) {
-        this.UserGroup = res.data["data"]
-      }
-    })
   },
 
   methods: {
@@ -144,7 +124,6 @@ export default {
     isCheckInput(event) {
       if (
         (this.UserData.email.length > 0) &
-        (this.UserData.group.length > 0) &
         (this.UserData.password.length > 0) &
         (this.UserData.realname.length > 0)
       ) {
@@ -159,7 +138,6 @@ export default {
       const email = this.UserData.email
       const password = this.UserData.password
       const realname = this.UserData.realname
-      const group = this.UserData.group
       if (email.length < 8 | email.length > 30) {
         this.$notify.error({
           title: "错误",
@@ -180,13 +158,6 @@ export default {
           message: "姓名的有效长度为2到8位"
         })
         return 
-      }
-      if (group.length === 0) {
-        this.$notify.error({
-          title: "错误",
-          message: "用户组必须填写，不能为空"
-        })
-        return
       }
       this.axios({
         method: "post",

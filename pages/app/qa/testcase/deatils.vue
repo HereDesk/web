@@ -122,7 +122,7 @@
                 <label>删除日期：</label>{{ CaseDetails.delete_time | date }}
               </li>
               <li id="case-update_time">
-                <label>最后操作：</label>{{ CaseDetails.update_time | date }}
+                <label>最后操作：</label>{{ CaseDetails.last_time | date }}
               </li>
             </ul>
           </div>
@@ -292,8 +292,10 @@ export default {
       }).then(res => {
           if (res.data['status'] === 20000) {
             this.getCaseDetails()
+            this.showModal = false
             this.$notify.success({title: '评审操作成功',message: res.data['msg']})
           } else {
+            this.showModal = false
             this.$notify.error({title: '评审操作失败',message: res.data['msg']})
           }
         }

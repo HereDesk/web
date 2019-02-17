@@ -67,12 +67,12 @@ const createStore = () => {
         const { data } = await axios.get('/api/user/userinfo')
         commit('setUserInfo', data)
       },
-      async getPageData({ commit }) {
-        const { data } = await axios.get('/api/user/pages')
+      async getPageData({ commit },product_id) {
+        const { data } = await axios.get('/api/user/pages?product_id=' + product_id)
         commit('setPageData', data)
       },
       async getProductRelease({ commit }) {
-        const { data } = await axios.get('/api/pm/product_release')
+        const { data } = await axios.get('/api/pm/product/my') 
         commit('setProductInfo', data)
       },
       async getBugProperty({ commit }) {

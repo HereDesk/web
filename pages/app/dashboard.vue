@@ -50,8 +50,8 @@
                   <div class="col-6 border-right">
                     <div class="board-view">
                       <nuxt-link :to="{ 
-                          path: '/app/qa/bug', 
-                          query: { 'operate': 'WaitPending', 'product_code': current_product_code } }">
+                        path: '/app/qa/bug', 
+                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.WaitPending || '0' }}</p>
                         <p class="v-desc">待我处理</p>
                       </nuxt-link>
@@ -60,8 +60,8 @@
                   <div class="col-6">
                     <div class="board-view">
                       <nuxt-link :to="{ 
-                          path: '/app/qa/bug', 
-                          query: { 'operate': 'NotResolved', 'product_code': current_product_code } }">
+                        path: '/app/qa/bug', 
+                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.NotFixed || '0' }}</p>
                         <p class="v-desc">所有未解决的</p>
                       </nuxt-link>
@@ -70,8 +70,8 @@
                   <div class="col-6 border-right border-top">
                     <div class="board-view">
                       <nuxt-link :to="{ 
-                          path: '/app/qa/bug', 
-                          query: { 'operate': 'CreatedByMe', 'product_code': current_product_code } }">
+                        path: '/app/qa/bug', 
+                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.CreatedByMe || '0' }}</p>
                         <p class="v-desc">我创建的</p>
                       </nuxt-link>
@@ -80,8 +80,8 @@
                   <div class="col-6 border-top">
                     <div class="board-view">
                       <nuxt-link :to="{ 
-                          path: '/app/qa/bug', 
-                          query: { 'status': 'Fixed', 'product_code': current_product_code } }">
+                        path: '/app/qa/bug', 
+                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.Fixed || '0' }}</p>
                         <p class="v-desc">已解决,待关闭</p>
                       </nuxt-link>
@@ -101,12 +101,22 @@
           <!-- page nav -->
           <div id="dashboard-nav" class="row align-items-center">
             <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
-              <nuxt-link to="/app/qa/bug" class="n-link">
+              <nuxt-link 
+                :to="{ 
+                  path: '/app/qa/bug', 
+                  query: { 'product_id': current_product_id } 
+                }" 
+                class="n-link">
                 <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
               </nuxt-link>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
-              <nuxt-link to="/app/qa/testcase" class="n-link">
+              <nuxt-link 
+                :to="{ 
+                  path: '/app/qa/testcase', 
+                  query: { 'product_id': current_product_id } 
+                }"
+                class="n-link">
                 <h5><i class="iconfont icon-T size-2 pr-3"></i>测试用例</h5>
               </nuxt-link>
             </div>
@@ -147,6 +157,7 @@ export default {
     return {
       fullscreenLoading: false,
       current_product_code: null,
+      current_product_id: null,
       chartData: {},
       product_list: [],
       chartSettings: {},
@@ -166,13 +177,14 @@ export default {
     },
 
     isDisplayBody() {
-      return this.$store.state.userInfo.group === "admin" || this.current_product_code ?
+      return this.$store.state.userInfo.identity === 0 || this.current_product_id ?
         true : false
     },
 
     QueryBuilderBugWeek() {
       let query = {
         product_code: null,
+        product_id: "",
         type: "section",
         start_date: null,
         end_date: null
@@ -188,7 +200,7 @@ export default {
           "-" + String(date.getDate()).padStart(2, "0")
         )
       })
-      query.product_code = this.current_product_code
+      query.product_id = this.current_product_id
       query.start_date = daysOfThisWeek[0]
       query.end_date = daysOfThisWeek[6]
       return query
@@ -240,11 +252,11 @@ export default {
       chart.ChartLine("ChartLineBugWeek", x, y, "每周新建缺陷统计")
     },
 
-    current_product_code: function(val, oldVal) {
-      if (this.current_product_code) {
+    current_product_id: function(val, oldVal) {
+      if (this.current_product_id) {
         this.$router.replace({
           path: "/app/dashboard",
-          query: { product_code: this.current_product_code},
+          query: { product_id: this.current_product_id },
         })
         this.getBugDashData()
         this.getBugStatusData()
@@ -253,23 +265,23 @@ export default {
     },
 
     product_msg: function(val, oldVal) {
+      // if (this.product_msg) {
+      //   this.img_src = require("static/images/smiley.png")
+      // }
       if (this.product_msg) {
-        this.img_src = require("static/images/smiley.png");
+        this.img_src = require("static/images/product_add.png")
       }
     }
   },
 
-  beforeCreate () {
+  created () {
     if (!this.$store.state.userInfo) {
       this.$store.dispatch("getUserInfo")
-      if (this.$store.state.userInfo.group != 'admin') {
-        this.$store.dispatch("getPageData")
-      }
     }
   },
 
   mounted() {
-    if (this.current_product_code) {
+    if (this.current_product_id) {
       this.getBugDashData()
       this.getBugStatusData()
       this.getBugWeekData()
@@ -279,14 +291,14 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      console.log(data.PageMsg);
       this.product_msg = data.PageMsg
+      this.current_product_id = data.product_id
       this.current_product_code = data.product_code
     },
 
     // get data：bug DashBoard
     getBugDashData() {
-      this.axios.get("/api/dashboard/data_statistics?product_code=" + this.current_product_code)
+      this.axios.get("/api/dashboard/data_statistics?product_id=" + this.current_product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.BugDashData = res.data["data"]
@@ -296,7 +308,7 @@ export default {
 
     // get data：bug status data
     getBugStatusData() {
-      this.axios.get("/api/analyze/bug/query?type=status&product_code=" + this.current_product_code)
+      this.axios.get("/api/analyze/bug/query?type=status&product_id=" + this.current_product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.BugStatusData = res.data["data"]

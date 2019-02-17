@@ -15,8 +15,12 @@
       <div class="col">
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column prop='realname' label='真实姓名' width="120"></el-table-column>
-          <el-table-column prop='email' label='E-mail'></el-table-column>
-          <el-table-column prop='group_name' label='群组' width="120"></el-table-column>
+          <el-table-column prop='email' label='E-mail' width="120"></el-table-column>
+          <el-table-column label='标识' width="120">
+            <template slot-scope="scope">
+              <span>{{ scope.row.identity === 0 ? '超级管理员' : '普通用户' }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop='position' label='岗位' width="120"></el-table-column>
           <el-table-column label='状态' sortable width="90">
             <template slot-scope="scope">
@@ -24,12 +28,12 @@
               <span v-if="scope.row.user_status === 2" class="text-deadly">封禁</span>
             </template>
           </el-table-column>
-          <el-table-column label='创建时间' width="150" show-overflow-tooltip>
+          <el-table-column label='创建时间' width="180" show-overflow-tooltip>
             <template slot-scope="scope">
                <span>{{ scope.row.create_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='更新时间' width="150" show-overflow-tooltip>
+          <el-table-column label='更新时间' width="180" show-overflow-tooltip>
             <template slot-scope="scope">
                <span>{{ scope.row.update_time | date }}</span>
             </template>
@@ -37,14 +41,14 @@
           <el-table-column label='操作' width="150" v-if="Rules.user_create">
             <template slot-scope="scope">
               <span @click="banned(scope.row,$event)" 
-                v-if="scope.row.group !== 'admin' & scope.row.user_status === 1">
+                v-if="scope.row.identity !== 0 & scope.row.user_status === 1">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="2">封禁</button>
               </span>
               <span @click="banned(scope.row,$event)" 
-                v-if="scope.row.group !== 'admin' & scope.row.user_status === 2">
+                v-if="scope.row.identity !== 0 & scope.row.user_status === 2">
                 <button type="button" class="btn btn-outline-success btn-sm" value="1">解封</button>
               </span>
-              <span @click="getUserId(scope.row,$event)" v-if="scope.row.group !== 'admin'">
+              <span @click="getUserId(scope.row,$event)" v-if="scope.row.identity !== 0">
                 <button type="button" class="ml-1 btn btn-outline-dark btn-sm" 
                   @click="showModal = 'ResetPasswd'">密码</button>
               </span>
@@ -115,9 +119,9 @@ export default {
 
   computed: {
     Rules: function() {
-      let group = this.$store.state.userInfo.group
+      let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
+      return rules.RuleManges(userInfo,PagesRules)
     }
   },
 

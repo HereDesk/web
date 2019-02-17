@@ -153,7 +153,7 @@ export default {
       case_id: null,
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       CaseData: {
-        product_code: null,
+        product_id: null,
         category: null,
         priority: null,
         module_id: [],
@@ -169,7 +169,7 @@ export default {
 
   computed: {
     seleted_product () {
-      return this.CaseData.product_code
+      return this.CaseData.product_id
     },
     uploadDisabled:function() {
       return this.fileList.length > 5
@@ -196,7 +196,7 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
-      this.CaseData.product_code = data.product_code
+      this.CaseData.product_id = data.product_id
       this.CaseData.module_id = data.module_id
     },
     getAnnex (data) {

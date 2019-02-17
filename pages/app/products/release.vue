@@ -42,19 +42,14 @@
     <Modal id="page-modal" v-if="showModal==='addversion'" @close="showModal=true" :isFooter="true">
       <h5 slot="header">创建版本号</h5>
       <div class="form-group" slot="body">
-        <div class="row col-md-auto m-3">
-          <span>产品</span>
-          <div style="width:100%;">
-            <ProductInfo
-              :showStyle="'select'" :ptype="'only-product-name'" @ProductInfo="GetProductInfo">
-            </ProductInfo>
-          </div>
-        </div>
         <div class="row col-md-auto mx-3">
-          <span>版本</span>
-          <input type="text" id="pg-product-name" class="form-control input-lg my-1"
+          <span>版本名称</span>
+          <input type="text" 
+            id="pg-product-name" class="form-control input-lg my-1"
             placeholder="输入（不超20个字）" maxlength="20" required 
-            v-model="ReleaseData.release"  @keyup.enter="createRelease()" />
+            v-model="ReleaseData.release"  
+            @keyup.enter="createRelease()" />
+          <p class="mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
         </div>
       </div>
       <button type="submit" class="btn btn-primary" slot="footer" @click="createRelease()">提交</button>
@@ -74,7 +69,7 @@ export default {
     }
   },
   validate({ query }) {
-    return /\w+/.test(query.product_code)
+    return /[A-Za-z0-9]+/.test(query.product_id)
   },
 
   layout: "head",
@@ -85,19 +80,20 @@ export default {
 			msg: "",
 			controlNull: false,
       product_code: this.$route.query.product_code || "",
+      product_id: this.$route.query.product_id || "",
       release_list: "",
       tableData: [],
       ReleaseData: {
         release: "",
-        product_code: ""
+        product_id: ""
       }
     }
   },
   computed: {
     Rules: function() {
-      let group = this.$store.state.userInfo.group
+      let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
+      return rules.RuleManges(userInfo,PagesRules)
     }
   },
   filters: { 
@@ -113,7 +109,7 @@ export default {
       if (this.tableData.length) {
         this.controlNull = false
       } else {
-        this.msg = this.product_code + "产品下暂时还没有版本哦"
+        this.msg = "还没有版本，快创建吧"
         this.controlNull = true
       }
     }
@@ -124,15 +120,11 @@ export default {
   },
   
   methods: {
-		// get $emit data
-    GetProductInfo (data)  {
-      this.product_code = data.product_code
-    },
     
     // Gets all versions in the project
     getReleaseList() {
       this.axios
-        .get("/api/pm/release/list?product_code=" + this.product_code)
+        .get("/api/pm/release/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -144,7 +136,7 @@ export default {
 		
     createRelease(row) {
       let release = this.ReleaseData.release
-      this.ReleaseData.product_code = this.product_code
+      this.ReleaseData.product_id = this.product_id
       if (release.length > 20 | release.length < 3) {
         this.$notify.error({title: "失败",message: "版本号的有效长度为3-20"})
         return

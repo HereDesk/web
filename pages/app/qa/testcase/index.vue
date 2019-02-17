@@ -22,7 +22,7 @@
 
           <!-- 测试用例查询相关 -->
           <div id="testcase-data-head" class="row justify-content-between">
-            <div id="testcase-query">
+            <div id="testcase-query" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
               
               <ProductInfo :ptype="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
@@ -43,10 +43,20 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div id="testcase-action" class="mobile-action-bar pt-2 vertical-center">
-              <span class="searchIcon mr-4" @click="clickSearch()" title="搜一搜">
-                <i class="iconfont icon-search icon-8a8a8a size-1-2"></i>
-              </span>
+            <div id="testcase-search" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12 pt-2">
+              <div class="input-group align-items-center">
+                <div id="ordinary-search" class="input-group-prepend">
+                  <span id="basic-addon" class="input-group-text" style="height: calc(2.05rem + 2px);">
+                    <i class="iconfont icon-search icon-E0E0E0"></i>
+                  </span>
+                </div>
+                <input id="id-title-search" type="text" 
+                  class="form-control search-control" 
+                  placeholder="搜索ID、或标题..." 
+                  v-model="wd">
+              </div>
+            </div>
+            <div id="testcase-action" class="col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
               <span title="导入导出" class="mr-4" @click="showModal = 'export'">
                 <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
               </span>
@@ -122,14 +132,14 @@
                 <el-table-column label='最后更新时间' sortable width='165'>
                   <template slot-scope="scope">
                     <span :class="{ 'hideText' : scope.row.case_id === HoverTestcase_id }">
-                      {{ scope.row.update_time | date(6) }}
+                      {{ scope.row.last_time | date(6) }}
                     </span>
                   </template>
                 </el-table-column>
-                <el-table-column label='' width="40">
+                <el-table-column label='' width="30">
                   <template slot-scope="scope">
                     <div class="display-none pt-2" 
-                      :class="{ 'showCaseOpreate' : scope.row.case_id === HoverTestcase_id}">
+                      :class="{ 'showDataOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <span v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
                       </span>
@@ -164,7 +174,7 @@
                         #&nbsp;{{ item.isReview === 0 ? '未评审' : item.isReview === 1 ? '评审通过' : '未通过评审' }}
                       </span>
                       <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
-                      <span>最后更新: {{ item.update_time | date(5) }}</span>
+                      <span>最后更新: {{ item.last_time | date(5) }}</span>
                     </div>
                     <div id="data-testcase-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
                       <span class="mr-2" v-if="item.status === 0 && CaseRules.fall" @click="handleFall(item)">
@@ -182,13 +192,6 @@
 
           <!-- 翻页 -->
           <Pagination :total="total" @PsPn="getPsPn"></Pagination>
-
-          <!-- page loading -->
-          <div id="page-loading" class="row" v-if='total === null'>
-            <div class="col text-center">
-              <PageLoading></PageLoading> 
-            </div>
-          </div>
 
           <!-- no data -->
           <div id="page-error" class="row" v-if="total === 0">
@@ -264,7 +267,7 @@ export default {
       showModal: false,
       ScreenWidth: 0,
       // 产品、版本
-      product_list: [],
+      product_id: this.$route.query.product_id || null,
       selected_product: this.$route.query.product_code || null,
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
@@ -278,7 +281,7 @@ export default {
       pageNumber: parseInt(this.$route.query.pageNumber) || 1,
       pageSize: parseInt(this.$route.query.pageSize) || 10,
       tableData: [],
-      Msg: false,
+      Msg: "没有数据哦",
       img_src: null,
       // Bug: 搜索
       wd: this.$route.query.wd || null,
@@ -302,9 +305,9 @@ export default {
       return rules.TestCaseRules(this.$store.state.userInfo)
     },
     Rules: function() {
-      let group = this.$store.state.userInfo.group
+      let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(group,PagesRules)
+      return rules.RuleManges(userInfo,PagesRules)
     },
 
     // 查询条件
@@ -312,7 +315,7 @@ export default {
       let Builder = {}
       Builder["pageNumber"] = this.pageNumber
       Builder["pageSize"] = this.pageSize
-      Builder["product_code"] = this.selected_product
+      Builder["product_id"] = this.product_id
       Builder["status"] = this.selected_status
       this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
       this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
@@ -321,7 +324,7 @@ export default {
     },
     // userinfo group
     uGroup: function() {
-      return this.$store.state.userInfo.group === "test" ? this.$store.state.userInfo.group : null
+      return this.$store.state.userInfo.role === "test" ? this.$store.state.userInfo.role : null
     },
     // show user config: about data style:  table and list
     DataShowStyle: function() {
@@ -370,11 +373,6 @@ export default {
         ? this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
       	: this.$router.replace({path: "/app/qa/testcase",query: this.QueryBuilder})
     },
-    product_list: function(val, oldVal) {
-      if ((this.product_list.length > 0) & !this.selected_product) {
-        this.selected_product = this.product_list[0]["product_code"]
-      }
-    },
     total: function() {
       if (this.total === 0) {
         this.img_src = require("static/images/happy.png")
@@ -391,6 +389,7 @@ export default {
   methods: {
     // get $emit data
     GetProductInfo (data)  {
+      this.product_id = data.product_id
       this.selected_product = data.product_code
     },
     getPsPn: function(ps, pn) {
@@ -404,14 +403,17 @@ export default {
 
     // TestCase: 数据列表
     getCaseList() {
-      if (!this.selected_product) { return }
-      this.axios.get("/api/qa/testcase/list", { params: this.QueryBuilder })
+      if (!this.product_id) { return }
+      this.axios
+        .get("/api/qa/testcase/list", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
-             this.tableData = res.data["data"]
-             this.total = res.data["total"]
+            this.tableData = res.data["data"]
+            this.total = res.data["total"]
           } else {
-             this.Msg = res.data["msg"]
+            this.$notify.success({ 
+              title: "错误", message: res.data["msg"] 
+            })
           }
         })
     },
@@ -419,7 +421,8 @@ export default {
     // Testcase: 失效操作
     handleFall(data) {
       let case_id = data.case_id
-      this.axios.get("/api/qa/testcase/fall?case_id=" + case_id)
+      this.axios
+        .get("/api/qa/testcase/fall?case_id=" + case_id)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.getCaseList()
@@ -446,10 +449,10 @@ export default {
         data: JSON.stringify(this.review_data)
       }).then(res => {
         if (res.data["status"] === 20000) {
-           this.$router.go(-1)
-           this.$notify.success({ title: "成功", message: res.data["msg"] })
+          this.$router.go(-1)
+          this.$notify.success({ title: "成功", message: res.data["msg"] })
         } else {
-           this.$notify.error({ title: "失败", message: res.data["msg"] })
+          this.$notify.error({ title: "失败", message: res.data["msg"] })
         }
       })
     },
@@ -459,14 +462,15 @@ export default {
       if (this.isShowSearch) {
         this.isShowSearch = false
         this.wd = null
-        this.getBugList()
+        this.getCaseList()
       } else {
         this.isShowSearch = true
       }
     },
 
     goSearch() {
-      this.axios.get("/api/qa/testcase/search", { params: this.QueryBuilder })
+      this.axios
+        .get("/api/qa/testcase/search", { params: this.QueryBuilder })
         .then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
@@ -484,16 +488,19 @@ export default {
     myToday() {
       this.showModal = 'count-today'
       if (!this.selected_product) { return }
-      this.axios("/api/analyze/testcase/my_today?product_code=" + this.selected_product).then(res => {
-        if (res.data["status"] === 20000) {
-          this.MyTodayData = res.data["data"]
-        }
+      this.axios
+        .get("/api/analyze/testcase/my_today?product_id=" + this.product_id)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.MyTodayData = res.data["data"]
+          }
       })
     },
 
     case_export () {
       if (!this.selected_product) { return }
-      this.axios.get("/api/qa/testcase/export", { params: this.QueryBuilder })
+      this.axios
+        .get("/api/qa/testcase/export", { params: this.QueryBuilder })
         .then( res => {
           if (res.data["status"] === 20000) {
             this.ExportFile = res.data
@@ -518,19 +525,23 @@ export default {
     // switch data style
     switchStyle() {
       let style = this.DataShowStyle == 'table' ? 'list' : 'table'
-      this.axios.get('/api/userconfig?CASE_DATA_SHOW_STYPE=' + style).then(res => {
-        if (res.data["status"] === 20000) {
-          this.$store.dispatch('getUserInfo')
-        }
+      this.axios
+        .get('/api/userconfig?CASE_DATA_SHOW_STYPE=' + style)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.$store.dispatch('getUserInfo')
+          }
       })
     },
     // is show module
     switchModule() {
       let isDisplay = this.isShowModules ? 0 : 1
-      this.axios.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay).then(res => {
-        if (res.data["status"] === 20000) {
-          this.$store.dispatch('getUserInfo')
-        }
+      this.axios
+        .get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay)
+        .then(res => {
+          if (res.data["status"] === 20000) {
+            this.$store.dispatch('getUserInfo')
+          }
       })
     }
   }

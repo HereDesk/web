@@ -99,9 +99,6 @@ export default {
             }
             this.$store.commit("setLoginInfo", res.data)
             this.$store.dispatch('getUserInfo')
-            if (res.data["data"]["group"] !== "admin") {
-              this.$store.dispatch("getPageData")
-            }
             this.$router.replace("/app/dashboard")
           }
           if (res.data["status"] !== 10000) {

@@ -32,22 +32,22 @@
               <span class="mr-3" v-if="scope.row.total > 0">
                 <nuxt-link :to="{ 
                     path: '/app/qa/testsuite/run',
-                    query: { 'suite_id': scope.row.suite_id, 'product_code':scope.row.product_code } }">
-                  <span title="运行完成" v-if="scope.row.executed === scope.row.total && scope.row.executed !== 0">
-                    <i class="iconfont icon-Running size-1-5 icon-E53935"></i>
+                    query: { 'suite_id': scope.row.suite_id, 'product_id':scope.row.product_id } }">
+                  <span title="运行完成" v-if="scope.row.executed === scope.row.total">
+                    <i class="iconfont icon-Running size-1-5 icon-00BFA5"></i>
                   </span>
                   <span  title="待运行" v-else-if="scope.row.total === 0 || scope.row.executed === 0">
                      <i class="iconfont icon-Running size-1-5 icon-8a8a8a"></i>
                   </span>
                   <span  title="运行中" v-else>
-                    <i class="iconfont icon-Running size-1-5 icon-00BFA5"></i>
+                    <i class="iconfont icon-Running size-1-5 icon-E53935"></i>
                   </span>
                 </nuxt-link>
               </span>
               <span>
                 <nuxt-link :to="{ 
                     path: '/app/qa/testsuite/loader', 
-                    query: { 'product_code':scope.row.product_code,'suite_id': scope.row.suite_id } }">
+                    query: { 'product_id':scope.row.product_id,'suite_id': scope.row.suite_id } }">
                   <i class="iconfont icon-jiaru size-1-5 icon-8a8a8a" title="组织测试用例"></i>
                 </nuxt-link>
               </span>
@@ -65,15 +65,22 @@
       <div slot="body" class="form-group mx-1">
         <div class='row col-md-auto'>
           <label for="product_code" class="col-sm-2 pt-2">产品</label>
-          <el-select class="col-sm-9 px-0" v-model="TestSuiteCreate.product_code" placeholder="请选择产品">
-            <el-option v-for="(item,index) in product_list" :key="index" :label="item.product_code" :value="item.product_code">
+          <el-select class="col-sm-9 px-0" v-model="TestSuiteCreate.product_id" placeholder="请选择产品">
+            <el-option 
+              v-for="(item,index) in product_list" 
+              :key="index" 
+              :label="item.product_code" 
+              :value="item.product_id">
             </el-option>
           </el-select>
         </div>
         <div class='row col-md-auto mt-3'>
           <label for="name" class="col-sm-2">执行版本</label>
           <div class="col-sm-9 px-0">
-            <input type='text' v-model.trim='TestSuiteCreate.suite_name' maxlength="20" class='form-control' rows="5" placeholder='请输入用户执行版本...' />
+            <input type='text' 
+              v-model.trim='TestSuiteCreate.suite_name' 
+              maxlength="20" class='form-control' rows="5" 
+              placeholder='请输入用户执行版本...' />
             <p class="text-notes">备注：用例执行版本，如v1.0_20180920</p>
           </div>
         </div>
@@ -106,7 +113,7 @@ export default {
         "pageNumber": 1,
       },
       TestSuiteCreate: {
-        "product_code": null,
+        "product_id": null,
         "suite_name": null,
       }
     }
@@ -162,8 +169,8 @@ export default {
      * must param: product_code  testsuite version
     */
     createTestSuite () {
-      let { product_code, suite_name } = this.TestSuiteCreate
-      if (!product_code) {
+      let { product_id, suite_name } = this.TestSuiteCreate
+      if (!product_id) {
         this.$notify.error({title:'提示',message:'请选择产品'})
         return
       }
