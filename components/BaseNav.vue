@@ -23,11 +23,6 @@ export default {
     return {
       last_url: false
     }
-  },
-  beforeCreate () {
-    if (!this.$store.state.PageData) {
-      this.$store.dispatch("getPageData")
-    }
   }
 }
 </script>

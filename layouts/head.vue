@@ -96,9 +96,6 @@
       if (!this.$store.state.userInfo) {
         this.$store.dispatch('getUserInfo')
       }
-      if (this.$store.state.userInfo.group != 'admin' & !this.$store.state.PageData) {
-        this.$store.dispatch("getPageData")
-      }
     },
     
     methods: {

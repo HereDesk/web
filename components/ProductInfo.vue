@@ -3,7 +3,7 @@
 
     <!-- 缺陷/用例：创建、编辑 -->
     <div id="product-version-module" class="container-fluid px-0" 
-      v-if="['bug_edit','case_add'].includes(ptype)">
+      v-if="['bug_edit','bug_create','case_add'].includes(ptype)">
       <div class="row">
         <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_id" >
           <el-option 
@@ -14,7 +14,7 @@
           </el-option>
         </el-select>
         <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" 
-          v-if="['bug_edit'].includes(ptype)">
+          v-if="['bug_edit','bug_create'].includes(ptype)">
           <el-option 
             v-for="(item,index) in release_list" 
             :key="index" 
@@ -88,7 +88,7 @@
         <span>
           <span class="el-dropdown-desc">版本:</span>
           <span class="el-dropdown-link bg-edown">
-            {{ release | FilterVersion }}
+            {{ release }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
         </span>
@@ -116,7 +116,7 @@ export default {
       product_list: [],
       product_code: "",
       product_id: "",
-      release: "全部",
+      release: this.$route.query.release || "全部",
       modules_list: [],
       module_id: [],
       ModuleMsg: "",
@@ -124,18 +124,19 @@ export default {
     }
   },
   
-  filters: {
-    FilterVersion: function(value) {
-      return value == "all" ? "全部" : value
-    }
-  },
-  
   computed: {
 
     // emit info
     EmitInfo: function() {
-      let { product_id, product_code, release, module_id, PageMsg } = this
-      return { product_id, product_code, release, module_id,PageMsg }
+      let { product_id, release, module_id, PageMsg } = this
+      if (this.release === "全部") {
+        if (this.ptype === "bug_create") {
+          this.release = ""
+        } else {
+          release = "all"
+        }
+      }
+      return { product_id, release, module_id,PageMsg }
     },
 
     // version list
@@ -214,27 +215,21 @@ export default {
           } else {
             this.product_id = this.product_list[0]['product_id']
           }
-          this.$store.dispatch("getPageData",this.product_id)
-        }
-      },
-      deep: true
-    },
-    
-    release_list: {
-      handler: function (val,oldVal) {
-        const isEdit = Boolean(JSON.stringify(this.editData))
-        if (!isEdit) {
-          this.release_list ? 
-          this.release = this.release_list[0]['version'] : this.release = ''
+          if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
+            this.$store.dispatch("getPageData",this.product_id)
+          }
         }
       },
       deep: true
     }
+    
   },
   
   created() {
     const ProductVersionInfo = this.$store.state.ProductVersionInfo
     if (JSON.stringify(ProductVersionInfo) !== '{}') {
+      console.log("----")
+      console.log(ProductVersionInfo)
       this.product_list = ProductVersionInfo
     } else {
       this.getProductRelease()

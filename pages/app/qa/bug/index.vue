@@ -542,7 +542,7 @@ export default {
       m2_id: this.$route.query.m2_id || null,
       visited_product_id: this.$route.query.product_id || "",
       selected_product: this.$route.query.product_code || "",
-      selected_release: this.$route.query.release || "全部",
+      selected_release: this.$route.query.release || "all",
       
       // Define Data: Bug-Status
       status_list: data.bug_status_list,
@@ -594,10 +594,7 @@ export default {
     filterSearchType: util.getSearchTypeName,
     filterBugStatusName: util.bugStatusName,
     QuickQperationName: util.QuickQperationName,
-    filterOrder: util.getOrderName,
-    FilterVersion: function(value) {
-      return value == "all" ? "全部" : value
-    }
+    filterOrder: util.getOrderName
   },
   
   computed: {
@@ -614,12 +611,11 @@ export default {
       const patternNumber = new RegExp("[0-9]+")
       let Builder = {}
       let tmp_release
-      this.selected_release == "全部" ? (tmp_release = "all") : (tmp_release = this.selected_release)
       Builder["pageNumber"] = this.pageNumber
       Builder["pageSize"] = this.pageSize
       Builder["isShowAdSearch"] = this.isShowAdSearch 
       Builder["product_id"] = this.visited_product_id
-      Builder["release"] = tmp_release
+      Builder["release"] = this.selected_release
       this.selected_status ? (Builder["status"] = this.selected_status) : undefined
       Builder["priority"] = this.selected_priority
       Builder["sort"] = this.advanced_search.sort
@@ -864,14 +860,12 @@ export default {
 
     /* bug adv search */
 		getAdvancedSearch() {
-      let release
       this.wd = ""
-      this.selected_release == "全部" ? (release = "all") : (release = this.selected_release)
       let basic_query = {
         "pageNumber": this.pageNumber,
         "pageSize": this.pageSize,
         "product_id": this.visited_product_id,
-        "release": release,
+        "release": this.selected_release,
         "sort_field": this.sort_field,
         "isShowAdSearch": 'yes'
       }
