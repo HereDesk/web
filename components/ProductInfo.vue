@@ -228,8 +228,6 @@ export default {
   created() {
     const ProductVersionInfo = this.$store.state.ProductVersionInfo
     if (JSON.stringify(ProductVersionInfo) !== '{}') {
-      console.log("----")
-      console.log(ProductVersionInfo)
       this.product_list = ProductVersionInfo
     } else {
       this.getProductRelease()

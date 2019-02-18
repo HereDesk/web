@@ -14,7 +14,7 @@ const createStore = () => {
       ProductInfo: [],
       isProductInfo: false,
       BugProperty: {},
-      ProductMemberList: false,
+      ProductMemberList: {},
       ProductVersionInfo: {},
       ProductModulesInfo: {},
     },
@@ -74,6 +74,10 @@ const createStore = () => {
       async getProductRelease({ commit }) {
         const { data } = await axios.get('/api/pm/product/my') 
         commit('setProductInfo', data)
+      },
+      async getProductMembers({ commit },product_id) {
+        const { data } = await axios.get('/api/pm/member/list?product_id=' + product_id) 
+        commit('setProductMemberList', data)
       },
       async getBugProperty({ commit }) {
         const { data } = await axios.get('/api/qa/bug/bug_property')

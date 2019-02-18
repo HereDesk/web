@@ -13,6 +13,7 @@
     <div class='row mt-3 mb-5 table_data'>
       <div class='col-xl-12 col-lg-12 col-md-12'>
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
+          <el-table-column prop='product_id' label='ID' show-overflow-tooltip></el-table-column>
           <el-table-column prop='product_name' label='产品名称'></el-table-column>
           <el-table-column prop='product_code' label='产品编码'></el-table-column>
           <el-table-column label='创建时间'>

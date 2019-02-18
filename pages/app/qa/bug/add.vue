@@ -234,7 +234,14 @@ export default {
 
   watch: {
     selected_product_id: function(old, oldVal) {
-      this.getDeveloper()
+      if (this.selected_product_id) {
+        const ProductMembersData = this.$store.state.ProductMemberList
+        const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
+          ? (ProductMembersData["product_id"] === this.selected_product_id ? true : false) : false
+        if (!isThisProduct){
+          this.$store.dispatch("getProductMembers",this.selected_product_id)
+        }
+      }
     }
   },
 
@@ -274,16 +281,6 @@ export default {
               title: '提示',
               message: res.data["msg"]
             })
-          }
-        })
-    },
-    
-    // get this product developer member
-    getDeveloper() {
-      this.axios.get("/api/pm/member/list?group=Developer&product_id=" + this.Bug.product_id)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.developer_list = res.data["data"]
           }
         })
     },

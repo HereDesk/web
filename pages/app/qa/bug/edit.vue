@@ -221,8 +221,14 @@ export default {
 
   watch: {
     selected_product_id: function (old,oldVal) {
-      this.getModule()
-			this.getDeveloper()
+			if (this.product_id) {
+        const ProductMembersData = this.$store.state.ProductMemberList
+        const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
+          ? (ProductMembersData["product_id"] === this.product_id ? true : false) : false
+        if (!isThisProduct){
+          this.$store.dispatch("getProductMembers",this.product_id)
+        }
+      }
     }
   },
 
@@ -250,17 +256,6 @@ export default {
       this.Bug.annex = data
     },
     
-		getModule () {
-      this.axios.get('/api/pm/module/all/list?product_id=' + this.Bug.product_id)
-        .then(res => {
-          if (res.data['status'] === 20000) {
-            this.modules_list = res.data['data']
-          } else {
-            this.Msg = res.data['msg']
-          }
-        })
-    },
-    
 		// get bug_details data
     getBugDetails () {
       if (this.currentBugId) {
@@ -282,14 +277,6 @@ export default {
     annex_delete (file_path) {
       this.AnnexDelData.url = file_path
       fileutil.AnnexDelete("bug",file_path,this.AnnexDelData,this.Annex)
-    },
-    
-    getDeveloper () {
-      this.axios.get('/api/pm/member/list?group=developer&product_id=' + this.Bug.product_id).then(res => {
-        if (res.data['status'] === 20000) {
-          this.developer_list = res.data['data']
-        }
-      })
     },
     
 		editBug (event) {

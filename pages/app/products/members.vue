@@ -162,9 +162,7 @@ export default {
           if (user_id === item1.user_id) {
             for (const item2 of this.group_list) {
               let tmp = item2.name + item2.group
-              console.log(tmp,item1.position)
               if (tmp.includes(item1.position)) {
-                console.log(tmp,item1.position)
                 this.MemberJoin.role = item2.group
               }
             }

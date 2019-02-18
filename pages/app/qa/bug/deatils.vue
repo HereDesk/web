@@ -350,6 +350,7 @@ export default {
       components_value: '',
       showModal: false,
       currentBugId: this.$route.query.bug_id || null,
+      product_id: "",
       current_product_code: "",
       BugDetails: {},
       Annex: [],
@@ -395,9 +396,14 @@ export default {
   },
 
   watch: {
-    product_code: function(val, oldVal) {
-      if (this.product_code) {
-        this.getMemberList()
+    product_id: function(val, oldVal) {
+      if (this.product_id) {
+        const ProductMembersData = this.$store.state.ProductMemberList
+        const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
+          ? (ProductMembersData["product_id"] === this.product_id ? true : false) : false
+        if (!isThisProduct){
+          this.$store.dispatch("getProductMembers",this.product_id)
+        }
       }
     },
     showModal () {
@@ -447,6 +453,7 @@ export default {
               this.BugDetails = res.data["data"]
               this.Annex = res.data["annex"]
               this.product_code = res.data["data"]["product_code"]
+              this.product_id = res.data["data"]["product_id"]
               // get history
               this.BugHistory()
             } else {
@@ -454,16 +461,6 @@ export default {
             }
           })
       }
-    },
-    
-    getMemberList() {
-      this.axios
-        .get("/api/pm/member/list?product_code=" + this.product_code)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.$store.commit("setProductMemberList", res.data)
-          }
-        })
     },
     
     // 编辑缺陷

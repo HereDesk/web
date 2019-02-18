@@ -721,7 +721,14 @@ export default {
       this.pageNumber = 1
     },
     visited_product_id: function(val, oldVal) {
-      this.getMemberList()
+      if (this.visited_product_id) {
+        const ProductMembersData = this.$store.state.ProductMemberList
+        const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
+          ? (ProductMembersData["product_id"] === this.visited_product_id ? true : false) : false
+        if (!isThisProduct){
+          this.$store.dispatch("getProductMembers",this.visited_product_id)
+        }
+      }
     },
     total: function() {
       if (this.total === 0) {
@@ -749,7 +756,6 @@ export default {
   },
 
   mounted() {
-    this.getMemberList()
     this.wd ? this.goSearch() : this.getBugList()
     this.ScreenWidth = process.server ? 0 : document.body.clientWidth
   },
@@ -767,17 +773,6 @@ export default {
     getM1M2: function(m1, m2) {
       this.m1_id = m1
       this.m2_id = m2
-    },
-		
-		/* get member user list */
-    getMemberList() {
-      if (!this.visited_product_id) {return}
-      this.axios.get("/api/pm/member/list?product_id=" + this.visited_product_id)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.$store.commit("setProductMemberList", res.data)
-          }
-        })
     },
 		
     /* 下拉相关操作 */
