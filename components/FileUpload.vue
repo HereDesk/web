@@ -34,12 +34,6 @@ export default {
   },
 
   watch: {
-    fileList: {
-      handler: function(old,oldVal) {
-        console.log(this.fileList)
-      },
-      deep: true
-    },
     annex:{
       handler: function(old,oldVal) {
         this.$emit('annex',this.annex)

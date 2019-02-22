@@ -61,7 +61,7 @@
                     <div class="board-view">
                       <nuxt-link :to="{ 
                         path: '/app/qa/bug', 
-                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
+                        query: { 'operate': 'NotResolved', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.NotFixed || '0' }}</p>
                         <p class="v-desc">所有未解决的</p>
                       </nuxt-link>
@@ -71,7 +71,7 @@
                     <div class="board-view">
                       <nuxt-link :to="{ 
                         path: '/app/qa/bug', 
-                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
+                        query: { 'operate': 'CreatedByMe', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.CreatedByMe || '0' }}</p>
                         <p class="v-desc">我创建的</p>
                       </nuxt-link>
@@ -81,7 +81,7 @@
                     <div class="board-view">
                       <nuxt-link :to="{ 
                         path: '/app/qa/bug', 
-                        query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
+                        query: { 'status': 'Fixed', 'product_id': current_product_id } }">
                         <p class="v-num">{{ BugDashData.Fixed || '0' }}</p>
                         <p class="v-desc">已解决,待关闭</p>
                       </nuxt-link>
@@ -104,7 +104,7 @@
               <nuxt-link 
                 :to="{ 
                   path: '/app/qa/bug', 
-                  query: { 'product_id': current_product_id } 
+                  query: { 'product_id': current_product_id, 'status': 'notClosed' } 
                 }" 
                 class="n-link">
                 <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
