@@ -76,18 +76,6 @@
             </div>
           </div>
 
-          <!-- 测试用例搜索 -->
-          <div id="testcase-search" class="row ml-2 mr-5 hiddenSearch" :class="{ showSearch: isShowSearch }">
-            <div class="col-md-10 col-10">
-              <input type="text" id="bugSearchInput" class="form-control border-none pt-3" 
-                placeholder="请输入ID或标题关键字进行搜索..." 
-                v-model.trim="wd" @keyup.enter="goSearch()" autofocus />
-            </div>
-            <div class="col-md-2 col-2 pt-2 text-center">
-              <button type="button" class="btn font-size-90" @click="goSearch()">搜索</button>
-            </div>
-          </div>
-
           <!-- 用例数据列表 -->
           <div id="testcase-data-list" class="row mt-3">
 
@@ -487,7 +475,7 @@ export default {
     // my today
     myToday() {
       this.showModal = 'count-today'
-      if (!this.selected_product) { return }
+      if (!this.product_id) { return }
       this.axios
         .get("/api/analyze/testcase/my_today?product_id=" + this.product_id)
         .then(res => {
@@ -498,7 +486,7 @@ export default {
     },
 
     case_export () {
-      if (!this.selected_product) { return }
+      if (!this.product_id) { return }
       this.axios
         .get("/api/qa/testcase/export", { params: this.QueryBuilder })
         .then( res => {
