@@ -15,7 +15,7 @@
       <div class="col">
         <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}">
           <el-table-column prop='realname' label='真实姓名' width="120"></el-table-column>
-          <el-table-column prop='email' label='E-mail' width="120"></el-table-column>
+          <el-table-column prop='email' label='E-mail'></el-table-column>
           <el-table-column label='标识' width="120">
             <template slot-scope="scope">
               <span>{{ scope.row.identity === 0 ? '超级管理员' : '普通用户' }}</span>
@@ -38,7 +38,7 @@
                <span>{{ scope.row.update_time | date }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' width="150" v-if="Rules.user_create">
+          <el-table-column label='操作' v-if="Rules.user_create">
             <template slot-scope="scope">
               <span @click="banned(scope.row,$event)" 
                 v-if="scope.row.identity !== 0 & scope.row.user_status === 1">

@@ -30,7 +30,7 @@
           <button type="button" class="btn btn-op" @click="showModal = 'hangup'" v-if="BtnRules.hangup" >
             延期挂起
           </button>
-          <button type="button" class="btn btn-op" @click="BugClosed()" v-if="BtnRules.close">
+          <button type="button" class="btn btn-op" @click="showModal = 'closed'" v-if="BtnRules.close">
             关闭
           </button>
           <button type="button" class="btn btn-op" @click="showModal = 'notes'" v-if="BtnRules.notes" >
@@ -282,6 +282,23 @@
         <button slot="footer" type="submit" class="btn btn-primary" @click="AddNotes()">提交</button>
       </div>
     </Modal>
+
+    <Modal id="modal-closed" class="toolbars" 
+      v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
+      <h5 slot="header" class="modal-title">关闭原因</h5>
+      <div slot="body" class="mx-3">
+        <mavon-editor
+          :toolbars="mavon_md_base_toolbars" 
+          :subfield="false" 
+          placeholder="请输入缺陷关闭原因，且不能少于10个字" 
+          v-model.trim="ClosedData.remark">
+        </mavon-editor>
+        <p class="mt-3 text-gray">备注: 当缺陷状态不是"已解决"时，关闭必须填写原因</p>
+      </div>
+      <div slot="footer">
+        <button slot="footer" type="submit" class="btn btn-primary" @click="BugClosed()">提交</button>
+      </div>
+    </Modal>
     
     <!-- Bug处理操作：延期挂起 -->
     <Modal id="modal-hangup" class="no-toolbars" 
@@ -367,7 +384,8 @@ export default {
         remark: ""
       },
       ClosedData: {
-        bug_id: ""
+        bug_id: "",
+        remark: ""
       },
       ReOpenData: {
         bug_id: "",
@@ -418,7 +436,7 @@ export default {
       return this.$store.state.ProductMemberList ? this.$store.state.ProductMemberList["data"] : ''
     },
     BtnRules: function() {
-      return rules.BugRules(this.BugDetails, this.$store.state.userInfo)
+      return rules.BugBtnRules(this.BugDetails, this.$store.state.userInfo)
     },
     BID: function() {
       return this.BugDetails["id"] ? this.BugDetails["id"] + "、" : ""
@@ -508,6 +526,17 @@ export default {
     // bug closed
     BugClosed() {
       this.ClosedData.bug_id = this.currentBugId
+      const remark = this.ClosedData.remark
+      if (this.BugDetails.status !== 'Fixed') {
+        if (!remark.length) {
+          this.$notify.error({ title: "错误", message: "缺陷关闭原因的必填哦" })
+          return 
+        }
+        if (remark.length < 10) {
+          this.$notify.error({ title: "错误", message: "缺陷关闭原因,不能少于10个字" })
+          return 
+        }
+      }
       this.axios({
         method: "post",
         url: "/api/qa/bug/close",

@@ -199,7 +199,7 @@ export default {
     // get added testcase list
     getHasJoinedCase() {
       this.axios
-        .get("/api/qa/testsuite/cell/brief_list", {params: this.HasJoinedCaseQueryBuilder})
+        .get("/api/qa/testsuite/cell/loader_list", {params: this.HasJoinedCaseQueryBuilder})
         .then(res => {
           if (res.data["status"] === 20000) {
             this.HasJoinedCaseData = res.data["data"]

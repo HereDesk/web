@@ -235,7 +235,7 @@ export default {
   computed: {
     // 权限控制
     Rules: function () {
-      return rules.TestCaseRules(this.$store.state.userInfo) 
+      return rules.TestCaseBtnRules(this.$store.state.userInfo,this.CaseDetails) 
     },
     CID: function () {
       return this.CaseDetails['id'] ? this.CaseDetails['id'] + '、' : ''

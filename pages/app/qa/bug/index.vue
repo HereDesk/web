@@ -313,9 +313,9 @@
                           <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
                         </nuxt-link>
                       </span>
-                      <span id="icon-bug-close" @click="BugClosedDialog(scope.row)">
+                      <!-- <span id="icon-bug-close" @click="BugClosedDialog(scope.row)">
                         <i class="iconfont icon-close-opera icon-8a8a8a size-1-5" title="关闭缺陷"></i>
-                      </span>
+                      </span> -->
                       <span id="icon-bug-resolve" @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
                         <i class="iconfont icon-resolve icon-8a8a8a size-1-6" title="解决缺陷"></i>
                       </span>

@@ -115,7 +115,7 @@
 
       getTestCaseRunList() {
         this.axios
-          .get('/api/qa/testsuite/cell/list', {params: this.QueryBuilder})
+          .get('/api/qa/testsuite/cell/run_list', {params: this.QueryBuilder})
           .then(res => {
             if (res.data['status'] === 20000) {
               this.tableData = res.data['data']

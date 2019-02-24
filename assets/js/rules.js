@@ -1,5 +1,5 @@
 export default {
-  BugRules (bug,userinfo) {
+  BugBtnRules (bug,userinfo) {
   	let BtnRules = {
       del: false,
       edit: false,
@@ -120,15 +120,17 @@ export default {
   },
 
   // Page: 测试用例
-  TestCaseRules (data) {
+  TestCaseBtnRules (userinfo,CaseDetails) {
     let rules = {
-      add: false,
       edit: false, 
       del: false,
       fall: false
     }
-    let identity = data.identity
-    if (identity === 0) {
+    let identity = userinfo.identity
+    let user_id = userinfo.user_id
+    let case_createor = CaseDetails.creator_id
+    // 编辑、删除、失效权限: 超级管理员、用例创建者
+    if (identity === 0 || user_id === case_createor) {
       rules.edit = true
       rules.del = true
       rules.fall = true

@@ -66,7 +66,7 @@
               <span title="切换样式" class="mr-4" @click="switchStyle()">
                 <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
               </span>
-              <span>
+              <span v-if="Rules.case_create">
                 <nuxt-link :to="{ 
                     path: '/app/qa/testcase/add' ,
                     query: { 'product_code': selected_product }}">
@@ -128,10 +128,10 @@
                   <template slot-scope="scope">
                     <div class="display-none pt-2" 
                       :class="{ 'showDataOpreate' : scope.row.case_id === HoverTestcase_id}">
-                      <span v-if="scope.row.status === 0 && CaseRules.fall" @click="handleFall(scope.row)">
+                      <span v-if="scope.row.status === 0 && CaseBtnRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
                       </span>
-                      <span class="ml-3" v-if="scope.row.status === 0 && CaseRules.edit" @click="handleEdit(scope.row)">
+                      <span class="ml-3" v-if="scope.row.status === 0 && CaseBtnRules.edit" @click="handleEdit(scope.row)">
                         <nuxt-link :to="{path:'/app/qa/testcase/edit',query:{'case_id':scope.row.case_id}}">
                           <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
                         </nuxt-link>
@@ -165,10 +165,10 @@
                       <span>最后更新: {{ item.last_time | date(5) }}</span>
                     </div>
                     <div id="data-testcase-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
-                      <span class="mr-2" v-if="item.status === 0 && CaseRules.fall" @click="handleFall(item)">
+                      <span class="mr-2" v-if="item.status === 0 && CaseBtnRules.fall" @click="handleFall(item)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
                       </span>
-                      <span v-if="item.status === 0 && CaseRules.edit" @click="handleEdit(item)">
+                      <span v-if="item.status === 0 && CaseBtnRules.edit" @click="handleEdit(item)">
                         <i class="iconfont icon-edit icon-8a8a8a size-1-3" title="编辑"></i>
                       </span>
                     </div>
@@ -289,8 +289,15 @@ export default {
 
   computed: {
     // 权限控制
-    CaseRules: function() {
-      return rules.TestCaseRules(this.$store.state.userInfo)
+    CaseBtnRules: function() {
+      for (let i of this.tableData) {
+        if (i["case_id"] === this.HoverTestcase_id) {
+          return rules.TestCaseBtnRules(this.$store.state.userInfo,i)
+          break
+        } else {
+          return rules.TestCaseBtnRules(this.$store.state.userInfo,{})
+        }
+      }
     },
     Rules: function() {
       let userInfo = this.$store.state.userInfo

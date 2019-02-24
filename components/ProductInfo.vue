@@ -18,7 +18,7 @@
           <el-option 
             v-for="(item,index) in release_list" 
             :key="index" 
-            :label="item.version" 
+            :label="item.label" 
             :value="item.version">
           </el-option>
           <!-- <el-option value="create">
@@ -88,13 +88,13 @@
         <span>
           <span class="el-dropdown-desc">版本:</span>
           <span class="el-dropdown-link bg-edown">
-            {{ release }}
+            {{ release | FilterRelease}}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="(item,index) in release_list" :key="index">
-            <span @click="release = item.version">{{ item.version }}</span>
+            <span @click="release = item.version">{{ item.version | FilterRelease}}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -116,7 +116,7 @@ export default {
       product_list: [],
       product_code: "",
       product_id: "",
-      release: this.$route.query.release || "全部",
+      release: this.$route.query.release || "all",
       modules_list: [],
       module_id: [],
       ModuleMsg: "",
@@ -129,7 +129,7 @@ export default {
     // emit info
     EmitInfo: function() {
       let { product_id, release, module_id, PageMsg } = this
-      if (this.release === "全部") {
+      if (this.release === "all") {
         if (this.ptype === "bug_create") {
           this.release = ""
         } else {
@@ -143,7 +143,7 @@ export default {
     release_list: function() {
       let arr = []
       let tmp = []
-      this.ptype.includes('index') ? tmp = [{ version: "全部" }] : undefined
+      this.ptype.includes('index') ? tmp = [{ "label": "全部","version": "all" }] : undefined
       let data = this.product_list
       if (this.product_id) {
         for (let i in data) {
@@ -152,6 +152,17 @@ export default {
           }
         }
         return arr.length > 0 ? arr : false
+      }
+      console.log(arr)
+    }
+  },
+
+  filters: {
+    FilterRelease: function(value) {
+      if (value == "all") {
+        return "全部"
+      } else {
+        return value
       }
     }
   },
