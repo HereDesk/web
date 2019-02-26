@@ -359,6 +359,11 @@
   /* white-space: pre-line; */
 }
 
+.log-text-remark .icon-edit {
+  float: right;
+  margin-top: -1.5rem;
+}
+
 .log-text-remark p {
   margin-bottom: 0;
 }

@@ -87,8 +87,16 @@
                 <li v-for="(item,index) in history" :key="index" class="my-2">
                   {{ item.create_time | date }} : 
                   <span class="log-text-user">{{ item.username }}</span>
-                  {{ item.desc }}
-                  <div class="log-text-remark" v-if="item.remark" v-html="ConvertsMd(item.remark)">
+                  <span>{{ item.desc }}</span>
+                  <span class="font-color-F05945" v-if="item.remark_status === 0">备注已被删除</span>
+                  <span class="font-color-2973B7" v-if="item.remark_status === 2">修改过</span>
+                  <div class="log-text-remark" v-if="item.remark && item.remark_status !== 0" >
+                    <span v-html="ConvertsMd(item.remark)"></span>
+                    <i class="iconfont icon-edit" @click="showModal='edit-notes',
+                      EditNotesData.remark=item.remark,
+                      EditNotesData.bug_id=item.bug_id,
+                      EditNotesData.record_id=item.record_id"
+                      v-if="item.user_id === login_user_id"></i>
                   </div>
                 </li>
               </ol>
@@ -140,12 +148,12 @@
                 {{ BugDetails.solution_name }}
               </li>
               <li id="bug-desc-type">
-              	<label>缺陷类型：</label>
-              	{{ BugDetails.bug_type_name }}问题
+                <label>缺陷类型：</label>
+                {{ BugDetails.bug_type_name }}问题
               </li>
               <li id="bug-desc-source">
-              	<label>缺陷来源：</label>
-              	{{ BugDetails.bug_source_name }}
+                <label>缺陷来源：</label>
+                {{ BugDetails.bug_source_name }}
               </li>
             </ul>
           </div>
@@ -156,8 +164,8 @@
             <div class="dropdown-divider"></div>
             <ul class="mt-3 mb-5 pl-3 satellite_info">
               <li id="bug-last-time">
-              	<label>最后操作：</label>
-              	{{ BugDetails.last_time | date }}
+                <label>最后操作：</label>
+                {{ BugDetails.last_time | date }}
               </li>
               <li id="bug-creator">
                 <label>创建者：</label>
@@ -201,7 +209,8 @@
             <ul class="mt-3 pl-3 satellite_info">
               <li>
                 <label>关联用例：</label>
-                <nuxt-link :to="{ path:'/app/qa/testcase/deatils',query:{'case_id':BugDetails.case_id}}">
+                <nuxt-link 
+                  :to="{ path:'/app/qa/testcase/deatils',query:{'case_id':BugDetails.case_id}}">
                   查看
                 </nuxt-link>
               </li>
@@ -267,22 +276,39 @@
     		</div>
     	</div>
     	<div slot="footer">
-    		<button slot="footer" type="submit" class="btn btn-primary" @click="ReOpen()">提交</button>
+    		<button type="submit" class="btn btn-primary" @click="ReOpen()">提交</button>
     	</div>
     </Modal>
 
-    <!-- Bug处理操作：备注 -->
+    <!-- Bug处理操作：增加备注 -->
     <Modal id="modal-notes" class="toolbars" 
       v-if="showModal == 'notes'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">增加备注</h5>
-      <mavon-editor slot="body" class="mx-3" :toolbars="mavon_md_base_toolbars" 
-        :subfield="false" placeholder="请输入备注 ~ " v-model.trim="NotesData.remark">
+      <mavon-editor slot="body" class="mx-3" 
+        :toolbars="mavon_md_base_toolbars" 
+        :subfield="false" placeholder="请输入备注 ~ " 
+        v-model.trim="NotesData.remark">
       </mavon-editor>
       <div slot="footer">
-        <button slot="footer" type="submit" class="btn btn-primary" @click="AddNotes()">提交</button>
+        <button type="submit" class="btn btn-primary" @click="AddNotes()">提交</button>
       </div>
     </Modal>
-
+    
+    <!-- Bug处理操作：修改备注 -->
+    <Modal id="modal-edit-notes" class="toolbars" 
+      v-if="showModal == 'edit-notes'" @close="showModal = false" :isFooter="true">
+      <h5 slot="header" class="modal-title">修改备注</h5>
+      <mavon-editor slot="body" class="mx-3" 
+        :toolbars="mavon_md_base_toolbars" 
+        :subfield="false" placeholder="请输入备注 ~ " 
+        v-model.trim="EditNotesData.remark">
+      </mavon-editor>
+      <div slot="footer">
+        <button type="submit" class="btn btn-primary" @click="EditRecordRemard()">提交</button>
+      </div>
+    </Modal>
+    
+    <!-- Bug处理操作：关闭 -->
     <Modal id="modal-closed" class="toolbars" 
       v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">关闭原因</h5>
@@ -296,7 +322,7 @@
         <p class="mt-3 text-gray">备注: 当缺陷状态不是"已解决"时，关闭必须填写原因</p>
       </div>
       <div slot="footer">
-        <button slot="footer" type="submit" class="btn btn-primary" @click="BugClosed()">提交</button>
+        <button type="submit" class="btn btn-primary" @click="BugClosed()">提交</button>
       </div>
     </Modal>
     
@@ -308,7 +334,7 @@
         placeholder="请输入延期原因 ~ " v-model.trim="HangUpData.remark">
       </mavon-editor>
     	<div slot="footer">
-    		<button slot="footer" type="submit" class="btn btn-primary" @click="HandUp()">确定延期？</button>
+    		<button type="submit" class="btn btn-primary" @click="HandUp()">确定延期？</button>
     	</div>
     </Modal>
 
@@ -396,6 +422,11 @@ export default {
         bug_id: "",
         remark: ""
       },
+      EditNotesData: {
+        remark: "",
+        record_id: "",
+        bug_id: ""
+      },
       HangUpData: {
         bug_id: "",
         remark: ""
@@ -432,6 +463,9 @@ export default {
   },
 
   computed: {
+    login_user_id: function() {
+      return this.$store.state.userInfo.user_id
+    },
     member_list: function() {
       return this.$store.state.ProductMemberList ? this.$store.state.ProductMemberList["data"] : ''
     },
@@ -599,7 +633,7 @@ export default {
       })
     },
 
-    // the bug history record
+    // bug history record
     BugHistory() {
       this.axios.get("/api/qa/bug/history?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
@@ -608,13 +642,30 @@ export default {
       })
     },
 
-    // add notes or remark
+    // bug add notes or remark
     AddNotes() {
       this.NotesData.bug_id = this.currentBugId
       this.axios({
         method: "post",
-        url: "/api/qa/bug/add_notes",
+        url: "/api/qa/bug/remarks",
         data: JSON.stringify(this.NotesData)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          this.showModal=false
+          this.BugHistory()
+          this.$notify.success({title: "成功",message: res.data["msg"]})
+        } else {
+          this.$notify.error({title: "错误",message: res.data["msg"]})
+        }
+      })
+    },
+    
+    // bug edit remark
+    EditRecordRemard(item) {
+      this.axios({
+        method: "post",
+        url: "/api/qa/bug/remarks",
+        data: JSON.stringify(this.EditNotesData)
       }).then(res => {
         if (res.data["status"] === 20000) {
           this.showModal=false
