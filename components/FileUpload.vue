@@ -23,7 +23,8 @@
 export default {
   props: {
     fileLimit: Number,
-    identification: String
+    identification: String,
+    editFileList: {}
   },
 
   data () {
@@ -34,6 +35,13 @@ export default {
   },
 
   watch: {
+    editFileList: {
+      handler: function(old,oldval) {
+        for (const f of this.editFileList) {
+          this.fileList.push({"name":f.url,"url":f.url,"response":{"name":f.url}})
+        }
+      }
+    },
     annex:{
       handler: function(old,oldVal) {
         this.$emit('annex',this.annex)
@@ -61,13 +69,31 @@ export default {
 
     // file remove
     handleRemove(file,fileList) {
-      let data = this.annex
-      let beDeleted = file.response["name"]
-      for (var i = 0 ;i < data.length;i++) {
-        if (data[i] == beDeleted) {
-          data.splice(i, 1)
-        }
+      const source = this.$route.fullPath
+      let api_url = ""
+      let req_data = {"url":file.url}
+      if (source.includes('bug')) {
+        api_url = '/api/qa/bug/annex/delete'
+      } else if (source.includes('testcase')) {
+        api_url = '/api/qa/testcase/annex/delete'
+      } else {
+        return
       }
+      this.axios({
+        method: 'post',
+        url: api_url,
+        data: req_data
+      }).then(res => {
+        if (res.data['status'] === 20000) {
+          let data = this.annex
+          let beDeleted = file.response["name"]
+          for (var i = 0 ;i < data.length;i++) {
+            if (data[i] == beDeleted) {
+              data.splice(i, 1)
+            }
+          }
+        }
+      })
     },
 
     // 当上传图片，服务器未返回成功时，清除本地filelist
@@ -89,6 +115,7 @@ export default {
         message: "最多只能上传" + this.fileLimit + "个文件"
       })
     },
+    
 
     /*
     * File Upload success

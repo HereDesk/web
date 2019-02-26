@@ -97,13 +97,7 @@
             <div id="case-annex" class='form-group row'>
               <label class="col-lg-2 col-md-2 col-sm-12 bug-label">设计图/原型图</label>
               <form class="col-lg-8 col-md-10 col-sm-12">
-                <div v-for="(item,index) in Annex" :key="index" class="annex">
-                  <img :src="item.file_path">
-                  <span class="annex_delete" @click="annex_delete(item.file_path)">
-                    <i class="iconfont icon-bucket-del size-1-5"></i>
-                  </span>
-                </div>
-                <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
+                <FileUpload :fileLimit="5" :editFileList="this.Annex" @annex="getAnnex"></FileUpload>
               </form>
             </div> 
 
@@ -160,27 +154,13 @@ export default {
         annex: []
       },
       fileList: [],
-      Annex: [],
-      AnnexDelData: {
-        file_path: null
-      }
+      Annex: []
     }
   },
 
   computed: {
-    seleted_product () {
-      return this.CaseData.product_id
-    },
     uploadDisabled:function() {
       return this.fileList.length > 5
-    }
-  },
-
-  watch: {
-    seleted_product: function(val, oldVal) {
-      if (this.seleted_product) {
-        this.getModule()
-      }
     }
   },
 
@@ -217,22 +197,6 @@ export default {
             this.$router.go(-1)
           }
       })
-    },
-
-    getModule () {
-      this.axios
-        .get('/api/pm/get_module?product_code=' + this.seleted_product)
-        .then(res => {
-          if (res.data['status'] === 20000) {
-             this.modules_list = res.data['data']
-          } else {
-             this.Msg = res.data['msg']
-          }
-        })
-    },
-    annex_delete (path) {
-      this.AnnexDelData.file_path = path
-      fileutil.AnnexDelete("testcase",path,this.AnnexDelData,this.Annex)
     },
 
     EditTestCase (event) {

@@ -301,7 +301,7 @@
 
 .annex {
   display:inline !important;
-  margin-right: -20.44px;
+  margin-right: -20px;
 }
 
 .annex > img {
@@ -326,10 +326,10 @@
   right: 90px;
 }
 
-.annex_delete > img {
+/* .annex_delete > img {
   height: 28px;
   width:28px;
-}
+} */
 
 .annex:hover .annex_delete {
   visibility: visible;

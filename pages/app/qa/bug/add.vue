@@ -201,7 +201,6 @@ export default {
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       page_type: 'bug',
       fileList: [],
-      developer_list: [],
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
@@ -226,6 +225,9 @@ export default {
   computed: {
     selected_product_id () {
       return this.Bug.product_id
+    },
+    developer_list () {
+      return this.$store.state.ProductMemberList.data
     },
     BugProperty () {
     	return this.$store.state.BugProperty

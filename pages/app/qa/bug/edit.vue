@@ -12,7 +12,11 @@
               <span class="text-red">*</span>
             </label>
             <div class="col-lg-6 col-md-10 col-sm-12 col-12">
-              <ProductInfo :ptype="'bug_edit'" :editData="Bug" :showVersionInfo="true" @ProductInfo="GetProductInfo">
+              <ProductInfo 
+                :ptype="'bug_edit'" 
+                :editData="Bug" 
+                :showVersionInfo="true" 
+                @ProductInfo="GetProductInfo">
               </ProductInfo>
             </div>
           </div>
@@ -22,19 +26,22 @@
             <label for='bug-mini-info' class="col-lg-2 col-md-2 col-sm-12 col-12 bug-label">
               缺陷属性<span class="text-red">*</span>
             </label>
-            <el-select id="bug-assignedTo" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.assignedTo_id" placeholder="选择指派人">
+            <el-select id="bug-assignedTo" class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              v-model="Bug.assignedTo_id" placeholder="选择指派人">
               <el-option value="" :disabled="true">请选择指派人</el-option>
               <el-option 
                 v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
               </el-option>
             </el-select>
-            <el-select id="bug-priority" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.priority" placeholder="选择优先级">
+            <el-select id="bug-priority" class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              v-model="Bug.priority" placeholder="选择优先级">
               <el-option value="" :disabled="true">请选择优先级</el-option>
               <el-option 
                 v-for="item in BugProperty.bug_priority" :key="item.id" :label="item.name" :value="item.key">
               </el-option>
             </el-select>
-            <el-select id="bug-severity" class='col-lg-2 col-md-2 col-sm-3 col-6' v-model="Bug.severity" placeholder="选择严重程度">
+            <el-select id="bug-severity" class='col-lg-2 col-md-2 col-sm-3 col-6' 
+              v-model="Bug.severity" placeholder="选择严重程度">
               <el-option value="" :disabled="true">请选择严重程度</el-option>
               <el-option 
                 v-for="item in BugProperty.bug_severity" :key="item.id" :label="item.name" :value="item.key">
@@ -120,13 +127,7 @@
           <div id="bug-file" class="form-group row">
             <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
-							<div v-for="(item,index) in Annex" :key="index" class="annex">
-								<img :src="item.url">
-								<span class="annex_delete" @click="annex_delete(item.url)">
-									<i class="iconfont icon-bucket-del size-1-5"></i>
-								</span>
-							</div>
-              <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
+              <FileUpload :fileLimit="5" :editFileList="this.Annex" @annex="getAnnex"></FileUpload>
             </form>
           </div> 
           
@@ -178,7 +179,6 @@ export default {
       bug_type: [],
       bug_priority: [],
       bug_severity: [],
-      developer_list: [],
       product_list: [],
       release_list: [],
       modules_list: [],
@@ -187,9 +187,6 @@ export default {
       BugDetails: {},
       product_id: '',
       Annex: [],
-      AnnexDelData: {
-        url: null
-      },
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       Raw_Data: false,
       Bug: {
@@ -216,17 +213,20 @@ export default {
     },
     BugProperty() {
     	return this.$store.state.BugProperty
+    },
+    developer_list() {
+      return this.$store.state.ProductMemberList.data
     }
   },
 
   watch: {
     selected_product_id: function (old,oldVal) {
-			if (this.product_id) {
+			if (this.selected_product_id) {
         const ProductMembersData = this.$store.state.ProductMemberList
         const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
           ? (ProductMembersData["product_id"] === this.product_id ? true : false) : false
         if (!isThisProduct){
-          this.$store.dispatch("getProductMembers",this.product_id)
+          this.$store.dispatch("getProductMembers",this.selected_product_id)
         }
       }
     }
@@ -272,11 +272,6 @@ export default {
             }
         })
       }
-    },
-
-    annex_delete (file_path) {
-      this.AnnexDelData.url = file_path
-      fileutil.AnnexDelete("bug",file_path,this.AnnexDelData,this.Annex)
     },
     
 		editBug (event) {
