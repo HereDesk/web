@@ -117,7 +117,6 @@
 </template>
 
 <script>
-import fileutil from "~/assets/js/file.js"
 import data from '~/assets/js/data.js'
 
 import FileUpload from '~/components/FileUpload'
