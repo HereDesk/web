@@ -153,7 +153,6 @@ export default {
         }
         return arr.length > 0 ? arr : false
       }
-      console.log(arr)
     }
   },
 
@@ -203,10 +202,11 @@ export default {
     editData: {
       handler: function (val, oldVal) {
         const isEdit = Boolean(JSON.stringify(this.editData))
+        let data = this.editData
         if (isEdit) {
-          this.product_id = this.editData.product_id
-          this.module_id = this.editData.module_id
-          this.release = this.editData.release
+          this.product_id = data.product_id
+          this.module_id = data.module_id
+          this.release = data.release
         }
       },
       deep: true

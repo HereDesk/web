@@ -546,7 +546,7 @@ export default {
       
       // Define Data: Bug-Status
       status_list: data.bug_status_list,
-      selected_status: this.$route.query.status || "all",
+      selected_status: this.$route.query.status || "notClosed",
       
       // Define Data: Bug-priority
       priority_list: data.priority_list,
