@@ -27,7 +27,7 @@
               <span>{{ scope.row.isCreator ? '是' : '否' }}</span>
             </template>
           </el-table-column>
-          <el-table-column label='操作' align="center" 
+          <el-table-column label='操作' align="center" width="200"
             v-if="Rules.product_members || Rules.product_release || Rules.product_modules">
             <template slot-scope="scope">
               <nuxt-link 
