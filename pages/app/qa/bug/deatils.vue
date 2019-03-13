@@ -1,5 +1,10 @@
 <template>
   <div id="page">
+
+    <div id="page-loading" class="col text-center" v-if="isShowLoading">
+      <PageLoading></PageLoading>
+    </div>
+
     <div id="page-details" class="container mt-5" v-if="JSON.stringify(BugDetails) !== '{}'">
       
       <div id="page-details-head" class="row">
@@ -44,19 +49,19 @@
       <div id="page-details-body" class="row mt-3">
         
         <div id="page-details-body-main" class="col-md-8 col-sm-12">
-          <div id="bug-steps" class="height-7 mb-5" v-if="BugDetails.steps">
+          <div id="bug-steps" class="height-7 mb-3" v-if="BugDetails.steps">
             <h6 class="details-minor-title">
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
             </h6>
             <div class="details-block" v-html="ConvertsMd(BugDetails.steps)"></div>
           </div>
-          <div id="bug-reality-result" class="height-7 mb-5" v-if="BugDetails.reality_result">
+          <div id="bug-reality-result" class="height-7 mb-3" v-if="BugDetails.reality_result">
             <h6 class="details-minor-title">
               <span class="redline"></span>&nbsp;&nbsp;实际结果
             </h6>
             <div class="details-block" v-html="ConvertsMd(BugDetails.reality_result)"></div>
           </div>
-          <div id="bug-expected-result" class="height-7 mb-5" v-if="BugDetails.expected_result">
+          <div id="bug-expected-result" class="height-7 mb-3" v-if="BugDetails.expected_result">
             <h6 class="details-minor-title">
               <span class="successline"></span>&nbsp;&nbsp;预期结果
             </h6>
@@ -71,12 +76,16 @@
           </div>
 
           <!-- 图片附件 -->
-          <div id="bug-annex" class="height-7 mb-5" v-if="Annex.length > 0">
+          <div id="bug-annex" class="height-7" v-if="Annex.length > 0 || BtnRules.upload">
             <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附件
+              <span @click="showModal = 'upload'" title="上传附件">
+                <i class="iconfont icon-cloudupload size-1-3 mx-3 font-color-2973B7"></i>
+              </span>
             </h6>​
             <FileShow :Annex="Annex"></FileShow>
           </div>
+
           <div id="bug-details-history" class="height-7 mb-5 font-color-383838 font-size-93">
             <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;活动记录
@@ -92,7 +101,8 @@
                   <span class="font-color-2973B7" v-if="item.remark_status === 2">修改过</span>
                   <div class="log-text-remark" v-if="item.remark && item.remark_status !== 0" >
                     <span v-html="ConvertsMd(item.remark)"></span>
-                    <i class="iconfont icon-edit" @click="showModal='edit-notes',
+                    <i class="iconfont icon-edit" 
+                      @click="showModal='edit-notes',
                       EditNotesData.remark=item.remark,
                       EditNotesData.bug_id=item.bug_id,
                       EditNotesData.record_id=item.record_id"
@@ -122,7 +132,8 @@
               <li id="bug-desc-status">
                 <label>缺陷状态：</label>
                 <span class="border-radius-5"
-                  :class="{ 'text-secondary': BugDetails.status === 'Closed',
+                  :class="{ 
+                    'text-secondary': BugDetails.status === 'Closed',
                     'text-success': BugDetails.status === 'Fixed',
                     'text-urgency': ['New','Open','Reopen'].includes(BugDetails.status),
                     'text-warning': BugDetails.status === 'Hang-up'}">
@@ -209,9 +220,10 @@
             <ul class="mt-3 pl-3 satellite_info">
               <li>
                 <label>关联用例：</label>
-                <nuxt-link 
-                  :to="{ path:'/app/qa/testcase/deatils',query:{'case_id':BugDetails.case_id}}">
-                  查看
+                <nuxt-link :to="{ 
+                  path:'/app/qa/testcase/deatils',
+                  query:{'case_id':BugDetails.case_id}}
+                ">查看
                 </nuxt-link>
               </li>
             </ul>
@@ -219,10 +231,6 @@
         </div>
         
       </div>
-    </div>
-
-    <div id="page-loading" class="col text-center" v-if="isShowLoading">
-      <PageLoading></PageLoading>
     </div>
 
     <!-- Bug处理操作：指派 -->
@@ -255,6 +263,16 @@
       :bug_id="currentBugId" 
       @refreshList="getBugDetails()">
     </BugChange>
+
+    <!-- Bug上传附件 -->
+    <Modal id="modal-upload" v-if="showModal == 'upload'" 
+      :isHeaderClose="true" @close="showModal = false">
+      <h5 slot="header" class="modal-title">上传附件</h5>
+      <div slot="body" class="mb-3 text-center">
+        <FileUpload :fileLimit="3" @refresh="getBugDetails()"></FileUpload>
+        <p class="pt-3 font-size-85 text-gray">备注：删除其它的附件，请点击编辑</p>
+      </div>
+    </Modal>
 
     <!-- Bug处理操作：重新打开缺陷 -->
     <Modal id="modal-reopen" class="no-toolbars" 
@@ -330,8 +348,11 @@
     <Modal id="modal-hangup" class="no-toolbars" 
       v-if="showModal == 'hangup'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">缺陷延期操作</h5>
-      <mavon-editor slot="body" class="mx-3" :toolbarsFlag="false" :subfield="false" 
-        placeholder="请输入延期原因 ~ " v-model.trim="HangUpData.remark">
+      <mavon-editor slot="body" class="mx-3" 
+        :toolbarsFlag="false" 
+        :subfield="false" 
+        placeholder="请输入延期原因 ~ " 
+        v-model.trim="HangUpData.remark">
       </mavon-editor>
     	<div slot="footer">
     		<button type="submit" class="btn btn-primary" @click="HandUp()">确定延期？</button>
@@ -343,6 +364,8 @@
 
 <script>
 import Vue from "vue"
+
+import FileUpload from '~/components/FileUpload'
 import FileShow from '~/components/FileShow'
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
@@ -384,7 +407,8 @@ export default {
     BugAssign,
     BugResolve,
     BugChange,
-    FileShow
+    FileShow,
+    FileUpload
   },
 
   data() {

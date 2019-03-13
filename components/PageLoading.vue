@@ -2,7 +2,7 @@
   <div>
     <transition name="loading">
       <div class="main-loading-page loading">
-        <h1>Loading</h1>
+        <!-- <h1>Loading</h1> -->
         <span></span>
         <span></span>
         <span></span>
@@ -22,7 +22,7 @@
 
 .main-loading-page {
   text-align: center;
-  padding: 15%;
+  padding: 20%;
 }
 
 @media (max-width: 576px) {

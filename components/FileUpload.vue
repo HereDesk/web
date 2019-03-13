@@ -38,7 +38,11 @@ export default {
     editFileList: {
       handler: function(old,oldval) {
         for (const f of this.editFileList) {
-          this.fileList.push({"name":f.url,"url":f.url,"response":{"name":f.url}})
+          this.fileList.push({
+            "name":f.url,
+            "url":f.url,
+            "response":{"name":f.url}
+          })
         }
       }
     },
@@ -52,6 +56,7 @@ export default {
 
   computed: {
     url () {
+      let request_url = "/api/support/upload"
       let url = this.$route.fullPath
       let filetype
       if (url.includes('bug')) {
@@ -61,7 +66,13 @@ export default {
       } else {
         filetype = 'other'
       }
-      return "/api/support/upload?type=" + filetype
+      if (this.$route.query.bug_id) {
+        return request_url + "?type=" + filetype + "&bug_id=" + this.$route.query.bug_id
+      }else if (this.$route.query.case_id) {
+        return request_url + "?type=" + filetype + "&case_id=" + this.$route.query.case_id
+      } else {
+        return request_url + "?type=" + filetype
+      }
     }
   },
 
@@ -122,9 +133,11 @@ export default {
     */
     ImageSuccess(response, file,fileList) {
       if (response.status === 20000) {
+        // refresh page data
+        this.$emit("refresh")
+        // alter local data
         this.annex.push(response["name"])
       } else {
-        // this.$refs.upload.clearFiles()
         this.ResErrorRemove(file,fileList)
         this.$notify.error({
           title: "上传失败",
@@ -137,7 +150,10 @@ export default {
     * File Upload error
     */
     FileUploadError(err, file, fileList) {
-      this.$notify.error({title: "上传失败","message":error})
+      this.$notify.error({
+        title: "上传失败",
+        "message":error
+      })
     },
 
     /*
@@ -151,16 +167,19 @@ export default {
         "txt","log","md","html","json","ini","yaml"]
       const img = ["jpg","png","jpeg","gif","bmp","svg","psd","tif","tga","ai"]
       const allow_file_format_list = [...video,...zip,...doc,...img]
+      
       let tmp = file.name.split(".")
       let FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()
       let isLt20M = file.size / 1024 / 1024 < 20
       let isFile = allow_file_format_list.includes(FileSuffix)
+      
       if (!isFile) {
         this.$notify.error({
           title: "上传失败",
           message: "不允许上传" + FileSuffix + "格式的文件; 若要上传, 请压缩后在上传！"
         })
       }
+      
       if (!isLt20M) {
         this.$notify.error({
           title: "上传失败",

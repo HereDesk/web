@@ -1,8 +1,7 @@
 <template>
-  <div id="components-annexs">
-    ​<picture class="container-fluid">
+  <div id="components-annexs" class="container-fluid mb-3">
       <div class="row">
-        <div class="col-lg-2 col-md-3 col-sm-4 images" v-for="(p,index) in Annex" :key="index" v-viewer>
+        <div class="col-lg-2 col-md-3 col-sm-4 images mb-3" v-for="(p,index) in Annex" :key="index" v-viewer>
           <div id="file-type-other" class="file-card" 
             v-if="['md','log','txt','json','html'].includes(p.suffix)">
             <a class="file-link pt-2" :href="p.file_path || p.url" target="_blank">
@@ -49,7 +48,6 @@
           </div>
         </div>
       </div>
-    </picture>
   </div>
 </template>
 

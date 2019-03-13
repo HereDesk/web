@@ -73,18 +73,17 @@ export default {
     },
     mtitle: function() {
       if (this.scheme === "Postponed") {
-        return "延期解决缺陷";
+        return "延期解决缺陷"
       } else {
-        return "解决缺陷";
+        return "解决缺陷"
       }
     }
   },
   methods: {
     // bug resolve
     MoreRecovered() {
-      this.ResolveData.bug_id = this.bug_id;
-      // this.ResolveData.assignedTo = this.PageData.openedBy
-      this.ResolveData.solution = this.scheme;
+      this.ResolveData.bug_id = this.bug_id
+      this.ResolveData.solution = this.scheme
       this.axios({
         method: "post",
         url: "/api/qa/bug/resolve",
@@ -93,14 +92,20 @@ export default {
         if (res.data["status"] === 20000) {
           this.$emit('close')
           if (this.pageSource === "page_bug_index") {
-            this.$emit("refreshList");
+            this.$emit("refreshList")
           }
           if (this.pageSource === "page_bug_details") {
             this.$router.go(-1)
           }
-          this.$notify.success({ title: "成功", message: res.data["msg"] });
+          this.$notify.success({
+            title: "成功", 
+            message: res.data["msg"]
+          })
         } else {
-          this.$notify.error({ title: "错误", message: res.data["msg"] });
+          this.$notify.error({
+            title: "错误", 
+            message: res.data["msg"] 
+          })
         }
       });
     }
