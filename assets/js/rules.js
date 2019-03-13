@@ -1,6 +1,7 @@
 export default {
   BugBtnRules (bug,userinfo) {
   	let BtnRules = {
+      upload: false,
       del: false,
       edit: false,
       assign: false,
@@ -18,8 +19,12 @@ export default {
 		  // 1）Bug创建者、测试人员
 		  // 2）Bug状态为New时才能删除，已分配他人的缺陷不能删除
   		if ((bug.status === 'New') && (bug.creator_id === uid || identity === 0)) {
-  			BtnRules.del = true
-  		}
+        BtnRules.del = true
+      }
+      
+      if (bug.status !== 'Closed' && bug.creator_id === uid || identity === 0) {
+        BtnRules.upload = true
+      }
 
   		// Bug: 编辑按钮规则
       // Bug创建者、测试人员
