@@ -13,9 +13,16 @@ export default function ({
   if (process.server && !req) {
     return
   }
+
   const token = process.server ? getUserFromCookie(req) : getUserFromLocalStorage()
   if (!token) {
     return redirect('/')
+    // if (route.fullPath !== "/") {
+    //   const url = "/?source=" + route.fullPath
+    //   return redirect(url)
+    // } else {
+    //   return redirect('/')
+    // }
   }
   const visted_path = process.server ? route.path : ''
   if (token) {

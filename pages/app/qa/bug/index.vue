@@ -68,7 +68,7 @@
                 </div>
                 <input id="id-title-search" type="text" 
                   class="form-control search-control" 
-                  placeholder="搜索ID、或标题..." 
+                  placeholder="搜索ID、标题、或指派人员..." 
                   v-model="wd">
                 <div id="advanced-search" @click="unfoldAdvancedSearch()">
                   <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
@@ -626,8 +626,8 @@ export default {
         Builder["operate"] = this.operate
       }
       if (this.wd) {
-        patternNumber.test(this.wd) ? Builder["SearchType"] = "ID" : Builder["SearchType"] = "title"
-        Builder["Operators"] = "like"
+        // patternNumber.test(this.wd) ? Builder["SearchType"] = "ID" : Builder["SearchType"] = "title"
+        // Builder["Operators"] = "like"
         Builder["wd"] = this.wd
       }
       return Builder
