@@ -104,7 +104,7 @@
             </div>
           </div>
 
-          <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }">
+          <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }" style="border:1px solid #eee;border-radius:5px; padding: 20px 0;">
             <div id="bug-search-sort" class="col-12 sa-grid-item">
               <span class="sa-desc">顺序：</span>
               <div class="d-inline sc-context">
@@ -231,8 +231,8 @@
 
             <div class="col-12 text-center mt-3">
               <button type="button" class="btn-ad-search" @click="isShowAdSearch = 'no'">隐藏</button>
+              <button type="button" class="btn-primary btn-ad-search" @click="getAdvancedSearch()">高级搜索</button>
               <button type="button" class="btn-ad-search" @click="resetAdvancedSearch()">重置</button>
-              <button type="button" class="btn-ad-search" @click="getAdvancedSearch()">高级搜索</button>
             </div>
           </div>
 
@@ -1071,9 +1071,9 @@ export default {
   }
   .btn-ad-search {
     font-size:0.88rem;
-    color: #5E6D82;
-    background-color: #ffffff;
-    border: 1px solid #eeeeee;
+    /* color: #5E6D82; */
+    /* background-color: #ffffff; */
+    /* border: 1px solid #eeeeee; */
     border-radius: 5px;
     padding: 4px 8px;
     margin: 9px;

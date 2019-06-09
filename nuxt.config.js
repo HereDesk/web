@@ -98,10 +98,12 @@ module.exports = {
       }
     }
   },
+
   cache: true,
+  
   router: {
     linkActiveClass: 'active-link',
-    middleware: ['auth']
+    middleware: 'auth'
   },
   
 
