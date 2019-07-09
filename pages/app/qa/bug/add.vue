@@ -199,6 +199,8 @@ export default {
       mavon_md_base_toolbars: data.mavon_md_base_toolbars,
       page_type: 'bug',
       fileList: [],
+      modal_draft_box: false,
+      is_reduction_draft_box: false,
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
@@ -242,6 +244,16 @@ export default {
           this.$store.dispatch("getProductMembers",this.selected_product_id)
         }
       }
+    },
+    Bug: {
+      handler: function(old,oldVal) {
+        if (process.client) {
+          if (this.Bug.title || this.Bug.steps || this.Bug.reality_result || this.Bug.expected_result) {
+            window.localStorage.setItem("bug_drafts", JSON.stringify(this.Bug))
+          }
+        }
+      },
+      deep: true
     }
   },
 
@@ -251,6 +263,14 @@ export default {
     }
     if (this.$route.query.case_id) {
       this.getCaseDetails()
+    }
+  },
+
+  mounted() {
+    let bug_drafts = window.localStorage.bug_drafts
+    if (bug_drafts) {
+      let bug_drafts_box = JSON.parse(bug_drafts)
+      this.open_draft_box(bug_drafts_box)
     }
   },
 
@@ -389,7 +409,23 @@ export default {
           })
         }
       })
-    }
+    },
+
+    open_draft_box(data) {
+      this.$confirm('检测到草稿箱存在未提交的缺陷，是否恢复？', '提示', {
+          showClose: false,
+          type: "info",
+          distinguishCancelAndClose: true,
+          confirmButtonText: '是',
+          cancelButtonText: '否，创建新缺陷'
+        })
+        .then(() => {
+          this.Bug = data
+        })
+        .catch(action => {
+          this.is_reduction_draft_box = false
+        })
+      }
     
   }
 }

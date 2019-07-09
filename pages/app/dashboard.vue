@@ -12,12 +12,10 @@
     <div class="navbar">
       <span class="dashboard-username">{{ familyname || '' }}</span>
       <el-dropdown class="ml-3" trigger="click">
-        <span
-            id="dashboard-set"
+        <span id="dashboard-set"
             data-toggle="dropdown"
             aria-haspopup="true"
-            aria-expanded="false"
-          >
+            aria-expanded="false">
             <i class="iconfont icon-menu size-2 icon-8a8a8a"></i>
           </span>
         <el-dropdown-menu slot="dropdown">
@@ -105,10 +103,7 @@
             </nuxt-link>
           </div>
           <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav FF6D00">
-            <nuxt-link :to="{ 
-                  path: '/app/qa/testcase', 
-                  query: { 'product_id': current_product_id } 
-                }" class="n-link">
+            <nuxt-link :to="{ path: '/app/qa/testcase', query: { 'product_id': current_product_id } }" class="n-link">
               <h5><i class="iconfont icon-T size-2 pr-3"></i>测试用例</h5>
             </nuxt-link>
           </div>

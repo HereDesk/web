@@ -5,15 +5,13 @@ import {
 
 export default function ({isHMR,context,req,redirect,route,store}) {
 
-  if (isHMR) return
-
   if (process.server && !req) {
     return
   }
 
   const token = process.server ? getUserFromCookie(req) : getUserFromLocalStorage()
 
-  if (!token || typeof(token) == "undefined") {
+  if (!token || typeof(token) === "undefined") {
     return redirect("/")
   }
 

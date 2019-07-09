@@ -15,6 +15,7 @@ import PageLoading from "~/components/PageLoading"
 import Pagination from "~/components/Pagination"
 import BaseNav from '~/components/BaseNav'
 import Modal from "~/components/Modal"
+import MessageBox from "~/components/MessageBox"
 import ProductInfo from "~/components/ProductInfo"
 
 
@@ -25,4 +26,5 @@ Vue.component('PageLoading',PageLoading)
 Vue.component('Pagination',Pagination)
 Vue.component('BaseNav',BaseNav)
 Vue.component('Modal',Modal)
+Vue.component('MessageBox',MessageBox)
 Vue.component('ProductInfo',ProductInfo)
