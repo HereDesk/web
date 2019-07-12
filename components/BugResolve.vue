@@ -15,7 +15,7 @@
             </select>
           </div>
           <div class='form-group row col-md-auto mx-3'>
-            <label for="assignedTo">指派给</label>
+            <label for="assignedTo">指派</label>
             <select class='select-control border' v-model="ResolveData.assignedTo">
               <option disabled value="">请选择指派给谁</option>
               <option v-for='(item,index) in person_list' :key="index" :value="item.user_id">
@@ -46,7 +46,8 @@ export default {
   props: {
     bug_id: String,
     OpenBy: String,
-    product_code: String,
+    bug_creator_id: String,
+    product_id: String,
     scheme: String,
     pageSource: String,
     member_list: {}
@@ -66,10 +67,11 @@ export default {
       return this.$store.state.BugProperty.bug_solution
     },
     person_list: function () {
-      if (this.$store.state.ProductMemberList) {
-        return this.$store.state.ProductMemberList["data"]
+      let person_list = this.$store.state.ProductMemberList
+      if (JSON.stringify(person_list) === "{}") {
+        this.$store.dispatch("getProductMembers",this.product_id)
       }
-      return 
+      return this.$store.state.ProductMemberList["data"]
     },
     mtitle: function() {
       if (this.scheme === "Postponed") {
@@ -77,6 +79,11 @@ export default {
       } else {
         return "解决缺陷"
       }
+    }
+  },
+  mounted() {
+    if (this.bug_creator_id) {
+      this.ResolveData.assignedTo = this.bug_creator_id
     }
   },
   methods: {

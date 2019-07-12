@@ -403,7 +403,7 @@
       v-if="showModal == 'resolve'" 
       @close="showModal = false"
       :bug_id="selectedBugId"
-      :OpenBy="HoverBugIdOpenBy"
+      :bug_creator_id="HoverBugIdCreatorBy"
       :product_id="visited_product_id"
       :pageSource="pageSource"
       :scheme="scheme"
@@ -527,7 +527,7 @@ export default {
       tableData: [],
       HoverBugId: "",
       selectedBugId: "",
-      HoverBugIdOpenBy: "",
+      HoverBugIdCreatorBy: "",
       MyTodayData: false,
       BugExportFile: {},
       
@@ -1001,8 +1001,9 @@ export default {
 		
     /* table line hover and leave */
     tableHover(row) {
-      this.HoverBugIdOpenBy = row.openedBy
+      this.HoverBugIdCreatorBy = row.creator_id
       this.HoverBugId = row.bug_id
+      this.visited_product_id = row.product_id
     },
     
     tableLeave(row) {

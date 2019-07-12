@@ -248,8 +248,8 @@
       v-if="showModal == 'resolve'" 
       @close="showModal = false"
       :bug_id="currentBugId"
-      :OpenBy="BugDetails.openedBy"
-      :product_code="product_code"
+      :bug_creator_id="BugDetails.creator_id"
+      :product_id="BugDetails.product_id"
       :scheme="'other'"
       :pageSource="pageSource"
       :member_list="member_list">

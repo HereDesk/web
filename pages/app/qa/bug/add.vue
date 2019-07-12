@@ -385,6 +385,9 @@ export default {
             title: "成功",
             message: res.data["msg"]
           })
+          if (process.client) { 
+            window.localStorage.removeItem("bug_drafts")
+          }
           if (event.target.value === "only-once-commit") {
             this.$router.push({path: "/app/qa/bug"})
           }
@@ -412,7 +415,7 @@ export default {
     },
 
     open_draft_box(data) {
-      this.$confirm('检测到草稿箱存在未提交的缺陷，是否恢复？', '提示', {
+      this.$confirm('检测到草稿箱存在未提交的缺陷，是否恢复？创建新缺陷后，将会导致上次未提交的数据被覆盖！', '提示', {
           showClose: false,
           type: "info",
           distinguishCancelAndClose: true,

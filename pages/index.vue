@@ -46,10 +46,10 @@ export default {
     }
   },
   mounted() {
-    // const token = getUserFromLocalStorage()
-    // if (this.$store.state.isLogin || token) {
-    //   this.$router.replace("/app/dashboard")
-    // }
+    const token = getUserFromLocalStorage()
+    if (this.$store.state.isLogin || token) {
+      this.$router.replace("/app/dashboard")
+    }
   },
   methods: {
     goLogin() {
