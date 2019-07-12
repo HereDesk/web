@@ -134,7 +134,7 @@
           <div id="bug-file" class="form-group row">
             <label for="bug-file" class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
-              <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
+              <FileUpload :fileLimit="5" :editFileList="this.Bug.annex" @annex="getAnnex"></FileUpload>
             </form>
           </div> 
           
@@ -153,20 +153,12 @@
   
           <!-- bug: about button -->
           <div id="bug-btn" class="d-flex justify-content-center my-5">
-            <button type="button" class="btn btn-accessories" @click="isShowRemark">
-              添加备注
-            </button>
+            <button type="button" class="btn btn-accessories" @click="isShowRemark">添加备注</button>
             <button type="button" class="btn btn-submit mx-3" value="only-once-commit" 
-              :disabled="isButtonDisabled" @click="createBug($event)">
-              保存提交
-            </button>
+              :disabled="isButtonDisabled" @click="createBug($event)">保存提交</button>
             <button type="button" class="btn btn-accessories" value="continue-commit" 
-              :disabled="isButtonDisabled" @click="createBug($event)">
-              继续添加
-            </button>
-            <button type="button" class="btn btn-accessories" @click="$router.go(-1)">
-              返回
-            </button>
+              :disabled="isButtonDisabled" @click="createBug($event)">继续添加</button>
+            <button type="button" class="btn btn-accessories" @click="$router.go(-1)">返回</button>
           </div>
           
         </div>
@@ -248,6 +240,7 @@ export default {
     Bug: {
       handler: function(old,oldVal) {
         if (process.client) {
+          // 标题、步骤、预期结果、实际结果，只要有输入，就保存到草稿箱
           if (this.Bug.title || this.Bug.steps || this.Bug.reality_result || this.Bug.expected_result) {
             window.localStorage.setItem("bug_drafts", JSON.stringify(this.Bug))
           }
@@ -267,6 +260,7 @@ export default {
   },
 
   mounted() {
+    // 草稿箱
     let bug_drafts = window.localStorage.bug_drafts
     if (bug_drafts) {
       let bug_drafts_box = JSON.parse(bug_drafts)
@@ -414,11 +408,15 @@ export default {
       })
     },
 
+    /*
+    * 缺陷草稿箱
+    */
     open_draft_box(data) {
       this.$confirm('检测到草稿箱存在未提交的缺陷，是否恢复？创建新缺陷后，将会导致上次未提交的数据被覆盖！', '提示', {
           showClose: false,
-          type: "info",
+          type: "warning",
           distinguishCancelAndClose: true,
+          closeOnClickModal: false,
           confirmButtonText: '是',
           cancelButtonText: '否，创建新缺陷'
         })

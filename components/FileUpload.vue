@@ -38,11 +38,22 @@ export default {
     editFileList: {
       handler: function(old,oldval) {
         for (const f of this.editFileList) {
-          this.fileList.push({
-            "name":f.url,
-            "url":f.url,
-            "response":{"name":f.url}
-          })
+          // 新增页面，草稿箱
+          if (typeof(f) === 'string') {
+            this.fileList.push({
+              "name":f,
+              "url":f,
+              "response":{"name":f}
+            })
+          }
+          // 编辑页面
+          if (typeof(f) === 'object') {
+            this.fileList.push({
+              "name":f.url,
+              "url":f.url,
+              "response":{"name":f.url}
+            })
+          }
         }
       }
     },

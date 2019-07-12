@@ -24,6 +24,11 @@
               <i class="iconfont icon-help"></i>&nbsp;&nbsp;帮助文档
             </nuxt-link>
           </el-dropdown-item>
+          <el-dropdown-item divided v-if="SystemMenuRules == 1">
+            <nuxt-link to="/app/system">
+              <i class="iconfont icon-password"></i>&nbsp;&nbsp;系统设置
+            </nuxt-link>
+          </el-dropdown-item>
           <el-dropdown-item divided>
             <nuxt-link to="/app/set/passwd">
               <i class="iconfont icon-password"></i>&nbsp;&nbsp;修改密码
@@ -158,6 +163,24 @@ export default {
   },
 
   computed: {
+
+    PageRules() {
+      return this.$store.state.PageData
+    },
+
+    // 系统设置菜单权限
+    SystemMenuRules() {
+      let PageRules = this.PageRules
+      if (JSON.stringify(PageRules) === '[]' || PageRules === false) {
+        return 0
+      } else {
+        for (let i of PageRules) {
+          if (i['url'] == '/api/system') {
+            return i['is_allow']
+          }
+        }
+      }
+    },
 
     familyname: function () {
       return this.$store.state.userInfo ? this.$store.state.userInfo.realname : ""

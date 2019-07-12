@@ -18,33 +18,41 @@ export const state = () => ({
 })
 
 export const mutations = {
+    // 项目版本信息
     setProductVersionInfo(state, data) {
         state.ProductVersionInfo = data
     },
+    // 项目模块信息
     setProductModulesInfo(state, data) {
         state.ProductModulesInfo = data
     },
+    // 用户登录信息
     setLoginInfo(state, data) {
         state.isLogin = true
     },
+    // 用户信息
     setUserInfo(state, data) {
         if (data) {
             state.userInfo = data['data']
             state.UserConfig = data['config']
         }
     },
+    // 页面访问权限数据
     setPageData(state, data) {
         if (data) {
             state.PageData = data['data']
         }
     },
+    // 项目信息
     setProductInfo(state, data) {
         state.isProductInfo = true
         state.ProductInfo = data
     },
+    // 缺陷属性
     setBugPropery(state, data) {
         state.BugProperty = data
     },
+    // 项目成员列表
     setProductMemberList(state, data) {
         state.ProductMemberList = data
     }

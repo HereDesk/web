@@ -133,11 +133,8 @@
           
           <!-- 提交按钮 -->
           <div id="bug-btn" class='d-flex justify-content-center my-5'>
-            <button type='button' class='btn btn-transparent' @click="$router.go(-1)">
-              返回
-            </button>
-            <button type='button' class='btn btn-submit mx-5 px-3' 
-              :disabled="isButtonDisabled" @click='editBug()'>
+            <button type='button' class='btn btn-transparent' @click="$router.go(-1)">返回</button>
+            <button type='button' class='btn btn-submit mx-5 px-3' :disabled="isButtonDisabled" @click='editBug()'>
               提交修改
             </button>
           </div>

@@ -337,7 +337,7 @@
           placeholder="请输入缺陷关闭原因，且不能少于10个字" 
           v-model.trim="ClosedData.remark">
         </mavon-editor>
-        <p class="mt-3 text-gray">备注: 当缺陷状态不是"已解决"时，关闭必须填写原因</p>
+        <p class="mt-3 mb-0 text-gray">备注: 当缺陷状态不是"已解决"时，关闭必须填写原因</p>
       </div>
       <div slot="footer">
         <button type="submit" class="btn btn-primary" @click="BugClosed()">提交</button>
@@ -483,6 +483,11 @@ export default {
       this.showModal ? 
         document.body.classList.add("overflow-hidden") : 
         document.body.classList.remove("overflow-hidden")
+
+      // 当点击【重新打开】,默认指派人为：上次缺陷解决者
+      if (this.showModal === 'ReOpen') {
+        this.ReOpenData.assignedTo = this.BugDetails.assignedTo_id
+      } 
     }
   },
 

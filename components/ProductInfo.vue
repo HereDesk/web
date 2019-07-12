@@ -215,10 +215,10 @@ export default {
       handler: function (val, oldVal) {
         const isEdit = Boolean(JSON.stringify(this.editData))
         const route = this.$route.query
-        const last_visited_product = process.browser & isEdit 
+        const last_visited_product = process.browser && isEdit 
           ? window.localStorage.last_visited_product 
           : undefined
-        if (JSON.stringify(this.product_list) !== '[]' & !isEdit) {
+        if (JSON.stringify(this.product_list) !== '[]' && !isEdit) {
           if (route.product_id) {
             this.product_id = route.product_id
           } else if (last_visited_product) {
@@ -226,7 +226,10 @@ export default {
           } else {
             this.product_id = this.product_list[0]['product_id']
           }
-          if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
+          
+          // 请求页面菜单权限数据
+          let PageData = this.$store.state.PageData
+          if (JSON.stringify(PageData) === '[]' || PageData.length === 0 || PageData === false) {
             this.$store.dispatch("getPageData",this.product_id)
           }
         }
