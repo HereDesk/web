@@ -379,6 +379,7 @@ export default {
             title: "成功",
             message: res.data["msg"]
           })
+          // 提交成功后，清除本地草稿箱内容
           if (process.client) { 
             window.localStorage.removeItem("bug_drafts")
           }
@@ -413,20 +414,20 @@ export default {
     */
     open_draft_box(data) {
       this.$confirm('检测到草稿箱存在未提交的缺陷，是否恢复？创建新缺陷后，将会导致上次未提交的数据被覆盖！', '提示', {
-          showClose: false,
-          type: "warning",
-          distinguishCancelAndClose: true,
-          closeOnClickModal: false,
-          confirmButtonText: '是',
-          cancelButtonText: '否，创建新缺陷'
-        })
-        .then(() => {
-          this.Bug = data
-        })
-        .catch(action => {
-          this.is_reduction_draft_box = false
-        })
-      }
+        showClose: false,
+        type: "warning",
+        distinguishCancelAndClose: true,
+        closeOnClickModal: false,
+        confirmButtonText: '是',
+        cancelButtonText: '否，创建新缺陷'
+      })
+      .then(() => {
+        this.Bug = data
+      })
+      .catch(action => {
+        this.is_reduction_draft_box = false
+      })
+    }
     
   }
 }

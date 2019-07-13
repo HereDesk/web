@@ -422,7 +422,7 @@ code {
 
 .form-control::-webkit-input-placeholder{
   color: #c0c4cc;
-  font-style: italic;
+  font-style: normal;
 }
 
 /* Bootstrap dropdown */
@@ -955,23 +955,23 @@ pre {
 
 input::-webkit-input-placeholder {
   font-weight: 300;
-  font-size:0.9rem;
-  font-style: italic;
-  color: c0c4cc;
+  font-size:0.85rem;
+  font-style: normal;
+  color: #c0c4cc;
 }
 
 input:-moz-placeholder {
   font-weight: 300;
-  font-size:0.9rem;
-  color: c0c4cc;
-  font-style: italic;
+  font-size:0.85rem;
+  color: #c0c4cc;
+  font-style: normal;
 }
 
 input:-ms-input-placeholder {
   font-weight: 300;
-  font-size:0.9rem;
-  color: c0c4cc;
-  font-style: italic;
+  font-size:0.85rem;
+  color: #c0c4cc;
+  font-style: normal;
 }
 
 /* 
@@ -1045,7 +1045,7 @@ textarea::-webkit-input-placeholder {
   font-weight: 300;
   font-size: 0.9rem !important;
   color: #c0c4cc;
-  font-style: italic;
+  font-style: normal;
 }
 
 /* 

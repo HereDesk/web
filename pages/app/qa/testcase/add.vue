@@ -98,7 +98,7 @@
                 设计图/原型图
               </label>
               <form id="case-file" class="col-lg-9 col-md-10 col-sm-12">
-                <FileUpload :fileLimit="5" @annex="getAnnex"></FileUpload>
+                <FileUpload :fileLimit="5" :editFileList="this.CaseData.annex" @annex="getAnnex"></FileUpload>
               </form>
             </div>
 
@@ -177,10 +177,33 @@ export default {
     next()
   },
 
+  watch: {
+    CaseData: {
+      handler: function(old,oldVal) {
+        if (process.client) {
+          // 标题、步骤、预期结果，只要有输入，就保存到草稿箱
+          if (this.CaseData.title || this.CaseData.precondition || this.CaseData.ExpectedResult || this.CaseData.steps || this.CaseData.DataInput) {
+            window.localStorage.setItem("testcase_drafts_box", JSON.stringify(this.CaseData))
+          }
+        }
+      },
+      deep: true
+    }
+  },
+
   computed: {
   },
 
   created () {
+  },
+
+  mounted () {
+    // 测试用例草稿箱
+    let testcase_drafts_box = window.localStorage.testcase_drafts_box
+    if (testcase_drafts_box) {
+      let drafts_box = JSON.parse(testcase_drafts_box)
+      this.open_draft_box(drafts_box)
+    }
   },
 
   methods: {
@@ -207,6 +230,7 @@ export default {
     getAnnex (data) {
       this.CaseData.annex = data
     },
+
     addTest (event) {
       var title = this.CaseData.title
       var DataInput = this.CaseData.DataInput
@@ -259,6 +283,12 @@ export default {
       }).then(res => {
         if (res.data['status'] === 20000) {
           this.isButtonDisabled = false
+
+          // 提交成功后，清除本地草稿箱内容
+          if (process.client) { 
+            window.localStorage.removeItem("testcase_drafts_box")
+          }
+
           if (event.target.value === 'only-once-commit') {
             if (this.last_url == '/app/qa/testcase') {
               this.$router.go(-1)
@@ -286,7 +316,25 @@ export default {
           })
         }
       })
+    },
+
+    /*
+    * 测试用例草稿箱
+    */
+    open_draft_box(data) {
+      this.$confirm('检测到草稿箱存在未提交的测试用例，是否恢复？创建新用例，将会导致上次未提交的数据被覆盖！', '提示', {
+        showClose: false,
+        type: "warning",
+        distinguishCancelAndClose: true,
+        closeOnClickModal: false,
+        confirmButtonText: '是',
+        cancelButtonText: '否，创建新用例'
+      })
+      .then(() => {
+        this.CaseData = data
+      })
     }
+
   }
 }
 </script>
