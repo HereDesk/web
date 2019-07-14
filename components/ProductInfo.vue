@@ -2,23 +2,23 @@
   <div id="components-product-info" class="display-inline">
 
     <!-- 缺陷/用例：创建、编辑 -->
-    <div id="product-version-module" class="container-fluid px-0" 
+    <div id="product-version-module" class="container-fluid px-0"
       v-if="['bug_edit','bug_create','case_add'].includes(ptype)">
       <div class="row">
         <el-select id="info-product" class="col" placeholder="选择产品" v-model="product_id" >
-          <el-option 
-            v-for="(item,index) in product_list" 
-            :key="index" 
-            :label="item.product_code" 
+          <el-option
+            v-for="(item,index) in product_list"
+            :key="index"
+            :label="item.product_code"
             :value="item.product_id">
           </el-option>
         </el-select>
-        <el-select id="info-version" class="col" placeholder="选择版本" v-model="release" 
+        <el-select id="info-version" class="col" placeholder="选择版本" v-model="release"
           v-if="['bug_edit','bug_create'].includes(ptype)">
-          <el-option 
-            v-for="(item,index) in release_list" 
-            :key="index" 
-            :label="item.label" 
+          <el-option
+            v-for="(item,index) in release_list"
+            :key="index"
+            :label="item.label"
             :value="item.version">
           </el-option>
           <!-- <el-option value="create">
@@ -27,11 +27,11 @@
             </a>
           </el-option> -->
         </el-select>
-        <el-cascader id="info-modules" class="col" 
-          :options="modules_list" 
-          v-model="module_id" 
-          filterable 
-          change-on-select 
+        <el-cascader id="info-modules" class="col"
+          :options="modules_list"
+          v-model="module_id"
+          filterable
+          change-on-select
           placeholder="选择模块" >
         </el-cascader>
       </div>
@@ -41,7 +41,7 @@
     <div class="display-inline" v-if="showStyle === 'no-border-dropdown' & ptype === 'only-product-name'">
       <el-dropdown>
         <span class="dashboard-product">
-          <span class="el-dropdown-link"> 
+          <span class="el-dropdown-link">
             {{ product_code || '' }}&nbsp;&nbsp;
             <i class="iconfont icon-trigon-down icon-8a8a8a"></i>
           </span>
@@ -55,18 +55,18 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    
+
     <!-- Only ProductNameList, no border dropdown -->
-    <el-select id="info-product" style="width:100%;" placeholder="选择产品" v-model="product_code" 
+    <el-select id="info-product" style="width:100%;" placeholder="选择产品" v-model="product_code"
       v-if="showStyle === 'select' & ptype === 'only-product-name'">
       <el-option
-        v-for="(item,index) in product_list" 
-        :key="index" 
-        :label="item.product_code" 
+        v-for="(item,index) in product_list"
+        :key="index"
+        :label="item.product_code"
         :value="item.product_code">
       </el-option>
     </el-select>
-    
+
 
     <!-- Dropdown style -->
     <div class="display-inline" v-if="showStyle === 'dropdown' & ['bug_index','case_index'].includes(ptype)">
@@ -110,7 +110,7 @@ export default {
     showVersionInfo: Boolean,
     editData: Object
   },
-  
+
   data () {
     return {
       product_list: [],
@@ -123,7 +123,7 @@ export default {
       PageMsg: ""
     }
   },
-  
+
   computed: {
 
     // emit info
@@ -165,7 +165,7 @@ export default {
       }
     }
   },
-  
+
   watch: {
     EmitInfo: {
       handler: function(val,oldVal) {
@@ -173,7 +173,7 @@ export default {
       },
       deep: true
     },
-    
+
     product_id: function (val, oldVal) {
       if (this.product_id) {
         // save product_id to localStorage
@@ -186,10 +186,10 @@ export default {
             this.product_code = item.product_code
           }
         }
-        if (!['only-product-name','case_index','bug_index'].includes(this.ptype)) {  
+        if (!['only-product-name','case_index','bug_index'].includes(this.ptype)) {
           const ProductModulesInfo = this.$store.state.ProductModulesInfo
           if (JSON.stringify(ProductModulesInfo) !== '{}') {
-            ProductModulesInfo.product_id === this.product_id 
+            ProductModulesInfo.product_id === this.product_id
               ? this.modules_list = ProductModulesInfo.data
               : this.getModule()
           } else {
@@ -198,7 +198,7 @@ export default {
         }
       }
     },
-    
+
     editData: {
       handler: function (val, oldVal) {
         const isEdit = Boolean(JSON.stringify(this.editData))
@@ -215,8 +215,8 @@ export default {
       handler: function (val, oldVal) {
         const isEdit = Boolean(JSON.stringify(this.editData))
         const route = this.$route.query
-        const last_visited_product = process.browser && isEdit 
-          ? window.localStorage.last_visited_product 
+        const last_visited_product = process.browser && isEdit
+          ? window.localStorage.last_visited_product
           : undefined
         if (JSON.stringify(this.product_list) !== '[]' && !isEdit) {
           if (route.product_id) {
@@ -226,19 +226,20 @@ export default {
           } else {
             this.product_id = this.product_list[0]['product_id']
           }
-          
+
           // 请求页面菜单权限数据
           let PageData = this.$store.state.PageData
-          if (JSON.stringify(PageData) === '[]' || PageData.length === 0 || PageData === false) {
+          let UserIdentity = this.$store.state.userInfo.identity === 1 ? true : false
+          if (JSON.stringify(PageData) === '[]' && UserIdentity ) {
             this.$store.dispatch("getPageData",this.product_id)
           }
         }
       },
       deep: true
     }
-    
+
   },
-  
+
   created() {
     const ProductVersionInfo = this.$store.state.ProductVersionInfo
     if (JSON.stringify(ProductVersionInfo) !== '{}') {
@@ -247,10 +248,10 @@ export default {
       this.getProductRelease()
     }
   },
-  
+
   methods: {
-    /* 
-    * get product info and release info 
+    /*
+    * get product info and release info
     */
     getProductRelease() {
       this.axios
@@ -265,9 +266,9 @@ export default {
         }
       )
     },
-    
-    /* 
-    * get product module info 
+
+    /*
+    * get product module info
     */
     getModule() {
       this.axios
@@ -288,7 +289,7 @@ export default {
         }
       )
     }
-    
+
   }
 }
 </script>

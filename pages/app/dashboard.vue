@@ -54,8 +54,8 @@
               <div class="row pt-3">
                 <div class="col-6 border-right">
                   <div class="board-view">
-                    <nuxt-link :to="{ 
-                        path: '/app/qa/bug', 
+                    <nuxt-link :to="{
+                        path: '/app/qa/bug',
                         query: { 'operate': 'WaitPending', 'product_id': current_product_id } }">
                       <p class="v-num">{{ BugDashData.WaitPending || '0' }}</p>
                       <p class="v-desc">待我处理</p>
@@ -100,9 +100,9 @@
         <!-- page nav -->
         <div id="dashboard-nav" class="row align-items-center">
           <div class="col-lg-3 col-md-3 col-sm-6 col-6 dashboard-nav F4511E">
-            <nuxt-link :to="{ 
-                  path: '/app/qa/bug', 
-                  query: { 'product_id': current_product_id, 'status': 'notClosed' } 
+            <nuxt-link :to="{
+                  path: '/app/qa/bug',
+                  query: { 'product_id': current_product_id, 'status': 'notClosed' }
                 }" class="n-link">
               <h5><i class="iconfont icon-bug size-2 pr-3"></i>缺陷</h5>
             </nuxt-link>
@@ -170,13 +170,17 @@ export default {
 
     // 系统设置菜单权限
     SystemMenuRules() {
-      let PageRules = this.PageRules
-      if (JSON.stringify(PageRules) === '[]' || PageRules === false) {
-        return 0
+      if (this.$store.state.userInfo.identity == 0) {
+        return 1
       } else {
-        for (let i of PageRules) {
-          if (i['url'] == '/api/system') {
-            return i['is_allow']
+        let PageRules = this.PageRules
+        if (JSON.stringify(PageRules) === '[]' || PageRules === false) {
+          return 0
+        } else {
+          for (let i of PageRules) {
+            if (i['url'] == '/api/system') {
+              return i['is_allow']
+            }
           }
         }
       }
@@ -276,9 +280,6 @@ export default {
     },
 
     product_msg: function (val, oldVal) {
-      // if (this.product_msg) {
-      //   this.img_src = require("static/images/smiley.png")
-      // }
       if (this.product_msg) {
         this.img_src = require("static/images/product_add.png")
       }

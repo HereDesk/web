@@ -1,12 +1,10 @@
-import {
-  getUserFromCookie,
-  getUserFromLocalStorage
-} from '~/assets/js/auth'
+import { getUserFromCookie,getUserFromLocalStorage } from '~/assets/js/auth'
+import { Base64 } from 'js-base64'
 
 export default function ({isHMR,context,req,redirect,route,store,next}) {
 
   if (isHMR) return
-  if (process.server && !req) return 
+  if (process.server && !req) return
 
   // 获取token
   let token = process.server ? getUserFromCookie(req) : getUserFromLocalStorage()
@@ -15,7 +13,7 @@ export default function ({isHMR,context,req,redirect,route,store,next}) {
   if ( !token || typeof(token) === "undefined" ) {
     let fullpath = req.url
     if (fullpath !== '/' && !fullpath.includes('target') ) {
-      return redirect("/?target=" + fullpath)
+      return redirect("/?target=" + Base64.encodeURI(fullpath))
     } else {
       return redirect(fullpath)
     }

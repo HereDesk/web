@@ -9,15 +9,15 @@
       <div class="col-lg-4 col-md-6 col-sm-8 col-12 text-center">
         <h2 class="p-user-login-title">欢迎登录</h2>
         <div id="input-email" class="input-group input-group-lg">
-          <input type="email" id="user_name" name="email" class="form-control" 
-            maxlength="30" minlength="6" 
+          <input type="email" id="user_name" name="email" class="form-control"
+            maxlength="30" minlength="6"
             placeholder="电子邮件"
             v-model.trim="LoginData.username" />
         </div>
         <div id="input-passwd" class="input-group input-group-lg passwd">
-          <input type="password" id="user_passwd" name="user_passwd" class="form-control" 
-            maxlength="30" minlength="6" 
-            placeholder="输入密码" 
+          <input type="password" id="user_passwd" name="user_passwd" class="form-control"
+            maxlength="30" minlength="6"
+            placeholder="输入密码"
             v-model.trim="LoginData.password"
             @keyup.enter="goLogin" />
         </div>
@@ -32,6 +32,7 @@
 
 <script>
 import { getUserFromLocalStorage } from "~/assets/js/auth"
+import { Base64 } from 'js-base64'
 
 export default {
   data() {
@@ -51,9 +52,9 @@ export default {
     if (this.$store.state.isLogin || token) {
       this.$router.replace("/app/dashboard")
     }
-    const from_url = this.$route.fullPath
-    if (from_url.includes('target')) {
-      this.target_url = unescape(from_url.split('/?target=')[1])
+    const target_url = this.$route.query.target ? this.$route.query.target : false
+    if (target_url) {
+      this.target_url = Base64.decode(target_url)
     }
   },
   methods: {

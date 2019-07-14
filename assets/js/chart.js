@@ -46,12 +46,12 @@ export default {
       if (data['type'] === 'week') {
         a1.push('周'+(d-1))
       } else if (data['type'] === 'year') {
-        a1.push(d + '月') 
+        a1.push(d + '月')
       } else if (data['type'] === 'today') {
-        a1.push(d + ':00') 
+        a1.push(d + ':00')
       } else {
         a1.push(d)
-      } 
+      }
       a2.push(n)
     }
     chart_data['datetime'] = a1
@@ -174,7 +174,7 @@ export default {
             },
             itemStyle: {
               normal: {
-                color: function(params) { 
+                color: function(params) {
                   let colorList = ['#66C2CB']
                   return colorList[params.dataIndex]
                 },
@@ -195,7 +195,7 @@ export default {
             },
             itemStyle: {
               normal: {
-                color: function(params) { 
+                color: function(params) {
                   let colorList = ['#F48B31']
                   return colorList[params.dataIndex]
                 },
@@ -257,7 +257,7 @@ export default {
         },
         itemStyle: {
           normal: {
-            color: function(params) { 
+            color: function(params) {
               let colorList = ['#F48B31','#66C2CB','#EF7030','#FBB731','#51C1F0']
               return colorList[params.dataIndex]
             },

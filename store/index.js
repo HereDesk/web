@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export const state = () => ({
     userInfo: false,
-    PageData: false,
+    PageData: [],
     UserConfig: [],
     isLogin: false,
     ProductInfo: [],
@@ -22,14 +22,17 @@ export const mutations = {
     setProductVersionInfo(state, data) {
         state.ProductVersionInfo = data
     },
+
     // 项目模块信息
     setProductModulesInfo(state, data) {
         state.ProductModulesInfo = data
     },
+
     // 用户登录信息
     setLoginInfo(state, data) {
         state.isLogin = true
     },
+
     // 用户信息
     setUserInfo(state, data) {
         if (data) {
@@ -37,21 +40,25 @@ export const mutations = {
             state.UserConfig = data['config']
         }
     },
+
     // 页面访问权限数据
     setPageData(state, data) {
         if (data) {
             state.PageData = data['data']
         }
     },
+
     // 项目信息
     setProductInfo(state, data) {
         state.isProductInfo = true
         state.ProductInfo = data
     },
+
     // 缺陷属性
     setBugPropery(state, data) {
         state.BugProperty = data
     },
+
     // 项目成员列表
     setProductMemberList(state, data) {
         state.ProductMemberList = data
@@ -59,22 +66,31 @@ export const mutations = {
 }
 
 export const actions = {
+    // 用户信息数据
     async getUserInfo({ commit }) {
         const { data } = await axios.get('/api/user/userinfo')
         commit('setUserInfo', data)
     },
+
+    // 页面权限数据
     async getPageData({ commit }, product_id) {
         const { data } = await axios.get('/api/user/pages?product_id=' + product_id)
         commit('setPageData', data)
     },
+
+    // 产品版本信息
     async getProductRelease({ commit }) {
         const { data } = await axios.get('/api/pm/product/my')
         commit('setProductInfo', data)
     },
+
+    // 产品成员列表
     async getProductMembers({ commit }, product_id) {
         const { data } = await axios.get('/api/pm/member/list?product_id=' + product_id)
         commit('setProductMemberList', data)
     },
+
+    // 缺陷属性
     async getBugProperty({ commit }) {
         const { data } = await axios.get('/api/qa/bug/bug_property')
         commit('setBugPropery', data)

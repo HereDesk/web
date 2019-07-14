@@ -156,6 +156,7 @@ export default {
       msg: '',
       isButtonDisabled: false,
       isRemarkDisable: false,
+      isShowDraftsBox: false,
       CaseData: {
         product_id: null,
         title: '',
@@ -172,11 +173,6 @@ export default {
     }
   },
 
-  beforeRouteLeave (to, from, next) {
-    this.last_url = to.path
-    next()
-  },
-
   watch: {
     CaseData: {
       handler: function(old,oldVal) {
@@ -191,17 +187,16 @@ export default {
     }
   },
 
-  computed: {
-  },
-
-  created () {
-  },
+  // beforeRouteLeave({to,from,next}) {
+  //   next()
+  // },
 
   mounted () {
     // 测试用例草稿箱
     let testcase_drafts_box = window.localStorage.testcase_drafts_box
     if (testcase_drafts_box) {
       let drafts_box = JSON.parse(testcase_drafts_box)
+      this.isShowDraftsBox = true
       this.open_draft_box(drafts_box)
     }
   },
@@ -331,6 +326,7 @@ export default {
         cancelButtonText: '否，创建新用例'
       })
       .then(() => {
+        this.isShowDraftsBox = false
         this.CaseData = data
       })
     }
