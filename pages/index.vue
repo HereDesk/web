@@ -39,6 +39,7 @@ export default {
       token: "",
       showModal: false,
       msg: "",
+      target_url: "/app/dashboard",
       LoginData: {
         username: "",
         password: ""
@@ -49,6 +50,10 @@ export default {
     const token = getUserFromLocalStorage()
     if (this.$store.state.isLogin || token) {
       this.$router.replace("/app/dashboard")
+    }
+    const from_url = this.$route.fullPath
+    if (from_url.includes('target')) {
+      this.target_url = unescape(from_url.split('/?target=')[1])
     }
   },
   methods: {
@@ -97,9 +102,13 @@ export default {
               exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000)
               document.cookie = "token=" + token + ";" + "expires=" + exp.toGMTString() + ";" + "path=/"
             }
+
+            // 保存用户登录数据到state
             this.$store.commit("setLoginInfo", res.data)
             this.$store.dispatch('getUserInfo')
-            this.$router.replace("/app/dashboard")
+
+            // 跳转首页
+            this.$router.replace(this.target_url)
           }
           if (res.data["status"] !== 10000) {
             this.LoginData.username = ""
