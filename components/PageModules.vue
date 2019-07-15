@@ -10,9 +10,9 @@
     </div>
     <ul :id="item1.id" class="ul-style-none" v-for="(item1,index) in modules_list" :key="index">
       <li>
-        <span class="line-height-1-8" :class="{ 'el-active': m1_id == item1.id }" 
+        <span class="line-height-1-8" :class="{ 'el-active': m1_id == item1.id }"
           @click="clickMoudle1(item1)">
-          <i class="iconfont icon-8a8a8a" 
+          <i class="iconfont icon-8a8a8a"
             :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
           </i>
           &nbsp;&nbsp;{{ item1.label }}
@@ -50,21 +50,21 @@ export default {
       this.isRequestModuleData()
     },
     m1_id () {
-      this.$emit('getM1M2',this.m1_id,this.m2_id) 
+      this.$emit('getM1M2',this.m1_id,this.m2_id)
     },
     m2_id () {
-      this.$emit('getM1M2',this.m1_id,this.m2_id) 
+      this.$emit('getM1M2',this.m1_id,this.m2_id)
     },
   },
 
-  mounted() {
+  created() {
     this.isRequestModuleData()
   },
   methods: {
     isRequestModuleData() {
       const ProductModulesInfo = this.$store.state.ProductModulesInfo
       if (JSON.stringify(ProductModulesInfo) !== '{}') {
-        ProductModulesInfo.product_code === this.product_code 
+        ProductModulesInfo.product_code === this.product_code
           ? this.modules_list = ProductModulesInfo.data
           : this.getModule()
       } else {

@@ -23,6 +23,11 @@ export default {
     return {
       last_url: false
     }
+  },
+  created() {
+    if (!this.$store.state.userInfo) {
+      this.$store.dispatch("getUserInfo")
+    }
   }
 }
 </script>

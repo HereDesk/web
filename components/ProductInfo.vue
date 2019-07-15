@@ -125,20 +125,6 @@ export default {
   },
 
   computed: {
-
-    // emit info
-    EmitInfo: function() {
-      let { product_id, release, module_id, PageMsg } = this
-      if (this.release === "all") {
-        if (this.ptype === "bug_create") {
-          this.release = ""
-        } else {
-          release = "all"
-        }
-      }
-      return { product_id, release, module_id,PageMsg }
-    },
-
     // version list
     release_list: function() {
       let arr = []
@@ -151,9 +137,25 @@ export default {
             arr = [...tmp, ...data[i]["data"]]
           }
         }
+        if (arr.length !== 0) {
+          for (let i of arr) {
+            this.release = i["version"]
+            break
+          }
+        }
         return arr.length > 0 ? arr : false
       }
-    }
+    },
+    // emit info
+    EmitInfo: function() {
+      let { product_id, release, module_id, PageMsg } = this
+      if (this.release === "all" && this.ptype !== "bug_create") {
+        release = "all"
+      } else {
+        release = this.release
+      }
+      return { product_id, release, module_id,PageMsg }
+    },
   },
 
   filters: {
