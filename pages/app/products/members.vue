@@ -42,7 +42,7 @@
               <span @click="reJoin(scope.row,$event)" v-if="scope.row.status === 1">
                 <button type="button" class="btn btn-outline-success btn-sm" value="0">激活</button>
               </span>
-            </template>  
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -70,7 +70,7 @@
         <div class="row col-md-auto m-3" @change="selectMember($event)">
           <span>人员</span>
           <el-select id="info-product" style="width:100%;" placeholder="选择人员" v-model="MemberJoin.user_id">
-            <el-option v-for="(item,index) in AllUser" 
+            <el-option v-for="(item,index) in AllUser"
               :key="index" :label="item.realname" :value="item.user_id">
             </el-option>
           </el-select>
@@ -78,8 +78,8 @@
         <div class="row col-md-auto mx-3" @change="selectMember($event)">
           <span>权限</span>
           <el-select id="info-perm" style="width:100%;" placeholder="选择权限" v-model="MemberJoin.role">
-            <el-option v-for="(item,index) in group_list" 
-              :key="index" :label="item.name" :value="item.group">
+            <el-option v-for="(item,index) in group_list"
+              :key="index" :label="item.name" :value="item.role">
             </el-option>
           </el-select>
         </div>
@@ -100,8 +100,8 @@ export default {
       title: "HDesk - 成员管理"
     }
   },
-  
-  layout: "head", 
+
+  layout: "head",
 
   validate({ query }) {
     return /[A-Za-z0-9]+/.test(query.product_id)
@@ -110,7 +110,7 @@ export default {
   filters: {
     date: util.date
   },
-  
+
   data() {
     return {
 			showModal: false,
@@ -140,11 +140,11 @@ export default {
       return rules.RuleManges(userInfo,PagesRules)
     }
   },
-  
+
   watch: {
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     },
     tableData: function(val, oldval) {
@@ -172,7 +172,7 @@ export default {
       deep: true
     }
   },
-  
+
   mounted() {
     const product_id = this.$route.query.product_id
     this.product_id = product_id

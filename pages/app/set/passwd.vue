@@ -4,22 +4,22 @@
       <div class='col-xl-4 col-lg-4 col-md-4 col-12 offset-xl-4 col-lg-4 offset-md-4'>
   	    <div class='form-group input-group-control'>
           <label for='oldPassword'>旧密码</label>
-          <input type='password' id='oldPassword' name="oldPassword" class='form-control'  
+          <input type='password' id='oldPassword' name="oldPassword" class='form-control'
             maxlength='16' minlength="8" placeholder='旧密码'
             required autofocus
             v-model.trim='passwdData.oldPassword' />
         </div>
         <div class='form-group input-group-control'>
         	<label for='newPassword'>新密码</label>
-        	<input type='password' id='newPassword' name="newPassword"  class='form-control' 
-            maxlength='16' minlength="8" placeholder='新密码不能为纯数字' 
+        	<input type='password' id='newPassword' name="newPassword"  class='form-control'
+            maxlength='16' minlength="8" placeholder='不要输入纯数字的密码哦'
             required autofocus
             v-model.trim='passwdData.newPassword' />
       	</div>
         <p class="my-3 font-size-85 text-gray">备注：密码有效长度8到16位，且首尾不能使用空格</p>
       	<div class='form-group input-group-control'>
         	<input type="submit" class="btn btn-control"
-            :class="{ 'btn-secondary': !isButtonStatus, 'btn-primary': isButtonStatus }" 
+            :class="{ 'btn-secondary': !isButtonStatus, 'btn-primary': isButtonStatus }"
             :disabled="!isButtonStatus"
             @click="SubmitPasswd" />
       	</div>
@@ -64,8 +64,8 @@ export default {
       window.location.replace("/");
     },
     SubmitPasswd() {
-      const newPassword = this.passwdData.newPassword;
-      const oldPassword = this.passwdData.oldPassword;
+      let newPassword = this.passwdData.newPassword;
+      let oldPassword = this.passwdData.oldPassword;
       if ((newPassword.length < 8) | (newPassword.length > 16)) {
         this.$notify.error({
           title: "错误",
@@ -86,16 +86,18 @@ export default {
         data: JSON.stringify(this.passwdData)
       }).then(res => {
         if (res.data["status"] === 20000) {
-          this.$notify.error({
+          this.$notify.success({
             title: "修改成功",
-            message: rep.data["msg"]
+            message: res.data["msg"]
           })
-          this.HandLogout()
+          if (process.client) {
+            this.HandLogout()
+          }
         }
         if (res.data["status"] !== 20000) {
           this.$notify.error({
             title: "修改失败",
-            message: rep.data["msg"]
+            message: res.data["msg"]
           })
         }
       })
