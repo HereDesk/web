@@ -90,6 +90,12 @@ export const actions = {
         commit('setProductMemberList', data)
     },
 
+    // 产品模块数据
+    async getProductModules({ commit }, product_id) {
+        const { data } = await axios.get('/api/pm/module/all/list?product_id=' + product_id)
+        commit('setProductModulesInfo', data)
+    },
+
     // 缺陷属性
     async getBugProperty({ commit }) {
         const { data } = await axios.get('/api/qa/bug/bug_property')

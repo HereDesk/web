@@ -29,7 +29,7 @@
         </el-table>
       </div>
     </div>
-    
+
 		<!-- page null -->
 		<div id="page-null" class="row" v-if="controlNull">
       <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
@@ -44,10 +44,10 @@
       <div class="form-group" slot="body">
         <div class="row col-md-auto mx-3">
           <span>版本名称</span>
-          <input type="text" 
+          <input type="text"
             id="pg-product-name" class="form-control input-lg my-1"
-            placeholder="输入（不超20个字）" maxlength="20" required 
-            v-model="ReleaseData.release"  
+            placeholder="输入（不超20个字）" maxlength="20" required
+            v-model="ReleaseData.release"
             @keyup.enter="createRelease()" />
           <p class="mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
         </div>
@@ -96,13 +96,13 @@ export default {
       return rules.RuleManges(userInfo,PagesRules)
     }
   },
-  filters: { 
+  filters: {
     date: util.date
   },
   watch: {
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     },
     tableData: function(val, oldval) {
@@ -114,13 +114,13 @@ export default {
       }
     }
   },
-  
+
   created() {
     this.getReleaseList()
   },
-  
+
   methods: {
-    
+
     // Gets all versions in the project
     getReleaseList() {
       this.axios
@@ -133,7 +133,7 @@ export default {
           }
         })
     },
-		
+
     createRelease(row) {
       let release = this.ReleaseData.release
       this.ReleaseData.product_id = this.product_id
@@ -150,6 +150,7 @@ export default {
 					this.showModal = false
           this.$notify.success({ title: "成功", message: res.data["msg"]})
           this.getReleaseList()
+          this.$store.dispatch("getProductRelease")
         }
         if (res.data["status"] !== 20000) {
           this.$notify.error({ title: "错误", message: res.data["msg"] })

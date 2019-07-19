@@ -174,7 +174,7 @@ export default {
   },
 
   mounted() {
-    const product_id = this.$route.query.product_id
+    let product_id = this.$route.query.product_id
     this.product_id = product_id
     this.MemberJoin.product_id = product_id
     this.MemberBanned.product_id = product_id

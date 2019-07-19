@@ -155,11 +155,7 @@ export default {
 
   filters: {
     FilterRelease: function(value) {
-      if (value == "all") {
-        return "全部"
-      } else {
-        return value
-      }
+      return value == "all" ? "全部" : value
     }
   },
 
@@ -185,13 +181,13 @@ export default {
         }
 
         // product modules
-        const ProductModulesInfo = this.$store.state.ProductModulesInfo
+        let ProductModulesInfo = this.$store.state.ProductModulesInfo
         if (JSON.stringify(ProductModulesInfo) !== '{}') {
           ProductModulesInfo.product_id === this.product_id
             ? this.modules_list = ProductModulesInfo.data
-            : this.getModule()
+            : this.getAllModule()
         } else {
-          this.getModule()
+          this.getAllModule()
         }
       }
     },
@@ -208,6 +204,7 @@ export default {
       },
       deep: true
     },
+
     product_list: {
       handler: function (val, oldVal) {
         let isEdit = Boolean(JSON.stringify(this.editData))
@@ -215,6 +212,8 @@ export default {
         let last_visited_product = process.browser && isEdit
           ? window.localStorage.last_visited_product
           : undefined
+
+        // 处理product_id
         if (JSON.stringify(this.product_list) !== '[]' && !isEdit) {
           if (route.product_id) {
             this.product_id = route.product_id
@@ -228,7 +227,7 @@ export default {
           let PageData = this.$store.state.PageData
           let UserIdentity = this.$store.state.userInfo.identity === 1 ? true : false
           if (JSON.stringify(PageData) === '[]' && UserIdentity ) {
-            this.$store.dispatch("getPageData",this.product_id)
+            this.$store.dispatch("getProductModules",this.product_id)
           }
         }
       },
@@ -238,7 +237,7 @@ export default {
   },
 
   created() {
-    const ProductVersionInfo = this.$store.state.ProductVersionInfo
+    let ProductVersionInfo = this.$store.state.ProductVersionInfo
     if (JSON.stringify(ProductVersionInfo) !== '{}') {
       this.product_list = ProductVersionInfo
     } else {
@@ -267,21 +266,18 @@ export default {
     /*
     * get product module info
     */
-    getModule() {
+    getAllModule() {
       this.axios
         .get("/api/pm/module/all/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
-            const data = res.data["data"]
+            let data = res.data["data"]
             if (data.length > 0) {
               this.modules_list = data
               this.$store.commit("setProductModulesInfo", res.data)
             }
           } else {
-           this.$notify.error({
-             title: "上传失败",
-             message: res.data["msg"]
-           })
+           this.$notify.error({ title: "消息提示", message: res.data["msg"] })
           }
         }
       )
