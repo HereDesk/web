@@ -83,7 +83,8 @@ export default {
     }
   },
   validate({ query }) {
-    return /[A-Za-z0-9]+/.test(query.product_id)
+    let status = query.product_id ? true : false
+    return status
   },
 
   layout: "head",

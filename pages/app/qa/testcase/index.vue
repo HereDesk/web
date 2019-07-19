@@ -4,8 +4,8 @@
 
       <!-- 模块 -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
-        <PageModules 
-          :product_code="selected_product" 
+        <PageModules
+          :product_id="product_id"
           :Rules="Rules"
           @getM1M2="getM1M2" v-if="isShowModules">
         </PageModules>
@@ -23,10 +23,10 @@
           <!-- 测试用例查询相关 -->
           <div id="testcase-data-head" class="row justify-content-between">
             <div id="testcase-query" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-              
+
               <ProductInfo :ptype="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
-              
+
               <el-dropdown id="testcase-query-status" class="pt-2 pl-3" trigger="click">
                 <span>
                   <span class="el-dropdown-desc">状态：</span>
@@ -36,7 +36,7 @@
                   </span>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item 
+                  <el-dropdown-item
                     v-for="(item,index) in status_list" :key="index" :value="item.status_value">
                     <span @click="selected_status = item.status_value">{{ item.status_name }}</span>
                   </el-dropdown-item>
@@ -50,9 +50,9 @@
                     <i class="iconfont icon-search icon-E0E0E0"></i>
                   </span>
                 </div>
-                <input id="id-title-search" type="text" 
-                  class="form-control search-control" 
-                  placeholder="搜索ID、或标题..." 
+                <input id="id-title-search" type="text"
+                  class="form-control search-control"
+                  placeholder="搜索ID、或标题..."
                   v-model="wd">
               </div>
             </div>
@@ -67,9 +67,9 @@
                 <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
               </span>
               <span v-if="Rules.case_create">
-                <nuxt-link :to="{ 
+                <nuxt-link :to="{
                     path: '/app/qa/testcase/add' ,
-                    query: { 'product_code': selected_product }}">
+                    query: { 'product_id': product_id }}">
                   <button type="btn" class="btn btn-create"> + 创建 </button>
                 </nuxt-link>
               </span>
@@ -81,12 +81,12 @@
 
             <!-- table style -->
             <div id="testcase-table-style" class="col" v-if="DataShowStyle == 'table'">
-              <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}" 
+              <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}"
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
-                    <span class="circle-content" 
+                    <span class="circle-content"
                       :class="{ 'text-deadly': scope.row.priority == 'P1',
                         'text-urgency': scope.row.priority == 'P2' }">
                       {{ scope.row.priority }}
@@ -126,7 +126,7 @@
                 </el-table-column>
                 <el-table-column label='' width="30">
                   <template slot-scope="scope">
-                    <div class="display-none pt-2" 
+                    <div class="display-none pt-2"
                       :class="{ 'showDataOpreate' : scope.row.case_id === HoverTestcase_id}">
                       <span v-if="scope.row.status === 0 && CaseBtnRules.fall" @click="handleFall(scope.row)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
@@ -147,14 +147,14 @@
               <ul class="pl-0 ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
                   <p>
-                    <nuxt-link style="color:#424242" 
+                    <nuxt-link style="color:#424242"
                       :to="{path:'/app/qa/testcase/deatils',query:{'case_id':item.case_id}}">
                       {{ item.id }}. {{ item.title }}
                     </nuxt-link>
                   </p>
                   <div id="data-testcase-info" class="my-2">
                     <div id="data-detailed-information" class="data-liststyle-satellite">
-                      <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1', 
+                      <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1',
                       'text-urgency': item.priority == 'P2' }">
                         &nbsp;{{ item.priority }}
                       </span>
@@ -174,7 +174,7 @@
                     </div>
                   </div>
                 </li>
-              </ul> 
+              </ul>
             </div>
           </div>
 
@@ -194,7 +194,7 @@
     </div>
 
     <!-- 测试用例统计 -->
-    <Modal id="modal-my-today" v-if="showModal == 'count-today'" 
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'"
       @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
@@ -241,15 +241,15 @@ import rules from "~/assets/js/rules.js"
 export default {
   head() {
     return {
-      title: "HDesk - 测试用例" 
+      title: "HDesk - 测试用例"
     }
   },
-  
+
   layout: "head",
   components: {
     PageModules
   },
-  
+
   data() {
     return {
       showModal: false,
@@ -328,7 +328,7 @@ export default {
         if (config["CASE_DATA_SHOW_STYPE"]) {
           return this.ScreenWidth > 768 ? config["CASE_DATA_SHOW_STYPE"] : 'list'
         } else {
-          return this.ScreenWidth > 768 ? 'table' : 'list' 
+          return this.ScreenWidth > 768 ? 'table' : 'list'
         }
       } else {
         return this.ScreenWidth > 768 ? 'table' : 'list'
@@ -348,8 +348,8 @@ export default {
 
   watch: {
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     },
     wd: function(val, oldVal) {
@@ -364,7 +364,7 @@ export default {
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch() : this.getCaseList()
-      this.$route.query.product_code 
+      this.$route.query.product_code
         ? this.$router.push({path: "/app/qa/testcase",query: this.QueryBuilder})
       	: this.$router.replace({path: "/app/qa/testcase",query: this.QueryBuilder})
     },
@@ -406,8 +406,8 @@ export default {
             this.tableData = res.data["data"]
             this.total = res.data["total"]
           } else {
-            this.$notify.success({ 
-              title: "错误", message: res.data["msg"] 
+            this.$notify.success({
+              title: "错误", message: res.data["msg"]
             })
           }
         })

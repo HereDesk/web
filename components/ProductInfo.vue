@@ -21,11 +21,6 @@
             :label="item.label"
             :value="item.version">
           </el-option>
-          <!-- <el-option value="create">
-            <a :href="'/app/products/release?product_code=' + product_code">
-              创建新版本
-            </a>
-          </el-option> -->
         </el-select>
         <el-cascader id="info-modules" class="col"
           :options="modules_list"
@@ -188,22 +183,22 @@ export default {
             this.product_code = item.product_code
           }
         }
-        if (!['only-product-name','case_index','bug_index'].includes(this.ptype)) {
-          const ProductModulesInfo = this.$store.state.ProductModulesInfo
-          if (JSON.stringify(ProductModulesInfo) !== '{}') {
-            ProductModulesInfo.product_id === this.product_id
-              ? this.modules_list = ProductModulesInfo.data
-              : this.getModule()
-          } else {
-            this.getModule()
-          }
+
+        // product modules
+        const ProductModulesInfo = this.$store.state.ProductModulesInfo
+        if (JSON.stringify(ProductModulesInfo) !== '{}') {
+          ProductModulesInfo.product_id === this.product_id
+            ? this.modules_list = ProductModulesInfo.data
+            : this.getModule()
+        } else {
+          this.getModule()
         }
       }
     },
 
     editData: {
       handler: function (val, oldVal) {
-        const isEdit = Boolean(JSON.stringify(this.editData))
+        let isEdit = Boolean(JSON.stringify(this.editData))
         let data = this.editData
         if (isEdit) {
           this.product_id = data.product_id
@@ -215,9 +210,9 @@ export default {
     },
     product_list: {
       handler: function (val, oldVal) {
-        const isEdit = Boolean(JSON.stringify(this.editData))
-        const route = this.$route.query
-        const last_visited_product = process.browser && isEdit
+        let isEdit = Boolean(JSON.stringify(this.editData))
+        let route = this.$route.query
+        let last_visited_product = process.browser && isEdit
           ? window.localStorage.last_visited_product
           : undefined
         if (JSON.stringify(this.product_list) !== '[]' && !isEdit) {
