@@ -2,8 +2,8 @@
   <div id="page" style="height:100%;">
     <nav id="page-head" class="navbar navbar-expand-lg page-head">
       <a id="navbar-brand" class="navbar-brand" href="#">HDesk</a>
-      <button class="navbar-toggler" type="button" 
-        data-toggle="collapse" data-target="#navbarSupportedContent" 
+      <button class="navbar-toggler" type="button"
+        data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -30,10 +30,10 @@
             </ul>
           </li>
           <li class="nav-item">
-            <nuxt-link class="nav-link" to="/app/products">产品管理</nuxt-link>
+            <nuxt-link class="nav-link" to="/app/products" :class="{ 'nav-active' : currentRoute.includes('/app/products') }">产品管理</nuxt-link>
           </li>
           <li class="nav-item">
-            <nuxt-link class="nav-link" to="/app/user-management/user">用户管理</nuxt-link>
+            <nuxt-link class="nav-link" to="/app/user-management/user" :class="{ 'nav-active' : currentRoute.includes('user-management') }">用户管理</nuxt-link>
           </li>
           <li class="nav-item media-lg-Logout">
             <a class="nav-link">退出登录</a>
@@ -63,7 +63,7 @@
           </span>
         </div>
       </div>
-      
+
     </nav>
     <div id="page-body">
       <nuxt/>
@@ -97,7 +97,19 @@
         this.$store.dispatch('getUserInfo')
       }
     },
-    
+
+    mounted() {
+      let PageData = this.$store.state.PageData
+      let UserIdentity = this.$store.state.userInfo.identity === 1 ? true : false
+      let product_id = process.client ? window.localStorage.last_visited_product_id : undefined
+      console.log(PageData,product_id,UserIdentity)
+      if (product_id) {
+        if (JSON.stringify(PageData) === '[]' && !UserIdentity ) {
+          this.$store.dispatch("getPageData",product_id)
+        }
+      }
+    },
+
     methods: {
       HandLogout () {
         if (process.browser) {

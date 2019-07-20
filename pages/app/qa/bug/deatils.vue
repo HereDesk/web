@@ -6,7 +6,7 @@
     </div>
 
     <div id="page-details" class="container mt-5" v-if="JSON.stringify(BugDetails) !== '{}'">
-      
+
       <div id="page-details-head" class="row">
         <div id="page-deatails-title" class="col-12">
           <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
@@ -47,7 +47,7 @@
       </div>
 
       <div id="page-details-body" class="row mt-3">
-        
+
         <div id="page-details-body-main" class="col-md-8 col-sm-12">
           <div id="bug-steps" class="height-7 mb-3" v-if="BugDetails.steps">
             <h6 class="details-minor-title">
@@ -94,14 +94,14 @@
             <div id="bug-history-record" class="mt-3">
               <ol class="pl-3">
                 <li v-for="(item,index) in history" :key="index" class="my-2">
-                  {{ item.create_time | date }} : 
+                  {{ item.create_time | date }} :
                   <span class="log-text-user">{{ item.username }}</span>
                   <span>{{ item.desc }}</span>
                   <span class="font-color-F05945" v-if="item.remark_status === 0">备注已被删除</span>
                   <span class="font-color-2973B7" v-if="item.remark_status === 2">修改过</span>
                   <div class="log-text-remark" v-if="item.remark && item.remark_status !== 0" >
                     <span v-html="ConvertsMd(item.remark)"></span>
-                    <i class="iconfont icon-edit" 
+                    <i class="iconfont icon-edit"
                       @click="showModal='edit-notes',
                       EditNotesData.remark=item.remark,
                       EditNotesData.bug_id=item.bug_id,
@@ -132,7 +132,7 @@
               <li id="bug-desc-status">
                 <label>缺陷状态：</label>
                 <span class="border-radius-5"
-                  :class="{ 
+                  :class="{
                     'text-secondary': BugDetails.status === 'Closed',
                     'text-success': BugDetails.status === 'Fixed',
                     'text-urgency': ['New','Open','Reopen'].includes(BugDetails.status),
@@ -220,7 +220,7 @@
             <ul class="mt-3 pl-3 satellite_info">
               <li>
                 <label>关联用例：</label>
-                <nuxt-link :to="{ 
+                <nuxt-link :to="{
                   path:'/app/qa/testcase/deatils',
                   query:{'case_id':BugDetails.case_id}}
                 ">查看
@@ -229,13 +229,13 @@
             </ul>
           </div>
         </div>
-        
+
       </div>
     </div>
 
     <!-- Bug处理操作：指派 -->
-    <BugAssign id="modal-assign" 
-      v-if="showModal == 'assign'" 
+    <BugAssign id="modal-assign"
+      v-if="showModal == 'assign'"
       @close="showModal = false"
       :bug_id="currentBugId"
       :product_code="product_code"
@@ -245,7 +245,7 @@
 
     <!-- Bug处理操作：解决 -->
     <BugResolve id="modal-resolve"
-      v-if="showModal == 'resolve'" 
+      v-if="showModal == 'resolve'"
       @close="showModal = false"
       :bug_id="currentBugId"
       :bug_creator_id="BugDetails.creator_id"
@@ -257,15 +257,15 @@
 
     <!-- Bug处理操作：修改优先级/严重程度 -->
     <BugChange id="modal-change"
-      v-if="['priority','severity'].includes(showModal)" 
+      v-if="['priority','severity'].includes(showModal)"
       @close="showModal = false"
-      :data_type="components_value" 
-      :bug_id="currentBugId" 
+      :data_type="components_value"
+      :bug_id="currentBugId"
       @refreshList="getBugDetails()">
     </BugChange>
 
     <!-- Bug上传附件 -->
-    <Modal id="modal-upload" v-if="showModal == 'upload'" 
+    <Modal id="modal-upload" v-if="showModal == 'upload'"
       :isHeaderClose="true" @close="showModal = false">
       <h5 slot="header" class="modal-title">上传附件</h5>
       <div slot="body" class="mb-3 text-center">
@@ -275,7 +275,7 @@
     </Modal>
 
     <!-- Bug处理操作：重新打开缺陷 -->
-    <Modal id="modal-reopen" class="no-toolbars" 
+    <Modal id="modal-reopen" class="no-toolbars"
       v-if="showModal == 'ReOpen'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">重新打开缺陷</h5>
     	<div slot="body">
@@ -299,59 +299,59 @@
     </Modal>
 
     <!-- Bug处理操作：增加备注 -->
-    <Modal id="modal-notes" class="toolbars" 
+    <Modal id="modal-notes" class="toolbars"
       v-if="showModal == 'notes'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">增加备注</h5>
-      <mavon-editor slot="body" class="mx-3" 
-        :toolbars="mavon_md_base_toolbars" 
-        :subfield="false" placeholder="请输入备注 ~ " 
+      <mavon-editor slot="body" class="mx-3"
+        :toolbars="mavon_md_base_toolbars"
+        :subfield="false" placeholder="请输入备注 ~ "
         v-model.trim="NotesData.remark">
       </mavon-editor>
       <div slot="footer">
         <button type="submit" class="btn btn-primary" @click="AddNotes()">提交</button>
       </div>
     </Modal>
-    
+
     <!-- Bug处理操作：修改备注 -->
-    <Modal id="modal-edit-notes" class="toolbars" 
+    <Modal id="modal-edit-notes" class="toolbars"
       v-if="showModal == 'edit-notes'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">修改备注</h5>
-      <mavon-editor slot="body" class="mx-3" 
-        :toolbars="mavon_md_base_toolbars" 
-        :subfield="false" placeholder="请输入备注 ~ " 
+      <mavon-editor slot="body" class="mx-3"
+        :toolbars="mavon_md_base_toolbars"
+        :subfield="false" placeholder="请输入备注 ~ "
         v-model.trim="EditNotesData.remark">
       </mavon-editor>
       <div slot="footer">
         <button type="submit" class="btn btn-primary" @click="EditRecordRemard()">提交</button>
       </div>
     </Modal>
-    
+
     <!-- Bug处理操作：关闭 -->
-    <Modal id="modal-closed" class="toolbars" 
+    <Modal id="modal-closed" class="toolbars"
       v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
       <h5 slot="header" class="modal-title">关闭原因</h5>
       <div slot="body" class="mx-3">
         <mavon-editor
-          :toolbars="mavon_md_base_toolbars" 
-          :subfield="false" 
-          placeholder="请输入缺陷关闭原因，且不能少于10个字" 
+          :toolbars="mavon_md_base_toolbars"
+          :subfield="false"
+          placeholder="请输入缺陷关闭原因，且不能少于10个字"
           v-model.trim="ClosedData.remark">
         </mavon-editor>
-        <p class="mt-3 mb-0 text-gray">备注: 当缺陷状态不是"已解决"时，关闭必须填写原因</p>
+        <p class="mt-3 mb-0 text-gray" v-if="BugStatus != 'Fixed'">备注: 当缺陷状态不是"已解决"时，关闭必须填写原因</p>
       </div>
       <div slot="footer">
         <button type="submit" class="btn btn-primary" @click="BugClosed()">提交</button>
       </div>
     </Modal>
-    
+
     <!-- Bug处理操作：延期挂起 -->
-    <Modal id="modal-hangup" class="no-toolbars" 
+    <Modal id="modal-hangup" class="no-toolbars"
       v-if="showModal == 'hangup'" @close="showModal = false" :isFooter="true">
     	<h5 slot="header" class="modal-title">缺陷延期操作</h5>
-      <mavon-editor slot="body" class="mx-3" 
-        :toolbarsFlag="false" 
-        :subfield="false" 
-        placeholder="请输入延期原因 ~ " 
+      <mavon-editor slot="body" class="mx-3"
+        :toolbarsFlag="false"
+        :subfield="false"
+        placeholder="请输入延期原因 ~ "
         v-model.trim="HangUpData.remark">
       </mavon-editor>
     	<div slot="footer">
@@ -472,7 +472,7 @@ export default {
     product_id: function(val, oldVal) {
       if (this.product_id) {
         const ProductMembersData = this.$store.state.ProductMemberList
-        const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
+        const isThisProduct = ProductMembersData.hasOwnProperty("product_id")
           ? (ProductMembersData["product_id"] === this.product_id ? true : false) : false
         if (!isThisProduct){
           this.$store.dispatch("getProductMembers",this.product_id)
@@ -480,14 +480,14 @@ export default {
       }
     },
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
 
       // 当点击【重新打开】,默认指派人为：上次缺陷解决者
       if (this.showModal === 'ReOpen') {
         this.ReOpenData.assignedTo = this.BugDetails.assignedTo_id
-      } 
+      }
     }
   },
 
@@ -543,7 +543,7 @@ export default {
           })
       }
     },
-    
+
     // 编辑缺陷
     EditBug() {
       this.$router.push("/app/qa/bug/edit?bug_id=" + this.currentBugId)
@@ -593,11 +593,11 @@ export default {
       if (this.BugDetails.status !== 'Fixed') {
         if (!remark.length) {
           this.$notify.error({ title: "错误", message: "缺陷关闭原因的必填哦" })
-          return 
+          return
         }
         if (remark.length < 10) {
           this.$notify.error({ title: "错误", message: "缺陷关闭原因,不能少于10个字" })
-          return 
+          return
         }
       }
       this.axios({
@@ -619,7 +619,7 @@ export default {
       this.ReOpenData.bug_id = this.currentBugId
       if (!this.ReOpenData.assignedTo) {
         this.$notify.error({ title: "错误", message: "请选择指派人" })
-        return 
+        return
       }
       if (!this.ReOpenData.remark) {
         this.$notify.error({title: "错误",message: "重新打开缺陷，原因不能为空"})
@@ -688,7 +688,7 @@ export default {
         }
       })
     },
-    
+
     // bug edit remark
     EditRecordRemard(item) {
       this.axios({

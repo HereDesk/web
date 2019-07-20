@@ -3,7 +3,7 @@
 
     <div id="page-head" class="row pt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
-        <a class="navbar-brand">&nbsp;模块</a>
+        <a class="navbar-brand">&nbsp;{{ product_code }} 模块管理</a>
       </nav>
     </div>
 
@@ -119,6 +119,10 @@ export default {
     AllModules () {
       let moduls = this.$store.state.ProductModulesInfo
       return moduls.data ? moduls.data : []
+    },
+
+    product_code () {
+      return this.$store.state.ProductModulesInfo.product_code
     },
 
     /**

@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <!-- Only ProductNameList, no border dropdown -->
+    <!-- 仅包含项目列表的下拉菜单 -->
     <div class="display-inline" v-if="showStyle === 'no-border-dropdown' & ptype === 'only-product-name'">
       <el-dropdown>
         <span class="dashboard-product">
@@ -51,7 +51,7 @@
       </el-dropdown>
     </div>
 
-    <!-- Only ProductNameList, no border dropdown -->
+    <!-- 仅包含项目列表的下拉菜单 -->
     <el-select id="info-product" style="width:100%;" placeholder="选择产品" v-model="product_code"
       v-if="showStyle === 'select' & ptype === 'only-product-name'">
       <el-option
@@ -63,7 +63,7 @@
     </el-select>
 
 
-    <!-- Dropdown style -->
+    <!-- 缺陷、用例主页面 -->
     <div class="display-inline" v-if="showStyle === 'dropdown' & ['bug_index','case_index'].includes(ptype)">
       <el-dropdown id="query-product" class="mr-1 my-1">
         <span>
@@ -75,7 +75,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="(item,index) in product_list" :key="index">
-            <span @click="product_code = item.product_code">{{ item.product_code }}</span>
+            <span @click="product_id = item.product_id">{{ item.product_code }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -120,7 +120,6 @@ export default {
   },
 
   computed: {
-    // version list
     release_list: function() {
       let arr = []
       let tmp = []
@@ -141,7 +140,8 @@ export default {
         return arr.length > 0 ? arr : false
       }
     },
-    // emit info
+
+    // 组件通信数据
     EmitInfo: function() {
       let { product_id, release, module_id, PageMsg } = this
       if (this.release === "all" && this.ptype !== "bug_create") {
@@ -173,14 +173,15 @@ export default {
         if (process.browser) {
           window.localStorage.setItem("last_visited_product_id", this.product_id)
         }
-        // get product_code, used for page show
-        for (const item of this.product_list) {
+
+        // 解析项目编码
+        for (let item of this.product_list) {
           if (this.product_id === item.product_id) {
             this.product_code = item.product_code
           }
         }
 
-        // product modules
+        // 项目模块数据
         let ProductModulesInfo = this.$store.state.ProductModulesInfo
         if (JSON.stringify(ProductModulesInfo) !== '{}') {
           ProductModulesInfo.product_id === this.product_id
@@ -188,6 +189,12 @@ export default {
             : this.getAllModule()
         } else {
           this.getAllModule()
+        }
+
+        // 请求页面菜单权限数据
+        let PageData = this.$store.state.PageData
+        if (JSON.stringify(PageData) === '[]' || PageData.length === 0 || PageData === false) {
+          this.$store.dispatch("getPageData",this.product_id)
         }
       }
     },
@@ -209,9 +216,7 @@ export default {
       handler: function (val, oldVal) {
         let isEdit = Boolean(JSON.stringify(this.editData))
         let route = this.$route.query
-        let last_visited_product = process.browser && isEdit
-          ? window.localStorage.last_visited_product
-          : undefined
+        let last_visited_product = process.browser && isEdit ? window.localStorage.last_visited_product : undefined
 
         // 处理product_id
         if (JSON.stringify(this.product_list) !== '[]' && !isEdit) {
@@ -221,13 +226,6 @@ export default {
             this.product_id = last_visited_product_id
           } else {
             this.product_id = this.product_list[0]['product_id']
-          }
-
-          // 请求页面菜单权限数据
-          let PageData = this.$store.state.PageData
-          let UserIdentity = this.$store.state.userInfo.identity === 1 ? true : false
-          if (JSON.stringify(PageData) === '[]' && UserIdentity ) {
-            this.$store.dispatch("getProductModules",this.product_id)
           }
         }
       },
@@ -247,7 +245,7 @@ export default {
 
   methods: {
     /*
-    * get product info and release info
+    * 请求：当前用户所有项目，以及项目对应的版本
     */
     getProductRelease() {
       this.axios
@@ -264,7 +262,7 @@ export default {
     },
 
     /*
-    * get product module info
+    * 请求：项目模块
     */
     getAllModule() {
       this.axios

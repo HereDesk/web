@@ -43,8 +43,8 @@ code {
   background: none !important;
 }
 
-/* 
-** mavon markdown 
+/*
+** mavon markdown
 */
 .shadow {
   box-shadow: none !important;
@@ -246,7 +246,7 @@ code {
   font-size:0.95rem;
 }
 
-/* 
+/*
   el-table
 */
 .el-table__expanded-cell {
@@ -284,8 +284,8 @@ code {
   display: none;
 }
 
-/* 
-  el-级联选择器 
+/*
+  el-级联选择器
 */
 .el-cascader__label {
   font-size: 1rem !important;
@@ -343,7 +343,7 @@ code {
 /*
 **
 ** 以下为自定义的的Bootstrap Css部分代码
-** 
+**
 */
 
 /* padding */
@@ -354,8 +354,9 @@ code {
 
 /* Bootstrap navbar */
 .navbar-brand {
-  color: #000 !important;
-  font-size: 1.8rem;
+  color: rgb(33, 33, 33) !important;
+  font-size: 1.65rem;
+  font-weight: 400 !important;
 }
 
 @media (max-width: 414px) {
@@ -395,7 +396,7 @@ code {
 	display: table;
 	transition: opacity .3s ease;
 }
-	
+
 .modal-footer {
   background-color: rgb(244, 245, 246) !important;
 }
@@ -466,21 +467,21 @@ a:link {
   text-decoration: none;
 }
 
-.active-link {
+/* .active-link {
   pointer-events: none;
   cursor: default;
   color: #3385FF !important;
-}
+} */
 
 /* Public: tiitle */
 .bd-title {
-  font-weight: 300; 
+  font-weight: 300;
   font-size: 2rem;
 }
 
-/* 
+/*
 **
-**Public: background 
+**Public: background
 **
 */
 .bg-white {
@@ -512,9 +513,9 @@ a:link {
   background-color: #00BFA5 !important;
 }
 
-/* 
+/*
 **
-** Public: ul and li 
+** Public: ul and li
 **
 */
 .ul_link li {
@@ -550,9 +551,9 @@ a:link {
   line-height: 2.5rem;
 }
 
-/* 
+/*
 **
-** Public: circle 
+** Public: circle
 **
 */
 
@@ -614,8 +615,8 @@ a:link {
   text-align: center;
 }
 
-/* 
-** 
+/*
+**
 ** Public: 线条先关
 **
 */
@@ -658,7 +659,7 @@ a:link {
   float: left;
 }
 
-/* 
+/*
 **
 ** Public: text
 **
@@ -802,7 +803,7 @@ a:link {
   text-overflow:ellipsis;
   white-space: nowrap;
 }
-/* 
+/*
 **
 ** Public: 行高
 **
@@ -840,7 +841,7 @@ a:link {
   min-height: 90vh;
 }
 
-/* 
+/*
 **
 ** Public: pre
 **
@@ -848,14 +849,14 @@ a:link {
 pre {
   display: block;
   margin: 0;
-  white-space:pre-wrap;  
-  white-space:-moz-pre-wrap;  
-  white-space:-pre-wrap;  
-  white-space:-o-pre-wrap;  
+  white-space:pre-wrap;
+  white-space:-moz-pre-wrap;
+  white-space:-pre-wrap;
+  white-space:-o-pre-wrap;
   word-wrap:break-word;
 }
 
-/* 
+/*
 **
 ** Public: button
 **
@@ -922,8 +923,8 @@ pre {
   color: rgb(66, 133, 244);;
 }
 
-/* 
-** 
+/*
+**
 ** Public: input
 **
 */
@@ -974,7 +975,7 @@ input:-ms-input-placeholder {
   font-style: normal;
 }
 
-/* 
+/*
   搜索
 */
 .search-input-control {
@@ -995,7 +996,7 @@ input:-ms-input-placeholder {
   font-size:0.88rem;
 }
 
-/* 
+/*
   datatime input
 */
 input::-webkit-datetime-edit-year-field {
@@ -1022,7 +1023,7 @@ input::-webkit-inner-spin-button {
   visibility: hidden;
 }
 
-/* 
+/*
   textarea
 */
 .textarea-control {
@@ -1048,7 +1049,7 @@ textarea::-webkit-input-placeholder {
   font-style: normal;
 }
 
-/* 
+/*
   select
 */
 .select-control {
@@ -1068,7 +1069,7 @@ textarea::-webkit-input-placeholder {
   outline: none;
 }
 
-/* 
+/*
 **
 ** Public: lable
 **
@@ -1095,7 +1096,7 @@ textarea::-webkit-input-placeholder {
   font-weight: 300;
 }
 
-/* 
+/*
 **
 ** Pubilc: iconfont size and text color style
 **
@@ -1170,9 +1171,9 @@ textarea::-webkit-input-placeholder {
   align-items:Center;
 }
 
-/* 
+/*
 **
-** 关于display 
+** 关于display
 **
 */
 .display-inline {
@@ -1224,7 +1225,7 @@ textarea::-webkit-input-placeholder {
 }
 
 /*
-** 
+**
 ** 其它页面的一些css
 **
 */

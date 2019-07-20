@@ -127,6 +127,7 @@ export default {
         .get("/api/pm/release/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
+            this.product_code = res.data["product_code"]
             this.tableData = res.data["data"]
           } else {
             this.msg = res.data["msg"]

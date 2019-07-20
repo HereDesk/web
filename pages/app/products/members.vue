@@ -4,7 +4,10 @@
 
     <div id="page-head" class="row mt-5">
       <div id="page-title" class="col-auto mr-auto">
-        <a class="navbar-brand">{{ product_code }}&nbsp;成员管理</a>
+        <a class="navbar-brand">
+          {{ product_code }} 成员管理
+          <!-- <nuxt-link :to="'/app/products?product_id=' + product_id"></nuxt-link>&nbsp; -->
+        </a>
       </div>
       <div  id="add-members" class="col-auto">
         <button type="button"  id="add-btn" class="btn btn-create mt-2"
@@ -198,6 +201,7 @@ export default {
       this.axios.get("/api/pm/member/list?product_id=" + this.product_id)
         .then(res => {
           if (res.data["status"] === 20000) {
+            this.product_code = res.data["product_code"]
             this.tableData = res.data["data"]
           } else {
             this.msg = res.data["msg"]
