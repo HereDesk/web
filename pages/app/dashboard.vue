@@ -187,7 +187,7 @@ export default {
     },
 
     familyname: function () {
-      return this.$store.state.userInfo ? this.$store.state.userInfo.realname : ""
+      return this.$store.state.userInfo.realname ? this.$store.state.userInfo.realname : ""
     },
 
     isDisplayBody() {

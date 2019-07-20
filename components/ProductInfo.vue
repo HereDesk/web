@@ -169,6 +169,12 @@ export default {
 
     product_id: function (val, oldVal) {
       if (this.product_id) {
+        // 请求页面菜单权限数据
+        let PageData = this.$store.state.PageData
+        if (JSON.stringify(PageData) === '[]' || PageData === false) {
+          this.$store.dispatch("getPageData",this.product_id)
+        }
+
         // save product_id to localStorage
         if (process.browser) {
           window.localStorage.setItem("last_visited_product_id", this.product_id)
@@ -189,12 +195,6 @@ export default {
             : this.getAllModule()
         } else {
           this.getAllModule()
-        }
-
-        // 请求页面菜单权限数据
-        let PageData = this.$store.state.PageData
-        if (JSON.stringify(PageData) === '[]' || PageData.length === 0 || PageData === false) {
-          this.$store.dispatch("getPageData",this.product_id)
         }
       }
     },

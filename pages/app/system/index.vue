@@ -51,9 +51,9 @@ export default {
           text: "日志记录"
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>
