@@ -38,6 +38,15 @@ export const mutations = {
         if (data) {
             state.userInfo = data['data']
             state.UserConfig = data['config']
+
+            if (process.client && JSON.stringify(data["data"]) !== '{}') {
+                window.localStorage.setItem("user_id", data["data"]["user_id"])
+                window.localStorage.setItem("realname", data["data"]["realname"])
+                window.localStorage.setItem("identity", data["data"]["identity"])
+            }
+            if (process.client && JSON.stringify(data["config"]) !== '{}') {
+                window.localStorage.setItem("IS_SHOW_MODULE", data["config"]["IS_SHOW_MODULE"])
+            }
         }
     },
 
