@@ -56,6 +56,15 @@ export default {
 };
 </script>
 
-<style>
-@import "~/assets/css/system.css";
+<style scoped>
+  .link-item:hover p {
+    color: #1565C0 !important;
+  }
+
+  .link-item img:hover {
+    transform: scale(1.1);
+    transition: all 1s ease 0s;
+    -webkit-transform: scale(1.1);
+    -webkit-transform: all 1s ease 0s;
+  }
 </style>

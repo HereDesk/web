@@ -1,20 +1,20 @@
 <template>
   <div id="page-permissions" class="container">
-    
+
 		<div id="page-head" class="row mt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand">页面管理</a>
       </nav>
     </div>
-		
+
     <div id="page-data" class="row mt-3">
       <div id="permissions-group" class="col-xl-3 col-sm-12 col-12">
         <p class="divider"></p>
         <ul class="pl-0 ul_link">
-          <li v-for="item in group_list" 
-            :key="item.id" :value="item.group" 
-            :class="{ 'selected_data' : PageData.group == item.group }"
-            @click="select_group(item.group)">
+          <li v-for="item in group_list"
+            :key="item.id" :value="item.group"
+            :class="{ 'selected_data' : PageData.group == item.role }"
+            @click="select_group(item.role)">
             {{ item.name }}
           </li>
         </ul>
@@ -30,10 +30,10 @@
           <p class="divider"></p>
           <ul class="pl-0 ul_line">
             <li v-for="p in item.data" :key="p.id" class="mr-3">
-              <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1" 
+              <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1"
                 @click="PageManage($event,p.id)">
               <span>{{ p.page_name }} &nbsp;&nbsp;</span>
-              <span v-if="p.desc" style="color:#666666;font-size:0.85rem;">{{ p.desc }}</span> 
+              <span v-if="p.desc" style="color:#666666;font-size:0.85rem;">{{ p.desc }}</span>
             </li>
           </ul>
         </div>
@@ -45,17 +45,17 @@
       <div class="my-3" slot="body">
         <div class='form-group row col-md-auto mx-3'>
           <label for="permissions_name">页面标记</label>
-          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
+          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...'
             v-model='PageData.flag' />
         </div>
         <div class='form-group row col-md-auto mx-3'>
           <label for="permissions_name">页面名称</label>
-          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...' 
+          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面名称...'
             v-model='PageData.page_name' />
         </div>
           <div class='form-group row col-md-auto mx-3'>
           <label for="permissions_url">页面地址</label>
-          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面url...' 
+          <input type='text' class='form-control' maxlength="100" placeholder='请输入页面url...'
             v-model='PageData.page_url' />
         </div>
       </div>
@@ -91,17 +91,17 @@ export default {
 
   watch: {
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     }
   },
-	
+
   created() {
     this.get_group_list()
     this.getPageList()
   },
-	
+
   methods: {
     get_group_list() {
       this.axios.get("/api/user/group").then(res => {
@@ -112,15 +112,15 @@ export default {
         }
       })
     },
-		
+
     select_group(data) {
       this.PageData.group = data
       this.getPageList()
     },
-		
+
     getPageList() {
       this.axios
-        .get("/api/system/page/list?group=" + this.PageData.group)
+        .get("/api/system/page/list?role=" + this.PageData.group)
         .then(res => {
           if (res.data["status"] === 20000) {
             this.page_list = res.data["data"]
@@ -130,7 +130,7 @@ export default {
           }
         })
     },
-		
+
     SavePageData() {
       this.axios({
         method: "post",
@@ -146,7 +146,7 @@ export default {
         }
       })
     },
-		
+
     PageManage(event, page_id) {
       var data = {
         is_allow: null,

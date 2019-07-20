@@ -354,7 +354,7 @@ code {
 
 /* Bootstrap navbar */
 .navbar-brand {
-  color: rgb(33, 33, 33) !important;
+  color: rgb(33, 33, 33);
   font-size: 1.65rem;
   font-weight: 400 !important;
 }
@@ -1149,20 +1149,15 @@ textarea::-webkit-input-placeholder {
   color: #8a8a8a;
 }
 
+.icon-fff {
+  color: #fff;
+}
+
 .icon-hover {
-  /* padding: 3px; */
   border-radius: 20px;
   transform: translate3d(0,-2px,0);
   box-shadow: 0 7px 7px rgba(0,0,0,0.1);
 }
-/* .iconfont:hover {
-  color: #3385FF !important;
-  transform: translate3d(0,-2px,0);
-  box-shadow: 0 10px 10px rgba(0,0,0,0.1);
-  padding: 3px;
-  border: 1px solid #3385FF;
-  border-radius: 20px;
-} */
 
 /* 垂直居中 */
 .vertical-center {

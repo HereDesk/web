@@ -14,14 +14,14 @@
             placeholder="电子邮件"
             v-model.trim="LoginData.username" />
         </div>
-        <div id="input-passwd" class="input-group input-group-lg passwd">
+        <div id="input-passwd" class="input-group input-group-lg mt-3">
           <input type="password" id="user_passwd" name="user_passwd" class="form-control"
             maxlength="30" minlength="6"
             placeholder="输入密码"
             v-model.trim="LoginData.password"
             @keyup.enter="goLogin" />
         </div>
-        <div class="login-btn">
+        <div class="mt-4">
           <button type="button" id="user_login_btn" class="btn btn-login btn-lg btn-block"  @click="goLogin">
             登录</button>
         </div>
@@ -57,6 +57,7 @@ export default {
       this.target_url = Base64.decode(target_url)
     }
   },
+
   methods: {
     goLogin() {
       let [username,password] = [this.LoginData.username,this.LoginData.password]
@@ -94,7 +95,8 @@ export default {
         data: JSON.stringify(this.LoginData)
       }).then(res => {
           if (res.data["status"] === 10000) {
-            // set localStorage and token
+
+            // 存储token与cookie
             let token = res.data["data"]["token"]
             if (process.browser) {
               window.localStorage.setItem("token", token)
@@ -128,6 +130,20 @@ export default {
 }
 </script>
 
-<style>
-  @import "~/assets/css/login.css"
+<style scoped>
+  .btn-login {
+    background-color: rgb(66, 133, 244);
+    border-color: rgb(66, 133, 244);
+    color: rgb(255, 255, 255);
+  }
+
+  .p-user-login-title {
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .p-user-login-main {
+    margin-top: 10%;
+    text-align: center;
+  }
 </style>

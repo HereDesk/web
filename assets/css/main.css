@@ -3,7 +3,12 @@
 */
 
 .page-head {
+  background-color: rgb(36, 41, 46);
   border-bottom: 1px solid #eee;
+}
+
+.page-head .nav-link {
+  color: #fff !important;
 }
 
 @media (max-width:992px) {

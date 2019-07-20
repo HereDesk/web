@@ -1,21 +1,21 @@
 <template>
   <div id="page-permissions" class="container">
-    
+
 		<div id="page-head" class="row mt-5">
       <nav class="navbar navbar-expand-lg mr-auto">
         <a class="navbar-brand">API权限管理</a>
       </nav>
     </div>
-		
+
     <div id="page-data" class="row mt-3">
       <div id="permissions-group" class="col-xl-3 col-sm-12 col-12">
         <p class="divider"></p>
         <ul class="pl-0 ul_link">
-          <li v-for="item in group_list" 
-            :key="item.id" :value="item.group" 
-            :class="{ 'selected_data' : ApiPermissionsData.group == item.group }" 
-            v-if="item.group != 'admin'"
-            @click="select_group(item.group)">
+          <li v-for="item in group_list"
+            :key="item.id" :value="item.group"
+            :class="{ 'selected_data' : ApiPermissionsData.group == item.role }"
+            v-if="item.role != 'admin'"
+            @click="select_group(item.role)">
             {{ item.name }}
           </li>
         </ul>
@@ -29,7 +29,7 @@
           <p class="divider"></p>
           <ul class="pl-0 ul_perm">
             <li v-for="p in item.data" :key="p.id" class="mr-3">
-              <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1" 
+              <input type="checkbox" class="mr-2" :value="p.id" :checked="p.is_allow === 1"
                 @click="ApiManage($event,p.id)">
                 {{ p.api_name }}
             </li>
@@ -43,22 +43,22 @@
       <div class="my-3" slot="body">
         <div class='form-group row col-md-auto mx-3'>
           <label for="api_module">所属模块</label>
-          <input type='text' maxlength="100" class='form-control' placeholder='请输入api所属模块...' 
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api所属模块...'
             v-model='ApiPermissionsData.flag' />
         </div>
         <div class='form-group row col-md-auto mx-3'>
           <label for="api_name">api_name</label>
-          <input type='text' maxlength="100" class='form-control' placeholder='请输入api名称...' 
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api名称...'
             v-model='ApiPermissionsData.api_name' />
         </div>
         <div class='form-group row col-md-auto mx-3'>
           <label for="api_code">api_code</label>
-          <input type='text' maxlength="100" class='form-control' placeholder='请输入api_code...' 
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api_code...'
             v-model='ApiPermissionsData.api_code' />
         </div>
           <div class='form-group row col-md-auto mx-3'>
           <label for="api_url">url</label>
-          <input type='text' maxlength="100" class='form-control' placeholder='请输入api_url...' 
+          <input type='text' maxlength="100" class='form-control' placeholder='请输入api_url...'
             v-model='ApiPermissionsData.url' />
         </div>
       </div>
@@ -95,18 +95,18 @@ export default {
 
   watch: {
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     }
   },
-  
+
   created() {
     this.get_group_list()
     this.getApiList("test")
   },
   methods: {
-		
+
     get_group_list() {
       this.axios.get("/api/user/group").then(res => {
         if (res.data["status"] === 20000) {
@@ -116,12 +116,12 @@ export default {
         }
       })
     },
-		
+
     select_group(data) {
       this.ApiPermissionsData.group = data
       this.getApiList(data)
     },
-		
+
     getApiList(data) {
       this.axios.get("/api/system/api/list?group=" + data)
         .then(res => {
@@ -133,7 +133,7 @@ export default {
           }
         })
     },
-		
+
     SaveApiData() {
       this.axios({
         method: "post",
@@ -149,7 +149,7 @@ export default {
         }
       })
     },
-		
+
     ApiManage(event, api_id) {
       var data = {
         is_allow: null,

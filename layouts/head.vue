@@ -13,7 +13,7 @@
             <nuxt-link class="nav-link" to="/app/dashboard">首页</nuxt-link>
           </li>
           <li class="nav-item mx-3 naspan">
-            <a class="nav-link" :class="{ 'nav-active' : currentRoute.includes('bug') }">缺陷</a>
+            <a class="nav-link">缺陷</a>
             <ul>
               <li><nuxt-link to="/app/qa/bug/add">提交BUG</nuxt-link></li>
               <li><nuxt-link to="/app/qa/bug" exact>缺陷列表</nuxt-link></li>
@@ -22,7 +22,7 @@
             </ul>
           </li>
           <li class="nav-item mx-3 naspan">
-            <a class="nav-link" :class="{ 'nav-active' : currentRoute.includes('test') }">测试用例</a>
+            <a class="nav-link">测试用例</a>
             <ul>
               <li><nuxt-link to="/app/qa/testcase/add">编写用例</nuxt-link></li>
               <li><nuxt-link to="/app/qa/testcase" exact>管理用例</nuxt-link></li>
@@ -30,10 +30,10 @@
             </ul>
           </li>
           <li class="nav-item">
-            <nuxt-link class="nav-link" to="/app/products" :class="{ 'nav-active' : currentRoute.includes('/app/products') }">产品管理</nuxt-link>
+            <nuxt-link class="nav-link" to="/app/products">产品管理</nuxt-link>
           </li>
           <li class="nav-item">
-            <nuxt-link class="nav-link" to="/app/user-management/user" :class="{ 'nav-active' : currentRoute.includes('user-management') }">用户管理</nuxt-link>
+            <nuxt-link class="nav-link" to="/app/user-management/user">用户管理</nuxt-link>
           </li>
           <li class="nav-item media-lg-Logout">
             <a class="nav-link">退出登录</a>
@@ -42,7 +42,7 @@
         <div id="user-info" class="h-nav">
           <span class="familyname" :class="{ 'name_inline_block': familyname }">{{ familyname }}</span>
           <span id="dashboard-set" class="ml-3 naspan">
-            <i class="iconfont icon-menu size-2 icon_8a8a8a"></i>
+            <i class="iconfont icon-menu size-2 icon-fff"></i>
             <ul class="pl-2">
               <li>
                 <nuxt-link to="/app/help" target="_blank">
@@ -122,6 +122,10 @@
   }
 </script>
 
-<style>
-  @import '~/assets/css/main.css'
+<style scoped>
+  @import '~/assets/css/main.css';
+
+  .navbar-brand {
+    color: #fff;
+  }
 </style>

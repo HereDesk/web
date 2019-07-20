@@ -13,7 +13,7 @@
 7. 使用扩展运算符（...）拷贝数组
 8. 使用 `Array.from` 方法，将类似数组的对象转为数组
 9. 立即执行函数可以写成箭头函数的形式
-10. 使用`impor`t取代`require`; 使用`export`取代`module.exports`
+10. 使用`import`取代`require`; 使用`export`取代`module.exports`
 
 #### Vue风格指南
 
