@@ -102,7 +102,6 @@
       let PageData = this.$store.state.PageData
       let UserIdentity = this.$store.state.userInfo.identity === 1 ? true : false
       let product_id = process.client ? window.localStorage.last_visited_product_id : undefined
-      console.log(PageData,product_id,UserIdentity)
       if (product_id) {
         if (JSON.stringify(PageData) === '[]' && !UserIdentity ) {
           this.$store.dispatch("getPageData",product_id)
