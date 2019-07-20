@@ -11,14 +11,19 @@
 
       <div id="module-a" class="col-md-3 col-sm-12 col-12">
         <h5 class="font-weight-light">一级模块</h5>
-        <p class="add_m_a" v-if="Rules.product_modules" @click="showModal = 'addmodules'">
+        <p class="add_m_a" v-if="Rules.product_modules" @click="showModal = 'add-modules-1'">
            + 一级模块</p>
         <p class="divider"></p>
         <ul class="pl-0 ul_module_a">
           <li v-for="(item,index) in AllModules" :key="index" :id="item.m1_id"
 						:class="{ 'selected_a_module' : selected_a_module == item.m1_id }"
 						@click="selected_a_module = item.m1_id">
-						- {{ item.label }}
+						<span class="pl-0">- {{ item.label }}</span>
+            <i
+              class="iconfont icon-delete icon-edit size-1-1 float-right"
+              v-if="selected_a_module == item.m1_id"
+              @click="showModal = 'edit-modules-1',m1_data.m1_id = item.m1_id,m1_data.m1_name=item.label">
+            </i>
 					</li>
         </ul>
       </div>
@@ -56,15 +61,28 @@
 		</div>
 
     <!-- 添加一级模块 -->
-    <Modal id="modal-a-module" v-if="showModal == 'addmodules'" @close="showModal = true" :isFooter="true">
+    <Modal id="modal-a-module" v-if="showModal == 'add-modules-1'" @close="showModal = true" :isFooter="true">
       <h5 slot="header">添加一级模块</h5>
       <div class="form-group row col-md-auto mx-3" slot="body">
         <label for="ModuleA">模块名称</label>
         <input type="text" class="form-control" rows="5" maxlength="20" placeholder="请输入名称..."
-          v-model="m1_data.m1_name"  @keyup.enter="addModuleA()" autofocus/>
+          v-model="m1_data.m1_name"  @keyup.enter="module_1_edit('add')" autofocus/>
       </div>
-      <button slot="footer" type="submit" class="btn btn-primary" @click="addModuleA()">
+      <button slot="footer" type="submit" class="btn btn-primary" @click="module_1_edit('add')">
 				提交
+			</button>
+    </Modal>
+
+     <!-- 修改编辑一级模块 -->
+    <Modal id="modal-a-module" v-if="showModal == 'edit-modules-1'" @close="showModal = true" :isFooter="true">
+      <h5 slot="header">编辑一级模块</h5>
+      <div class="form-group row col-md-auto mx-3" slot="body">
+        <label for="ModuleA">模块名称</label>
+        <input type="text" class="form-control" rows="5" maxlength="20" placeholder="请输入名称..."
+          v-model="m1_data.m1_name"  @keyup.enter="module_1_edit('edit')" autofocus/>
+      </div>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="module_1_edit('edit')">
+				提交修改
 			</button>
     </Modal>
 
@@ -186,7 +204,15 @@ export default {
     /**
      * 增加一级模块
      */
-    addModuleA() {
+    module_1_edit(type) {
+      let m1_id_status = this.m1_data.hasOwnProperty("m1_id")
+      if (type == "add" && m1_id_status) {
+        delete this.m1_data.m1_id
+      }
+      if (type == "edit" && !m1_id_status) {
+        this.$notify.error({title: "提示",message: "没有获取到模块id，出错了"})
+        return
+      }
       this.m1_data.product_id = this.product_id
 			let module_a_name = this.m1_data.m1_name
 			if (module_a_name > 20 | module_a_name < 2) {
@@ -195,7 +221,7 @@ export default {
 			}
       this.axios({
         method: "post",
-        url: "/api/pm/module/1/add",
+        url: "/api/pm/module/1/edit",
         data: JSON.stringify(this.m1_data)
       }).then(res => {
         if (res.data["status"] === 20000) {
