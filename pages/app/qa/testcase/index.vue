@@ -181,8 +181,15 @@
           <!-- 翻页 -->
           <Pagination :total="total" @PsPn="getPsPn"></Pagination>
 
+          <!-- loading -->
+          <div id="page-loading" class="row">
+            <div class="col text-center" v-if='!Msg && total === null'>
+              <PageLoading></PageLoading>
+            </div>
+          </div>
+
           <!-- no data -->
-          <div id="page-error" class="row" v-if="total === 0">
+          <div id="page-error" class="row" v-if="total === 0 || Msg">
             <div id="page-no-data" class="col text-center">
               <img :src="img_src" class="mt-5 pt-5">
               <p class="text-gray no-hint">{{ Msg }}</p>
@@ -269,7 +276,7 @@ export default {
       pageNumber: parseInt(this.$route.query.pageNumber) || 1,
       pageSize: parseInt(this.$route.query.pageSize) || 10,
       tableData: [],
-      Msg: "没有数据哦",
+      Msg: "",
       img_src: null,
       // Bug: 搜索
       wd: this.$route.query.wd || null,
@@ -386,6 +393,10 @@ export default {
     GetProductInfo (data)  {
       this.product_id = data.product_id
       this.selected_product = data.product_code
+      if (Boolean(data.PageMsg)) {
+        this.Msg = data.PageMsg
+        this.img_src = require("static/images/happy.png")
+      }
     },
     getPsPn: function(ps, pn) {
       this.pageSize = ps

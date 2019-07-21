@@ -174,14 +174,14 @@ export default {
         return 1
       } else {
         let PageRules = this.PageRules
-        if (JSON.stringify(PageRules) === '[]' || PageRules === false) {
-          return 0
-        } else {
+        if (Boolean(PageRules) || JSON.stringify(PageRules)) {
           for (let i of PageRules) {
             if (i['url'] == '/api/system') {
               return i['is_allow']
             }
           }
+        } else {
+          return 0
         }
       }
     },

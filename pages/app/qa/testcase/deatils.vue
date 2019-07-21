@@ -14,11 +14,11 @@
           <button id="case-edit-btn" ype="btn" class="btn btn-gray" @click="handleEdit()" v-if="Rules.edit">
             编辑
           </button>
-          <button id="case-del-btn" type="button" class="btn btn-gray ml-3" 
+          <button id="case-del-btn" type="button" class="btn btn-gray ml-3"
             @click="CaseDelete(CaseDetails.case_id)" v-if="CaseDetails.isDelete === 0 && Rules.del">
             删除
           </button>
-          <button id="case-fall-btn" type="button" class="btn btn-gray ml-3" 
+          <button id="case-fall-btn" type="button" class="btn btn-gray ml-3"
             @click="handleFall(CaseDetails.case_id)" v-if="Rules.fall">
             失效
           </button>
@@ -127,7 +127,7 @@
             </ul>
           </div>
         </div>
-      </div> 
+      </div>
 
       <div id="case-review-record" class="row mt-3 mb-5" v-if="CaseReviewDetails.length">
         <div class="col-lg-8 col-md-8 col-sm-12 col-12">
@@ -151,7 +151,7 @@
     <div id="page-loading" class="col text-center" v-if='isShowLoading'>
       <PageLoading></PageLoading>
     </div>
-    
+
     <Modal id="ModalCaseReview"  v-if="showModal == 'caseReview'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">用户评审</h5>
       <div slot="body" class='form-group row col-md-auto mx-3 toolbars'>
@@ -196,7 +196,7 @@ export default {
       title: 'HDesk - ' + this.CID + '测试用例详情'
     }
   },
-  
+
   validate({ query }) {
     return /\w{2,6}/.test(query.case_id)
   },
@@ -222,8 +222,8 @@ export default {
 
   watch: {
     showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     }
   },
@@ -231,11 +231,11 @@ export default {
   filters: {
     date: util.date
   },
-  
+
   computed: {
     // 权限控制
     Rules: function () {
-      return rules.TestCaseBtnRules(this.$store.state.userInfo,this.CaseDetails) 
+      return rules.TestCaseBtnRules(this.$store.state.userInfo,this.CaseDetails)
     },
     CID: function () {
       return this.CaseDetails['id'] ? this.CaseDetails['id'] + '、' : ''

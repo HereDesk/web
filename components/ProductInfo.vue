@@ -176,7 +176,8 @@ export default {
         }
 
         // save product_id to localStorage
-        if (process.browser) {
+        if (process.client) {
+          document.cookie = "last_visited_product_id=" + this.product_id + ";" + "path=/"
           window.localStorage.setItem("last_visited_product_id", this.product_id)
         }
 

@@ -98,7 +98,7 @@
       }
     },
 
-    mounted() {
+    created() {
       let PageData = this.$store.state.PageData
       let UserIdentity = this.$store.state.userInfo.identity === 1 ? true : false
       let product_id = process.client ? window.localStorage.last_visited_product_id : undefined

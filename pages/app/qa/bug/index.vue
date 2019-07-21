@@ -1,10 +1,10 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
-    <div class="row"> 
+    <div class="row">
 			<!-- Data: Module -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <PageModules v-if="isShowModules"
-          :product_id="visited_product_id" 
+          :product_id="visited_product_id"
           :Rules="Rules"
           @getM1M2="getM1M2">
         </PageModules>
@@ -19,10 +19,10 @@
       <!-- Action: Bug Query and Bug Search -->
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
         <div class="container-fluid">
-					
+
           <div id="bug-nav-manage" class="row">
             <div id="bug-query-1" class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 my-2">
-              
+
               <ProductInfo :ptype="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
 
@@ -66,9 +66,9 @@
                     <i class="iconfont icon-search icon-E0E0E0"></i>
                   </span>
                 </div>
-                <input id="id-title-search" type="text" 
-                  class="form-control search-control" 
-                  placeholder="搜索ID、标题、或指派人员..." 
+                <input id="id-title-search" type="text"
+                  class="form-control search-control"
+                  placeholder="搜索ID、标题、或指派人员..."
                   v-model="wd">
                 <div id="advanced-search" @click="unfoldAdvancedSearch()">
                   <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
@@ -123,7 +123,7 @@
               <div class="d-inline sc-context">
                 <div class="d-inline" v-for="(item,index) in order_list" :key="index">
                   <span>
-                    <input type="radio" :value="item.order_value" 
+                    <input type="radio" :value="item.order_value"
                       v-model="sort_field">
                     <label>{{item.order_name}}</label>
                   </span>
@@ -135,7 +135,7 @@
               <div class="d-inline sc-context">
                 <div class="d-inline" v-for="(item,index) in status_list" :key="index">
                   <span v-if="!['all','notClosed'].includes(item.status_value)">
-                    <input type="checkbox" :value="item.status_value" 
+                    <input type="checkbox" :value="item.status_value"
                       v-model="advanced_search.status_list">
                     <label>{{item.status_name}}</label>
                   </span>
@@ -157,7 +157,7 @@
               <div class="d-inline sc-context">
                 <div class="d-inline" v-for="(item,index) in priority_list" :key="index">
                   <span v-if="!['all'].includes(item.priority_value)">
-                    <input type="checkbox" :value="item.priority_name" 
+                    <input type="checkbox" :value="item.priority_name"
                       v-model="advanced_search.priority_list">
                     <label>{{item.priority_name}}</label>
                   </span>
@@ -183,7 +183,7 @@
               <el-input v-model="advanced_search.closed_user" placeholder="输入名字，多个以空格分割..."></el-input>
             </div>
             <div class="w-100"></div>
-            
+
             <div id="bug-search-create-time" class="col-12 sa-grid-item">
               <span class="sa-desc">创建时间：</span>
               <el-date-picker
@@ -240,14 +240,14 @@
           <div id="bug-data-list" class="row mt-3 mb-5 table_data">
             <!-- style: table -->
             <div id="bug-table-style" class="col px-0" v-if="DataShowStyle == 'table'">
-              <el-table :data='tableData' 
-                :default-sort="{prop: 'date', order: 'descending'}" 
+              <el-table :data='tableData'
+                :default-sort="{prop: 'date', order: 'descending'}"
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label="ID" prop="id" width="50" show-overflow-tooltip sortable>
                 </el-table-column>
                 <el-table-column label="状态" width="85" show-overflow-tooltip sortable>
                   <template slot-scope="scope">
-                    <span class="circle-content" 
+                    <span class="circle-content"
                       :class="{ 'text-secondary': scope.row.status === 'Closed',
                       'text-success': scope.row.status === 'Fixed',
                       'text-urgency': ['New','Open','Reopen'].includes(scope.row.status),
@@ -269,7 +269,7 @@
                     <div @click="BugPriorityDialog(scope.row)">
                       <span class="circle-content font-color-757575"
                         :class="{
-                          'text-deadly': scope.row.priority === 'P1', 
+                          'text-deadly': scope.row.priority === 'P1',
                           'text-urgency': scope.row.priority === 'P2'
                         }">{{ scope.row.priority }}
                       </span>
@@ -294,28 +294,16 @@
                     </span>
                   </template>
                 </el-table-column>
-                <!-- <el-table-column label='解决方案' width='91' align="center">
-                  <template slot-scope="scope">
-                    <div :class="{ 'hideText' : scope.row.bug_id === HoverBugId && scope.row.status != 'Closed'}">
-                      <span :class="[ scope.row.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
-                        &nbsp;{{ scope.row.solution_name }}
-                      </span>
-                    </div>
-                  </template>
-                </el-table-column> -->
                 <el-table-column label="" width="48">
                   <template slot-scope="scope">
-                    <div class="display-none" 
-                      :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId, 
+                    <div class="display-none"
+                      :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId,
                         'hideText': scope.row.status == 'Closed'}">
                       <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || Rules.bug_edit">
                         <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
                           <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
                         </nuxt-link>
                       </span>
-                      <!-- <span id="icon-bug-close" @click="BugClosedDialog(scope.row)">
-                        <i class="iconfont icon-close-opera icon-8a8a8a size-1-5" title="关闭缺陷"></i>
-                      </span> -->
                       <span id="icon-bug-resolve" @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
                         <i class="iconfont icon-resolve icon-8a8a8a size-1-6" title="解决缺陷"></i>
                       </span>
@@ -333,7 +321,7 @@
               <ul class="pl-0 ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="index">
                   <p id="data-bugtitle" class="mt-3">
-                    <nuxt-link style="color:#424242" 
+                    <nuxt-link style="color:#424242"
                       :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
                       {{ item.id }}. {{ item.title }}
                     </nuxt-link>
@@ -354,16 +342,16 @@
                       <span>@指派: {{ item.assignedTo_user }}</span>
                       <span v-if="item.fixed_user">
                         @解决: {{ item.fixed_user }}&nbsp;|&nbsp;
-                        <p class="d-inline" 
+                        <p class="d-inline"
                           :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
                           {{ item.solution_name }}
                         </p>
-                      </span> 
+                      </span>
                       <span>最后更新: {{ item.last_time | date(6) }}</span>
                     </div>
                   </div>
                 </li>
-              </ul> 
+              </ul>
             </div>
 					</div>
 
@@ -372,14 +360,14 @@
 
           <!-- loading -->
           <div id="page-loading" class="row">
-            <div class="col text-center" v-if='total === null'>
+            <div class="col text-center" v-if='!Msg && total === null'>
               <PageLoading></PageLoading>
             </div>
           </div>
 
           <!-- no data -->
           <div id="page-error" class="row">
-            <div id="page-no-data" class="col text-center" v-if="total === 0">
+            <div id="page-no-data" class="col text-center" v-if="total == 0 || Msg">
               <img :src="img_src" class="mt-5">
               <p class="text-gray no-hint">{{ Msg }}</p>
             </div>
@@ -390,9 +378,9 @@
 
     <!-- Action：Bug Assign -->
     <BugAssign id="modal-assign"
-      v-if="showModal == 'assign'" 
+      v-if="showModal == 'assign'"
       @close="showModal = false"
-      :bug_id="selectedBugId" 
+      :bug_id="selectedBugId"
       :product_id="visited_product_id"
       :pageSource="pageSource"
       @refreshList="getBugList()">
@@ -400,7 +388,7 @@
 
     <!-- Action：Bug Resolve -->
     <BugResolve id="modal-resolve"
-      v-if="showModal == 'resolve'" 
+      v-if="showModal == 'resolve'"
       @close="showModal = false"
       :bug_id="selectedBugId"
       :bug_creator_id="HoverBugIdCreatorBy"
@@ -411,11 +399,11 @@
     </BugResolve>
 
     <!-- Action：Bug Change Priority -->
-    <BugChange id="modal-change-priority" 
+    <BugChange id="modal-change-priority"
       v-if="showModal == 'priority'"
       @close="showModal = false"
-      :bug_id="selectedBugId" 
-      :data_type="'priority'" 
+      :bug_id="selectedBugId"
+      :data_type="'priority'"
       @refreshList="getBugList()">
     </BugChange>
 
@@ -428,7 +416,7 @@
         确定
       </button>
     </Modal>
-    
+
     <!-- Action: Bug Expoert -->
     <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }} 缺陷</h5>
@@ -452,9 +440,9 @@
         </div>
       </div>
     </Modal>
-  
+
     <!-- Data: Bug Count -->
-    <Modal id="modal-my-today" v-if="showModal == 'count-today'" 
+    <Modal id="modal-my-today" v-if="showModal == 'count-today'"
       @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
       <div slot="body" class="text-center mb-3">
@@ -505,7 +493,7 @@ export default {
       title: "HDesk - 缺陷列表"
     }
   },
-	
+
   layout: "head",
   components: {
     BugAssign,
@@ -519,7 +507,7 @@ export default {
 			showModal: false,
       ScreenWidth: 0,
       isDisplayOperate: true,
-      
+
       // Page Body Data
       total: null,
       pageNumber: parseInt(this.$route.query.pageNumber) || 1,
@@ -530,11 +518,11 @@ export default {
       HoverBugIdCreatorBy: "",
       MyTodayData: false,
       BugExportFile: {},
-      
+
       // Other
       Msg: false,
       img_src: null,
-      
+
       // Define Data: Query and Search field
       modules_list: [],
       modules_id: [null, null],
@@ -543,11 +531,11 @@ export default {
       visited_product_id: this.$route.query.product_id || "",
       selected_product: this.$route.query.product_code || "",
       selected_release: this.$route.query.release || "all",
-      
+
       // Define Data: Bug-Status
       status_list: data.bug_status_list,
       selected_status: this.$route.query.status || "notClosed",
-      
+
       // Define Data: Bug-priority
       priority_list: data.priority_list,
       selected_priority: [],
@@ -555,18 +543,18 @@ export default {
       // Define Data: Bug-severity_list
       severity_list: data.severity_list,
       selected_severity: [],
-      
+
       // Define Data: Bug-Order
       sort_field: this.$route.query.sort_field || "last_time",
       order_list: data.order_list,
-      
+
       // Define Data: Bug-more-quick-operate
       operate: this.$route.query.operate || "no",
       QuickQperationList: data.bug_quick_operation_list,
 
       wd: this.$route.query.wd || '',
       isShowAdSearch: this.$route.query.isShowAdSearch || "no",
-      
+
       // advanced-search
       advanced_search: {
         sort: '-',
@@ -596,16 +584,16 @@ export default {
     QuickQperationName: util.QuickQperationName,
     filterOrder: util.getOrderName
   },
-  
+
   computed: {
-		
+
     // page and menu rules
     Rules: function() {
       let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
       return rules.RuleManges(userInfo,PagesRules)
     },
-		
+
     // query condition
     QueryBuilder: function() {
       const patternNumber = new RegExp("[0-9]+")
@@ -613,7 +601,7 @@ export default {
       let tmp_release
       Builder["pageNumber"] = this.pageNumber
       Builder["pageSize"] = this.pageSize
-      Builder["isShowAdSearch"] = this.isShowAdSearch 
+      Builder["isShowAdSearch"] = this.isShowAdSearch
       Builder["product_id"] = this.visited_product_id
       Builder["release"] = this.selected_release
       this.selected_status ? (Builder["status"] = this.selected_status) : undefined
@@ -632,7 +620,7 @@ export default {
       }
       return Builder
     },
-		
+
     // bug search condition
     OperatorsList: function() {
       let search_type = this.SearchCriteria.SearchType
@@ -655,7 +643,7 @@ export default {
         return OperatorsList1
       }
     },
-		
+
     // switch search input
     SwitchSearchInput: function() {
       if (this.SearchCriteria.SearchType.includes("time")) {
@@ -668,7 +656,7 @@ export default {
         return "other"
       }
     },
-		
+
     // userinfo group
     uGroup: function() {
       let userInfo = this.$store.state.userInfo
@@ -678,21 +666,21 @@ export default {
     	let userInfo = this.$store.state.userInfo
     	return userInfo.user_id ? userInfo.user_id : null
     },
-		
+
     // show user config
     DataShowStyle: function() {
       let config = this.$store.state.UserConfig
       if (config) {
-        if (config["BUG_DATA_SHOW_STYPE"]) { 
+        if (config["BUG_DATA_SHOW_STYPE"]) {
           return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
         } else {
-          return this.ScreenWidth > 768 ? 'table' : 'list' 
+          return this.ScreenWidth > 768 ? 'table' : 'list'
         }
       } else {
         return this.ScreenWidth > 768 ? 'table' : 'list'
       }
     },
-		
+
     // show user config : 1: show, 0: hide
     isShowModules: function() {
       let config = this.$store.state.UserConfig
@@ -707,8 +695,8 @@ export default {
 
   watch: {
     showModal: function(val, oldVal) {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
+      this.showModal ?
+        document.body.classList.add("overflow-hidden") :
         document.body.classList.remove("overflow-hidden")
     },
     wd: function(val, oldVal) {
@@ -723,7 +711,7 @@ export default {
     visited_product_id: function(val, oldVal) {
       if (this.visited_product_id) {
         const ProductMembersData = this.$store.state.ProductMemberList
-        const isThisProduct = ProductMembersData.hasOwnProperty("product_id") 
+        const isThisProduct = ProductMembersData.hasOwnProperty("product_id")
           ? (ProductMembersData["product_id"] === this.visited_product_id ? true : false) : false
         if (!isThisProduct){
           this.$store.dispatch("getProductMembers",this.visited_product_id)
@@ -739,11 +727,11 @@ export default {
 		QueryBuilder: function(val, oldVal) {
 			if (JSON.stringify(val) != JSON.stringify(oldVal)) {
 				this.tableData = []
-				this.$route.query.product_id 
-					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder}) 
+				this.$route.query.product_id
+					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
 					: this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
-        this.wd 
-          ? this.goSearch() 
+        this.wd
+          ? this.goSearch()
           : (this.isShowAdSearch === 'yes' ?  this.getAdvancedSearch() : this.getBugList())
 			}
 		}
@@ -765,6 +753,10 @@ export default {
     GetProductInfo (data)  {
       this.visited_product_id = data.product_id
       this.selected_release = data.release
+      if (Boolean(data.PageMsg)) {
+        this.Msg = data.PageMsg
+        this.img_src = require("static/images/happy.png")
+      }
     },
     getPsPn: function(ps, pn) {
       this.pageSize = ps
@@ -774,7 +766,7 @@ export default {
       this.m1_id = m1
       this.m2_id = m2
     },
-		
+
     /* 下拉相关操作 */
     handleCommand(data) {
       if ("order_name" in data) {
@@ -826,7 +818,7 @@ export default {
           }
         })
     },
-		
+
 		/* Bug: show search input */
     unfoldAdvancedSearch() {
       if (this.isShowAdSearch == 'no') {
@@ -836,7 +828,7 @@ export default {
         this.wd = ""
       }
     },
-    
+
     /* bug adv search reset */
     resetAdvancedSearch () {
       this.advanced_search.sort = '-'
@@ -867,7 +859,7 @@ export default {
       if (JSON.stringify(this.advanced_search.status_list) !== '[]') {
         this.selected_status = 'all'
       }
-      
+
       let advanced_search = this.advanced_search
       const merge_search = Object.assign(this.advanced_search, basic_query)
 
@@ -886,7 +878,7 @@ export default {
         }
       })
     },
-    
+
 		/* bug: search */
     goSearch() {
       let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
@@ -935,25 +927,25 @@ export default {
       this.selectedBugId = row.bug_id
       this.showModal = 'priority'
     },
-		
+
     /* modal: bug assign */
     skipAssign(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'assign'
     },
-		
+
     /* modal: bug resolve */
     skipResolve(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'resolve'
     },
-		
+
     /* Modal: bug closed */
     BugClosedDialog(row) {
       this.selectedBugId = row.bug_id
       this.showModal = 'closed'
     },
-		
+
 		/* bug: closed */
     ClosedBug() {
       let data = {"bug_id": this.selectedBugId}
@@ -971,7 +963,7 @@ export default {
         }
       })
     },
-		
+
 		/* bug: export */
     bug_export () {
       if (!this.visited_product_id) { return }
@@ -985,7 +977,7 @@ export default {
           }
 				})
     },
-		
+
     /* my today data: count */
     myToday() {
       this.showModal = 'count-today'
@@ -998,14 +990,14 @@ export default {
 					}
 				})
     },
-		
+
     /* table line hover and leave */
     tableHover(row) {
       this.HoverBugIdCreatorBy = row.creator_id
       this.HoverBugId = row.bug_id
       this.visited_product_id = row.product_id
     },
-    
+
     tableLeave(row) {
       this.HoverBugId = ""
     },
@@ -1039,7 +1031,7 @@ export default {
 </script>
 
 <style scope>
-  @import "~/assets/css/test.css";  
+  @import "~/assets/css/test.css";
   .sa-grid-item {
     line-height: 1.8rem;
     font-size:0.92rem;
