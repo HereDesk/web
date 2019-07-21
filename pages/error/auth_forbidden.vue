@@ -11,7 +11,7 @@
           <p class="text-lg mt-3">您没有此项目或此接口的访问权限</p>
         </div>
         <div class="links">
-          <a target="_blank" class="button--green" @click="ReLogin()">重新登录</a>
+          <a target="_blank" class="button--green" @click="BackHome()">返回首页</a>
         </div>
       </div>
     </div>
@@ -21,11 +21,8 @@
 <script>
 export default {
   methods: {
-    ReLogin() {
-      window.localStorage.removeItem('token')
-      window.localStorage.removeItem('last_visited_product_id')
-      document.cookie = 'token' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;' + 'path=/'
-      this.$router.replace("/")
+    BackHome() {
+      this.$router.replace("/app/dashboard")
     }
   },
 }
