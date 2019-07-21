@@ -9,6 +9,14 @@ Vue.prototype.axios = axios
 
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
+// optionally configure hljs
+hljs.configure({
+    languages: ['javascript', 'css', 'scss','less', 'html',
+      'python','java','c','c++','php','perl',
+      'shell','bash','powershell',
+      'json','sql','markdown',
+      'nginx']
+  })
 Vue.use(hljs)
 
 // 引入elementUi

@@ -100,23 +100,23 @@ module.exports = {
   },
 
   cache: true,
-  
+
   router: {
     linkActiveClass: 'active-link',
     middleware: 'auth'
   },
-  
+
 
   /*
    ** Build configuration
    */
   build: {
-    vender: ['axios','marked'],
+    vender: ['axios','marked','element-ui','echarts','lodash','mavon-editor'],
     /*
      ** You can extend webpack config here
      */
     extend(config, ctx) {
-      
+
     }
   }
 }

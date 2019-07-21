@@ -72,7 +72,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import rules from '~/assets/js/rules.js'
 
   export default {
