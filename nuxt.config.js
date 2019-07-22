@@ -111,7 +111,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    vender: ['axios','marked','element-ui','echarts','lodash','mavon-editor'],
+    vender: ['axios','marked','element-ui','echarts','lodash'],
     /*
      ** You can extend webpack config here
      */

@@ -17,12 +17,6 @@
  - 用户管理 （用户管理、增加、删除、修改密码）
  - 系统管理（api、page、日志管理）
 
-## 问题
- 为什么没有需求、任务进度等功能？
- `因为具体的功能实现、UI正在梳理中，后续会增加`
- > API自动化测试模块正在开发中
- 备注：如果您有更好的解决方案，却苦于无法实现，请联系我。
-
 ## 安装
  安装文档见[INSTALL.md](INSTALL.md)
  ```
@@ -40,3 +34,36 @@ $ npm run dev 或者 nuxt dev
  > 其它的截图见screenshot目录
  图一：（首页）
  ![home](screenshot/home.png)
+
+## 项目文件布局
+
+采用nuxt标准的项目文件配置
+
+```
+.
+├── .nuxt                                       // .nuxt编译目录
+├── assets                                      // 资源目录 用于组织未编译的静态资源如(LESS、SASS 或 JavaScript)
+├── components                                  // 组件目录
+├── layouts                                     // 布局目录
+├── middleware                                  // 中间件目录
+├── plugins                                     // 插件目录
+├── screenshot                                  // 存放页面截图
+├── static                                      // 静态文件目录 static 用于存放应用的静态文件
+├── store                                       // Vuex 状态树相关
+├── pages                                       // 页面目录 pages 用于组织应用的路由及视图
+│   ├── index.vue                               // 主入口页面
+│   ├── error.vue                               // 错误页面
+│   ├── app                                     // 应用
+│   │   ├── help                                // 帮助
+│   │   ├── products                            // 产品/项目
+│   │   ├── qa                                  // QA
+│   │   ├── set                                 // 设置
+│   │   ├── system                              // 系统管理
+│   │   ├── user-management                     // 用户管理
+│   │   ├── dashboard                           // dashboard
+├── nuxt.config.js                              // 用于组织Nuxt.js 应用的个性化配置
+├── package.json                                // 文件用于描述应用的依赖关系和对外暴露的脚本接口
+├── version.json                                // 版本号文件
+├── ReleaseNote.md                              // 版本更新日志
+├── README.md
+```
