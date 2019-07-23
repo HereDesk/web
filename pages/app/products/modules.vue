@@ -155,7 +155,7 @@
       },
 
       /**
-       *  二级模块
+       *  二级模块列表： 根据一级模块ID，返回二级模块列表
        */
       m2_list() {
         let m2_list = []
@@ -167,6 +167,10 @@
         }
         return m2_list
       },
+
+      /**
+       * 权限计算
+       */
       Rules: function() {
         let userInfo = this.$store.state.userInfo
         let PagesRules = this.$store.state.PageData
@@ -201,7 +205,8 @@
       },
 
       /**
-       * 增加一级模块
+       * 新增、修改一级模块
+       * @param {string} type=[add|edit] - 类型：新增、修改
        */
       module_1_edit(type) {
         let m1_id_status = this.m1_data.hasOwnProperty("m1_id")
@@ -256,6 +261,7 @@
               title: "成功",
               message: res.data["msg"]
             })
+            this.showModal = false
             this.$store.dispatch("getProductModules", this.product_id)
           } else {
             this.$notify.error({
