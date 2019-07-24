@@ -379,6 +379,8 @@ export default {
       if (this.total === 0) {
         this.img_src = require("static/images/happy.png")
         this.Msg = "没找到数据"
+      } else {
+        this.Msg = ""
       }
     }
   },

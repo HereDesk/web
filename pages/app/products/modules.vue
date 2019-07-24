@@ -81,8 +81,8 @@
           @keyup.enter="module_1_edit('edit')"
           autofocus />
       </div>
-      <button slot="footer" type="submit" class="btn btn-primary" @click="module_1_edit('edit')">提交修改</button>
       <button slot="footer" type="submit" class="btn btn-cancel" @click="module_1_del()">删除</button>
+      <button slot="footer" type="submit" class="btn btn-primary" @click="module_1_edit('edit')">提交修改</button>
     </Modal>
 
   </div>

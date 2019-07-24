@@ -52,13 +52,13 @@
     </div>
 
     <!-- 仅包含项目列表的下拉菜单 -->
-    <el-select id="info-product" style="width:100%;" placeholder="选择产品" v-model="product_code"
+    <el-select id="info-product" style="width:100%;" placeholder="选择产品" v-model="product_id"
       v-if="showStyle === 'select' & ptype === 'only-product-name'">
       <el-option
         v-for="(item,index) in product_list"
         :key="index"
         :label="item.product_code"
-        :value="item.product_code">
+        :value="item.product_value">
       </el-option>
     </el-select>
 
@@ -109,7 +109,6 @@ export default {
   data () {
     return {
       product_list: [],
-      product_code: "",
       product_id: "",
       release: this.$route.query.release || "all",
       modules_list: [],
@@ -120,6 +119,14 @@ export default {
   },
 
   computed: {
+    product_code: function() {
+      // 遍历项目编码
+      for (let item of this.product_list) {
+        if (this.product_id === item.product_id) {
+          return item.product_code
+        }
+      }
+    },
     release_list: function() {
       let arr = []
       let tmp = []
@@ -181,13 +188,6 @@ export default {
           window.localStorage.setItem("last_visited_product_id", this.product_id)
         }
 
-        // 解析项目编码
-        for (let item of this.product_list) {
-          if (this.product_id === item.product_id) {
-            this.product_code = item.product_code
-          }
-        }
-
         // 项目模块数据
         let ProductModulesInfo = this.$store.state.ProductModulesInfo
         if (JSON.stringify(ProductModulesInfo) !== '{}') {
@@ -217,13 +217,12 @@ export default {
       handler: function (val, oldVal) {
         let isEdit = Boolean(JSON.stringify(this.editData))
         let route = this.$route.query
-        let last_visited_product = process.browser && isEdit ? window.localStorage.last_visited_product : undefined
-
+        let last_visited_product_id = process.client ? window.localStorage.last_visited_product_id : undefined
         // 处理product_id
         if (JSON.stringify(this.product_list) !== '[]' && !isEdit) {
           if (route.product_id) {
             this.product_id = route.product_id
-          } else if (last_visited_product) {
+          } else if (last_visited_product_id) {
             this.product_id = last_visited_product_id
           } else {
             this.product_id = this.product_list[0]['product_id']
@@ -236,6 +235,10 @@ export default {
   },
 
   created() {
+    let route_info = this.$route.query
+    if (route_info.hasOwnProperty("product_id")) {
+      this.product_id = route_info.product_id
+    }
     let ProductVersionInfo = this.$store.state.ProductVersionInfo
     if (JSON.stringify(ProductVersionInfo) !== '{}') {
       this.product_list = ProductVersionInfo
@@ -245,7 +248,7 @@ export default {
   },
 
   methods: {
-    /*
+    /**
     * 请求：当前用户所有项目，以及项目对应的版本
     */
     getProductRelease() {
@@ -262,7 +265,7 @@ export default {
       )
     },
 
-    /*
+    /**
     * 请求：项目模块
     */
     getAllModule() {

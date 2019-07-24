@@ -5,6 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 export const state = () => ({
+    product_id: "",
     userInfo: false,
     PageData: [],
     UserConfig: [],
@@ -26,6 +27,11 @@ export const mutations = {
     // 项目模块信息
     setProductModulesInfo(state, data) {
         state.ProductModulesInfo = data
+    },
+
+    // 项目id
+    setProductId(state,data) {
+        state.product_id = data
     },
 
     // 用户登录信息
