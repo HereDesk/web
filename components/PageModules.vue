@@ -10,15 +10,16 @@
     </div>
     <ul :id="item1.m1_id" class="ul-style-none" v-for="(item1,index) in modules_list" :key="index">
       <li>
-        <span class="line-height-1-8" :class="{ 'el-active': m1_id == item1.m1_id }"
-          @click="clickMoudle1(item1)">
+        <div class="line-height-2" :class="{ 'el-active': m1_id == item1.m1_id }"
+          @click="click_moudle_1(item1)">
           <i class="iconfont icon-8a8a8a"
             :class="[ m1_id == item1.id ? 'icon-trigon-down' : 'icon-trigon-right' ]">
           </i>
           &nbsp;&nbsp;{{ item1.label }}
-        </span>
+          <span class="badge_num" v-if="item1.num" :key="item1.num">{{ item1.num }}</span>
+        </div>
         <ul class="t_module_second pl-5" v-if="m1_id == item1.m1_id">
-          <li v-for="(item2,index2) in item1.children" :key="index2" :id="index2" @click="clickMoudle2(item2)">
+          <li v-for="(item2,index2) in item1.children" :key="index2" :id="index2" @click="click_moudle_2(item2)">
             <span :class="{ 'el-active': m2_id == item2.m2_id }">
               {{ item2.label }}
             </span>
@@ -30,62 +31,114 @@
 </template>
 
 <script>
-
-export default {
-  props: {
-    product_id: String,
-    Rules:{}
-  },
-  data () {
-    return {
-      m1_id: this.$route.query.m1_id || null,
-      m2_id: this.$route.query.m2_id || null
-    }
-  },
-
-  computed: {
-    modules_list () {
-      return this.$store.state.ProductModulesInfo.data
-    }
-  },
-
-  watch: {
-    m1_id () {
-      this.$emit('getM1M2',this.m1_id,this.m2_id)
+  export default {
+    props: {
+      product_id: {
+        type: String,
+        required: true
+      },
+      query_type: {
+        validator: function (value) {
+          return ['bug', 'testcase'].indexOf(value) !== -1
+        }
+      },
+      Rules:{}
     },
-    m2_id () {
-      this.$emit('getM1M2',this.m1_id,this.m2_id)
-    },
-  },
-
-  methods: {
-
-    clickMoudle1 (data) {
-      if (this.m1_id == data.m1_id) {
-        this.m1_id = ''
-        this.m2_id = ''
-      } else {
-        this.m1_id = data.m1_id
-      }
-    },
-    clickMoudle2 (data) {
-      if (this.m2_id == data.m2_id) {
-        this.m2_id = ''
-      } else {
-        this.m2_id = data.m2_id
+    data () {
+      return {
+        m1_id: this.$route.query.m1_id || null,
+        m2_id: this.$route.query.m2_id || null,
+        modules_num: [],
+        tmp_modules_list: []
       }
     },
 
-    click_all_modules() {
-      this.m1_id = null
-      this.m2_id = null
+    computed: {
+      modules_list() {
+        let modules_name = this.$store.state.ProductModulesInfo.data
+        if (this.modules_num.length > 0 && modules_name) {
+          this.tmp_modules_list = JSON.parse(JSON.stringify(modules_name))
+          for (let i1 in modules_name) {
+            for (let i2 of this.modules_num) {
+              if (modules_name[i1]["m1_id"] == i2["m1_id"]) {
+                this.tmp_modules_list[i1]["num"] = i2["num"]
+              }
+            }
+          }
+          return this.tmp_modules_list
+        }
+        return modules_name
+      }
+    },
+
+    watch: {
+      product_id () {
+        this.getModuleCount()
+      },
+      m1_id () {
+        this.$emit('getM1M2',this.m1_id,this.m2_id)
+      },
+      m2_id () {
+        this.$emit('getM1M2',this.m1_id,this.m2_id)
+      },
+    },
+
+    mounted() {
+      this.getModuleCount()
+    },
+
+    methods: {
+
+      click_moudle_1 (data) {
+        if (this.m1_id == data.m1_id) {
+          this.m1_id = ''
+          this.m2_id = ''
+        } else {
+          this.m1_id = data.m1_id
+        }
+      },
+      click_moudle_2 (data) {
+        if (this.m2_id == data.m2_id) {
+          this.m2_id = ''
+        } else {
+          this.m2_id = data.m2_id
+        }
+      },
+
+      click_all_modules() {
+        this.m1_id,this.m2_id = null,null
+      },
+
+      /**
+       * 模块对应的缺陷数量、测试用例数量
+      */
+      getModuleCount() {
+        if (!this.query_type) return
+        if (!this.product_id) return
+        this.axios
+          .get("/api/pm/module/count?product_id=" + this.product_id + "&type=" + this.query_type)
+          .then(res => {
+            if (res.data["status"] === 20000) {
+              this.tmp_modules_list = []
+              this.modules_num = res.data["data"]
+            }
+          }
+        )
+      }
     }
   }
-}
 </script>
 
 <style scope>
   .el-active {
     color: rgb(21, 101, 192);
+  }
+  .badge_num {
+    background-color: #EEEEEE;
+    padding: 2px 10px;
+    border-radius: 15px;
+    color: rgb(158, 158, 158);
+    font-weight: 300;
+    font-size: 0.2rem !important;
   }
 </style>
