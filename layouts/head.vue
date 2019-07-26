@@ -110,7 +110,7 @@
 
     methods: {
       HandLogout () {
-        if (process.browser) {
+        if (process.client) {
         	window.localStorage.removeItem("token")
           window.localStorage.removeItem("last_visited_product")
         	document.cookie = "token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;" + "path=/"
