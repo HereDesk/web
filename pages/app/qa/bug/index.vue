@@ -6,6 +6,7 @@
         <PageModules v-if="isShowModules"
           :product_id="visited_product_id"
           :Rules="Rules"
+          :query_type="'bug'"
           @getM1M2="getM1M2">
         </PageModules>
       </div>

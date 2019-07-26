@@ -7,6 +7,7 @@
         <PageModules
           :product_id="product_id"
           :Rules="Rules"
+          :query_type="'testcase'"
           @getM1M2="getM1M2" v-if="isShowModules">
         </PageModules>
       </div>
@@ -262,7 +263,7 @@ export default {
       showModal: false,
       ScreenWidth: 0,
       // 产品、版本
-      product_id: this.$route.query.product_id || null,
+      product_id: this.$route.query.product_id || '',
       selected_product: this.$route.query.product_code || null,
       m1_id: this.$route.query.m1_id || null,
       m2_id: this.$route.query.m2_id || null,
