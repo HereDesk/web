@@ -4,7 +4,7 @@
       <span class="mb-2" :class="{ 'el-active' : !m1_id && !m2_id }" @click="click_all_modules()">全部模块</span>
       <span>
         <nuxt-link :to="{ path: '/app/products/modules',query: {'product_id': product_id } }">
-          <span style="color:#2b2b2b" title="维护模块"> / 维护</span>
+          <span style="color:#2b2b2b" title="维护模块"> / 维护 </span>
         </nuxt-link>
       </span>
     </div>
@@ -22,6 +22,7 @@
           <li v-for="(item2,index2) in item1.children" :key="index2" :id="index2" @click="click_moudle_2(item2)">
             <span :class="{ 'el-active': m2_id == item2.m2_id }">
               {{ item2.label }}
+              <span class="badge_num" v-show="filter_m2_id(item2.m2_id)">{{  filter_m2_id(item2.m2_id) }}</span>
             </span>
           </li>
         </ul>
@@ -68,6 +69,25 @@
           return this.tmp_modules_list
         }
         return modules_name
+      },
+
+      // 因为模块和模块计数是两个api，先采用这种方式吧
+      filter_m2_id() {
+        return function(value) {
+          if (JSON.stringify(this.modules_num) == '[]') return
+          let tmp = {}
+          for (let i of this.modules_num) {
+            if (JSON.stringify(i["m2_data"]) !== '[]') {
+              for (let m2 of i["m2_data"]) {
+                tmp[m2["m2_id"]] = m2["num"]
+              }
+            }
+          }
+          if (tmp.hasOwnProperty(value)) {
+            return tmp[value]
+          }
+          return ""
+        }
       }
     },
 

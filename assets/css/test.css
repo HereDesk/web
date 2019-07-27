@@ -1,6 +1,6 @@
-/* 
+/*
 **
-** 移动端 
+** 移动端
 **
 */
 
@@ -38,7 +38,7 @@
 /*
 ** 页面：product modules
 */
- 
+
 .pg-modules {
   border-right: 1px solid #eee;
 }
@@ -64,7 +64,7 @@
 }
 
 .t_module_second li {
-  line-height: 2.5rem;
+  line-height: 2rem;
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   white-space: nowrap !important;
@@ -191,9 +191,9 @@
 .bug-sort:hover .sort_text {
   color: #17a2b8;
 }
-/* 
+/*
 **
-** 缺陷详情：bug_details 
+** 缺陷详情：bug_details
 **
 */
 
@@ -237,7 +237,7 @@
   color:#333333;
 }
 
-/* 
+/*
 ** 背景块
 */
 .details-block {
@@ -296,7 +296,7 @@
   }
 }
 
-/* 
+/*
 ** 附件相关
 */
 
