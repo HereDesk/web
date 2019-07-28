@@ -687,12 +687,12 @@ a:link {
 }
 
 .text-urgency {
-  color: #EF5350 !important;
+  color: #f56c6c !important;
 }
 
 .text-bg-urgency {
 	color: #FFF;
-	background-color: #EF5350;
+	background-color: #f56c6c;
 }
 
 .text-warning {

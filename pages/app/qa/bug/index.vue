@@ -268,7 +268,7 @@
                   <template slot-scope="scope">
                     <nuxt-link style="color:#424242"
                       :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}">
-                    <!-- <span v-if="scope.row.bug_label">{{ scope.row.bug_label }}</span> -->
+                    <el-tag v-if="scope.row.bug_label">{{ scope.row.bug_label }}</el-tag>
                     {{ scope.row.title }}
                     </nuxt-link>
                   </template>
