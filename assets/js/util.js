@@ -1,7 +1,7 @@
 import BasicData from "~/assets/js/data.js"
 
 export default {
-	
+
    txt_deal_with(txt){
     let reg = /(((https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/ig;
     let result = txt.replace(reg,function(item){
@@ -9,7 +9,7 @@ export default {
     });
     return result;
   },
-	
+
   getWeek (str) {
     if (!str) {
       return ''
@@ -17,7 +17,7 @@ export default {
     let date = new Date(str)
     return date.getDay()
   },
-  
+
   date (str, type) {
     if (!str) {
       return '';
@@ -52,18 +52,18 @@ export default {
     let diff_days = Math.floor(diff_hours / 24);
     let diff_months = Math.floor(diff_days / 30);
     let diff_years = Math.floor(diff_months / 12);
-    
+
     let format_date = function (number) {
       return /^\d$/.test(number) ? '0' + number : number;
     };
     // 显示全部
     if (!type || type == 1) {
-      return param_year + '-' + format_date(param_month) + '-' + format_date(param_day) + ' ' 
+      return param_year + '-' + format_date(param_month) + '-' + format_date(param_day) + ' '
         + format_date(param_hours) + ':' + format_date(param_minutes) + ':' + format_date(param_seconds);
     }
     // 显示：01/01 01:01
     else if (type == 2) {
-      return format_date(param_month) + '/' + format_date(param_day) + ' ' 
+      return format_date(param_month) + '/' + format_date(param_day) + ' '
         + format_date(param_hours) + ':' + format_date(param_minutes);
     }
     // 只显示年月日
@@ -76,7 +76,7 @@ export default {
     }
     else if (type == 5) {
       return format_date(param_year) + '/' + format_date(param_month) + '/' + format_date(param_day)
-    } 
+    }
     else if (type == 6) {
       if (diff_days === 0 & currdate_day === param_day) {
         if (diff_hours === 0) {
@@ -100,7 +100,7 @@ export default {
       }
     }
   },
-	
+
   bugStatusName (data) {
     let status_list = BasicData.bug_status_list
     for (let x in status_list) {
@@ -109,7 +109,7 @@ export default {
       }
     }
   },
-	
+
   getOperatorsName (data) {
     let list =  [
       {"value": "=","name":'='},
@@ -128,7 +128,31 @@ export default {
       }
     }
   },
-	
+
+  getTableFieldName (data) {
+    let list =  [
+      { "value": "solution", "name": "解决方案" },
+      { "value": "priority", "name": "优先级" },
+      { "value": "severity", "name": "严重程度" },
+      { "value": "bug_type", "name": "缺陷类型" },
+      { "value": "bug_source", "name": "缺陷来源" },
+      { "value": "creator_user", "name": "创建者" },
+      { "value": "closed_user", "name": "关闭者" },
+      { "value": "fixed_user", "name": "解决者" },
+      { "value": "last_operation_user","name":"最后操作人"},
+      { "value": "assignedTo_user", "name": "指派谁" },
+      { "value": "create_time", "name": "创建日期" },
+      { "value": "closed_time", "name": "关闭日期" },
+      { "value": "fixed_time", "name": "解决日期" },
+      { "value": "assignedTo_time", "name": "指派日期" }
+    ]
+    for (let x in list) {
+      if (list[x]['value'] == data) {
+        return list[x]['name']
+      }
+    }
+  },
+
   getSearchTypeName (data) {
     let list =  BasicData.bug_search_type_list
     for (let x in list) {
@@ -137,7 +161,7 @@ export default {
       }
     }
   },
-	
+
   getOrderName (data) {
     let order_list = BasicData.order_list
     for (let x in order_list) {
@@ -146,7 +170,7 @@ export default {
       }
     }
   },
-	
+
   QuickQperationName (data) {
     let QuickQperationList = BasicData.bug_quick_operation_list
     for (let x in QuickQperationList) {
@@ -155,7 +179,7 @@ export default {
       }
     }
   },
-	
+
   flowdesc (type) {
     let data = [
       {'status': -1, 'name': '不涉及此项'},
@@ -180,7 +204,7 @@ export default {
       }
     }
   },
-	
+
   FilterCaseStatus (status_value) {
     let data = [
       { status_name: "正常", status_value: 0 },

@@ -8,41 +8,30 @@
     <div id="page-details" class="container mt-5" v-if="JSON.stringify(BugDetails) !== '{}'">
 
       <div id="page-details-head" class="row">
-        <div id="page-deatails-title" class="col-12">
-          <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
-        </div>
-        <div id="page-details-opera-btn" class="col-12 my-3">
-          <button type="button" class="btn btn-op" @click="BugDelete()" v-if="BtnRules.del">
-            删除
-          </button>
-          <button type="button" class="btn btn-op" @click="EditBug()" v-if="BtnRules.edit">
-            编辑
-          </button>
-          <button type="button" class="btn btn-op" @click="showModal = 'assign'" v-if="BtnRules.assign" >
-            分配
-          </button>
-          <button type="button" class="btn btn-op" @click="showModal = 'ReOpen'" v-if="BtnRules.reopen" >
-            重新打开
-          </button>
-          <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-op mr-0" @click="immediateRecovered()" v-if="BtnRules.Recovered">
-              已解决
-            </label>
-            <label class="btn btn-op" @click="showModal = 'resolve'" v-if="BtnRules.Recovered">
-              其它解决方案
-            </label>
+        <div class="col-md-10 col-sm-12">
+          <div class="row">
+            <div id="page-deatails-title" class="col-12">
+              <h3 class="details-title">{{ BID }} {{ BugDetails.title }}</h3>
+            </div>
+            <div id="page-details-opera-btn" class="col-12 my-3">
+              <button type="button" class="btn btn-op" @click="showModal = 'tags'">打标签</button>
+              <button type="button" class="btn btn-op" @click="BugDelete()" v-if="BtnRules.del">删除</button>
+              <button type="button" class="btn btn-op" @click="EditBug()" v-if="BtnRules.edit"> 编辑 </button>
+              <button type="button" class="btn btn-op" @click="showModal = 'assign'" v-if="BtnRules.assign">分配</button>
+              <button type="button" class="btn btn-op" @click="showModal = 'ReOpen'" v-if="BtnRules.reopen">重新打开</button>
+              <div class="btn-group" data-toggle="buttons" v-if="BtnRules.Recovered">
+                <label class="btn btn-op mr-0" @click="immediateRecovered()" > 已解决 </label>
+                <label class="btn btn-op" @click="showModal = 'resolve'"> 其它解决方案 </label>
+              </div>
+              <button type="button" class="btn btn-op" @click="showModal = 'hangup'" v-if="BtnRules.hangup"> 延期挂起 </button>
+              <button type="button" class="btn btn-op" @click="showModal = 'closed'" v-if="BtnRules.close">关闭</button>
+              <button type="button" class="btn btn-op" @click="showModal = 'notes'" v-if="BtnRules.notes">备注</button>
+              <button type="button" class="btn btn-op" @click="$router.back(-1)">返回</button>
+            </div>
           </div>
-          <button type="button" class="btn btn-op" @click="showModal = 'hangup'" v-if="BtnRules.hangup" >
-            延期挂起
-          </button>
-          <button type="button" class="btn btn-op" @click="showModal = 'closed'" v-if="BtnRules.close">
-            关闭
-          </button>
-          <button type="button" class="btn btn-op" @click="showModal = 'notes'" v-if="BtnRules.notes" >
-            备注</button>
-          <button type="button" class="btn btn-op" @click="$router.back(-1)">
-            返回
-          </button>
+        </div>
+        <div class="col-md-2 col-sm-12">
+          <div class="bug-tags" v-if="BugDetails.bug_label">{{ BugDetails.bug_label }}</div>
         </div>
       </div>
 
@@ -174,6 +163,10 @@
             </h6>
             <div class="dropdown-divider"></div>
             <ul class="mt-3 mb-5 pl-3 satellite_info">
+              <li id="bug-last-time">
+                <label>最后操作：</label>
+                {{ BugDetails.last_operation_user }}
+              </li>
               <li id="bug-last-time">
                 <label>最后操作：</label>
                 {{ BugDetails.last_time | date }}
@@ -359,6 +352,25 @@
     	</div>
     </Modal>
 
+    <!-- 创建标签 -->
+    <Modal id="modal-tags" class="toolbars"
+      v-if="showModal == 'tags'" @close="showModal = false" :isFooter="true">
+      <h5 slot="header" class="modal-title">创建标签</h5>
+      <div slot="body" class="px-5">
+        <el-input type="text" id="bug-tags" class="mb-3"
+          maxlength="10" placeholder="标签名称，最多6个字符 ~."
+          v-model.trim="tag_name" required autofocus @keyup.enter="AddBugTags()">
+        </el-input>
+        <div class="text-gray">
+          标签建议：<span @click="tag_name='疑难Bug'">疑难Bug</span>、
+          <span @click="tag_name='无法复现'">无法复现</span>
+        </div>
+      </div>
+      <div slot="footer">
+        <button type="submit" class="btn btn-primary" @click="AddBugTags()">提交</button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
@@ -422,6 +434,7 @@ export default {
       BugDetails: {},
       Annex: [],
       product_code: "",
+      tag_name: "",
       ResolveData: {
         bug_id: "",
         assignedTo: "",
@@ -689,6 +702,31 @@ export default {
       })
     },
 
+    // 创建缺陷标签
+    AddBugTags() {
+      let req = {
+        "bug_id": this.currentBugId,
+        "tag_name":this.tag_name
+      }
+      if (this.tag_name.length > 6) {
+        return this.$notify.error({title: "错误",message: "长度不要大于6"})
+      }
+      this.axios({
+        method: "post",
+        url: "/api/qa/bug/tags/add",
+        data: JSON.stringify(req)
+      }).then(res => {
+        if (res.data["status"] === 20000) {
+          this.showModal=false
+          this.BugHistory()
+          this.$notify.success({title: "成功",message: res.data["msg"]})
+          this.BugDetails.bug_label = this.tag_name
+        } else {
+          this.$notify.error({title: "错误",message: res.data["msg"]})
+        }
+      })
+    },
+
     // bug edit remark
     EditRecordRemard(item) {
       this.axios({
@@ -709,6 +747,28 @@ export default {
 }
 </script>
 
-<style>
-  @import "~/assets/css/test.css"
+<style scoped="scoped">
+  @import "~/assets/css/test.css";
+
+  .bug-tags{
+    margin:30px;
+    width:150px;
+    height:50px;
+    color: red;
+    font-size:1.3rem;
+    line-height: 44px;
+    text-align: center;
+    text-justify: auto;
+    border: 3px solid red;
+    transform:rotate(15deg);
+    -ms-transform:rotate(15deg); /* Internet Explorer */
+    -moz-transform:rotate(15deg); /* Firefox */
+    -webkit-transform:rotate(15deg); /* Safari 和 Chrome */
+    -o-transform:rotate(15deg); /* Opera */
+    }
+  @media (max-width: 767px) {
+    .bug-tags {
+      display: none;
+    }
+  }
 </style>

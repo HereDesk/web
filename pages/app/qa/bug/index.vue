@@ -1,7 +1,8 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
     <div class="row">
-			<!-- Data: Module -->
+
+      <!-- 项目模块：左侧 -->
       <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
         <PageModules v-if="isShowModules"
           :product_id="visited_product_id"
@@ -24,9 +25,10 @@
           <div id="bug-nav-manage" class="row">
             <div id="bug-query-1" class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 my-2">
 
+              <!-- 项目下拉列表 -->
               <ProductInfo :ptype="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
-
+              <!-- 缺陷状态下拉列表 -->
               <el-dropdown id="bug-query-status" class="mr-1 my-1" :class="{ 'd-none': isShowAdSearch === 'yes' }">
                 <span>
                   <span class="el-dropdown-desc">状态:</span>
@@ -69,7 +71,7 @@
                 </div>
                 <input id="id-title-search" type="text"
                   class="form-control search-control"
-                  placeholder="搜索ID、标题、或指派人员..."
+                  placeholder="搜索ID、标题、标签、或指派人员..."
                   v-model="wd">
                 <div id="advanced-search" @click="unfoldAdvancedSearch()">
                   <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
@@ -100,11 +102,17 @@
                       <i class="iconfont icon-web-icon- icon-8a8a8a size-1-5"></i> 今日数据
                     </span>
                   </el-dropdown-item>
+                  <el-dropdown-item class="px-2">
+                    <span  class="searchIcon mr-3" title="过滤字段" @click="showModal = 'table-filter-field'">
+                      <i class="iconfont icon-filter icon-8a8a8a size-1-5"></i> 字段过滤
+                    </span>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
           </div>
 
+          <!-- 高级搜索 -->
           <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }" style="border:1px solid #eee;border-radius:5px; padding: 20px 0;">
             <div id="bug-search-sort" class="col-12 sa-grid-item">
               <span class="sa-desc">顺序：</span>
@@ -229,7 +237,6 @@
                 value-format="yyyy-MM-dd">
               </el-date-picker>
             </div>
-
             <div class="col-12 text-center mt-3">
               <button type="button" class="btn-ad-search" @click="isShowAdSearch = 'no'">隐藏</button>
               <button type="button" class="btn-primary btn-ad-search" @click="getAdvancedSearch()">高级搜索</button>
@@ -237,9 +244,9 @@
             </div>
           </div>
 
-          <!-- table: 数据展示 -->
           <div id="bug-data-list" class="row mt-3 mb-5 table_data">
-            <!-- style: table -->
+
+            <!-- 样式：表格 -->
             <div id="bug-table-style" class="col px-0" v-if="DataShowStyle == 'table'">
               <el-table :data='tableData'
                 :default-sort="{prop: 'date', order: 'descending'}"
@@ -261,11 +268,12 @@
                   <template slot-scope="scope">
                     <nuxt-link style="color:#424242"
                       :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}">
+                    <!-- <span v-if="scope.row.bug_label">{{ scope.row.bug_label }}</span> -->
                     {{ scope.row.title }}
                     </nuxt-link>
                   </template>
                 </el-table-column>
-                <el-table-column label="优先级" prop="priority" align="center" width="95" sortable>
+                <el-table-column label="优先级" align="center" width="95" sortable v-if="table_field.priority">
                   <template slot-scope="scope">
                     <div @click="BugPriorityDialog(scope.row)">
                       <span class="circle-content font-color-757575"
@@ -277,11 +285,17 @@
                     </div>
                   </template>
                 </el-table-column>
+                <el-table-column label="创建时间" align="center" width="110"
+                  sortable show-overflow-tooltip v-if="table_field.create_time">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.create_time | date(6) }}</span>
+                  </template>
+                </el-table-column>
                 <el-table-column label="创建" prop="creator_user" align="center" width="85"
-                  sortable  show-overflow-tooltip>
+                  sortable  show-overflow-tooltip v-if="table_field.creator_user">
                 </el-table-column>
                 <el-table-column label="指派" prop="assignedTo_user" align="center" width="85"
-                  sortable show-overflow-tooltip>
+                  sortable show-overflow-tooltip v-if="table_field.assignedTo_user">
                 </el-table-column>
                 <el-table-column label="最后更新" align="center" width="110">
                   <template slot-scope="scope">
@@ -317,7 +331,7 @@
               </el-table>
             </div>
 
-            <!-- style: list -->
+            <!-- 数据展示样式：列表 -->
             <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
               <ul class="pl-0 ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="index">
@@ -356,10 +370,10 @@
             </div>
 					</div>
 
-          <!-- table: 翻页 -->
+          <!-- 数据翻页 -->
           <Pagination :total="total" @PsPn="getPsPn"></Pagination>
 
-          <!-- loading -->
+          <!-- 加载动画 -->
           <div id="page-loading" class="row">
             <div class="col text-center" v-if='!Msg && total === null'>
               <PageLoading></PageLoading>
@@ -377,7 +391,7 @@
       </div>
     </div>
 
-    <!-- Action：Bug Assign -->
+    <!-- 缺陷指派 -->
     <BugAssign id="modal-assign"
       v-if="showModal == 'assign'"
       @close="showModal = false"
@@ -387,7 +401,7 @@
       @refreshList="getBugList()">
     </BugAssign>
 
-    <!-- Action：Bug Resolve -->
+    <!-- 缺陷解决 -->
     <BugResolve id="modal-resolve"
       v-if="showModal == 'resolve'"
       @close="showModal = false"
@@ -399,7 +413,7 @@
       @refreshList="getBugList()">
     </BugResolve>
 
-    <!-- Action：Bug Change Priority -->
+    <!-- 改变缺陷优先级 -->
     <BugChange id="modal-change-priority"
       v-if="showModal == 'priority'"
       @close="showModal = false"
@@ -408,7 +422,7 @@
       @refreshList="getBugList()">
     </BugChange>
 
-    <!-- Action：Bug Closed -->
+    <!-- 缺陷关闭 -->
     <Modal id="modal-bugClosed" v-if="showModal == 'closed'" @close="showModal = false" :isFooter="true">
       <div slot="body" class="text-center my-5">
         <h3 style="font-weight: 300;">确定关闭此缺陷?</h3>
@@ -418,7 +432,7 @@
       </button>
     </Modal>
 
-    <!-- Action: Bug Expoert -->
+    <!-- 缺陷导出 -->
     <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }} 缺陷</h5>
       <div slot="body">
@@ -442,7 +456,7 @@
       </div>
     </Modal>
 
-    <!-- Data: Bug Count -->
+    <!-- 今日数据统计 -->
     <Modal id="modal-my-today" v-if="showModal == 'count-today'"
       @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">今日概况&nbsp;&nbsp;{{ selected_product }}</h5>
@@ -469,6 +483,24 @@
               <p class="countdata-num">{{ MyTodayData.data.residue || 0 }}</p>
               <p class="countdata-desc" v-if="MyTodayData.group == 'developer'">待我解决</p>
               <p class="countdata-desc" v-else>剩余待解决</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Modal>
+
+    <!-- 表格字段过滤 -->
+    <Modal id="modal-table-filter" v-if="showModal == 'table-filter-field'"
+      @close="showModal = false" :isHeaderClose="true">
+      <h5 slot="header" class="modal-title">过滤字段&nbsp;&nbsp;{{ selected_product }}</h5>
+      <div slot="body" class="text-center mb-3">
+        <div class="modal-body text-center">
+          <div class="row">
+            <div class="col">
+              <div class="form-check form-check-inline" v-for="(value, name) in table_field" :key="name">
+                <input class="form-check-input" type="checkbox" :id="name" :value="table_field.name" v-model="table_field[name]" @change="SetTableFilterField('set')">
+                <label class="form-check-label">{{ name | filterTableField }}</label>
+              </div>
             </div>
           </div>
         </div>
@@ -556,7 +588,7 @@ export default {
       wd: this.$route.query.wd || '',
       isShowAdSearch: this.$route.query.isShowAdSearch || "no",
 
-      // advanced-search
+      // 高级搜索
       advanced_search: {
         sort: '-',
         status_list: [],
@@ -574,11 +606,25 @@ export default {
       // Define components Data
       scheme: "Fixed",
       pageSource: "page_bug_index",
+
+      // 字段过滤
+      table_field: {
+        "create_time": false,
+        "creator_user": true,
+        "assignedTo_user": true,
+        "fixed_user": false,
+        "severity": false,
+        "priority": true,
+        // "bug_type": false,
+        "solution": false,
+        "last_operation_user": true,
+      }
     }
   },
 
   filters: {
     date: util.date,
+    filterTableField: util.getTableFieldName,
     filterOperators: util.getOperatorsName,
     filterSearchType: util.getSearchTypeName,
     filterBugStatusName: util.bugStatusName,
@@ -588,14 +634,14 @@ export default {
 
   computed: {
 
-    // page and menu rules
+    // 页面权限菜单控制
     Rules: function() {
       let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
       return rules.RuleManges(userInfo,PagesRules)
     },
 
-    // query condition
+    // 查询搜索条件组织
     QueryBuilder: function() {
       const patternNumber = new RegExp("[0-9]+")
       let Builder = {}
@@ -615,34 +661,9 @@ export default {
         Builder["operate"] = this.operate
       }
       if (this.wd) {
-        // patternNumber.test(this.wd) ? Builder["SearchType"] = "ID" : Builder["SearchType"] = "title"
-        // Builder["Operators"] = "like"
         Builder["wd"] = this.wd
       }
       return Builder
-    },
-
-    // bug search condition
-    OperatorsList: function() {
-      let search_type = this.SearchCriteria.SearchType
-      let OperatorsList1 = [
-        { OperatorsValue: "=", OperatorsName: "=" },
-        { OperatorsValue: "!=", OperatorsName: "!=" }
-      ]
-      let OperatorsList2 = [
-        { OperatorsValue: "=", OperatorsName: "=" },
-        { OperatorsValue: "!=", OperatorsName: "!=" },
-        { OperatorsValue: ">=", OperatorsName: ">=" },
-        { OperatorsValue: ">", OperatorsName: ">" },
-        { OperatorsValue: "<", OperatorsName: "<" },
-        { OperatorsValue: "<=", OperatorsName: "<=" },
-        { OperatorsValue: "range", OperatorsName: "范围" }
-      ]
-      if (search_type.includes("time")) {
-        return OperatorsList2
-      } else {
-        return OperatorsList1
-      }
     },
 
     // switch search input
@@ -732,7 +753,7 @@ export default {
 				this.tableData = []
 				this.$route.query.product_id
 					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
-					: this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
+          : this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
         this.wd
           ? this.goSearch()
           : (this.isShowAdSearch === 'yes' ?  this.getAdvancedSearch() : this.getBugList())
@@ -747,8 +768,11 @@ export default {
   },
 
   mounted() {
-    this.wd ? this.goSearch() : this.getBugList()
+    this.wd && this.visited_product_id ? this.goSearch() : this.getBugList()
     this.ScreenWidth = process.server ? 0 : document.body.clientWidth
+
+    // 页面表格字段过滤
+    this.SetTableFilterField('get')
   },
 
   methods: {
@@ -770,7 +794,9 @@ export default {
       this.m2_id = m2
     },
 
-    /* 下拉相关操作 */
+    /**
+     * 下拉相关操作
+     */
     handleCommand(data) {
       if ("order_name" in data) {
         this.sort_field = data["order_value"]
@@ -806,7 +832,9 @@ export default {
       this.pageNumber = 1
     },
 
-    /* Bug: get bug list data */
+    /**
+     * 缺陷数据
+     */
     getBugList() {
       if (!this.visited_product_id) { return }
       this.axios
@@ -822,7 +850,9 @@ export default {
         })
     },
 
-		/* Bug: show search input */
+		/**
+     * 用于判断是否显示高级搜索区域
+     */
     unfoldAdvancedSearch() {
       if (this.isShowAdSearch == 'no') {
         this.isShowAdSearch = 'yes'
@@ -832,7 +862,9 @@ export default {
       }
     },
 
-    /* bug adv search reset */
+    /**
+     * 缺陷高级搜索条件重置
+     */
     resetAdvancedSearch () {
       this.advanced_search.sort = '-'
       this.advanced_search.status_list = []
@@ -848,7 +880,9 @@ export default {
       this.advanced_search.assignedTo_user = ''
     },
 
-    /* bug adv search */
+    /**
+     * 缺陷高级搜索
+     */
 		getAdvancedSearch() {
       this.wd = ""
       let basic_query = {
@@ -863,6 +897,7 @@ export default {
         this.selected_status = 'all'
       }
 
+      // 搜索条件合并
       let advanced_search = this.advanced_search
       const merge_search = Object.assign(this.advanced_search, basic_query)
 
@@ -882,32 +917,14 @@ export default {
       })
     },
 
-		/* bug: search */
+		/**
+     * 缺陷搜索，目前仅支持搜索：id、标签、标题、指派人员
+     */
     goSearch() {
-      let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
       let data = this.QueryBuilder
-      if (!data.wd && String(data.SearchType).includes("time")) {
+      if (!data.wd) {
         this.$notify.error({title: "提示",message: "请输入搜索内容"})
         return
-      }
-      if (data.Operators === "range" && String(data.SearchType).includes("time") && String(data.wd).includes("#")) {
-        let start_date = (data.wd).split("#")[0]
-        let end_date = (data.wd).split("#")[1]
-        if (!start_date && !end_date) {
-          this.$notify.error({title: "提示",message: "请输入开始日期和结束日期"})
-          return
-        }
-        if (!start_date.match(reg) || !end_date.match(reg)) {
-          this.$notify.error({title: "提示",message: "请输入有效日期范围,比如:2018-08-08 2018-10-01"})
-          return
-        }
-      }
-      if (String(data.SearchType).includes("time") && data.Operators !== "range") {
-        let date = data.wd
-        if (!date.match(reg)) {
-          this.$notify.error({title: "提示",message: "请输入有效日期,比如:2018-08-08"})
-          return
-        }
       }
       this.axios({
         method: "POST",
@@ -949,7 +966,9 @@ export default {
       this.showModal = 'closed'
     },
 
-		/* bug: closed */
+		/**
+     * 缺陷关闭
+     */
     ClosedBug() {
       let data = {"bug_id": this.selectedBugId}
       this.axios({
@@ -967,7 +986,9 @@ export default {
       })
     },
 
-		/* bug: export */
+		/**
+     * 缺陷导出到excel
+     */
     bug_export () {
       if (!this.visited_product_id) { return }
       this.axios
@@ -981,7 +1002,9 @@ export default {
 				})
     },
 
-    /* my today data: count */
+    /**
+     * 今日数据统计
+     */
     myToday() {
       this.showModal = 'count-today'
       if (!this.visited_product_id) { return }
@@ -994,7 +1017,9 @@ export default {
 				})
     },
 
-    /* table line hover and leave */
+    /**
+     * 表格行：数据悬停
+     */
     tableHover(row) {
       this.HoverBugIdCreatorBy = row.creator_id
       this.HoverBugId = row.bug_id
@@ -1017,7 +1042,9 @@ export default {
 				})
     },
 
-    /* page style: switch data style */
+    /**
+     * 页面样式切换: 表格、列表
+     */
     switchStyle() {
       let style = this.DataShowStyle == 'table' ? 'list' : 'table'
       this.axios
@@ -1027,6 +1054,21 @@ export default {
 						this.$store.dispatch('getUserInfo')
 					}
 				})
+    },
+
+    /**
+     * 表格字段过滤
+     */
+    SetTableFilterField(type) {
+      if (process.client) {
+        if (type === 'set') {
+          window.localStorage.setItem("page_bug_table_filter_field", JSON.stringify(this.table_field))
+        }
+        if (type === 'get') {
+          let local_data = window.localStorage.page_bug_table_filter_field
+          local_data ? this.table_field = JSON.parse(local_data) : this.table_filter_field
+        }
+      }
     }
 
   }
