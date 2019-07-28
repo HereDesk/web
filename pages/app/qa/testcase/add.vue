@@ -1,11 +1,11 @@
 <template>
   <div id="page-testcase-add">
     <BaseNav :title="title"></BaseNav>
-    
+
     <div id="page-testcase-add" class="container mt-5 pg-test-edit">
       <div class="row m-0">
         <div id="page-body" class="col-lg-10 col-md-12 col-sm-12 col-12 offset-xl-1 offset-lg-1">
-          
+
           <div id="case-product" class="form-group row">
             <label for="CaseInfo" class="col-md-2 col-sm-12 col-12 testcase-label">
               产品与模块<span class="text-red">*</span>
@@ -20,7 +20,7 @@
             <label for="CaseInfo" class="col-md-2 col-sm-12 col-12 testcase-label">
               用例属性<span class="text-red">*</span>
             </label>
-            <el-select class="col-md-3 col-sm-4 col-6 e-select-support" placeholder="用例类型" 
+            <el-select class="col-md-3 col-sm-4 col-6 e-select-support" placeholder="用例类型"
               v-model="CaseData.category">
               <el-option value="Functional" label="功能"></el-option>
               <el-option value="compatibility" label="兼容"></el-option>
@@ -40,9 +40,9 @@
               <label for="CaseTitle" class="col-lg-2 col-md-2 col-sm-12 testcase-label">
                 用例标题<span class="text-red">*</span>
               </label>
-              <el-input type="text" id="inputTitle" class="col-lg-9 col-md-10 col-sm-12" 
+              <el-input type="text" id="inputTitle" class="col-lg-9 col-md-10 col-sm-12"
                 placeholder="用例标题..."
-                maxlength="50" required 
+                maxlength="50" required
                 v-model.trim="CaseData.title">
               </el-input>
             </div>
@@ -52,7 +52,7 @@
                 执行前置条件<p class="label-desc">(选填)</p>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="测试用例执行前置条件 ~" 
+                <mavon-editor placeholder="测试用例执行前置条件 ~"
                   :toolbarsFlag="false" :subfield="false" v-model.trim="CaseData.precondition">
                 </mavon-editor>
               </div>
@@ -63,7 +63,7 @@
                 操作步骤<span class="text-red">*</span>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 toolbars">
-                <mavon-editor placeholder="请输入操作步骤 ~" 
+                <mavon-editor placeholder="请输入操作步骤 ~"
                   :toolbars="mavon_md_base_toolbars" :subfield="false" v-model.trim="CaseData.steps">
                 </mavon-editor>
               </div>
@@ -74,7 +74,7 @@
                 测试数据<p class="label-desc">(选填)</p>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="需要使用的测试数据 ~" 
+                <mavon-editor placeholder="需要使用的测试数据 ~"
                   :toolbarsFlag="false" :subfield="false" :autofocus="false"
                   v-model.trim="CaseData.DataInput">
                 </mavon-editor>
@@ -86,7 +86,7 @@
                 预期结果<span class="text-red">*</span>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="测试用例预期结果 ~" 
+                <mavon-editor placeholder="测试用例预期结果 ~"
                   :toolbarsFlag="false" :subfield="false" :autofocus="false"
                   v-model.trim="CaseData.ExpectedResult">
                 </mavon-editor>
@@ -107,7 +107,7 @@
                 备注<p class="label-desc">(选填)</p>
               </label>
               <div class="col-lg-9 col-md-10 col-sm-12 no-toolbars">
-                <mavon-editor placeholder="请输入备注 ~" 
+                <mavon-editor placeholder="请输入备注 ~"
                   :toolbarsFlag="false" :subfield="false" v-model.trim="CaseData.remark">
                 </mavon-editor>
               </div>
@@ -115,16 +115,16 @@
 
             <div class="d-flex justify-content-center my-5">
               <button type="button" class="btn btn-accessories" @click="isShowRemark">添加备注</button>
-              <button type="button" class="btn btn-submit mx-3" value="only-once-commit" 
+              <button type="button" class="btn btn-submit mx-3" value="only-once-commit"
                 :disabled="isButtonDisabled" @click="addTest">保存提交
               </button>
-              <button type="button" class="btn btn-accessories" value="continue-commit" 
+              <button type="button" class="btn btn-accessories" value="continue-commit"
                 :disabled="isButtonDisabled" @click="addTest($event)">继续添加
               </button>
               <button type="button" class="btn btn-accessories" @click="$router.go(-1)">返回</button>
             </div>
           </div>
-        
+
         </div>
       </div>
     </div>
@@ -133,10 +133,11 @@
 
 <script>
 import data from '~/assets/js/data.js'
+import edit from '~/assets/js/edit.js'
 
 import FileUpload from '~/components/FileUpload'
 
-export default {  
+export default {
   head () {
     return {
       title: 'HDesk - 编写测试用例'
@@ -149,7 +150,7 @@ export default {
 
   data () {
     return {
-      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
+      mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       page_type: 'testcase',
       title: '增加测试用例',
       last_url: '',
@@ -187,10 +188,6 @@ export default {
     }
   },
 
-  // beforeRouteLeave({to,from,next}) {
-  //   next()
-  // },
-
   mounted () {
     // 测试用例草稿箱
     let testcase_drafts_box = window.localStorage.testcase_drafts_box
@@ -208,7 +205,7 @@ export default {
       this.CaseData.product_id = data.product_id
       this.CaseData.module_id = data.module_id
     },
-    
+
     // page: is show remark input
     isShowRemark () {
       if (this.isRemarkDisable) {
@@ -280,7 +277,7 @@ export default {
           this.isButtonDisabled = false
 
           // 提交成功后，清除本地草稿箱内容
-          if (process.client) { 
+          if (process.client) {
             window.localStorage.removeItem("testcase_drafts_box")
           }
 
@@ -288,8 +285,8 @@ export default {
             if (this.last_url == '/app/qa/testcase') {
               this.$router.go(-1)
             } else {
-              this.$router.replace({ 
-                path: '/app/qa/testcase', 
+              this.$router.replace({
+                path: '/app/qa/testcase',
                 query: { product_code: this.CaseData.product_code }
               })
             }
@@ -302,7 +299,7 @@ export default {
             this.CaseData.remark = ''
             this.CaseData.ExpectedResult = ''
             this.CaseData.steps = '1.\n2.\n'
-          } 
+          }
         } else {
           this.isButtonDisabled = false
           this.$notify.error({

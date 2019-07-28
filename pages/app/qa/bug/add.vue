@@ -95,6 +95,7 @@
                 :toolbars="mavon_md_base_toolbars"
                 :subfield="false"
                 :autofocus="false"
+                :tabSize="2"
                 v-model.trim="Bug.steps">
               </mavon-editor>
             </div>
@@ -169,6 +170,7 @@
 
 <script>
 import data from '~/assets/js/data.js'
+import edit from '~/assets/js/edit.js'
 
 import FileUpload from '~/components/FileUpload'
 
@@ -188,7 +190,7 @@ export default {
       title: '创建缺陷',
       isButtonDisabled: false,
       isRemarkDisable: false,
-      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
+      mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       page_type: 'bug',
       fileList: [],
       modal_draft_box: false,

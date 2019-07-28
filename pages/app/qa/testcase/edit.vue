@@ -12,9 +12,9 @@
             </label>
             <div class="col-md-6 col-sm-8 col-12">
               <ProductInfo
-                :ptype="'case_add'" 
-                :editData="CaseData" 
-                :showVersionInfo="true" 
+                :ptype="'case_add'"
+                :editData="CaseData"
+                :showVersionInfo="true"
                 @ProductInfo="GetProductInfo">
               </ProductInfo>
             </div>
@@ -24,7 +24,7 @@
             <label for='CaseInfo' class="col-md-2 col-sm-12 col-12 testcase-label">
               用例属性
             </label>
-            <el-select class='col-md-3 col-sm-4 col-6 e-select-support' placeholder="用例类型" 
+            <el-select class='col-md-3 col-sm-4 col-6 e-select-support' placeholder="用例类型"
               v-model="CaseData.category">
               <el-option value="Functional" label="功能"></el-option>
               <el-option value="compatibility" label="兼容"></el-option>
@@ -43,7 +43,7 @@
           <div id="t-testcase-functional">
             <div id="case-title" class='form-group row'>
               <label for='CaseTitle' class="col-lg-2 col-md-2 col-sm-12 testcase-label">用例标题</label>
-              <el-input type='text' id='inputTitle' class='col-lg-9 col-md-10 col-sm-12' 
+              <el-input type='text' id='inputTitle' class='col-lg-9 col-md-10 col-sm-12'
                 placeholder='用例标题...' maxlength='50' required v-model.trim='CaseData.title'>
               </el-input>
             </div>
@@ -99,7 +99,7 @@
               <form class="col-lg-8 col-md-10 col-sm-12">
                 <FileUpload :fileLimit="5" :editFileList="this.Annex" @annex="getAnnex"></FileUpload>
               </form>
-            </div> 
+            </div>
 
             <!-- 提交按钮 -->
             <div id="case-button" class='d-flex justify-content-center my-5'>
@@ -118,6 +118,7 @@
 
 <script>
 import data from '~/assets/js/data.js'
+import edit from '~/assets/js/edit.js'
 
 import FileUpload from '~/components/FileUpload'
 
@@ -144,7 +145,7 @@ export default {
       msg: '',
       isButtonDisabled: false,
       case_id: null,
-      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
+      mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       CaseData: {
         product_id: null,
         category: null,
@@ -165,8 +166,8 @@ export default {
 
   created () {
     if (this.$route.query.case_id) {
-      this.case_id = this.$route.query.case_id 
-      this.getCaseDetails()   
+      this.case_id = this.$route.query.case_id
+      this.getCaseDetails()
     } else {
       this.$router.go(-1)
     }
@@ -181,7 +182,7 @@ export default {
     getAnnex (data) {
       this.CaseData.annex = data
     },
-    
+
     getCaseDetails () {
       this.axios
         .get('/api/qa/testcase/details?case_id=' + this.case_id)
