@@ -418,7 +418,7 @@ export default {
             this.$router.push({path: "/app/qa/bug"})
           }
           if (event.target.value === "continue-commit") {
-            $(document).scrollTop(0)
+            // $(document).scrollTop(0)
             this.Bug.title = ""
             this.Bug.annex = []
             this.fileList = []

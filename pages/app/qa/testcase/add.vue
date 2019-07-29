@@ -292,7 +292,7 @@ export default {
             }
           }
           if (event.target.value === 'continue-commit') {
-            $(document).scrollTop(0)
+            // $(document).scrollTop(0)
             this.CaseData.title = ''
             this.CaseData.precondition = ''
             this.CaseData.DataInput = ''
