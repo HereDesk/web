@@ -7,7 +7,6 @@ import {
 
 axios.defaults.timeout = 100000
 axios.defaults.withCredentials = true
-// axios.defaults.baseURL = 'http://127.0.0.1:8000/'
 
 axios.interceptors.request.use(function (config, context) {
   var url = config.url

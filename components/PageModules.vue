@@ -159,6 +159,6 @@
     border-radius: 15px;
     color: rgb(158, 158, 158);
     font-weight: 300;
-    font-size: 0.2rem !important;
+    font-size: 0.6rem !important;
   }
 </style>
