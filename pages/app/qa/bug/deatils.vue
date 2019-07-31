@@ -386,6 +386,7 @@ import BugChange from "~/components/BugChange"
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
 import data from '~/assets/js/data.js'
+import edit from '~/assets/js/edit.js'
 
 import hljs from 'highlight.js'
 import marked from 'marked'
@@ -425,7 +426,7 @@ export default {
 
   data() {
     return {
-      mavon_md_base_toolbars: data.mavon_md_base_toolbars,
+      mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       components_value: '',
       showModal: false,
       currentBugId: this.$route.query.bug_id || null,

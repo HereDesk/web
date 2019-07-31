@@ -2,7 +2,7 @@ export default {
   mavon_md_base_toolbars: {
     bold: true,
     italic: true,
-    underline: true,
+    // underline: true,
     ol: true,
     ul: true,
     quote: true,
