@@ -21,8 +21,8 @@ export default {
   		if ((bug.status === 'New') && (bug.creator_id === uid || identity === 0)) {
         BtnRules.del = true
       }
-      
-      if (bug.status !== 'Closed' && bug.creator_id === uid || identity === 0) {
+
+      if ( (bug.status !== 'Closed' && bug.creator_id === uid) || (identity === 0) ){
         BtnRules.upload = true
       }
 
@@ -127,7 +127,7 @@ export default {
   // Page: 测试用例
   TestCaseBtnRules (userinfo,CaseDetails) {
     let rules = {
-      edit: false, 
+      edit: false,
       del: false,
       fall: false
     }

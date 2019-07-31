@@ -314,7 +314,7 @@
                     <div class="display-none"
                       :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId,
                         'hideText': scope.row.status == 'Closed'}">
-                      <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || Rules.bug_edit">
+                      <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || BtnRules.bug_edit">
                         <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
                           <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
                         </nuxt-link>
@@ -546,6 +546,7 @@ export default {
       pageNumber: parseInt(this.$route.query.pageNumber) || 1,
       pageSize: parseInt(this.$route.query.pageSize) || 10,
       tableData: [],
+      HoverBugInfo: {},
       HoverBugId: "",
       selectedBugId: "",
       HoverBugIdCreatorBy: "",
@@ -639,6 +640,10 @@ export default {
       let userInfo = this.$store.state.userInfo
       let PagesRules = this.$store.state.PageData
       return rules.RuleManges(userInfo,PagesRules)
+    },
+    BtnRules: function() {
+      let userInfo = this.$store.state.userInfo
+      return rules.BugBtnRules(userInfo,this.HoverBugInfo)
     },
 
     // 查询搜索条件组织
@@ -1021,6 +1026,7 @@ export default {
      * 表格行：数据悬停
      */
     tableHover(row) {
+      this.HoverBugInfo = row
       this.HoverBugIdCreatorBy = row.creator_id
       this.HoverBugId = row.bug_id
       this.visited_product_id = row.product_id
