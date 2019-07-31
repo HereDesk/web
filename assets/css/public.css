@@ -313,6 +313,10 @@ code {
   font-size: 1rem !important;
 }
 
+.el-input__inner::-moz-placeholder {
+  font-weight: 300;
+}
+
 .el-textarea__inner {
   line-height: 1.8 !important;
   font-size: 0.95rem !important;
@@ -425,6 +429,26 @@ code {
   color: #c0c4cc;
   font-style: normal;
 }
+
+.form-control:-ms-input-placeholde{
+  color: #c0c4cc;
+  font-style: normal;
+}
+
+.form-control::-moz-placeholder{
+  color: #c0c4cc;
+  font-style: normal;
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+.form-control:-moz-placeholder {
+  color: #c0c4cc;
+  font-style: normal;
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
 
 /* Bootstrap dropdown */
 .dropdown-menu {
