@@ -179,14 +179,12 @@
     },
 
     watch: {
-      showModal() {
-        this.showModal ?
-          document.body.classList.add("overflow-hidden") :
-          document.body.classList.remove("overflow-hidden")
-      },
       m1_list: {
         handler: function(val, oldVal) {
-          this.m1_list ? this.selected_a_module = this.m1_list[0] : ''
+          if (val.length == oldVal.length) return
+          if (this.m1_list){
+            this.selected_a_module = this.m1_list[0]
+          }
         },
         deep: true
       }

@@ -1,6 +1,6 @@
 <template>
   <div id="page-user-index" class="container mt-3">
-    
+
 		<div id="page-head" class="row mt-5">
       <div class="col-auto mr-auto">
       </div>
@@ -40,19 +40,19 @@
           </el-table-column>
           <el-table-column label='操作' v-if="Rules.user_create">
             <template slot-scope="scope">
-              <span @click="banned(scope.row,$event)" 
+              <span @click="banned(scope.row,$event)"
                 v-if="scope.row.identity !== 0 & scope.row.user_status === 1">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="2">封禁</button>
               </span>
-              <span @click="banned(scope.row,$event)" 
+              <span @click="banned(scope.row,$event)"
                 v-if="scope.row.identity !== 0 & scope.row.user_status === 2">
                 <button type="button" class="btn btn-outline-success btn-sm" value="1">解封</button>
               </span>
               <span @click="getUserId(scope.row,$event)" v-if="scope.row.identity !== 0">
-                <button type="button" class="ml-1 btn btn-outline-dark btn-sm" 
+                <button type="button" class="ml-1 btn btn-outline-dark btn-sm"
                   @click="showModal = 'ResetPasswd'">密码</button>
               </span>
-            </template>  
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -63,16 +63,16 @@
       <div class="form-group" slot="body">
         <div class="row col-md-auto">
           <label for="password" class="ml-5">密码</label>
-          <input type="password" id="password" class="form-control input-lg mx-5 my-1" 
+          <input type="password" id="password" class="form-control input-lg mx-5 my-1"
             placeholder='请输入密码' minlength="8" maxlength="16"
             v-model.trim="password.passwd"
             required autofocus />
         </div>
         <div class="row col-md-auto">
           <label for="t-password" class="ml-5">确认密码</label>
-          <input type="password" id="t-password" class="form-control input-lg mx-5 my-1" 
-            placeholder="请再次输入密码" minlength="8" maxlength="16" required 
-            v-model.trim="password.RepeatPasswd" 
+          <input type="password" id="t-password" class="form-control input-lg mx-5 my-1"
+            placeholder="请再次输入密码" minlength="8" maxlength="16" required
+            v-model.trim="password.RepeatPasswd"
             @keyup.enter="ResetPassword()">
           <p class="mb-0 ml-5 mt-3 font-size-85 text-gray">备注：密码有效长度8到16位,且不能使用空格</p>
         </div>
@@ -93,9 +93,9 @@ export default {
       title: "HDesk - 用户管理"
     }
   },
-	
+
   layout: "head",
-	
+
   filters: {
     date: util.date
   },
@@ -125,14 +125,6 @@ export default {
     }
   },
 
-  watch: {
-    showModal () {
-      this.showModal ? 
-        document.body.classList.add("overflow-hidden") : 
-        document.body.classList.remove("overflow-hidden")
-    }
-  },
-
   created() {
     this.getAllUser()
   },
@@ -146,12 +138,12 @@ export default {
         }
       })
     },
-		
+
     // getUserId
     getUserId(event) {
       this.password.user_id = event.user_id
     },
-		
+
     // reset password
     ResetPassword(event) {
       if (!this.password.passwd) {
@@ -180,7 +172,7 @@ export default {
         }
       })
     },
-		
+
     // banned user
     banned(rows, event) {
       this.bannedData.user_id = rows.user_id

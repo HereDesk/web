@@ -696,16 +696,17 @@ export default {
 
     // show user config
     DataShowStyle: function() {
-      let config = this.$store.state.UserConfig
-      if (config) {
-        if (config["BUG_DATA_SHOW_STYPE"]) {
-          return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
-        } else {
-          return this.ScreenWidth > 768 ? 'table' : 'list'
-        }
-      } else {
-        return this.ScreenWidth > 768 ? 'table' : 'list'
-      }
+      return 'table'
+      // let config = this.$store.state.UserConfig
+      // if (config) {
+      //   if (config["BUG_DATA_SHOW_STYPE"]) {
+      //     return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+      //   } else {
+      //     return this.ScreenWidth > 768 ? 'table' : 'list'
+      //   }
+      // } else {
+      //   return this.ScreenWidth > 768 ? 'table' : 'list'
+      // }
     },
 
     // show user config : 1: show, 0: hide
@@ -721,11 +722,6 @@ export default {
   },
 
   watch: {
-    showModal: function(val, oldVal) {
-      this.showModal ?
-        document.body.classList.add("overflow-hidden") :
-        document.body.classList.remove("overflow-hidden")
-    },
     wd: function(val, oldVal) {
       this.pageNumber = 1
     },

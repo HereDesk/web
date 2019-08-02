@@ -494,10 +494,6 @@ export default {
       }
     },
     showModal () {
-      this.showModal ?
-        document.body.classList.add("overflow-hidden") :
-        document.body.classList.remove("overflow-hidden")
-
       // 当点击【重新打开】,默认指派人为：上次缺陷解决者
       if (this.showModal === 'ReOpen') {
         this.ReOpenData.assignedTo = this.BugDetails.assignedTo_id

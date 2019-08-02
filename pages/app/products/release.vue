@@ -100,11 +100,6 @@ export default {
     date: util.date
   },
   watch: {
-    showModal () {
-      this.showModal ?
-        document.body.classList.add("overflow-hidden") :
-        document.body.classList.remove("overflow-hidden")
-    },
     tableData: function(val, oldval) {
       if (this.tableData.length) {
         this.controlNull = false

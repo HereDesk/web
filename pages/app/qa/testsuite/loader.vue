@@ -33,11 +33,11 @@
     </div>
   </div>
 
-  <Modal :isFooter="isFooter" :isHeaderClose="true" :modalSize="'lg'" :footerDirection="'start'" 
+  <Modal :isFooter="isFooter" :isHeaderClose="true" :modalSize="'lg'" :footerDirection="'start'"
     v-if="showModal == 'create'" @close="showModal = false">
     <div slot="header" class="testsuite-head">
       <h5 class="modal-title">用例列表</h5>
-      <el-cascader class="ml-3 select-module" placeholder="按模块选择测试用例" :options="modules_list" 
+      <el-cascader class="ml-3 select-module" placeholder="按模块选择测试用例" :options="modules_list"
         v-model="selected_mod_id" filterable change-on-select>
       </el-cascader>
     </div>
@@ -48,7 +48,7 @@
       <div v-else>
         <ul class="ul-style-none mb-3 mx-3">
           <li class="case_text" v-for="(item,index) in AllTestCaseList" :key="index">
-            <input type="checkbox" id="item.case_id" value="item.case_id" 
+            <input type="checkbox" id="item.case_id" value="item.case_id"
               @click="CheckedCase(item.case_id,$event)">
               &nbsp;&nbsp;{{ item.id }}.&nbsp;&nbsp;{{ item.title }}
           </li>
@@ -117,11 +117,6 @@ export default {
   },
 
   watch: {
-    showModal() {
-      this.showModal ?
-        document.body.classList.add("overflow-hidden") :
-        document.body.classList.remove("overflow-hidden")
-    },
     selected_mod_id: {
       handler: function (val, oldVal) {
         this.QueryBuilder.m1_id = this.selected_mod_id[0]

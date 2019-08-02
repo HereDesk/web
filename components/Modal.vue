@@ -31,6 +31,12 @@ export default {
     isHeaderClose: Boolean,
     modalSize: String,
     footerDirection: String
+  },
+  mounted () {
+    document.body.classList.add("overflow-hidden")
+  },
+  beforeDestroy () {
+    document.body.classList.remove("overflow-hidden")
   }
 }
 </script>
