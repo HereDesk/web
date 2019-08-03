@@ -104,7 +104,7 @@
                 </el-table-column>
                 <el-table-column label='评审' width='70'>
                   <template slot-scope="scope">
-                    {{ scope.row.isReview === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
+                    {{ scope.row.is_review === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
                   </template>
                 </el-table-column>
                 <el-table-column label='状态' width='65'>
@@ -114,7 +114,7 @@
                 </el-table-column>
                 <el-table-column label='变更' width='60'>
                   <template slot-scope="scope">
-                    {{ scope.row.isChange === 1 ? '是' : '-' }}
+                    {{ scope.row.is_change === 1 ? '是' : '-' }}
                   </template>
                 </el-table-column>
                 <el-table-column label='创建' prop="creator" sortable width='100'></el-table-column>

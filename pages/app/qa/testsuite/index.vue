@@ -1,13 +1,19 @@
 <template>
   <div id="page-testcase-execution" class="container">
-    
+
     <!-- page head -->
-    <nav id="page-head" class="d-flex my-5">
-      <a class="navbar-brand flex-grow-1">TestSuite {{ childValue }}</a>
-      <div class="pt-3">
-        <button type="btn" class="btn btn-create" @click="showModal = 'create'"> + TestSuite</button>
+    <nav id="page-head" class="row mt-5 mb-3 align-items-center">
+      <div class="col-auto mr-auto">
+        <a class="navbar-brand">测试计划</a>
+        <ProductInfo
+          :showStyle="'no-border-dropdown'" :ptype="'only-product-name'" @ProductInfo="GetProductInfo">
+        </ProductInfo>
+      </div>
+      <div class="col-auto">
+        <button type="btn" class="btn btn-create" @click="showModal = 'create'"> + 测试计划</button>
       </div>
     </nav>
+
 
     <!-- page data -->
     <div id="page-data" class="row">
@@ -30,7 +36,7 @@
           <el-table-column label='操作' align="center">
             <template slot-scope="scope">
               <span class="mr-3" v-if="scope.row.total > 0">
-                <nuxt-link :to="{ 
+                <nuxt-link :to="{
                     path: '/app/qa/testsuite/run',
                     query: { 'suite_id': scope.row.suite_id, 'product_id':scope.row.product_id } }">
                   <span title="运行完成" v-if="scope.row.executed === scope.row.total">
@@ -45,8 +51,8 @@
                 </nuxt-link>
               </span>
               <span>
-                <nuxt-link :to="{ 
-                    path: '/app/qa/testsuite/loader', 
+                <nuxt-link :to="{
+                    path: '/app/qa/testsuite/loader',
                     query: { 'product_id':scope.row.product_id,'suite_id': scope.row.suite_id } }">
                   <i class="iconfont icon-jiaru size-1-5 icon-8a8a8a" title="组织测试用例"></i>
                 </nuxt-link>
@@ -66,10 +72,10 @@
         <div class='row col-md-auto'>
           <label for="product_code" class="col-sm-2 pt-2">产品</label>
           <el-select class="col-sm-9 px-0" v-model="TestSuiteCreate.product_id" placeholder="请选择产品">
-            <el-option 
-              v-for="(item,index) in product_list" 
-              :key="index" 
-              :label="item.product_code" 
+            <el-option
+              v-for="(item,index) in product_list"
+              :key="index"
+              :label="item.product_code"
               :value="item.product_id">
             </el-option>
           </el-select>
@@ -77,9 +83,9 @@
         <div class='row col-md-auto mt-3'>
           <label for="name" class="col-sm-2">执行版本</label>
           <div class="col-sm-9 px-0">
-            <input type='text' 
-              v-model.trim='TestSuiteCreate.suite_name' 
-              maxlength="20" class='form-control' rows="5" 
+            <input type='text'
+              v-model.trim='TestSuiteCreate.suite_name'
+              maxlength="20" class='form-control' rows="5"
               placeholder='请输入用户执行版本...' />
             <p class="text-notes">备注：用例执行版本，如v1.0_20180920</p>
           </div>
@@ -104,11 +110,11 @@ export default {
   data () {
     return {
       showModal: false,
-      childValue: '',
       current_product_code: null,
       total: null,
       tableData: [],
       QueryBuilder: {
+        "product_id": "",
         "pageSize": 10,
         "pageNumber": 1,
       },
@@ -145,6 +151,11 @@ export default {
   },
 
   methods: {
+    // get $emit data
+    GetProductInfo (data)  {
+      this.QueryBuilder.product_id = data.product_id
+    },
+
     getPsPn:function (ps,pn) {
       this.QueryBuilder.pageSize = ps
       this.QueryBuilder.pageNumber = pn
@@ -152,6 +163,7 @@ export default {
 
     /* get current all test suite */
     getTestSuite () {
+      if (!this.QueryBuilder.product_id) return
       this.axios.get('/api/qa/testsuite/list',{ params: this.QueryBuilder })
         .then(res => {
           if (res.data['status'] === 20000) {
@@ -164,7 +176,7 @@ export default {
         )
     },
 
-    /* 
+    /*
      * create testcase suite
      * must param: product_code  testsuite version
     */
@@ -180,7 +192,7 @@ export default {
       }
       if (suite_name.length < 2 | suite_name.length > 20) {
         this.$notify.error({title:"提示",message:"版本的有效长度为2-20位"})
-        return 
+        return
       }
       this.axios({
         method: 'POST',
