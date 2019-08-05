@@ -26,7 +26,7 @@
             <ul>
               <li><nuxt-link to="/app/qa/testcase/add">编写用例</nuxt-link></li>
               <li><nuxt-link to="/app/qa/testcase" exact>管理用例</nuxt-link></li>
-              <li><nuxt-link to="/app/qa/testsuite">测试执行</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/testsuite">测试计划</nuxt-link></li>
             </ul>
           </li>
           <li class="nav-item">

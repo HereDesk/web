@@ -21,9 +21,18 @@
 
 .input-group-text {
   border:1px solid #eee !important;
-  border-right: none !important;
+  /* border-right: none !important; */
   background-color: #FFF !important;
 }
+
+.border-left-none {
+  border-left: none !important;
+}
+
+.border-right-none {
+  border-right: none !important;
+}
+
 .search-control {
   height: calc(2.05rem + 2px) !important;
   box-shadow: none !important;
