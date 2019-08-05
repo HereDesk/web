@@ -1,5 +1,5 @@
 <template>
-  <div id="page-testcase" class="container-fluid">
+  <div id="page-case" class="container-fluid">
     <div class="row pt-5">
 
       <!-- 模块 -->
@@ -18,17 +18,17 @@
       </div>
 
       <!-- 数据列表 -->
-      <div id="data-testcase" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-12 col-sm-12 col-md-10']">
+      <div id="data-case" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
         <div class="container-fluid">
 
           <!-- 测试用例查询相关 -->
-          <div id="testcase-data-head" class="row justify-content-between">
-            <div id="testcase-query" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div id="case-head" class="row align-items-center">
+            <div id="case-query" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
 
               <ProductInfo :ptype="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
               </ProductInfo>
 
-              <el-dropdown id="testcase-query-status" class="pt-2 pl-3" trigger="click">
+              <el-dropdown id="case-query-status" class="pt-2 pl-3" trigger="click">
                 <span>
                   <span class="el-dropdown-desc">状态：</span>
                   <span class="el-dropdown-link bg-edown">
@@ -37,67 +37,61 @@
                   </span>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    v-for="(item,index) in status_list" :key="index" :value="item.status_value">
+                  <el-dropdown-item v-for="(item,index) in status_list" :key="index" :value="item.status_value">
                     <span @click="selected_status = item.status_value">{{ item.status_name }}</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
-            <div id="testcase-search" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12 pt-2">
+            <div id="case-search" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12">
               <div class="input-group align-items-center">
                 <div id="ordinary-search" class="input-group-prepend">
-                  <span id="basic-addon" class="input-group-text" style="height: calc(2.05rem + 2px);">
+                  <span class="input-group-text" style="height: calc(2.05rem + 2px);">
                     <i class="iconfont icon-search icon-E0E0E0"></i>
                   </span>
                 </div>
-                <input id="id-title-search" type="text"
-                  class="form-control search-control"
+                <input id="search-input" type="text" class="form-control search-control"
                   placeholder="搜索ID、或标题..."
                   v-model="wd">
               </div>
             </div>
-            <div id="testcase-action" class="col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
-              <span title="导入导出" class="mr-4" @click="showModal = 'export'">
+            <div id="case-action" class="col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
+              <span title="导入导出" class="mr-3" @click="showModal = 'export'">
                 <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
               </span>
-              <span title="测试用例统计" class="mr-4" @click="myToday()">
+              <span title="测试用例统计" class="mr-3" @click="myToday()">
                 <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
               </span>
-              <span title="切换样式" class="mr-4" @click="switchStyle()">
+              <span title="切换样式" class="mr-3" @click="switchStyle()">
                 <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
               </span>
-              <span v-if="Rules.case_create">
-                <nuxt-link :to="{
-                    path: '/app/qa/testcase/add' ,
-                    query: { 'product_id': product_id }}">
-                  <button type="btn" class="btn btn-create"> + 创建 </button>
+              <span v-if="Rules.case_create" style="padding-top: -5px;">
+                <nuxt-link :to="{ path: '/app/qa/testcase/add',query: { 'product_id': product_id }}" >
+                  <button type="btn" class="btn-create"> + 创建 </button>
                 </nuxt-link>
               </span>
             </div>
           </div>
 
           <!-- 用例数据列表 -->
-          <div id="testcase-data-list" class="row mt-3">
+          <div id="case-data-list" class="row mt-3">
 
-            <!-- table style -->
-            <div id="testcase-table-style" class="col" v-if="DataShowStyle == 'table'">
+            <!-- 表格样式 -->
+            <div id="case-table-style" class="col" v-if="DataShowStyle == 'table'">
               <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}"
                 @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
                 <el-table-column label='ID' prop='id' width='60'></el-table-column>
                 <el-table-column label='优先级' sortable width='100'>
                   <template slot-scope="scope">
                     <span class="circle-content"
-                      :class="{ 'text-deadly': scope.row.priority == 'P1',
-                        'text-urgency': scope.row.priority == 'P2' }">
+                      :class="{ 'text-deadly': scope.row.priority == 'P1','text-urgency': scope.row.priority == 'P2' }">
                       {{ scope.row.priority }}
                     </span>
                   </template>
                 </el-table-column>
                 <el-table-column label='用例标题' show-overflow-tooltip>
                   <template slot-scope="scope">
-                    <nuxt-link style="color:#424242"
-                      :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
+                    <nuxt-link style="color:#424242" :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
                       {{ scope.row.title }}
                     </nuxt-link>
                   </template>
@@ -143,8 +137,8 @@
               </el-table>
             </div>
 
-            <!-- list style -->
-            <div id="testcase-list-style" class="col" v-if="DataShowStyle == 'list'">
+            <!-- 列表样式 -->
+            <div id="case-list-style" class="col" v-if="DataShowStyle == 'list'">
               <ul class="pl-0 ul-none-2">
                 <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
                   <p>
@@ -153,7 +147,7 @@
                       {{ item.id }}. {{ item.title }}
                     </nuxt-link>
                   </p>
-                  <div id="data-testcase-info" class="my-2">
+                  <div id="data-case-info" class="my-2">
                     <div id="data-detailed-information" class="data-liststyle-satellite">
                       <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1',
                       'text-urgency': item.priority == 'P2' }">
@@ -165,7 +159,7 @@
                       <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
                       <span>最后更新: {{ item.last_time | date(5) }}</span>
                     </div>
-                    <div id="data-testcase-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
+                    <div id="data-case-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
                       <span class="mr-2" v-if="item.status === 0 && CaseBtnRules.fall" @click="handleFall(item)">
                         <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
                       </span>
@@ -325,10 +319,12 @@ export default {
       this.wd ? (Builder["wd"] = this.wd) : null
       return Builder
     },
+
     // userinfo group
     uGroup: function() {
       return this.$store.state.userInfo.role === "test" ? this.$store.state.userInfo.role : null
     },
+
     // show user config: about data style:  table and list
     DataShowStyle: function() {
       let config = this.$store.state.UserConfig
@@ -342,6 +338,7 @@ export default {
         return this.ScreenWidth > 768 ? 'table' : 'list'
       }
     },
+
     // show user config : 1: show, 0: hide
     isShowModules: function() {
       let config = this.$store.state.UserConfig
@@ -364,6 +361,8 @@ export default {
     m2_id: function(val, oldVal) {
       this.pageNumber = 1
     },
+
+    // 查询条件
     QueryBuilder: function(val, oldVal) {
       this.tableData = []
       this.wd ? this.goSearch() : this.getCaseList()
@@ -405,7 +404,9 @@ export default {
       this.m2_id = m2
     },
 
-    // TestCase: 数据列表
+    /**
+     * 测试用例列表
+     */
     getCaseList() {
       if (!this.product_id) { return }
       this.axios
@@ -422,7 +423,9 @@ export default {
         })
     },
 
-    // Testcase: 失效操作
+    /**
+     * 测试用例失效
+     */
     handleFall(data) {
       let case_id = data.case_id
       this.axios
@@ -437,13 +440,18 @@ export default {
         })
     },
 
-    // Testcase: 编辑操作
+    /**
+     * @param {string} case_id
+     * 测试用例编辑
+     */
     handleEdit(data) {
       let case_id = data.case_id
       this.$router.push("/app/qa/testcase/edit?case_id=" + case_id)
     },
 
-    // Testcase: 评审
+    /**
+     * 测试用例评审
+     */
     CaseReview(data) {
       this.review_data.result = data
       this.review_data.case_id = this.CaseDetails.case_id
@@ -461,17 +469,9 @@ export default {
       })
     },
 
-    // Testcase: 搜索
-    clickSearch() {
-      if (this.isShowSearch) {
-        this.isShowSearch = false
-        this.wd = null
-        this.getCaseList()
-      } else {
-        this.isShowSearch = true
-      }
-    },
-
+    /**
+     * 测试用例搜索
+     */
     goSearch() {
       this.axios
         .get("/api/qa/testcase/search", { params: this.QueryBuilder })
@@ -488,7 +488,9 @@ export default {
         .catch((error) => {})
     },
 
-    // my today
+    /**
+     * 测试用例统计
+     */
     myToday() {
       this.showModal = 'count-today'
       if (!this.product_id) { return }
@@ -501,6 +503,9 @@ export default {
       })
     },
 
+    /**
+     * 测试用例导出excel
+     */
     case_export () {
       if (!this.product_id) { return }
       this.axios
@@ -509,10 +514,7 @@ export default {
           if (res.data["status"] === 20000) {
             this.ExportFile = res.data
           } else {
-            this.$notify.warning({
-              title: "提示",
-              message: res.data["msg"]
-            })
+            this.$notify.warning({ title: "提示", message: res.data["msg"] })
           }
         }
       )
@@ -526,7 +528,9 @@ export default {
       this.HoverTestcase_id = ""
     },
 
-    // switch data style
+    /**
+     * 切换数据样式 (表格|列表)
+     */
     switchStyle() {
       let style = this.DataShowStyle == 'table' ? 'list' : 'table'
       this.axios
@@ -537,7 +541,10 @@ export default {
           }
       })
     },
-    // is show module
+
+    /**
+     * 是否显示模块列表（保存数据到服务器）
+     */
     switchModule() {
       let isDisplay = this.isShowModules ? 0 : 1
       this.axios

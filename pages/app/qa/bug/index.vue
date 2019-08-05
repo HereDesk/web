@@ -65,7 +65,7 @@
             <div id="bug-query-2" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12 pt-1 px-0 my-2">
               <div class="input-group align-items-center">
                 <div id="ordinary-search" class="input-group-prepend">
-                  <span id="basic-addon" class="input-group-text" style="height: calc(2.05rem + 2px);">
+                  <span id="icon-search" class="input-group-text" style="height: calc(2.05rem + 2px);">
                     <i class="iconfont icon-search icon-E0E0E0"></i>
                   </span>
                 </div>
@@ -73,12 +73,13 @@
                   class="form-control search-control"
                   placeholder="搜索ID、标题、标签、或指派人员..."
                   v-model="wd">
-                <div id="advanced-search" @click="unfoldAdvancedSearch()">
-                  <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
-                </div>
               </div>
             </div>
+
             <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12 vertical-center my-2">
+              <div id="advanced-search" @click="unfoldAdvancedSearch()">
+                <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
+              </div>
               <nuxt-link to='/app/qa/bug/add' id="bug-create" class="ml-3" v-if="Rules.bug_create">
                 <button type="btn" class="btn btn-create">+ 创建</button>
               </nuxt-link>
