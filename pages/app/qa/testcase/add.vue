@@ -98,7 +98,12 @@
                 设计图/原型图
               </label>
               <form id="case-file" class="col-lg-9 col-md-10 col-sm-12">
-                <FileUpload :fileLimit="5" :editFileList="this.CaseData.annex" @annex="getAnnex"></FileUpload>
+                <FileUpload
+                  :fileLimit="5"
+                  :editFileList="isShowDraftsBox ? this.CaseData.annex : {}"
+                  :pageType="'add'"
+                  @annex="getAnnex">
+                </FileUpload>
               </form>
             </div>
 
@@ -319,11 +324,10 @@ export default {
         type: "warning",
         distinguishCancelAndClose: true,
         closeOnClickModal: false,
-        confirmButtonText: '是',
-        cancelButtonText: '否，创建新用例'
+        confirmButtonText: '打开草稿箱',
+        cancelButtonText: '创建新用例'
       })
       .then(() => {
-        this.isShowDraftsBox = false
         this.CaseData = data
       })
     }

@@ -127,7 +127,7 @@
           <div id="bug-file" class="form-group row">
             <label for='bug-file' class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
-              <FileUpload :fileLimit="5" :editFileList="this.Annex" @annex="getAnnex"></FileUpload>
+              <FileUpload :fileLimit="5" :editFileList="this.Annex" :pageType="'edit'" @annex="getAnnex"></FileUpload>
             </form>
           </div>
 

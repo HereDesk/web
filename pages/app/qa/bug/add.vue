@@ -135,7 +135,12 @@
           <div id="bug-file" class="form-group row">
             <label for="bug-file" class="col-lg-2 col-md-2 col-sm-12 bug-label">附件</label>
             <form class="col-lg-8 col-md-10 col-sm-12">
-              <FileUpload :fileLimit="5" :editFileList="this.Bug.annex" @annex="getAnnex"></FileUpload>
+              <FileUpload
+                :fileLimit="5"
+                :editFileList="is_reduction_draft_box ? this.Bug.annex : {}"
+                :pageType="'add'"
+                @annex="getAnnex">
+              </FileUpload>
             </form>
           </div>
 
@@ -193,7 +198,6 @@ export default {
       mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       page_type: 'bug',
       fileList: [],
-      modal_draft_box: false,
       is_reduction_draft_box: false,
       Bug: {
         case_id: this.$route.query.case_id || null,
@@ -295,6 +299,7 @@ export default {
     let bug_drafts = window.localStorage.bug_drafts
     if (bug_drafts) {
       let bug_drafts_box = JSON.parse(bug_drafts)
+      this.is_reduction_draft_box = true
       this.open_draft_box(bug_drafts_box)
     }
   },
@@ -449,14 +454,11 @@ export default {
         type: "warning",
         distinguishCancelAndClose: true,
         closeOnClickModal: false,
-        confirmButtonText: '是',
-        cancelButtonText: '否，创建新缺陷'
+        confirmButtonText: '打开草稿箱',
+        cancelButtonText: '创建新缺陷'
       })
       .then(() => {
         this.Bug = data
-      })
-      .catch(action => {
-        this.is_reduction_draft_box = false
       })
     }
 

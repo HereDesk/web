@@ -1,7 +1,9 @@
 <template>
   <div id="page-testcase-run" class="container">
     <nav class="d-flex my-5">
-      <a class="navbar-brand flex-grow-1">运行测试用例</a>
+      <span class="navbar-brand flex-grow-1">
+        <a :href="'/app/qa/testsuite'" style="color: #000000;">测试计划</a> / 运行
+      </span>
     </nav>
 
     <div class="row">
