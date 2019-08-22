@@ -1,6 +1,6 @@
 export default {
-  BugBtnRules (bug,userinfo) {
-  	let BtnRules = {
+  BugBtnRules(bug, userinfo) {
+    let BtnRules = {
       upload: false,
       del: false,
       edit: false,
@@ -12,60 +12,60 @@ export default {
       notes: true
     }
 
-  	if (bug && userinfo) {
-  		let uid = userinfo.user_id
-  		let identity = userinfo.identity
-  		// Bug: 删除按钮规则
-		  // 1）Bug创建者、测试人员
-		  // 2）Bug状态为New时才能删除，已分配他人的缺陷不能删除
-  		if ((bug.status === 'New') && (bug.creator_id === uid || identity === 0)) {
-        BtnRules.del = true
+    if (bug && userinfo) {
+      let uid = userinfo.user_id
+      let identity = userinfo.identity
+      // Bug: 删除按钮规则
+      if ((bug.creator_id === uid || identity === 0)) {
+        if (["New", "Open"].includes(bug.status)) {
+          BtnRules.del = true
+        }
       }
 
-      if ( (bug.status !== 'Closed' && bug.creator_id === uid) || (identity === 0) ){
+      if ((bug.status !== 'Closed' && bug.creator_id === uid) || (identity === 0)) {
         BtnRules.upload = true
       }
 
-  		// Bug: 编辑按钮规则
+      // Bug: 编辑按钮规则
       // Bug创建者、测试人员
-  		if ((bug.status !== 'Closed') && (identity === 0 || bug.creator_id === uid)) {
-  			BtnRules.edit = true
-  		}
+      if ((bug.status !== 'Closed') && (identity === 0 || bug.creator_id === uid)) {
+        BtnRules.edit = true
+      }
 
-  		// Bug: 分配按钮规则
-  		// 所有人都可以进行缺陷分配
-  		if (bug.status !== 'Closed') {
-  			BtnRules.assign = true
-  		}
+      // Bug: 分配按钮规则
+      // 所有人都可以进行缺陷分配
+      if (bug.status !== 'Closed') {
+        BtnRules.assign = true
+      }
 
-  		// Bug: 重新打开按钮规则
-  		// 当状态为：已解决、已关闭，并且组为：测试
-  		if ((bug.status === 'Fixed' || bug.status === 'Closed') && (identity === 0 || bug.creator_id === uid)) {
-  			BtnRules.reopen = true
-  		}
+      // Bug: 重新打开按钮规则
+      // 当状态为：已解决、已关闭，并且组为：测试
+      if ((bug.status === 'Fixed' || bug.status === 'Closed') && (identity === 0 || bug.creator_id === uid)) {
+        BtnRules.reopen = true
+      }
 
-  		// Bug: 挂起按钮规则
-  		// 当状态为：已解决、待解决、重新打开
-  		if (['Open','Reopen','Fixed'].includes(bug.status)) {
-  			BtnRules.hangup = true
-  		}
+      // Bug: 挂起按钮规则
+      // 当状态为：已解决、待解决、重新打开
+      if (['Open', 'Reopen', 'Fixed'].includes(bug.status)) {
+        BtnRules.hangup = true
+      }
 
-  		// Bug: 关闭按钮规则
-  		// 当状态为：非关闭状态；组：测试
-  		if ((bug.status !== 'Closed') && (identity === 0 || bug.creator_id === uid)) {
-  			BtnRules.close = true
-  		}
+      // Bug: 关闭按钮规则
+      // 当状态为：非关闭状态；组：测试
+      if ((bug.status !== 'Closed') && (identity === 0 || bug.creator_id === uid)) {
+        BtnRules.close = true
+      }
 
-  		// Bug: 解决按钮规则
-  		// 当状态为：非关闭状态；组：测试
-  		if (['Open','Reopen','Hang-up'].includes(bug.status)) {
-  			BtnRules.Recovered = true
-  		}
+      // Bug: 解决按钮规则
+      // 当状态为：非关闭状态；组：测试
+      if (['Open', 'Reopen', 'Hang-up'].includes(bug.status)) {
+        BtnRules.Recovered = true
+      }
 
-  	}
-  	return BtnRules
+    }
+    return BtnRules
   },
-  RuleManges (userInfo,PagesRules) {
+  RuleManges(userInfo, PagesRules) {
     const identity = userInfo.identity
     let rules = {
       user_create: false,
@@ -125,7 +125,7 @@ export default {
   },
 
   // Page: 测试用例
-  TestCaseBtnRules (userinfo,CaseDetails) {
+  TestCaseBtnRules(userinfo, CaseDetails) {
     let rules = {
       edit: false,
       del: false,

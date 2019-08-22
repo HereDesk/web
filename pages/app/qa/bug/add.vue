@@ -197,7 +197,6 @@ export default {
       isRemarkDisable: false,
       mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       page_type: 'bug',
-      fileList: [],
       is_reduction_draft_box: false,
       Bug: {
         case_id: this.$route.query.case_id || null,
@@ -426,13 +425,12 @@ export default {
             // $(document).scrollTop(0)
             this.Bug.title = ""
             this.Bug.annex = []
-            this.fileList = []
             this.Bug.steps = ""
             this.Bug.expected_result = ""
             this.Bug.reality_result = ""
             this.Bug.remark = ""
             this.Bug.severity = "Normal"
-            this.Bug.priority = "P2"
+            this.Bug.priority = "P3"
             this.isButtonDisabled = false
           }
         } else {

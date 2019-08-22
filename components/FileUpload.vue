@@ -46,7 +46,10 @@
     watch: {
       editFileList: {
         handler: function(old,oldval) {
-          if (JSON.stringify(this.editFileList) === '{}') return
+          if (JSON.stringify(this.editFileList) === '{}') {
+            this.fileList = []
+            return
+          }
           if (this.pageType === 'edit') {
             for (const f of this.editFileList) {
               this.fileList.push({"name":f.url,"url":f.url,"response":{"name":f.url}})
