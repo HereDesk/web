@@ -28,10 +28,16 @@
       },
       pageType: {
         type: String,
-        required: true,
         validator: function (value) {
           return ['add', 'edit'].indexOf(value) !== -1
         }
+      },
+      isDraftBox: {
+        type: Boolean,
+        default: false
+      },
+      timestamp: {
+        type: Number
       },
       editFileList: {}
     },
@@ -44,6 +50,11 @@
     },
 
     watch: {
+      timestamp: function(newval,oldval) {
+        this.annex = []
+        this.editFileList = {}
+        this.fileList = []
+      },
       editFileList: {
         handler: function(old,oldval) {
           if (JSON.stringify(this.editFileList) === '{}') {
@@ -55,9 +66,10 @@
               this.fileList.push({"name":f.url,"url":f.url,"response":{"name":f.url}})
             }
           }
-          if (this.pageType === 'add') {
+          if (this.pageType === 'add' && this.isDraftBox) {
             for (const f of this.editFileList) {
               this.fileList.push({"name":f,"url":f,"response":{"name":f}})
+              this.annex.push(f)
             }
           }
         },
@@ -85,7 +97,7 @@
         }
         if (this.$route.query.bug_id) {
           return request_url + "?type=" + filetype + "&bug_id=" + this.$route.query.bug_id
-        }else if (this.$route.query.case_id) {
+        } else if (this.$route.query.case_id) {
           return request_url + "?type=" + filetype + "&case_id=" + this.$route.query.case_id
         } else {
           return request_url + "?type=" + filetype

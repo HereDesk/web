@@ -99,8 +99,10 @@
               </label>
               <form id="case-file" class="col-lg-9 col-md-10 col-sm-12">
                 <FileUpload
+                  :timestamp="timestamp"
                   :fileLimit="5"
-                  :editFileList="isShowDraftsBox ? this.CaseData.annex : {}"
+                  :isDraftBox="is_reduction_draft_box"
+                  :editFileList="case_draft_box_file"
                   :pageType="'add'"
                   @annex="getAnnex">
                 </FileUpload>
@@ -162,7 +164,8 @@ export default {
       msg: '',
       isButtonDisabled: false,
       isRemarkDisable: false,
-      isShowDraftsBox: false,
+      is_reduction_draft_box: false,
+      case_draft_box_file : [],
       CaseData: {
         product_id: null,
         title: '',
@@ -193,12 +196,17 @@ export default {
     }
   },
 
+  created () {
+    this.timestamp = (new Date()).valueOf()
+  },
+
   mounted () {
     // 测试用例草稿箱
     let testcase_drafts_box = window.localStorage.testcase_drafts_box
     if (testcase_drafts_box) {
       let drafts_box = JSON.parse(testcase_drafts_box)
-      this.isShowDraftsBox = true
+      this.is_reduction_draft_box = true
+      this.case_draft_box_file = drafts_box.annex
       this.open_draft_box(drafts_box)
     }
   },
@@ -304,6 +312,9 @@ export default {
             this.CaseData.remark = ''
             this.CaseData.ExpectedResult = ''
             this.CaseData.steps = '1.\n2.\n'
+
+            this.is_reduction_draft_box = false
+            this.timestamp = (new Date()).valueOf()
           }
         } else {
           this.isButtonDisabled = false

@@ -202,9 +202,6 @@ export default {
   },
 
   computed: {
-    uploadDisabled() {
-      return this.fileList.length > 3
-    },
     selected_product_id() {
       return this.Bug.product_id
     },
@@ -304,6 +301,7 @@ export default {
         this.$notify.error({title: '提示',message: '备注输入太长了,长度需要小于10000'})
         return
       }
+      this.Bug.annex = []
       this.axios({
         method: 'post',
         url: '/api/qa/bug/edit',

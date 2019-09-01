@@ -97,10 +97,10 @@
             <div id="case-annex" class='form-group row'>
               <label class="col-lg-2 col-md-2 col-sm-12 bug-label">设计图/原型图</label>
               <form class="col-lg-8 col-md-10 col-sm-12">
-                <FileUpload 
-                  :fileLimit="5" 
-                  :editFileList="this.Annex" 
-                  :pageType="'edit'" 
+                <FileUpload
+                  :fileLimit="5"
+                  :editFileList="this.Annex"
+                  :pageType="'edit'"
                   @annex="getAnnex">
                 </FileUpload>
               </form>
@@ -248,6 +248,7 @@ export default {
       if (!this.CaseData.module_id[0] && !this.CaseData.module_id[1]){
          this.CaseData.module_id = []
       }
+      this.CaseData.annex = []
       this.axios({
         method: 'post',
         url: '/api/qa/testcase/edit',

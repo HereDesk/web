@@ -137,7 +137,9 @@
             <form class="col-lg-8 col-md-10 col-sm-12">
               <FileUpload
                 :fileLimit="5"
-                :editFileList="is_reduction_draft_box ? this.Bug.annex : {}"
+                :timestamp="timestamp"
+                :isDraftBox="is_reduction_draft_box"
+                :editFileList="draft_box_file"
                 :pageType="'add'"
                 @annex="getAnnex">
               </FileUpload>
@@ -198,6 +200,8 @@ export default {
       mavon_md_base_toolbars: edit.mavon_md_base_toolbars,
       page_type: 'bug',
       is_reduction_draft_box: false,
+      draft_box_file: [],
+      timestamp: '',
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
@@ -291,6 +295,7 @@ export default {
     if (this.$route.query.case_id) {
       this.getCaseDetails()
     }
+    this.timestamp = (new Date()).valueOf()
   },
 
   mounted() {
@@ -299,6 +304,7 @@ export default {
     if (bug_drafts) {
       let bug_drafts_box = JSON.parse(bug_drafts)
       this.is_reduction_draft_box = true
+      this.draft_box_file = bug_drafts_box.annex
       this.open_draft_box(bug_drafts_box)
     }
   },
@@ -432,6 +438,8 @@ export default {
             this.Bug.severity = "Normal"
             this.Bug.priority = "P3"
             this.isButtonDisabled = false
+            this.is_reduction_draft_box = false
+            this.timestamp = (new Date()).valueOf()
           }
         } else {
           this.isButtonDisabled = false
