@@ -80,7 +80,7 @@
               <div id="advanced-search" @click="unfoldAdvancedSearch()">
                 <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
               </div>
-              <nuxt-link to='/app/qa/bug/add' id="bug-create" class="ml-3" v-if="Rules.bug_create">
+              <nuxt-link to='/app/qa/bug/add' target="_blank" id="bug-create" class="ml-3" v-if="Rules.bug_create">
                 <button type="btn" class="btn btn-create">+ 创建</button>
               </nuxt-link>
               <el-dropdown trigger="click">
@@ -775,6 +775,16 @@ export default {
 
     // 页面表格字段过滤
     this.SetTableFilterField('get')
+
+    window.addEventListener("keypress", event => {
+      console.log(event)
+      if (event.key === 'f' && event.ctrlKey) {
+        document.getElementById("id-title-search").focus()
+      }
+      if (event.key === 'n' && event.ctrlKey) {
+        document.getElementById("bug-create").focus()
+      }
+    })
   },
 
   methods: {
