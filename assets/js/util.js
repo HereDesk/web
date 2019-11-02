@@ -44,7 +44,9 @@ export default {
     let currdate_sec = current_datetimt.getSeconds();
     // 得到昨天的日期
     let get_curr_pre_datetime = new Date(current_datetimt.getTime() - 24*60*60*1000)
-    let current_pre_date = get_curr_pre_datetime.getDate()
+    let pre_day = get_curr_pre_datetime.getDate()
+    let pre_month = get_curr_pre_datetime.getMonth()
+    let pre_year = get_curr_pre_datetime.getFullYear()
 
     let diff_seconds = Math.floor((now - param_timestamp) / 1000);
     let diff_minutes = Math.floor(diff_seconds / 60);
@@ -52,7 +54,6 @@ export default {
     let diff_days = Math.floor(diff_hours / 24);
     let diff_months = Math.floor(diff_days / 30);
     let diff_years = Math.floor(diff_months / 12);
-
     let format_date = function (number) {
       return /^\d$/.test(number) ? '0' + number : number;
     };
@@ -78,7 +79,7 @@ export default {
       return format_date(param_year) + '/' + format_date(param_month) + '/' + format_date(param_day)
     }
     else if (type == 6) {
-      if (diff_days === 0 & currdate_day === param_day) {
+      if (diff_days === 0 && currdate_day === param_day) {
         if (diff_hours === 0) {
           if (diff_minutes > 0) {
             return diff_minutes + "分钟前"
@@ -89,7 +90,7 @@ export default {
         } else {
           return diff_hours + "小时前"
         }
-      } else if(currdate_day !== param_day & current_pre_date === param_day){
+      } else if(currdate_day !== param_day && pre_day === param_day && pre_month === param_month && pre_year === param_year){
         return "昨天"
       } else {
         if (currdate_year === param_year) {
