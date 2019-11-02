@@ -68,7 +68,7 @@
           <div id="bug-annex" class="height-7" v-if="Annex.length > 0 || BtnRules.upload">
             <h6 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附件
-              <span @click="showModal = 'upload'" title="上传附件">
+              <span id="icon-upload" @click="showModal = 'upload'" title="上传附件" >
                 <i class="iconfont icon-cloudupload size-1-3 mx-3 font-color-2973B7"></i>
               </span>
             </h6>​
@@ -767,5 +767,13 @@ export default {
     .bug-tags {
       display: none;
     }
+  }
+
+  #bug-annex #icon-upload {
+    visibility: hidden;
+  }
+  #bug-annex:hover #icon-upload {
+    visibility: initial;
+    padding-top: -1rem;
   }
 </style>
