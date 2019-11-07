@@ -47,15 +47,15 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [{
-      src: '~plugins/public.js',
+      src: '@/plugins/public',
       ssr: true
     },
     {
-      src: '~plugins/markdown.js',
+      src: '@/plugins/markdown',
       ssr: false
     },
     {
-      src: '~plugins/viewer.js',
+      src: '@/plugins/viewer',
       ssr: false
     }
   ],
@@ -75,13 +75,13 @@ module.exports = {
   },
   proxy: {
     '/api/': {
-      target: 'http://127.0.0.1:8000/api',
+      target: 'http://192.168.12.201/api',
       pathRewrite: {
         '^/api/': ''
       }
     },
     '/media/': {
-      target: 'http://127.0.0.1:8000/media',
+      target: 'http://192.168.12.201/media',
       pathRewrite: {
         '^/media/': ''
       }

@@ -535,6 +535,7 @@ export default {
   },
 
   methods: {
+    
     getBugDetails() {
       if (this.currentBugId) {
         this.axios
@@ -554,12 +555,10 @@ export default {
       }
     },
 
-    // 编辑缺陷
     EditBug() {
       this.$router.push("/app/qa/bug/edit?bug_id=" + this.currentBugId)
     },
 
-    // Bug immediate Recovered
     immediateRecovered() {
       this.ResolveData.bug_id = this.currentBugId
       this.ResolveData.assignedTo = this.BugDetails.creator_id
@@ -578,7 +577,6 @@ export default {
       })
     },
 
-    // bug delete
     BugDelete() {
       this.axios.get("/api/qa/bug/delete?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
@@ -590,13 +588,11 @@ export default {
       })
     },
 
-    // 操作：bug修改优先级
     BugPSDialog(data) {
       this.components_value = data
       this.showModal = data
     },
 
-    // bug closed
     BugClosed() {
       this.ClosedData.bug_id = this.currentBugId
       const remark = this.ClosedData.remark
@@ -624,7 +620,6 @@ export default {
       })
     },
 
-    // bug reopen
     ReOpen() {
       this.ReOpenData.bug_id = this.currentBugId
       if (!this.ReOpenData.assignedTo) {
@@ -654,7 +649,6 @@ export default {
       })
     },
 
-    // bug hand up
     HandUp() {
       this.HangUpData.bug_id = this.currentBugId
       this.axios({
@@ -672,7 +666,6 @@ export default {
       })
     },
 
-    // bug history record
     BugHistory() {
       this.axios.get("/api/qa/bug/history?bug_id=" + this.currentBugId).then(res => {
         if (res.data["status"] === 20000) {
@@ -681,7 +674,6 @@ export default {
       })
     },
 
-    // bug add notes or remark
     AddNotes() {
       this.NotesData.bug_id = this.currentBugId
       this.axios({
@@ -699,7 +691,6 @@ export default {
       })
     },
 
-    // 创建缺陷标签
     AddBugTags() {
       let req = {
         "bug_id": this.currentBugId,
@@ -724,7 +715,6 @@ export default {
       })
     },
 
-    // bug edit remark
     EditRecordRemard(item) {
       this.axios({
         method: "post",

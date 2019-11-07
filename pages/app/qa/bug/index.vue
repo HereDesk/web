@@ -520,6 +520,7 @@ import BugChange from "~/components/BugChange"
 import util from "~/assets/js/util.js"
 import data from "~/assets/js/data.js"
 import rules from "~/assets/js/rules.js"
+import shortcut_operations from '~/assets/js/shortcut_operation.js'
 
 export default {
   head() {
@@ -1043,7 +1044,9 @@ export default {
       this.HoverBugId = ""
     },
 
-    /* is show module */
+    /**
+     * 控制左侧模块列表
+     */
     switchModule() {
       let isDisplay = this.isShowModules ? 0 : 1
       this.axios
@@ -1122,9 +1125,6 @@ export default {
   }
   .btn-ad-search {
     font-size:0.88rem;
-    /* color: #5E6D82; */
-    /* background-color: #ffffff; */
-    /* border: 1px solid #eeeeee; */
     border-radius: 5px;
     padding: 4px 8px;
     margin: 9px;

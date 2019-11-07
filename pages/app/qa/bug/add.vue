@@ -91,13 +91,15 @@
               发现步骤<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 toolbars">
-              <mavon-editor placeholder="请输入发现步骤 ~"
-                :toolbars="mavon_md_base_toolbars"
-                :subfield="false"
-                :autofocus="false"
-                :tabSize="2"
-                v-model.trim="Bug.steps">
-              </mavon-editor>
+              <no-ssr>
+                <mavon-editor placeholder="请输入发现步骤 ~"
+                  :toolbars="mavon_md_base_toolbars"
+                  :subfield="false"
+                  :autofocus="false"
+                  :tabSize="2"
+                  v-model.trim="Bug.steps">
+                </mavon-editor>
+              </no-ssr>
             </div>
           </div>
 
@@ -107,12 +109,14 @@
               实际结果<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入实际结果 ~"
-                :toolbarsFlag="false"
-                :subfield="false"
-                :autofocus="false"
-                v-model.trim="Bug.reality_result">
-              </mavon-editor>
+              <no-ssr>
+                <mavon-editor placeholder="请输入实际结果 ~"
+                  :toolbarsFlag="false"
+                  :subfield="false"
+                  :autofocus="false"
+                  v-model.trim="Bug.reality_result">
+                </mavon-editor>
+              </no-ssr>
             </div>
           </div>
 
@@ -122,12 +126,14 @@
               预期结果
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入预期结果 ~"
-                :toolbarsFlag="false"
-                :subfield="false"
-                :autofocus="false"
-                v-model.trim="Bug.expected_result">
-              </mavon-editor>
+              <no-ssr>
+                <mavon-editor placeholder="请输入预期结果 ~"
+                  :toolbarsFlag="false"
+                  :subfield="false"
+                  :autofocus="false"
+                  v-model.trim="Bug.expected_result">
+                </mavon-editor>
+              </no-ssr>
             </div>
           </div>
 
@@ -150,12 +156,14 @@
           <div id="bug-remark" class="form-group row" v-if="isRemarkDisable">
             <label for="bug-remark" class="col-md-2 col-sm-12 bug-label">备注</label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <mavon-editor placeholder="请输入附加信息 ~"
-                :toolbarsFlag="false"
-                :subfield="false"
-                :autofocus="false"
-                v-model.trim="Bug.remark">
-              </mavon-editor>
+              <no-ssr>
+                <mavon-editor placeholder="请输入附加信息 ~"
+                  :toolbarsFlag="false"
+                  :subfield="false"
+                  :autofocus="false"
+                  v-model.trim="Bug.remark">
+                </mavon-editor>
+              </no-ssr>
             </div>
           </div>
 
@@ -218,7 +226,7 @@ export default {
         reality_result: "",
         expected_result: "",
         remark: "",
-        annex: []
+        annex: []    // 附件
       }
     }
   },
@@ -227,14 +235,21 @@ export default {
     selected_product_id () {
       return this.Bug.product_id
     },
+    
+    // 项目成员列表
     developer_list () {
       return this.$store.state.ProductMemberList.data
     },
+    
+    // 缺陷属性
     BugProperty () {
     	return this.$store.state.BugProperty
     },
+    
+    /**
+     * 自动填充某些数据
+     */
     auto_fill () {
-      // 某些数据的自动填充
       let login_user_id = this.$store.state.userInfo.user_id
       let [assignedTo_id,bug_source] = ["","tester"]
       if (this.developer_list) {
@@ -348,7 +363,11 @@ export default {
         this.isRemarkDisable = true
       }
     },
-
+    
+    /**
+     * 创建Bug
+     * @param {String} event - button id: 根据id，判断是继续创建，还是返回上一页面
+     */
     createBug(event) {
       if (!this.Bug.release) {
         this.$notify.error({
