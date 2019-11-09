@@ -197,7 +197,8 @@
         const video = ["mp4","mp3","mov","m4v","wmv","ts","3gp","avi","flv","mkv","mpeg"]
         const zip = ["zip","rar","tar","7z","bz2","gz"]
         const doc = ["docx","docx","xls","xlsx","ppt","pptx","pdf",
-          "txt","log","md","html","json","ini","yaml"]
+          "txt","log","md","json","ini","yaml"]
+        const code = ["html","js","css","py","less","scss","styl","java","cpp"]
         const img = ["jpg","png","jpeg","gif","bmp","svg","psd","tif","tga","ai"]
         const allow_file_format_list = [...video,...zip,...doc,...img]
 
