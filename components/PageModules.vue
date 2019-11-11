@@ -58,7 +58,7 @@ export default {
     isShowModules() {
       return this.$store.state.UserConfig["IS_SHOW_MODULE"] == 1 ? true : false
     },
-    
+
     // 模块列表
     modules_list() {
       let modules_name = this.$store.state.ProductModulesInfo.data
@@ -131,7 +131,7 @@ export default {
           }
         })
     },
-    
+
     /**
      * @param {String} m1_id 一级模块ID
      */
@@ -143,7 +143,7 @@ export default {
         this.m1_id = m1_id
       }
     },
-    
+
     /**
      * @param {String} m2_id 二级模块ID
      */
@@ -154,7 +154,7 @@ export default {
         this.m2_id = m2_id
       }
     },
-    
+
     /**
      * 所有模块
      */
@@ -187,11 +187,9 @@ export default {
     position: absolute;
     z-index: 9;
   }
-
   .isDisplay {
     display: block;
   }
-
   @media (max-width:767.98px) {
     .isDisplay {
       display: none !important;

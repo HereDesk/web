@@ -39,7 +39,7 @@
               </nuxt-link>
               <nuxt-link 
                 :to="{ 
-                  path: '/app/products/release', 
+                  path: '/app/products/version', 
                   query: { 'product_id': scope.row.product_id } }"
                 v-if="Rules.product_release">
                 <button type="button" class="btn btn-outline-primary btn-sm ml-3">版本</button>

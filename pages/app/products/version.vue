@@ -1,7 +1,7 @@
 <template>
   <div id="page-product-release" class="container mt-3">
 
-		<!-- page data -->
+    <!-- page head -->
     <div id="page-head" class="row mt-5">
       <div id="page-title" class="col-auto mr-auto">
         <h1 class="navbar-brand">{{ product_code }}&nbsp;版本管理</h1>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-		<!-- page data -->
+    <!-- page data -->
     <div id="page-data" class="row mt-3 mb-5 table_data">
       <div class="col-xl-12 col-lg-12 col-md-12">
         <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}">
@@ -30,8 +30,8 @@
       </div>
     </div>
 
-		<!-- page null -->
-		<div id="page-null" class="row" v-if="controlNull">
+    <!-- page null -->
+    <div id="page-null" class="row" v-if="controlNull">
       <div class="col-xl-12 col-lg-12 col-md-12 text-center mt-5">
         <img src="~/static/images/happy.png" class="null-icon"/>
         <p class="no-hint">{{ msg }}</p>
@@ -44,15 +44,14 @@
       <div class="form-group" slot="body">
         <div class="row col-md-auto mx-3">
           <span>版本名称</span>
-          <input type="text"
-            id="pg-product-name" class="form-control input-lg my-1"
+          <input type="text" id="pg-product-name" class="form-control input-lg my-1"
             placeholder="输入（不超20个字）" maxlength="20" required
-            v-model="ReleaseData.release"
-            @keyup.enter="createRelease()" />
+            v-model="product_version.release"
+            @keyup.enter="create_product_release()" autofocus />
           <p class="mt-3 font-size-90 text-gray">备注：提交后无法修改，请慎重填写</p>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary" slot="footer" @click="createRelease()">提交</button>
+      <button type="submit" class="btn btn-primary" slot="footer" @click="create_product_release()">提交</button>
     </Modal>
 
   </div>
@@ -77,18 +76,19 @@ export default {
   data() {
     return {
       showModal: false,
-			msg: "",
-			controlNull: false,
+      msg: "",
+      controlNull: false,
       product_code: this.$route.query.product_code || "",
       product_id: this.$route.query.product_id || "",
       release_list: "",
       tableData: [],
-      ReleaseData: {
+      product_version: {
         release: "",
         product_id: ""
       }
     }
   },
+
   computed: {
     Rules: function() {
       let userInfo = this.$store.state.userInfo
@@ -96,9 +96,11 @@ export default {
       return rules.RuleManges(userInfo,PagesRules)
     }
   },
+
   filters: {
     date: util.date
   },
+
   watch: {
     tableData: function(val, oldval) {
       if (this.tableData.length) {
@@ -111,13 +113,15 @@ export default {
   },
 
   created() {
-    this.getReleaseList()
+    this.get_product_version_list()
   },
 
   methods: {
 
-    // Gets all versions in the project
-    getReleaseList() {
+    /**
+     * 获取产品所有版本号列表
+     */
+    get_product_version_list() {
       this.axios
         .get("/api/pm/release/list?product_id=" + this.product_id)
         .then(res => {
@@ -130,9 +134,12 @@ export default {
         })
     },
 
-    createRelease(row) {
-      let release = this.ReleaseData.release
-      this.ReleaseData.product_id = this.product_id
+    /**
+     * 创建版本号信息
+     */
+    create_product_release() {
+      let release = this.product_version.release
+      this.product_version.product_id = this.product_id
       if (release.length > 20 | release.length < 3) {
         this.$notify.error({title: "失败",message: "版本号的有效长度为3-20"})
         return
@@ -140,12 +147,18 @@ export default {
       this.axios({
         method: "post",
         url: "/api/pm/release/create",
-        data: JSON.stringify(this.ReleaseData)
+        data: JSON.stringify(this.product_version)
       }).then(res => {
         if (res.data["status"] === 20000) {
-					this.showModal = false
+          this.showModal = false
           this.$notify.success({ title: "成功", message: res.data["msg"]})
-          this.getReleaseList()
+
+          // 清空输入框
+          this.product_version.release = ""
+
+          this.get_product_version_list()
+
+          // 保存到状态树
           this.$store.dispatch("getProductRelease")
         }
         if (res.data["status"] !== 20000) {
@@ -153,6 +166,7 @@ export default {
         }
       })
     }
+
   }
 }
 </script>

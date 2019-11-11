@@ -234,7 +234,7 @@ export default {
 
   },
 
-  created() {
+  mounted() {
     let route_info = this.$route.query
     if (route_info.hasOwnProperty("product_id")) {
       this.product_id = route_info.product_id
