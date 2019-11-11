@@ -1,12 +1,11 @@
-
 <template>
   <div id="page-product-members" class="container mt-3">
 
+    <!-- member head -->
     <div id="page-head" class="row mt-5">
       <div id="page-title" class="col-auto mr-auto">
         <a class="navbar-brand">
           {{ product_code }} 成员管理
-          <!-- <nuxt-link :to="'/app/products?product_id=' + product_id"></nuxt-link>&nbsp; -->
         </a>
       </div>
       <div  id="add-members" class="col-auto">
@@ -16,6 +15,7 @@
       </div>
     </div>
 
+    <!-- member bogy -->
     <div id="page-data" class="row mt-3 mb-5 table_data">
       <div class="col-xl-12 col-lg-12 col-md-12">
         <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}">
@@ -39,10 +39,10 @@
           </el-table-column>
           <el-table-column label="操作" v-if="Rules.product_members">
             <template slot-scope="scope">
-              <span @click="banned(scope.row,$event)" v-if="scope.row.status === 0">
+              <span @click="banned(scope.row.user_id)" v-if="scope.row.status === 0">
                 <button type="button" class="btn btn-outline-danger btn-sm" value="1">禁用</button>
               </span>
-              <span @click="reJoin(scope.row,$event)" v-if="scope.row.status === 1">
+              <span @click="reJoin(scope.row.user_id)" v-if="scope.row.status === 1">
                 <button type="button" class="btn btn-outline-success btn-sm" value="0">激活</button>
               </span>
             </template>
@@ -51,6 +51,7 @@
       </div>
     </div>
 
+    <!-- member null -->
     <div id="page-null" class="row" v-if="controlNull">
       <div class="col text-center mt-5">
         <img src="~/static/images/happy.png" class="null-icon"/>
@@ -58,7 +59,7 @@
       </div>
     </div>
 
-    <!-- add member modal -->
+    <!-- create member -->
     <Modal id="add_members" v-if="showModal === 'addmembers'" @close="showModal = false" :isFooter="true">
       <h5 slot="header">增加成员</h5>
       <div class="form-group" slot="body">
@@ -66,7 +67,9 @@
           <span>产品</span>
           <div style="width:100%;">
             <ProductInfo
-              :showStyle="'select'" :ptype="'only-product-name'" @ProductInfo="GetProductInfo">
+              :showStyle="'select'"
+              :ptype="'only-product-name'"
+              @ProductInfo="GetProductInfo">
             </ProductInfo>
           </div>
         </div>
@@ -191,7 +194,9 @@ export default {
       this.product_id = data.product_id
     },
 
-    // get current product member
+    /**
+     * 获取某个项目组下的成员列表
+     */
     getProductMember() {
       this.axios.get("/api/pm/member/list?product_id=" + this.product_id)
         .then(res => {
@@ -205,7 +210,9 @@ export default {
         })
     },
 
-    // group
+    /**
+     * 获取用户组列表
+     */
     get_group_list() {
       this.axios.get("/api/user/group").then(res => {
         if (res.data["status"] === 20000) {
@@ -216,7 +223,9 @@ export default {
       })
     },
 
-    // get system all user
+    /**
+     * 获取所有用户列表
+     */
     getAllUser() {
       this.axios.get("/api/user/user_list").then(res => {
         if (res.data["status"] === 20000) {
@@ -227,7 +236,9 @@ export default {
       })
     },
 
-    //  users to Join the project
+    /**
+     * 向项目组加入成员
+     */
     JoinProduct(row) {
       if (!this.MemberJoin.user_id) {
         this.$notify.error({title: "失败",message: "请选择用户后再提交"})
@@ -249,9 +260,12 @@ export default {
       })
     },
 
-    // banned user to the product
-    banned(rows, event) {
-      this.MemberBanned.user_id = rows.user_id
+    /**
+     * 禁用用户（从产品组移除用户）
+     * @param {String} user_id 用户ID
+     */
+    banned(user_id) {
+      this.MemberBanned.user_id = user_id
       this.axios({
         method: "post",
         url: "/api/pm/member/ban",
@@ -266,9 +280,12 @@ export default {
       })
     },
 
-    // rejoin user to the product
-    reJoin(rows, event) {
-      this.MemberBanned.user_id = rows.user_id
+    /**
+     * 重新加入产品组
+     * @param {String} user_id 用户ID
+     */
+    reJoin(user_id) {
+      this.MemberBanned.user_id = user_id
       this.axios({
         method: "post",
         url: "/api/pm/member/rejoin",
