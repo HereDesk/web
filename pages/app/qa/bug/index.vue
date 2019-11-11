@@ -3,20 +3,13 @@
     <div class="row">
 
       <!-- 项目模块：左侧 -->
-      <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
-        <PageModules v-if="isShowModules"
-          :product_id="visited_product_id"
-          :Rules="Rules"
-          :query_type="'bug'"
-          @getM1M2="getM1M2">
-        </PageModules>
-      </div>
-
-      <!-- Action: let Module switch -->
-      <div id="product-modules-switch" class="pl-4 mt-2 dataModule" @click="switchModule()">
-        <i class="iconfont Bg-EEEEEE py-2" style="visibility:hidden;"
-          :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
-      </div>
+      <PageModules
+        :product_id="visited_product_id"
+        :Rules="Rules"
+        :query_type="'bug'"
+        @getShowModules="getShowModules"
+        @getM1M2="getM1M2">
+      </PageModules>
 
       <!-- Action: Bug Query and Bug Search -->
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
@@ -539,6 +532,8 @@ export default {
 
   data() {
     return {
+      isShowModules: false,
+
 			showModal: false,
       ScreenWidth: 0,
       isDisplayOperate: true,
@@ -711,16 +706,7 @@ export default {
       // }
     },
 
-    // show user config : 1: show, 0: hide
-    isShowModules: function() {
-      let config = this.$store.state.UserConfig
-      if (!config) {return false}
-      if ("IS_SHOW_MODULE" in config) {
-        return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
-      } else {
-        return false
-      }
-    }
+
   },
 
   watch: {
@@ -790,6 +776,10 @@ export default {
 
   methods: {
     // get $emit data
+    getShowModules(isShowModules) {
+      this.isShowModules = isShowModules
+    },
+
     GetProductInfo (data)  {
       this.visited_product_id = data.product_id
       this.selected_release = data.release
@@ -798,6 +788,7 @@ export default {
         this.img_src = require("static/images/happy.png")
       }
     },
+
     getPsPn: function(ps, pn) {
       this.pageSize = ps
       this.pageNumber = pn
@@ -1042,20 +1033,6 @@ export default {
 
     tableLeave(row) {
       this.HoverBugId = ""
-    },
-
-    /**
-     * 控制左侧模块列表
-     */
-    switchModule() {
-      let isDisplay = this.isShowModules ? 0 : 1
-      this.axios
-				.get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay)
-				.then(res => {
-					if (res.data["status"] === 20000) {
-						this.$store.dispatch('getUserInfo')
-					}
-				})
     },
 
     /**

@@ -163,17 +163,6 @@
 
 /* bug_index_about opreate */
 
-.dataModule {
-  position: absolute;
-  z-index: 9;
-}
-
-@media (max-width:767.98px) {
-  .dataModule {
-    display: none !important;
-  }
-}
-
 .showDataOpreate {
   position: absolute;
   display: inline;

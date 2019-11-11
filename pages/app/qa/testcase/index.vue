@@ -3,19 +3,13 @@
     <div class="row pt-5">
 
       <!-- 模块 -->
-      <div id="product-modules" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
-        <PageModules
-          :product_id="product_id"
-          :Rules="Rules"
-          :query_type="'testcase'"
-          @getM1M2="getM1M2" v-if="isShowModules">
-        </PageModules>
-      </div>
-
-      <div id="product-modules-switch" class="pl-4 mt-2 dataModule" @click="switchModule()">
-        <i class="iconfont Bg-EEEEEE py-2" style="visibility:hidden;"
-          :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
-      </div>
+      <PageModules
+        :product_id="product_id"
+        :Rules="Rules"
+        :query_type="'bug'"
+        @getShowModules="getShowModules"
+        @getM1M2="getM1M2">
+      </PageModules>
 
       <!-- 数据列表 -->
       <div id="data-case" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
@@ -254,6 +248,9 @@ export default {
 
   data() {
     return {
+      // 左侧项目模块
+      isShowModules: false,
+
       showModal: false,
       ScreenWidth: 0,
       // 产品、版本
@@ -337,18 +334,8 @@ export default {
       } else {
         return this.ScreenWidth > 768 ? 'table' : 'list'
       }
-    },
-
-    // show user config : 1: show, 0: hide
-    isShowModules: function() {
-      let config = this.$store.state.UserConfig
-      if (!config) {return false}
-      if ("IS_SHOW_MODULE" in config) {
-        return (this.ScreenWidth > 768) & (config["IS_SHOW_MODULE"] == 1) ? true : false
-      } else {
-        return false
-      }
     }
+
   },
 
   watch: {
@@ -387,6 +374,10 @@ export default {
 
   methods: {
     // get $emit data
+    getShowModules(isShowModules) {
+      this.isShowModules = isShowModules
+    },
+
     GetProductInfo (data)  {
       this.product_id = data.product_id
       this.selected_product = data.product_code
@@ -395,6 +386,7 @@ export default {
         this.img_src = require("static/images/happy.png")
       }
     },
+
     getPsPn: function(ps, pn) {
       this.pageSize = ps
       this.pageNumber = pn
@@ -540,21 +532,8 @@ export default {
             this.$store.dispatch('getUserInfo')
           }
       })
-    },
-
-    /**
-     * 是否显示模块列表（保存数据到服务器）
-     */
-    switchModule() {
-      let isDisplay = this.isShowModules ? 0 : 1
-      this.axios
-        .get('/api/userconfig?IS_SHOW_MODULE=' + isDisplay)
-        .then(res => {
-          if (res.data["status"] === 20000) {
-            this.$store.dispatch('getUserInfo')
-          }
-      })
     }
+
   }
 }
 </script>

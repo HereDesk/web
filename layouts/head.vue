@@ -16,7 +16,7 @@
             <a class="nav-link">缺陷</a>
             <ul>
               <li><nuxt-link to="/app/qa/bug/add">提交BUG</nuxt-link></li>
-              <li><nuxt-link to="/app/qa/bug" exact>缺陷列表</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/bug">缺陷列表</nuxt-link></li>
               <li><nuxt-link to="/app/qa/bug/count">缺陷分析</nuxt-link></li>
               <li><nuxt-link to="/app/qa/bug/report">缺陷报告</nuxt-link></li>
             </ul>
@@ -25,7 +25,7 @@
             <a class="nav-link">测试用例</a>
             <ul>
               <li><nuxt-link to="/app/qa/testcase/add">编写用例</nuxt-link></li>
-              <li><nuxt-link to="/app/qa/testcase" exact>管理用例</nuxt-link></li>
+              <li><nuxt-link to="/app/qa/testcase">管理用例</nuxt-link></li>
               <li><nuxt-link to="/app/qa/testsuite">测试计划</nuxt-link></li>
             </ul>
           </li>
