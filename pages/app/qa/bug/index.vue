@@ -1,389 +1,385 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
-    <div class="row">
 
-      <!-- 项目模块：左侧 -->
-      <ProductModules
-        :product_id="visited_product_id"
-        :Rules="Rules"
-        :query_type="'bug'"
-        @getShowModules="getShowModules"
-        @getM1M2="getM1M2">
-      </ProductModules>
+    <template v-if='!Msg && total === null'>
+      <PageLoading></PageLoading>
+    </template>
 
-      <!-- Action: Bug Query and Bug Search -->
-      <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
-        <div class="container-fluid">
+    <template v-else>
+      <div class="row">
 
-          <div id="bug-nav-manage" class="row">
-            <div id="bug-query-1" class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 my-2">
+        <ProductModules
+          :product_id="visited_product_id"
+          :Rules="Rules"
+          :query_type="'bug'"
+          @getShowModules="getShowModules"
+          @getM1M2="getM1M2">
+        </ProductModules>
 
-              <!-- 项目下拉列表 -->
-              <ProductInfo :ptype="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
-              </ProductInfo>
-              <!-- 缺陷状态下拉列表 -->
-              <el-dropdown id="bug-query-status" class="mr-1 my-1" :class="{ 'd-none': isShowAdSearch === 'yes' }">
-                <span>
-                  <span class="el-dropdown-desc">状态:</span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_status | filterBugStatusName }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(item,index) in status_list" :key="index">
-                    <span @click="handleCommand(item)">
-                      {{ item.status_name }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+        <div id="page-nav" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
+          <div class="container-fluid">
 
-              <el-dropdown id="bug-query-quick" class="mr-1 my-1">
-                <span>
-                  <span class="el-dropdown-desc">快捷:</span>
-                  <span class="el-dropdown-link bg-edown" :class="{ '2973B7': operate != 'no' }">
-                    {{ operate | QuickQperationName }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
-                    <span :id="item.quick_value" @click="handleCommand(item)">
-                      {{ item.quick_name }}
-                    </span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-            <div id="bug-query-2" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12 pt-1 px-0 my-2">
-              <div class="input-group align-items-center">
-                <div id="ordinary-search" class="input-group-prepend">
-                  <span id="icon-search" class="input-group-text" style="height: calc(2.05rem + 2px);">
-                    <i class="iconfont icon-search icon-E0E0E0"></i>
-                  </span>
-                </div>
-                <input id="id-title-search" type="text"
-                  class="form-control search-control"
-                  placeholder="搜索ID、标题、标签、或指派人员..."
-                  v-model="wd">
-              </div>
-            </div>
-
-            <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12 vertical-center my-2">
-              <div id="advanced-search" @click="unfoldAdvancedSearch()">
-                <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
-              </div>
-              <nuxt-link to='/app/qa/bug/add' target="_blank" id="bug-create" class="ml-3" v-if="Rules.bug_create">
-                <button type="btn" class="btn btn-create">+ 创建</button>
-              </nuxt-link>
-              <el-dropdown trigger="click">
-                <span id="bug-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="iconfont icon-more-z size-1-5 mx-2" title="更多操作"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item id="bug-style-switch" class="px-2">
-                    <span class="searchIcon" title="切换样式" @click="switchStyle()">
-                      <i class="iconfont icon-table-list icon-8a8a8a size-1-2 mr-2"></i>切换样式
-                    </span>
-                  </el-dropdown-item>
-                  <el-dropdown-item id="bug-export" class="px-2">
-                    <span title="导入导出" @click="showModal = 'export'">
-                      <i class="iconfont icon-import-export icon-8a8a8a size-1-2 mr-2"></i>导入导出
-                    </span>
-                  </el-dropdown-item>
-                  <el-dropdown-item id="bug-today-count" class="px-2">
-                    <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
-                      <i class="iconfont icon-web-icon- icon-8a8a8a size-1-5"></i> 今日数据
-                    </span>
-                  </el-dropdown-item>
-                  <el-dropdown-item class="px-2">
-                    <span  class="searchIcon mr-3" title="过滤字段" @click="showModal = 'table-filter-field'">
-                      <i class="iconfont icon-filter icon-8a8a8a size-1-5"></i> 字段过滤
-                    </span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-          </div>
-
-          <!-- 高级搜索 -->
-          <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }" style="border:1px solid #eee;border-radius:5px; padding: 20px 0;">
-            <div id="bug-search-sort" class="col-12 sa-grid-item">
-              <span class="sa-desc">顺序：</span>
-              <div class="d-inline sc-context">
-                <span>
-                  <input type="radio" name="sort" :value="'-'" v-model="advanced_search.sort">
-                  <label>倒序</label>
-                </span>
-                <span>
-                  <input type="radio" name="sort" :value="'+'" v-model="advanced_search.sort">
-                  <label>正序</label>
-                </span>
-              </div>
-            </div>
-            <div id="bug-search-sort-field" class="col-12 sa-grid-item">
-              <span class="sa-desc">排序字段：</span>
-              <div class="d-inline sc-context">
-                <div class="d-inline" v-for="(item,index) in order_list" :key="index">
+            <div id="bug-nav-manage" class="row">
+              <div id="bug-query-1" class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 my-2">
+                <!-- 项目下拉列表 -->
+                <ProductInfo :ptype="'bug_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
+                </ProductInfo>
+                <!-- 缺陷状态下拉列表 -->
+                <el-dropdown id="bug-query-status" class="mr-1 my-1" :class="{ 'd-none': isShowAdSearch === 'yes' }">
                   <span>
-                    <input type="radio" :value="item.order_value"
-                      v-model="sort_field">
-                    <label>{{item.order_name}}</label>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div id="bug-search-status" class="col-12 sa-grid-item">
-              <span class="sa-desc">状态：</span>
-              <div class="d-inline sc-context">
-                <div class="d-inline" v-for="(item,index) in status_list" :key="index">
-                  <span v-if="!['all','notClosed'].includes(item.status_value)">
-                    <input type="checkbox" :value="item.status_value"
-                      v-model="advanced_search.status_list">
-                    <label>{{item.status_name}}</label>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div id="bug-search-severity" class="col-12 sa-grid-item">
-              <span class="sa-desc">严重程度：</span>
-              <div class="d-inline sc-context">
-                <span v-for="(item,index) in severity_list" :key="index">
-                  <input type="checkbox" :value="item.severity_value"
-                    v-model="advanced_search.severity_list">
-                  <label>{{item.severity_name}}</label>
-                </span>
-              </div>
-            </div>
-            <div id="bug-search-priority" class="col-12 sa-grid-item">
-              <span class="sa-desc">优先级：</span>
-              <div class="d-inline sc-context">
-                <div class="d-inline" v-for="(item,index) in priority_list" :key="index">
-                  <span v-if="!['all'].includes(item.priority_value)">
-                    <input type="checkbox" :value="item.priority_name"
-                      v-model="advanced_search.priority_list">
-                    <label>{{item.priority_name}}</label>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="w-100"></div>
-            <div id="bug-search-creator" class="col-12 sa-grid-item">
-              <span class="sa-desc">创建人员：</span>
-              <el-input v-model="advanced_search.creator" placeholder="输入名字，多个以空格分割..."></el-input>
-            </div>
-            <div id="bug-search-creator" class="col-12 sa-grid-item">
-              <span class="sa-desc">指派给谁：</span>
-              <el-input v-model="advanced_search.assignedTo_user" placeholder="输入名字，多个以空格分割..."></el-input>
-            </div>
-            <div class="w-100"></div>
-            <div id="bug-search-creator" class="col-12 sa-grid-item">
-              <span class="sa-desc">谁解决的：</span>
-              <el-input v-model="advanced_search.fixed_user" placeholder="输入名字，多个以空格分割..."></el-input>
-            </div>
-            <div id="bug-search-creator" class="col-12 sa-grid-item">
-              <span class="sa-desc">谁关闭的：</span>
-              <el-input v-model="advanced_search.closed_user" placeholder="输入名字，多个以空格分割..."></el-input>
-            </div>
-            <div class="w-100"></div>
-
-            <div id="bug-search-create-time" class="col-12 sa-grid-item">
-              <span class="sa-desc">创建时间：</span>
-              <el-date-picker
-                v-model="advanced_search.create_time"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </div>
-            <div id="bug-search-create-time" class="col-12 sa-grid-item">
-              <span class="sa-desc">解决时间：</span>
-              <el-date-picker
-                v-model="advanced_search.fixed_time"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </div>
-            <div id="bug-search-assignedTo-time" class="col-12 sa-grid-item">
-              <span class="sa-desc">指派时间：</span>
-              <el-date-picker
-                v-model="advanced_search.assignedTo_time"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </div>
-            <div id="bug-search-closed-time" class="col sa-grid-item">
-              <span class="sa-desc">关闭时间：</span>
-              <el-date-picker
-                v-model="advanced_search.closed_time"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </div>
-            <div class="col-12 text-center mt-3">
-              <button type="button" class="btn-ad-search" @click="isShowAdSearch = 'no'">隐藏</button>
-              <button type="button" class="btn-primary btn-ad-search" @click="getAdvancedSearch()">高级搜索</button>
-              <button type="button" class="btn-ad-search" @click="resetAdvancedSearch()">重置</button>
-            </div>
-          </div>
-
-          <div id="bug-data-list" class="row mt-3 mb-5 table_data">
-
-            <!-- 样式：表格 -->
-            <div id="bug-table-style" class="col px-0" v-if="DataShowStyle == 'table'">
-              <el-table :data='tableData'
-                :default-sort="{prop: 'date', order: 'descending'}"
-                @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
-                <el-table-column label="ID" prop="id" width="50" show-overflow-tooltip sortable>
-                </el-table-column>
-                <el-table-column label="状态" width="85" show-overflow-tooltip sortable>
-                  <template slot-scope="scope">
-                    <span class="circle-content"
-                      :class="{ 'text-secondary': scope.row.status === 'Closed',
-                      'text-success': scope.row.status === 'Fixed',
-                      'text-urgency': ['New','Open','Reopen'].includes(scope.row.status),
-                      'text-warning': scope.row.status === 'Hang-up'}">
-                      {{ scope.row.status_name }}
+                    <span class="el-dropdown-desc">状态:</span>
+                    <span class="el-dropdown-link bg-edown">
+                      {{ selected_status | filterBugStatusName }}
+                      <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="标题" show-overflow-tooltip>
-                  <template slot-scope="scope">
-                    <nuxt-link style="color:#424242"
-                      :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}">
-                    <el-tag v-if="scope.row.bug_label">{{ scope.row.bug_label }}</el-tag>
-                    {{ scope.row.title }}
-                    </nuxt-link>
-                  </template>
-                </el-table-column>
-                <el-table-column label="优先级" align="center" width="95" sortable v-if="table_field.priority">
-                  <template slot-scope="scope">
-                    <div @click="BugPriorityDialog(scope.row)">
-                      <span class="circle-content font-color-757575"
-                        :class="{
-                          'text-deadly': scope.row.priority === 'P1',
-                          'text-urgency': scope.row.priority === 'P2'
-                        }">{{ scope.row.priority }}
-                      </span>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column label="创建时间" align="center" width="110"
-                  sortable show-overflow-tooltip v-if="table_field.create_time">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.create_time | date(6) }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="创建" prop="creator_user" align="center" width="85"
-                  sortable  show-overflow-tooltip v-if="table_field.creator_user">
-                </el-table-column>
-                <el-table-column label="指派" prop="assignedTo_user" align="center" width="85"
-                  sortable show-overflow-tooltip v-if="table_field.assignedTo_user">
-                </el-table-column>
-                <el-table-column label="最后更新" align="center" width="110">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.last_time | date(6) }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="最后操作" align="center" width="85" show-overflow-tooltip>
-                  <template slot-scope="scope">
-                    <span :class="{'display-none': scope.row.bug_id == HoverBugId}">
-                      {{scope.row.last_operation_user}}
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(item,index) in status_list" :key="index">
+                      <span @click="handleCommand(item)">{{ item.status_name }}</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <!-- 快捷方式查询 -->
+                <el-dropdown id="bug-query-quick" class="mr-1 my-1">
+                  <span>
+                    <span class="el-dropdown-desc">快捷:</span>
+                    <span class="el-dropdown-link bg-edown" :class="{ '2973B7': operate != 'no' }">
+                      {{ operate | QuickQperationName }}
+                      <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="" width="48">
-                  <template slot-scope="scope">
-                    <div class="display-none"
-                      :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId,
-                        'hideText': scope.row.status == 'Closed'}">
-                      <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || BtnRules.bug_edit">
-                        <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
-                          <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
-                        </nuxt-link>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="item in QuickQperationList" :key="item.id">
+                      <span :id="item.quick_value" @click="handleCommand(item)">
+                        {{ item.quick_name }}
                       </span>
-                      <span id="icon-bug-resolve" @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
-                        <i class="iconfont icon-resolve icon-8a8a8a size-1-6" title="解决缺陷"></i>
-                      </span>
-                      <span id="icon-bug-assign" @click="skipAssign(scope.row)">
-                        <i class="iconfont icon-assign icon-8a8a8a size-2" title="指派给他人"></i>
-                      </span>
-                    </div>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-
-            <!-- 数据展示样式：列表 -->
-            <div id="bug-list-style" class="col px-0" v-if="DataShowStyle == 'list'">
-              <ul class="pl-0 ul-none-2">
-                <li v-for="(item,index) in tableData" :Key="index" :id="index">
-                  <p id="data-bugtitle" class="mt-3">
-                    <nuxt-link style="color:#424242"
-                      :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
-                      {{ item.id }}. {{ item.title }}
-                    </nuxt-link>
-                  </p>
-                  <div id="data-buginfo" class="my-2">
-                    <div id="data-detailed-information" class="d-inline data-liststyle-satellite">
-                      <span class="circle-content" @click="BugPriorityDialog(item)"
-                        :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
-                        {{ item.priority }}
-                      </span>
-                      <span :class="{ 'text-secondary': item.status === 'Closed',
-                        'text-success': item.status === 'Fixed',
-                        'text-urgency': ['New','Open','Reopen'].includes(item.status),
-                        'text-warning': item.status === 'Hang-up'}">
-                        # {{ item.status_name }}
-                      </span>
-                      <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
-                      <span>@指派: {{ item.assignedTo_user }}</span>
-                      <span v-if="item.fixed_user">
-                        @解决: {{ item.fixed_user }}&nbsp;|&nbsp;
-                        <p class="d-inline"
-                          :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
-                          {{ item.solution_name }}
-                        </p>
-                      </span>
-                      <span>最后更新: {{ item.last_time | date(6) }}</span>
-                    </div>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+              <div id="bug-query-2" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12 pt-1 px-0 my-2">
+                <div class="input-group align-items-center">
+                  <div id="ordinary-search" class="input-group-prepend">
+                    <span id="icon-search" class="input-group-text" style="height: calc(2.05rem + 2px);">
+                      <i class="iconfont icon-search icon-E0E0E0"></i>
+                    </span>
                   </div>
-                </li>
-              </ul>
+                  <input id="id-title-search" type="text"
+                    class="form-control search-control"
+                    placeholder="搜索ID、标题、标签、或指派人员..."
+                    v-model="wd">
+                </div>
+              </div>
+              <div id="bug-action" class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-12 vertical-center my-2">
+                <div id="advanced-search" @click="unfoldAdvancedSearch()">
+                  <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
+                </div>
+                <nuxt-link to='/app/qa/bug/add' target="_blank" id="bug-create" class="ml-3" v-if="Rules.bug_create">
+                  <button type="btn" class="btn btn-create">+ 创建</button>
+                </nuxt-link>
+                <el-dropdown trigger="click">
+                  <span id="bug-set" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="iconfont icon-more-z size-1-5 mx-2" title="更多操作"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item id="bug-style-switch" class="px-2">
+                      <span class="searchIcon" title="切换样式" @click="switchStyle()">
+                        <i class="iconfont icon-table-list icon-8a8a8a size-1-2 mr-2"></i>切换样式
+                      </span>
+                    </el-dropdown-item>
+                    <el-dropdown-item id="bug-export" class="px-2">
+                      <span title="导入导出" @click="showModal = 'export'">
+                        <i class="iconfont icon-import-export icon-8a8a8a size-1-2 mr-2"></i>导入导出
+                      </span>
+                    </el-dropdown-item>
+                    <el-dropdown-item id="bug-today-count" class="px-2">
+                      <span  class="searchIcon mr-3" title="今日概况" @click="myToday()">
+                        <i class="iconfont icon-web-icon- icon-8a8a8a size-1-5"></i> 今日数据
+                      </span>
+                    </el-dropdown-item>
+                    <el-dropdown-item class="px-2">
+                      <span  class="searchIcon mr-3" title="过滤字段" @click="showModal = 'table-filter-field'">
+                        <i class="iconfont icon-filter icon-8a8a8a size-1-5"></i> 字段过滤
+                      </span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </div>
-					</div>
 
-          <!-- 数据翻页 -->
-          <Pagination :total="total" @PsPn="getPsPn"></Pagination>
+            <!-- 高级搜索 -->
+            <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }" style="border:1px solid #eee;border-radius:5px; padding: 20px 0;">
+              <div id="bug-search-sort" class="col-12 sa-grid-item">
+                <span class="sa-desc">顺序：</span>
+                <div class="d-inline sc-context">
+                  <span>
+                    <input type="radio" name="sort" :value="'-'" v-model="advanced_search.sort">
+                    <label>倒序</label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sort" :value="'+'" v-model="advanced_search.sort">
+                    <label>正序</label>
+                  </span>
+                </div>
+              </div>
+              <div id="bug-search-sort-field" class="col-12 sa-grid-item">
+                <span class="sa-desc">排序字段：</span>
+                <div class="d-inline sc-context">
+                  <div class="d-inline" v-for="(item,index) in order_list" :key="index">
+                    <span>
+                      <input type="radio" :value="item.order_value"
+                        v-model="sort_field">
+                      <label>{{item.order_name}}</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div id="bug-search-status" class="col-12 sa-grid-item">
+                <span class="sa-desc">状态：</span>
+                <div class="d-inline sc-context">
+                  <div class="d-inline" v-for="(item,index) in status_list" :key="index">
+                    <span v-if="!['all','notClosed'].includes(item.status_value)">
+                      <input type="checkbox" :value="item.status_value"
+                        v-model="advanced_search.status_list">
+                      <label>{{item.status_name}}</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div id="bug-search-severity" class="col-12 sa-grid-item">
+                <span class="sa-desc">严重程度：</span>
+                <div class="d-inline sc-context">
+                  <span v-for="(item,index) in severity_list" :key="index">
+                    <input type="checkbox" :value="item.severity_value"
+                      v-model="advanced_search.severity_list">
+                    <label>{{item.severity_name}}</label>
+                  </span>
+                </div>
+              </div>
+              <div id="bug-search-priority" class="col-12 sa-grid-item">
+                <span class="sa-desc">优先级：</span>
+                <div class="d-inline sc-context">
+                  <div class="d-inline" v-for="(item,index) in priority_list" :key="index">
+                    <span v-if="!['all'].includes(item.priority_value)">
+                      <input type="checkbox" :value="item.priority_name"
+                        v-model="advanced_search.priority_list">
+                      <label>{{item.priority_name}}</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="w-100"></div>
+              <div id="bug-search-creator" class="col-12 sa-grid-item">
+                <span class="sa-desc">创建人员：</span>
+                <el-input v-model="advanced_search.creator" placeholder="输入名字，多个以空格分割..."></el-input>
+              </div>
+              <div id="bug-search-creator" class="col-12 sa-grid-item">
+                <span class="sa-desc">指派给谁：</span>
+                <el-input v-model="advanced_search.assignedTo_user" placeholder="输入名字，多个以空格分割..."></el-input>
+              </div>
+              <div class="w-100"></div>
+              <div id="bug-search-creator" class="col-12 sa-grid-item">
+                <span class="sa-desc">谁解决的：</span>
+                <el-input v-model="advanced_search.fixed_user" placeholder="输入名字，多个以空格分割..."></el-input>
+              </div>
+              <div id="bug-search-creator" class="col-12 sa-grid-item">
+                <span class="sa-desc">谁关闭的：</span>
+                <el-input v-model="advanced_search.closed_user" placeholder="输入名字，多个以空格分割..."></el-input>
+              </div>
+              <div class="w-100"></div>
 
-          <!-- 加载动画 -->
-          <div id="page-loading" class="row">
-            <div class="col text-center" v-if='!Msg && total === null'>
-              <PageLoading></PageLoading>
+              <div id="bug-search-create-time" class="col-12 sa-grid-item">
+                <span class="sa-desc">创建时间：</span>
+                <el-date-picker
+                  v-model="advanced_search.create_time"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  value-format="yyyy-MM-dd">
+                </el-date-picker>
+              </div>
+              <div id="bug-search-create-time" class="col-12 sa-grid-item">
+                <span class="sa-desc">解决时间：</span>
+                <el-date-picker
+                  v-model="advanced_search.fixed_time"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  value-format="yyyy-MM-dd">
+                </el-date-picker>
+              </div>
+              <div id="bug-search-assignedTo-time" class="col-12 sa-grid-item">
+                <span class="sa-desc">指派时间：</span>
+                <el-date-picker
+                  v-model="advanced_search.assignedTo_time"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  value-format="yyyy-MM-dd">
+                </el-date-picker>
+              </div>
+              <div id="bug-search-closed-time" class="col sa-grid-item">
+                <span class="sa-desc">关闭时间：</span>
+                <el-date-picker
+                  v-model="advanced_search.closed_time"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  value-format="yyyy-MM-dd">
+                </el-date-picker>
+              </div>
+              <div class="col-12 text-center mt-3">
+                <button type="button" class="btn-ad-search" @click="isShowAdSearch = 'no'">隐藏</button>
+                <button type="button" class="btn-primary btn-ad-search" @click="getAdvancedSearch()">高级搜索</button>
+                <button type="button" class="btn-ad-search" @click="resetAdvancedSearch()">重置</button>
+              </div>
             </div>
-          </div>
 
-          <!-- no data -->
-          <div id="page-error" class="row">
-            <div id="page-no-data" class="col text-center" v-if="total == 0 || Msg">
-              <img :src="img_src" class="mt-5">
-              <p class="text-gray no-hint">{{ Msg }}</p>
+            <!-- 表格展示 -->
+            <div id="bug-table-style" class="row mt-3 mb-5 table_data" v-if="DataShowStyle == 'table'">
+              <div class="col px-0">
+                <el-table :data='tableData'
+                  :default-sort="{prop: 'date', order: 'descending'}"
+                  @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
+                  <el-table-column label="ID" prop="id" width="50" show-overflow-tooltip sortable>
+                  </el-table-column>
+                  <el-table-column label="状态" width="85" show-overflow-tooltip sortable>
+                    <template slot-scope="scope">
+                      <span class="circle-content"
+                        :class="{ 'text-secondary': scope.row.status === 'Closed',
+                        'text-success': scope.row.status === 'Fixed',
+                        'text-urgency': ['New','Open','Reopen'].includes(scope.row.status),
+                        'text-warning': scope.row.status === 'Hang-up'}">
+                        {{ scope.row.status_name }}
+                      </span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="标题" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <nuxt-link style="color:#424242"
+                        :to="{path:'/app/qa/bug/deatils',query:{'bug_id':scope.row.bug_id}}">
+                      <el-tag v-if="scope.row.bug_label">{{ scope.row.bug_label }}</el-tag>
+                      {{ scope.row.title }}
+                      </nuxt-link>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="优先级" align="center" width="95" sortable v-if="table_field.priority">
+                    <template slot-scope="scope">
+                      <div @click="BugPriorityDialog(scope.row)">
+                        <span class="circle-content font-color-757575"
+                          :class="{
+                            'text-deadly': scope.row.priority === 'P1',
+                            'text-urgency': scope.row.priority === 'P2'
+                          }">{{ scope.row.priority }}
+                        </span>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="创建时间" align="center" width="110"
+                    sortable show-overflow-tooltip v-if="table_field.create_time">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.create_time | date(6) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="创建" prop="creator_user" align="center" width="85"
+                    sortable  show-overflow-tooltip v-if="table_field.creator_user">
+                  </el-table-column>
+                  <el-table-column label="指派" prop="assignedTo_user" align="center" width="85"
+                    sortable show-overflow-tooltip v-if="table_field.assignedTo_user">
+                  </el-table-column>
+                  <el-table-column label="最后更新" align="center" width="110">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.last_time | date(6) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="最后操作" align="center" width="85" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <span :class="{'display-none': scope.row.bug_id == HoverBugId}">
+                        {{scope.row.last_operation_user}}
+                      </span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="" width="48">
+                    <template slot-scope="scope">
+                      <div class="display-none"
+                        :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId,
+                          'hideText': scope.row.status == 'Closed'}">
+                        <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || BtnRules.bug_edit">
+                          <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
+                            <i class="iconfont icon-edit icon-8a8a8a size-1-5 mx-1" title="编辑缺陷"></i>
+                          </nuxt-link>
+                        </span>
+                        <span id="icon-bug-resolve" @click="skipResolve(scope.row)" v-if="scope.row.status != 'Fixed'">
+                          <i class="iconfont icon-resolve icon-8a8a8a size-1-6" title="解决缺陷"></i>
+                        </span>
+                        <span id="icon-bug-assign" @click="skipAssign(scope.row)">
+                          <i class="iconfont icon-assign icon-8a8a8a size-2" title="指派给他人"></i>
+                        </span>
+                      </div>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+
+            <!-- 列表展示 -->
+            <div id="bug-list-style" class="row mt-3 mb-5" v-if="DataShowStyle == 'list'">
+              <div class="col px-0">
+                <ul class="pl-0 ul-none-2">
+                  <li v-for="(item,index) in tableData" :Key="index" :id="index">
+                    <p id="data-bugtitle" class="mt-3">
+                      <nuxt-link style="color:#424242"
+                        :to="{path:'/app/qa/bug/deatils',query:{'bug_id':item.bug_id}}">
+                        {{ item.id }}. {{ item.title }}
+                      </nuxt-link>
+                    </p>
+                    <div id="data-buginfo" class="my-2">
+                      <div id="data-detailed-information" class="d-inline data-liststyle-satellite">
+                        <span class="circle-content" @click="BugPriorityDialog(item)"
+                          :class="{ 'text-deadly': item.priority == 'P1', 'text-urgency': item.priority == 'P2' }">
+                          {{ item.priority }}
+                        </span>
+                        <span :class="{ 'text-secondary': item.status === 'Closed',
+                          'text-success': item.status === 'Fixed',
+                          'text-urgency': ['New','Open','Reopen'].includes(item.status),
+                          'text-warning': item.status === 'Hang-up'}">
+                          # {{ item.status_name }}
+                        </span>
+                        <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
+                        <span>@指派: {{ item.assignedTo_user }}</span>
+                        <span v-if="item.fixed_user">
+                          @解决: {{ item.fixed_user }}&nbsp;|&nbsp;
+                          <p class="d-inline"
+                            :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
+                            {{ item.solution_name }}
+                          </p>
+                        </span>
+                        <span>最后更新: {{ item.last_time | date(6) }}</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 数据翻页 -->
+            <Pagination :total="total" @PsPn="getPsPn"></Pagination>
+
+            <!-- no data -->
+            <div id="page-error" class="row">
+              <div id="page-no-data" class="col text-center" v-if="total == 0 || Msg">
+                <img :src="img_src" class="mt-5">
+                <p class="text-gray no-hint">{{ Msg }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
 
     <!-- 缺陷指派 -->
     <BugAssign id="modal-assign"
@@ -691,19 +687,14 @@ export default {
     	return userInfo.user_id ? userInfo.user_id : null
     },
 
-    // show user config
+    // 数据展示样式
     DataShowStyle: function() {
-      return 'table'
-      // let config = this.$store.state.UserConfig
-      // if (config) {
-      //   if (config["BUG_DATA_SHOW_STYPE"]) {
-      //     return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
-      //   } else {
-      //     return this.ScreenWidth > 768 ? 'table' : 'list'
-      //   }
-      // } else {
-      //   return this.ScreenWidth > 768 ? 'table' : 'list'
-      // }
+      let config = this.$store.state.UserConfig
+      if (config["BUG_DATA_SHOW_STYPE"]) {
+        return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+      } else {
+        return this.ScreenWidth > 768 ? 'table' : 'list'
+      }
     },
 
 
