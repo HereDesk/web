@@ -42,11 +42,13 @@
           </span>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(item,index) in product_list" :key="index">
-            <span @click="product_id = item.product_id">
-              {{ item.product_code }}
-            </span>
-          </el-dropdown-item>
+          <div>
+            <el-dropdown-item v-for="(item,index) in product_list" :key="index">
+              <span @click="product_id = item.product_id">
+                {{ item.product_code }}
+              </span>
+            </el-dropdown-item>
+          </div>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -58,7 +60,7 @@
         v-for="(item,index) in product_list"
         :key="index"
         :label="item.product_code"
-        :value="item.product_value">
+        :value="item.product_id">
       </el-option>
     </el-select>
 
@@ -288,3 +290,17 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  /* 解决el-dropdown很多数据时，超出屏幕无法显示完整的问题 */
+  .el-dropdown-menu {
+    position: relative;
+    max-height: 274px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .el-dropdown-menu::-webkit-scrollbar {
+    display: none;
+  }
+</style>
