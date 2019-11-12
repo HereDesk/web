@@ -1,23 +1,27 @@
 <template>
-  <div>
-    <transition name="loading">
-      <div class="main-loading-page loading">
-        <!-- <h1>Loading</h1> -->
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+  <div class="container-fluid">
+    <div class="row">
+     <div class="col text-center">
+         <transition name="loading">
+          <div class="main-loading-page loading">
+            <!-- <h1>Loading</h1> -->
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </transition>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
 <style>
 /*
-  Loading 
+  Loading
 */
 
 .main-loading-page {
