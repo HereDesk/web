@@ -3,13 +3,13 @@
     <div class="row">
 
       <!-- 项目模块：左侧 -->
-      <PageModules
+      <ProductModules
         :product_id="visited_product_id"
         :Rules="Rules"
         :query_type="'bug'"
         @getShowModules="getShowModules"
         @getM1M2="getM1M2">
-      </PageModules>
+      </ProductModules>
 
       <!-- Action: Bug Query and Bug Search -->
       <div id="data-bug" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
@@ -505,7 +505,7 @@
 </template>
 
 <script>
-import PageModules from "~/components/PageModules"
+import ProductModules from "~/components/ProductModules"
 import BugAssign from "~/components/BugAssign"
 import BugResolve from "~/components/BugResolve"
 import BugChange from "~/components/BugChange"
@@ -527,7 +527,7 @@ export default {
     BugAssign,
     BugResolve,
     BugChange,
-    PageModules
+    ProductModules
   },
 
   data() {

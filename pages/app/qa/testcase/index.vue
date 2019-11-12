@@ -3,13 +3,13 @@
     <div class="row pt-5">
 
       <!-- 模块 -->
-      <PageModules
+      <ProductModules
         :product_id="product_id"
         :Rules="Rules"
         :query_type="'bug'"
         @getShowModules="getShowModules"
         @getM1M2="getM1M2">
-      </PageModules>
+      </ProductModules>
 
       <!-- 数据列表 -->
       <div id="data-case" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
@@ -229,7 +229,7 @@
 </template>
 
 <script>
-import PageModules from "~/components/PageModules"
+import ProductModules from "~/components/ProductModules"
 
 import util from "~/assets/js/util.js"
 import rules from "~/assets/js/rules.js"
@@ -243,7 +243,7 @@ export default {
 
   layout: "head",
   components: {
-    PageModules
+    ProductModules
   },
 
   data() {
