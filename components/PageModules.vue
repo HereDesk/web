@@ -1,7 +1,7 @@
 <template>
   <div id="product-modules" class="mt-5 isDisplay" :key="$route.fullPath" :class="[isShowModules ? 'pg-modules col-md-2' : 'col-md-1']">
-    <div id="product-modules-switch" class="dataModule" @click="switchModule()">
-        <i class="iconfont Bg-EEEEEE py-2"
+    <div id="icon-switch" class="dataModule" @click="switchModule()">
+        <i class="iconfont py-2 ml-3"
           :class="[ isShowModules ? 'icon-arrow-right' : 'icon-arrow-left']"></i>
       </div>
     <div id="modules-list" v-if="isShowModules">
