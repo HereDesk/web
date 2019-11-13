@@ -1,193 +1,191 @@
 <template>
   <div id="page-case" class="container-fluid">
-    <div class="row pt-5">
 
-      <!-- 模块 -->
-      <ProductModules
-        :product_id="product_id"
-        :Rules="Rules"
-        :query_type="'bug'"
-        @getShowModules="getShowModules"
-        @getM1M2="getM1M2">
-      </ProductModules>
+    <template v-if='!Msg && total === null'>
+      <PageLoading></PageLoading>
+    </template>
 
-      <!-- 数据列表 -->
-      <div id="data-case" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
-        <div class="container-fluid">
+    <template v-else>
+      <div class="row pt-5">
 
-          <!-- 测试用例查询相关 -->
-          <div id="case-head" class="row align-items-center">
-            <div id="case-query" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+        <ProductModules
+          :product_id="product_id"
+          :Rules="Rules"
+          :query_type="'bug'"
+          @getShowModules="getShowModules"
+          @getM1M2="getM1M2">
+        </ProductModules>
 
-              <ProductInfo :ptype="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
-              </ProductInfo>
+        <!-- 数据列表 -->
+        <div id="data-case" :class="[isShowModules ? 'col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
+          <div class="container-fluid">
 
-              <el-dropdown id="case-query-status" class="pt-2 pl-3" trigger="click">
-                <span>
-                  <span class="el-dropdown-desc">状态：</span>
-                  <span class="el-dropdown-link bg-edown">
-                    {{ selected_status | FilterCaseStatus }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
+            <!-- 测试用例查询相关 -->
+            <div id="case-head" class="row align-items-center">
+              <div id="case-query" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                <ProductInfo :ptype="'case_index'" :showStyle="'dropdown'" @ProductInfo="GetProductInfo">
+                </ProductInfo>
+
+                <el-dropdown id="case-query-status" class="pt-2 pl-3" trigger="click">
+                  <span>
+                    <span class="el-dropdown-desc">状态：</span>
+                    <span class="el-dropdown-link bg-edown">
+                      {{ selected_status | FilterCaseStatus }}
+                      <i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
                   </span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(item,index) in status_list" :key="index" :value="item.status_value">
-                    <span @click="selected_status = item.status_value">{{ item.status_name }}</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-            <div id="case-search" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12">
-              <div class="input-group align-items-center">
-                <div id="ordinary-search" class="input-group-prepend">
-                  <span class="input-group-text" style="height: calc(2.05rem + 2px);">
-                    <i class="iconfont icon-search icon-E0E0E0"></i>
-                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(item,index) in status_list" :key="index" :value="item.status_value">
+                      <span @click="selected_status = item.status_value">{{ item.status_name }}</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+              <div id="case-search" class="col-xl-3 col-lg-8 col-md-8 col-sm-8 col-12">
+                <div class="input-group align-items-center">
+                  <div id="ordinary-search" class="input-group-prepend">
+                    <span class="input-group-text" style="height: calc(2.05rem + 2px);">
+                      <i class="iconfont icon-search icon-E0E0E0"></i>
+                    </span>
+                  </div>
+                  <input id="search-input" type="text" class="form-control search-control"
+                    placeholder="搜索ID、或标题..."
+                    v-model="wd">
                 </div>
-                <input id="search-input" type="text" class="form-control search-control"
-                  placeholder="搜索ID、或标题..."
-                  v-model="wd">
+              </div>
+              <div id="case-action" class="col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
+                <span title="导入导出" class="mr-3" @click="showModal = 'export'">
+                  <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
+                </span>
+                <span title="测试用例统计" class="mr-3" @click="myToday()">
+                  <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
+                </span>
+                <span title="切换样式" class="mr-3" @click="switchStyle()">
+                  <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
+                </span>
+                <span v-if="Rules.case_create" style="padding-top: -5px;">
+                  <nuxt-link :to="{ path: '/app/qa/testcase/add',query: { 'product_id': product_id }}" >
+                    <button type="btn" class="btn-create"> + 创建 </button>
+                  </nuxt-link>
+                </span>
               </div>
             </div>
-            <div id="case-action" class="col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12">
-              <span title="导入导出" class="mr-3" @click="showModal = 'export'">
-                <i class="iconfont icon-import-export icon-8a8a8a size-1-8"></i>
-              </span>
-              <span title="测试用例统计" class="mr-3" @click="myToday()">
-                <i class="iconfont icon-web-icon- icon-8a8a8a size-2"></i>
-              </span>
-              <span title="切换样式" class="mr-3" @click="switchStyle()">
-                <i class="iconfont icon-table-list icon-8a8a8a size-1-5"></i>
-              </span>
-              <span v-if="Rules.case_create" style="padding-top: -5px;">
-                <nuxt-link :to="{ path: '/app/qa/testcase/add',query: { 'product_id': product_id }}" >
-                  <button type="btn" class="btn-create"> + 创建 </button>
-                </nuxt-link>
-              </span>
+
+            <!-- 展示样式：表格 -->
+            <div id="case-table-style" class="row mt-3" v-if="DataShowStyle == 'table'">
+              <div class="col">
+                <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}"
+                  @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
+                  <el-table-column label='ID' prop='id' width='60'></el-table-column>
+                  <el-table-column label='优先级' sortable width='100'>
+                    <template slot-scope="scope">
+                      <span class="circle-content"
+                        :class="{ 'text-deadly': scope.row.priority == 'P1','text-urgency': scope.row.priority == 'P2' }">
+                        {{ scope.row.priority }}
+                      </span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='用例标题' show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <nuxt-link style="color:#424242" :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
+                        {{ scope.row.title }}
+                      </nuxt-link>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='评审' width='70'>
+                    <template slot-scope="scope">
+                      {{ scope.row.is_review === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='状态' width='65'>
+                    <template slot-scope="scope">
+                      {{ scope.row.status === 1 ? '无效' : '' }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='变更' width='60'>
+                    <template slot-scope="scope">
+                      {{ scope.row.is_change === 1 ? '是' : '-' }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='创建' prop="creator" sortable width='100'></el-table-column>
+                  <el-table-column label='最后更新时间' sortable width='165'>
+                    <template slot-scope="scope">
+                      <span :class="{ 'hideText' : scope.row.case_id === HoverTestcase_id }">
+                        {{ scope.row.last_time | date(6) }}
+                      </span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='' width="30">
+                    <template slot-scope="scope">
+                      <div class="display-none pt-2"
+                        :class="{ 'showDataOpreate' : scope.row.case_id === HoverTestcase_id}">
+                        <span v-if="scope.row.status === 0 && CaseBtnRules.fall" @click="handleFall(scope.row)">
+                          <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
+                        </span>
+                        <span class="ml-3" v-if="scope.row.status === 0 && CaseBtnRules.edit" @click="handleEdit(scope.row)">
+                          <nuxt-link :to="{path:'/app/qa/testcase/edit',query:{'case_id':scope.row.case_id}}">
+                            <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
+                          </nuxt-link>
+                        </span>
+                      </div>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
             </div>
-          </div>
-
-          <!-- 用例数据列表 -->
-          <div id="case-data-list" class="row mt-3">
-
-            <!-- 表格样式 -->
-            <div id="case-table-style" class="col" v-if="DataShowStyle == 'table'">
-              <el-table :data='tableData' :default-sort="{prop: 'date', order: 'descending'}"
-                @cell-mouse-enter="tableHover" @cell-mouse-leave="tableLeave">
-                <el-table-column label='ID' prop='id' width='60'></el-table-column>
-                <el-table-column label='优先级' sortable width='100'>
-                  <template slot-scope="scope">
-                    <span class="circle-content"
-                      :class="{ 'text-deadly': scope.row.priority == 'P1','text-urgency': scope.row.priority == 'P2' }">
-                      {{ scope.row.priority }}
-                    </span>
-                  </template>
-                </el-table-column>
-                <el-table-column label='用例标题' show-overflow-tooltip>
-                  <template slot-scope="scope">
-                    <nuxt-link style="color:#424242" :to="{path:'/app/qa/testcase/deatils',query:{'case_id':scope.row.case_id}}">
-                      {{ scope.row.title }}
-                    </nuxt-link>
-                  </template>
-                </el-table-column>
-                <el-table-column label='评审' width='70'>
-                  <template slot-scope="scope">
-                    {{ scope.row.is_review === 0 ? '-' : scope.row.isReview === 1 ? '通过' : '未通过' }}
-                  </template>
-                </el-table-column>
-                <el-table-column label='状态' width='65'>
-                  <template slot-scope="scope">
-                    {{ scope.row.status === 1 ? '无效' : '' }}
-                  </template>
-                </el-table-column>
-                <el-table-column label='变更' width='60'>
-                  <template slot-scope="scope">
-                    {{ scope.row.is_change === 1 ? '是' : '-' }}
-                  </template>
-                </el-table-column>
-                <el-table-column label='创建' prop="creator" sortable width='100'></el-table-column>
-                <el-table-column label='最后更新时间' sortable width='165'>
-                  <template slot-scope="scope">
-                    <span :class="{ 'hideText' : scope.row.case_id === HoverTestcase_id }">
-                      {{ scope.row.last_time | date(6) }}
-                    </span>
-                  </template>
-                </el-table-column>
-                <el-table-column label='' width="30">
-                  <template slot-scope="scope">
-                    <div class="display-none pt-2"
-                      :class="{ 'showDataOpreate' : scope.row.case_id === HoverTestcase_id}">
-                      <span v-if="scope.row.status === 0 && CaseBtnRules.fall" @click="handleFall(scope.row)">
-                        <i class="iconfont icon-delete icon-8a8a8a size-1-5"></i>
-                      </span>
-                      <span class="ml-3" v-if="scope.row.status === 0 && CaseBtnRules.edit" @click="handleEdit(scope.row)">
-                        <nuxt-link :to="{path:'/app/qa/testcase/edit',query:{'case_id':scope.row.case_id}}">
-                          <i class="iconfont icon-edit icon-8a8a8a size-1-5"></i>
-                        </nuxt-link>
-                      </span>
+            <!-- 展示样式：列表 -->
+            <div id="case-list-style" class="row mt-3" v-if="DataShowStyle == 'list'">
+              <div class="col">
+                <ul class="pl-0 ul-none-2">
+                  <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
+                    <p>
+                      <nuxt-link style="color:#424242"
+                        :to="{path:'/app/qa/testcase/deatils',query:{'case_id':item.case_id}}">
+                        {{ item.id }}. {{ item.title }}
+                      </nuxt-link>
+                    </p>
+                    <div id="data-case-info" class="my-2">
+                      <div id="data-detailed-information" class="data-liststyle-satellite">
+                        <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1',
+                        'text-urgency': item.priority == 'P2' }">
+                          &nbsp;{{ item.priority }}
+                        </span>
+                        <span>
+                          #&nbsp;{{ item.isReview === 0 ? '未评审' : item.isReview === 1 ? '评审通过' : '未通过评审' }}
+                        </span>
+                        <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
+                        <span>最后更新: {{ item.last_time | date(5) }}</span>
+                      </div>
+                      <div id="data-case-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
+                        <span class="mr-2" v-if="item.status === 0 && CaseBtnRules.fall" @click="handleFall(item)">
+                          <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
+                        </span>
+                        <span v-if="item.status === 0 && CaseBtnRules.edit" @click="handleEdit(item)">
+                          <i class="iconfont icon-edit icon-8a8a8a size-1-3" title="编辑"></i>
+                        </span>
+                      </div>
                     </div>
-                  </template>
-                </el-table-column>
-              </el-table>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            <!-- 列表样式 -->
-            <div id="case-list-style" class="col" v-if="DataShowStyle == 'list'">
-              <ul class="pl-0 ul-none-2">
-                <li v-for="(item,index) in tableData" :Key="index" :id="item.case_id">
-                  <p>
-                    <nuxt-link style="color:#424242"
-                      :to="{path:'/app/qa/testcase/deatils',query:{'case_id':item.case_id}}">
-                      {{ item.id }}. {{ item.title }}
-                    </nuxt-link>
-                  </p>
-                  <div id="data-case-info" class="my-2">
-                    <div id="data-detailed-information" class="data-liststyle-satellite">
-                      <span class="circle-content" :class="{ 'text-deadly': item.priority == 'P1',
-                      'text-urgency': item.priority == 'P2' }">
-                        &nbsp;{{ item.priority }}
-                      </span>
-                      <span>
-                        #&nbsp;{{ item.isReview === 0 ? '未评审' : item.isReview === 1 ? '评审通过' : '未通过评审' }}
-                      </span>
-                      <span>@创建: {{ item.creator }}-{{ item.create_time | date(5) }}</span>
-                      <span>最后更新: {{ item.last_time | date(5) }}</span>
-                    </div>
-                    <div id="data-case-action" class="float-right display-inline action" style="margin-top:-1.7rem;">
-                      <span class="mr-2" v-if="item.status === 0 && CaseBtnRules.fall" @click="handleFall(item)">
-                        <i class="iconfont icon-delete icon-8a8a8a size-1-3" title="无效"></i>
-                      </span>
-                      <span v-if="item.status === 0 && CaseBtnRules.edit" @click="handleEdit(item)">
-                        <i class="iconfont icon-edit icon-8a8a8a size-1-3" title="编辑"></i>
-                      </span>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+            <!-- 翻页 -->
+            <Pagination :total="total" @PsPn="getPsPn"></Pagination>
+
+            <!-- 无数据样式 -->
+            <div id="page-error" class="row" v-if="total === 0 || Msg">
+              <div id="page-no-data" class="col text-center">
+                <img :src="img_src" class="mt-5 pt-5">
+                <p class="text-gray no-hint">{{ Msg }}</p>
+              </div>
             </div>
+
           </div>
-
-          <!-- 翻页 -->
-          <Pagination :total="total" @PsPn="getPsPn"></Pagination>
-
-          <!-- loading -->
-          <div id="page-loading" class="row">
-            <div class="col text-center" v-if='!Msg && total === null'>
-              <PageLoading></PageLoading>
-            </div>
-          </div>
-
-          <!-- no data -->
-          <div id="page-error" class="row" v-if="total === 0 || Msg">
-            <div id="page-no-data" class="col text-center">
-              <img :src="img_src" class="mt-5 pt-5">
-              <p class="text-gray no-hint">{{ Msg }}</p>
-            </div>
-          </div>
-
         </div>
       </div>
-    </div>
+    </template>
 
     <!-- 测试用例统计 -->
     <Modal id="modal-my-today" v-if="showModal == 'count-today'"

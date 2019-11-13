@@ -369,7 +369,7 @@
             <!-- 数据翻页 -->
             <Pagination :total="total" @PsPn="getPsPn"></Pagination>
 
-            <!-- no data -->
+            <!-- 无数据 -->
             <div id="page-error" class="row">
               <div id="page-no-data" class="col text-center" v-if="total == 0 || Msg">
                 <img :src="img_src" class="mt-5">
