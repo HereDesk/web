@@ -1,5 +1,5 @@
 <template>
-  <div id="page-user-login" class="container mt-5" v-cloak>
+  <div id="page-user-login" class="container mt-5" v-if="isLogin">
     <div class="row">
       <div class="col">
         <h1>HDesk</h1>
@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import { getUserFromLocalStorage } from "~/assets/js/auth"
+import axios from 'axios'
+import { getUserFromLocalStorage,getUserFromCookie } from "~/assets/js/auth"
 import { Base64 } from 'js-base64'
 
 export default {
@@ -44,13 +45,17 @@ export default {
       LoginData: {
         username: "",
         password: ""
-      }
+      },
+      isLogin: false
     }
   },
+
   mounted() {
     const token = getUserFromLocalStorage()
     if (this.$store.state.isLogin || token) {
       this.$router.replace("/app/dashboard")
+    } else {
+      this.isLogin = true
     }
     const target_url = this.$route.query.target ? this.$route.query.target : false
     if (target_url) {
