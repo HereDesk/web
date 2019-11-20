@@ -1,7 +1,7 @@
 <template>
 	<div id="page-bug" class="py-5 container-fluid">
 
-    <template v-if='!Msg && total === null'>
+    <template v-if='page_loading_status'>
       <PageLoading></PageLoading>
     </template>
 
@@ -529,6 +529,7 @@ export default {
   data() {
     return {
       isShowModules: false,
+      page_loading_status: true,
 
 			showModal: false,
       ScreenWidth: 0,
@@ -748,6 +749,7 @@ export default {
   },
 
   mounted() {
+    this.page_loading_status = false
     this.wd && this.visited_product_id ? this.goSearch() : this.getBugList()
     this.ScreenWidth = process.server ? 0 : document.body.clientWidth
 
@@ -755,7 +757,6 @@ export default {
     this.SetTableFilterField('get')
 
     window.addEventListener("keypress", event => {
-      console.log(event)
       if (event.key === 'f' && event.ctrlKey) {
         document.getElementById("id-title-search").focus()
       }

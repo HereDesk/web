@@ -1,7 +1,7 @@
 <template>
   <div id="page-case" class="container-fluid">
 
-    <template v-if='!Msg && total === null'>
+    <template v-if='page_loading_status'>
       <PageLoading></PageLoading>
     </template>
 
@@ -248,7 +248,7 @@ export default {
     return {
       // 左侧项目模块
       isShowModules: false,
-
+      page_loading_status: false,
       showModal: false,
       ScreenWidth: 0,
       // 产品、版本
@@ -366,6 +366,7 @@ export default {
   },
 
   mounted() {
+    this.page_loading_status = false
     this.wd ? this.goSearch() : this.getCaseList()
     this.ScreenWidth = process.server ? 0 : document.body.clientWidth
   },

@@ -96,7 +96,8 @@ export const actions = {
   // 产品版本信息
   async getProductRelease({ commit }) {
     const { data } = await axios.get('/api/pm/product/my')
-    commit('setProductInfo', data)
+    commit('setProductVersionInfo',data["data"])
+    commit('setProductInfo', data["data"])
   },
 
   // 产品成员列表

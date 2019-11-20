@@ -207,6 +207,8 @@ code {
   background-color: #F5F5F5;
   padding:0.5rem 0.4rem 0.5rem 0.6rem;
   border-radius: 16px !important;
+  min-width: 5rem;
+  text-align: center;
 }
 
 @media (max-width:575.98px) {
