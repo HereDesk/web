@@ -1,5 +1,5 @@
 <template>
-  <div id="page-bug-add">
+  <div id="page-bug-add" v-if="PageShow">
     <BaseNav :title="title"></BaseNav>
     <div id="page-bug-add-input" class='container mt-5'>
       <div class="row">
@@ -210,6 +210,7 @@ export default {
       is_reduction_draft_box: false,
       draft_box_file: [],
       timestamp: '',
+      PageShow: false,
       Bug: {
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
@@ -235,17 +236,17 @@ export default {
     selected_product_id () {
       return this.Bug.product_id
     },
-    
+
     // 项目成员列表
     developer_list () {
       return this.$store.state.ProductMemberList.data
     },
-    
+
     // 缺陷属性
     BugProperty () {
     	return this.$store.state.BugProperty
     },
-    
+
     /**
      * 自动填充某些数据
      */
@@ -322,6 +323,7 @@ export default {
       this.draft_box_file = bug_drafts_box.annex
       this.open_draft_box(bug_drafts_box)
     }
+    this.PageShow = true
   },
 
   methods: {
@@ -363,7 +365,7 @@ export default {
         this.isRemarkDisable = true
       }
     },
-    
+
     /**
      * 创建Bug
      * @param {String} event - button id: 根据id，判断是继续创建，还是返回上一页面
