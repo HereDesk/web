@@ -148,10 +148,10 @@ export default {
      * @param {String} m2_id 二级模块ID
      */
     click_moudle_2(data) {
-      if (this.m2_id == data) {
+      if (this.m2_id == m2_id) {
         this.m2_id = ""
       } else {
-        this.m2_id = data
+        this.m2_id = m2_id
       }
     },
 
