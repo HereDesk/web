@@ -8,6 +8,7 @@
     <template v-else>
       <div class="row">
 
+        <!-- 模块列表 -->
         <ProductModules
           :product_id="visited_product_id"
           :Rules="Rules"
@@ -16,7 +17,7 @@
           @getM1M2="getM1M2">
         </ProductModules>
 
-        <div id="page-nav" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
+        <div id="page-body" :class="[isShowModules ? 'px-5 col-lg-10 col-md-12' : 'col-sm-12 col-md-10']">
           <div class="container-fluid">
 
             <div id="bug-nav-manage" class="row">
@@ -74,7 +75,8 @@
                 <div id="advanced-search" @click="unfoldAdvancedSearch()">
                   <i class="iconfont icon-40 size-1-5 icon-8a8a8a ml-3" title="高级筛选"></i>
                 </div>
-                <nuxt-link to='/app/qa/bug/add' target="_blank" id="bug-create" class="ml-3" v-if="Rules.bug_create">
+                <nuxt-link to='/app/qa/bug/add' target="_blank"
+                  id="bug-create" class="ml-3" v-if="Rules.bug_create">
                   <button type="btn" class="btn btn-create">+ 创建</button>
                 </nuxt-link>
                 <el-dropdown trigger="click">
@@ -108,7 +110,8 @@
             </div>
 
             <!-- 高级搜索 -->
-            <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }" style="border:1px solid #eee;border-radius:5px; padding: 20px 0;">
+            <div id="bug-advanced-search" class="row my-3" :class="{ 'd-none': isShowAdSearch === 'no' }"
+              style="border:1px solid #eee;border-radius:5px; padding: 20px 0;">
               <div id="bug-search-sort" class="col-12 sa-grid-item">
                 <span class="sa-desc">顺序：</span>
                 <div class="d-inline sc-context">
@@ -240,7 +243,7 @@
             </div>
 
             <!-- 表格展示 -->
-            <div id="bug-table-style" class="row mt-3 mb-5 table_data" v-if="DataShowStyle == 'table'">
+            <div id="bug-table-style" class="row mt-3" v-if="DataShowStyle == 'table'">
               <div class="col px-0">
                 <el-table :data='tableData'
                   :default-sort="{prop: 'date', order: 'descending'}"
@@ -279,6 +282,9 @@
                       </div>
                     </template>
                   </el-table-column>
+                  <el-table-column label="严重程度" align="center" width="95" sortable
+                    prop="severity_name" v-if="table_field.severity">
+                  </el-table-column>
                   <el-table-column label="创建时间" align="center" width="110"
                     sortable show-overflow-tooltip v-if="table_field.create_time">
                     <template slot-scope="scope">
@@ -290,6 +296,12 @@
                   </el-table-column>
                   <el-table-column label="指派" prop="assignedTo_user" align="center" width="85"
                     sortable show-overflow-tooltip v-if="table_field.assignedTo_user">
+                  </el-table-column>
+                  <el-table-column label="解决者" prop="fixed_user" align="center" width="90"
+                    show-overflow-tooltip v-if="table_field.fixed_user">
+                  </el-table-column>
+                  <el-table-column label="解决方案" prop="solution_name" align="center" width="90"
+                    show-overflow-tooltip v-if="table_field.solution">
                   </el-table-column>
                   <el-table-column label="最后更新" align="center" width="110">
                     <template slot-scope="scope">
@@ -305,8 +317,7 @@
                   </el-table-column>
                   <el-table-column label="" width="48">
                     <template slot-scope="scope">
-                      <div class="display-none"
-                        :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId,
+                      <div class="display-none" :class="{ 'showDataOpreate' : scope.row.bug_id == HoverBugId,
                           'hideText': scope.row.status == 'Closed'}">
                         <span id="icon-bug-edit" v-if="scope.row.creator_id === myUID || BtnRules.bug_edit">
                           <nuxt-link :to="{path:'/app/qa/bug/edit',query:{'bug_id':scope.row.bug_id}}">
@@ -327,7 +338,7 @@
             </div>
 
             <!-- 列表展示 -->
-            <div id="bug-list-style" class="row mt-3 mb-5" v-if="DataShowStyle == 'list'">
+            <div id="bug-list-style" class="row mt-3" v-if="DataShowStyle == 'list'">
               <div class="col px-0">
                 <ul class="pl-0 ul-none-2">
                   <li v-for="(item,index) in tableData" :Key="index" :id="index">
@@ -351,8 +362,7 @@
                         </span>
                         <span>@创建: {{ item.creator_user }}&nbsp;&nbsp;{{ item.create_time | date(5) }}</span>
                         <span>@指派: {{ item.assignedTo_user }}</span>
-                        <span v-if="item.fixed_user">
-                          @解决: {{ item.fixed_user }}&nbsp;|&nbsp;
+                        <span v-if="item.fixed_user">@解决: {{ item.fixed_user }}&nbsp;|&nbsp;
                           <p class="d-inline"
                             :class="[ item.solution_name == '已修复' ? 'text-success' : 'text-secondary' ]">
                             {{ item.solution_name }}
@@ -376,8 +386,10 @@
                 <p class="text-gray no-hint">{{ Msg }}</p>
               </div>
             </div>
+
           </div>
         </div>
+
       </div>
     </template>
 
@@ -422,7 +434,7 @@
       </button>
     </Modal>
 
-    <!-- 缺陷导出 -->
+    <!-- 导出缺陷到excel -->
     <Modal id="modal-export" v-if="showModal == 'export'" @close="showModal = false" :isHeaderClose="true">
       <h5 slot="header" class="modal-title">{{ selected_product }} 缺陷</h5>
       <div slot="body">
@@ -488,7 +500,8 @@
           <div class="row">
             <div class="col">
               <div class="form-check form-check-inline" v-for="(value, name) in table_field" :key="name">
-                <input class="form-check-input" type="checkbox" :id="name" :value="table_field.name" v-model="table_field[name]" @change="SetTableFilterField('set')">
+                <input class="form-check-input" type="checkbox" :id="name" :value="table_field.name"
+                  v-model="table_field[name]" @change="SetTableFilterField('set')">
                 <label class="form-check-label">{{ name | filterTableField }}</label>
               </div>
             </div>
@@ -501,567 +514,578 @@
 </template>
 
 <script>
-import ProductModules from "~/components/ProductModules"
-import BugAssign from "~/components/BugAssign"
-import BugResolve from "~/components/BugResolve"
-import BugChange from "~/components/BugChange"
+  import ProductModules from "~/components/ProductModules"
+  import BugAssign from "~/components/BugAssign"
+  import BugResolve from "~/components/BugResolve"
+  import BugChange from "~/components/BugChange"
 
-import util from "~/assets/js/util.js"
-import data from "~/assets/js/data.js"
-import rules from "~/assets/js/rules.js"
-import shortcut_operations from '~/assets/js/shortcut_operation.js'
+  import util from "~/assets/js/util.js"
+  import data from "~/assets/js/data.js"
+  import rules from "~/assets/js/rules.js"
+  import shortcut_operations from '~/assets/js/shortcut_operation.js'
 
-export default {
-  head() {
-    return {
-      title: "HDesk - 缺陷列表"
-    }
-  },
+  export default {
+    head() {
+      return {
+        title: "HDesk - 缺陷列表"
+      }
+    },
 
-  layout: "head",
-  components: {
-    BugAssign,
-    BugResolve,
-    BugChange,
-    ProductModules
-  },
+    layout: "head",
+    components: {
+      BugAssign,
+      BugResolve,
+      BugChange,
+      ProductModules
+    },
 
-  data() {
-    return {
-      isShowModules: false,
-      page_loading_status: true,
+    data() {
+      return {
+        isShowModules: false,
+        page_loading_status: true,
 
-			showModal: false,
-      ScreenWidth: 0,
-      isDisplayOperate: true,
+        showModal: false,
+        ScreenWidth: 0,
+        isDisplayOperate: true,
 
-      // Page Body Data
-      total: null,
-      pageNumber: parseInt(this.$route.query.pageNumber) || 1,
-      pageSize: parseInt(this.$route.query.pageSize) || 10,
-      tableData: [],
-      HoverBugInfo: {},
-      HoverBugId: "",
-      selectedBugId: "",
-      HoverBugIdCreatorBy: "",
-      MyTodayData: false,
-      BugExportFile: {},
+        // Page Body Data
+        total: null,
+        pageNumber: parseInt(this.$route.query.pageNumber) || 1,
+        pageSize: parseInt(this.$route.query.pageSize) || 10,
+        tableData: [],
+        HoverBugInfo: {},
+        HoverBugId: "",
+        selectedBugId: "",
+        HoverBugIdCreatorBy: "",
+        MyTodayData: false,
+        BugExportFile: {},
 
-      // Other
-      Msg: false,
-      img_src: null,
+        // Other
+        Msg: false,
+        img_src: null,
 
-      // Define Data: Query and Search field
-      modules_list: [],
-      modules_id: [null, null],
-      m1_id: this.$route.query.m1_id || null,
-      m2_id: this.$route.query.m2_id || null,
-      visited_product_id: this.$route.query.product_id || "",
-      selected_product: this.$route.query.product_code || "",
-      selected_release: this.$route.query.release || "all",
+        // Define Data: Query and Search field
+        modules_list: [],
+        modules_id: [null, null],
+        m1_id: this.$route.query.m1_id || null,
+        m2_id: this.$route.query.m2_id || null,
+        visited_product_id: this.$route.query.product_id || "",
+        selected_product: this.$route.query.product_code || "",
+        selected_release: this.$route.query.release || "all",
 
-      // Define Data: Bug-Status
-      status_list: data.bug_status_list,
-      selected_status: this.$route.query.status || "notClosed",
+        // Define Data: Bug-Status
+        status_list: data.bug_status_list,
+        selected_status: this.$route.query.status || "notClosed",
 
-      // Define Data: Bug-priority
-      priority_list: data.priority_list,
-      selected_priority: [],
+        // Define Data: Bug-priority
+        priority_list: data.priority_list,
+        selected_priority: [],
 
-      // Define Data: Bug-severity_list
-      severity_list: data.severity_list,
-      selected_severity: [],
+        // Define Data: Bug-severity_list
+        severity_list: data.severity_list,
+        selected_severity: [],
 
-      // Define Data: Bug-Order
-      sort_field: this.$route.query.sort_field || "last_time",
-      order_list: data.order_list,
+        // Define Data: Bug-Order
+        sort_field: this.$route.query.sort_field || "last_time",
+        order_list: data.order_list,
 
-      // Define Data: Bug-more-quick-operate
-      operate: this.$route.query.operate || "no",
-      QuickQperationList: data.bug_quick_operation_list,
+        // Define Data: Bug-more-quick-operate
+        operate: this.$route.query.operate || "no",
+        QuickQperationList: data.bug_quick_operation_list,
 
-      wd: this.$route.query.wd || '',
-      isShowAdSearch: this.$route.query.isShowAdSearch || "no",
+        wd: this.$route.query.wd || '',
+        isShowAdSearch: this.$route.query.isShowAdSearch || "no",
 
-      // 高级搜索
-      advanced_search: {
-        sort: '-',
-        status_list: [],
-        priority_list: [],
-        severity_list: [],
-        create_time: [],
-        closed_time: [],
-        fiexed_time: [],
-        assignedTo_time: [],
-        fixed_user: '',
-        creator: '',
-        closed_user: '',
-        assignedTo_user: ''
+        // 高级搜索
+        advanced_search: {
+          sort: '-',
+          status_list: [],
+          priority_list: [],
+          severity_list: [],
+          create_time: [],
+          closed_time: [],
+          fiexed_time: [],
+          assignedTo_time: [],
+          fixed_user: '',
+          creator: '',
+          closed_user: '',
+          assignedTo_user: ''
+        },
+        // Define components Data
+        scheme: "Fixed",
+        pageSource: "page_bug_index",
+
+        // 字段过滤
+        table_field: {
+          "create_time": false,
+          "creator_user": true,
+          "assignedTo_user": true,
+          "fixed_user": false,
+          "severity": false,
+          "priority": true,
+          // "bug_type": false,
+          "solution": false,
+          "last_operation_user": true,
+        }
+      }
+    },
+
+    filters: {
+      date: util.date,
+      filterTableField: util.getTableFieldName,
+      filterOperators: util.getOperatorsName,
+      filterSearchType: util.getSearchTypeName,
+      filterBugStatusName: util.bugStatusName,
+      QuickQperationName: util.QuickQperationName,
+      filterOrder: util.getOrderName
+    },
+
+    computed: {
+
+      // 页面权限菜单控制
+      Rules: function() {
+        let userInfo = this.$store.state.userInfo
+        let PagesRules = this.$store.state.PageData
+        return rules.RuleManges(userInfo,PagesRules)
       },
-      // Define components Data
-      scheme: "Fixed",
-      pageSource: "page_bug_index",
+      BtnRules: function() {
+        let userInfo = this.$store.state.userInfo
+        return rules.BugBtnRules(userInfo,this.HoverBugInfo)
+      },
 
-      // 字段过滤
-      table_field: {
-        "create_time": false,
-        "creator_user": true,
-        "assignedTo_user": true,
-        "fixed_user": false,
-        "severity": false,
-        "priority": true,
-        // "bug_type": false,
-        "solution": false,
-        "last_operation_user": true,
-      }
-    }
-  },
+      // 查询搜索条件组织
+      QueryBuilder: function() {
+        const patternNumber = new RegExp("[0-9]+")
+        let Builder = {}
+        let tmp_release
+        Builder["pageNumber"] = this.pageNumber
+        Builder["pageSize"] = this.pageSize
+        Builder["isShowAdSearch"] = this.isShowAdSearch
+        Builder["product_id"] = this.visited_product_id
+        Builder["release"] = this.selected_release
+        this.selected_status ? (Builder["status"] = this.selected_status) : undefined
+        Builder["priority"] = this.selected_priority
+        Builder["sort"] = this.advanced_search.sort
+        Builder["sort_field"] = this.sort_field
+        this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
+        this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
+        if (this.operate != "no") {
+          Builder["operate"] = this.operate
+        }
+        if (this.wd) {
+          Builder["wd"] = this.wd
+        }
+        return Builder
+      },
 
-  filters: {
-    date: util.date,
-    filterTableField: util.getTableFieldName,
-    filterOperators: util.getOperatorsName,
-    filterSearchType: util.getSearchTypeName,
-    filterBugStatusName: util.bugStatusName,
-    QuickQperationName: util.QuickQperationName,
-    filterOrder: util.getOrderName
-  },
-
-  computed: {
-
-    // 页面权限菜单控制
-    Rules: function() {
-      let userInfo = this.$store.state.userInfo
-      let PagesRules = this.$store.state.PageData
-      return rules.RuleManges(userInfo,PagesRules)
-    },
-    BtnRules: function() {
-      let userInfo = this.$store.state.userInfo
-      return rules.BugBtnRules(userInfo,this.HoverBugInfo)
-    },
-
-    // 查询搜索条件组织
-    QueryBuilder: function() {
-      const patternNumber = new RegExp("[0-9]+")
-      let Builder = {}
-      let tmp_release
-      Builder["pageNumber"] = this.pageNumber
-      Builder["pageSize"] = this.pageSize
-      Builder["isShowAdSearch"] = this.isShowAdSearch
-      Builder["product_id"] = this.visited_product_id
-      Builder["release"] = this.selected_release
-      this.selected_status ? (Builder["status"] = this.selected_status) : undefined
-      Builder["priority"] = this.selected_priority
-      Builder["sort"] = this.advanced_search.sort
-      Builder["sort_field"] = this.sort_field
-      this.m2_id ? (Builder["m2_id"] = this.m2_id) : null
-      this.m1_id ? (Builder["m1_id"] = this.m1_id) : null
-      if (this.operate != "no") {
-        Builder["operate"] = this.operate
-      }
-      if (this.wd) {
-        Builder["wd"] = this.wd
-      }
-      return Builder
-    },
-
-    // switch search input
-    SwitchSearchInput: function() {
-      if (this.SearchCriteria.SearchType.includes("time")) {
-        if (this.SearchCriteria.Operators == "range") {
-          return "date_range"
+      // switch search input
+      SwitchSearchInput: function() {
+        if (this.SearchCriteria.SearchType.includes("time")) {
+          if (this.SearchCriteria.Operators == "range") {
+            return "date_range"
+          } else {
+            return "date"
+          }
         } else {
-          return "date"
+          return "other"
         }
-      } else {
-        return "other"
-      }
-    },
+      },
 
-    // userinfo group
-    uGroup: function() {
-      let userInfo = this.$store.state.userInfo
-      return userInfo.group !== "test" ? true : false
-    },
-    myUID: function() {
-    	let userInfo = this.$store.state.userInfo
-    	return userInfo.user_id ? userInfo.user_id : null
-    },
+      // userinfo group
+      uGroup: function() {
+        let userInfo = this.$store.state.userInfo
+        return userInfo.group !== "test" ? true : false
+      },
+      myUID: function() {
+        let userInfo = this.$store.state.userInfo
+        return userInfo.user_id ? userInfo.user_id : null
+      },
 
-    // 数据展示样式
-    DataShowStyle: function() {
-      let config = this.$store.state.UserConfig
-      if (config["BUG_DATA_SHOW_STYPE"]) {
-        return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
-      } else {
-        return this.ScreenWidth > 768 ? 'table' : 'list'
-      }
-    },
-
-
-  },
-
-  watch: {
-    wd: function(val, oldVal) {
-      this.pageNumber = 1
-    },
-    m1_id: function(val, oldVal) {
-      this.pageNumber = 1
-    },
-    m2_id: function(val, oldVal) {
-      this.pageNumber = 1
-    },
-    visited_product_id: function(val, oldVal) {
-      if (this.visited_product_id) {
-        const ProductMembersData = this.$store.state.ProductMemberList
-        const isThisProduct = ProductMembersData.hasOwnProperty("product_id")
-          ? (ProductMembersData["product_id"] === this.visited_product_id ? true : false) : false
-        if (!isThisProduct){
-          this.$store.dispatch("getProductMembers",this.visited_product_id)
+      // 数据展示样式
+      DataShowStyle: function() {
+        let config = this.$store.state.UserConfig
+        if (config["BUG_DATA_SHOW_STYPE"]) {
+          return this.ScreenWidth > 768 ? config["BUG_DATA_SHOW_STYPE"] : 'list'
+        } else {
+          return this.ScreenWidth > 768 ? 'table' : 'list'
         }
       }
-    },
-    total: function() {
-      if (this.total === 0) {
-        this.img_src = require("static/images/happy.png")
-        this.Msg = "没找到数据"
-      } else {
-        this.Msg = ""
-      }
-    },
-		QueryBuilder: function(val, oldVal) {
-			if (JSON.stringify(val) != JSON.stringify(oldVal)) {
-				this.tableData = []
-				this.$route.query.product_id
-					? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
-          : this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
-        this.wd
-          ? this.goSearch()
-          : (this.isShowAdSearch === 'yes' ?  this.getAdvancedSearch() : this.getBugList())
-			}
-		}
-  },
 
-  created() {
-    if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
-    	this.$store.dispatch("getBugProperty")
-    }
-  },
-
-  mounted() {
-    this.page_loading_status = false
-    this.wd && this.visited_product_id ? this.goSearch() : this.getBugList()
-    this.ScreenWidth = process.server ? 0 : document.body.clientWidth
-
-    // 页面表格字段过滤
-    this.SetTableFilterField('get')
-
-    window.addEventListener("keypress", event => {
-      if (event.key === 'f' && event.ctrlKey) {
-        document.getElementById("id-title-search").focus()
-      }
-      if (event.key === 'n' && event.ctrlKey) {
-        document.getElementById("bug-create").focus()
-      }
-    })
-  },
-
-  methods: {
-    // get $emit data
-    getShowModules(isShowModules) {
-      this.isShowModules = isShowModules
     },
 
-    GetProductInfo (data)  {
-      this.visited_product_id = data.product_id
-      this.selected_release = data.release
-      if (Boolean(data.PageMsg)) {
-        this.Msg = data.PageMsg
-        this.img_src = require("static/images/happy.png")
-      }
-    },
-
-    getPsPn: function(ps, pn) {
-      this.pageSize = ps
-      this.pageNumber = pn
-    },
-    getM1M2: function(m1, m2) {
-      this.m1_id = m1
-      this.m2_id = m2
-    },
-
-    /**
-     * 下拉相关操作
-     */
-    handleCommand(data) {
-      if ("order_name" in data) {
-        this.sort_field = data["order_value"]
-      }
-      if ("status_name" in data) {
-        this.operate = "no"
-        this.selected_status = data["status_value"]
-      }
-      if ("quick_name" in data) {
-        this.operate = data["quick_value"]
+    watch: {
+      wd: function(val, oldVal) {
         this.pageNumber = 1
-        this.selected_status = "all"
-        this.selected_priority = "all"
-      }
-      if ("OperatorsName" in data) {
-        this.SearchCriteria.start_date = null
-        this.SearchCriteria.end_date = null
-        this.wd = null
-        this.SearchCriteria.Operators = data["OperatorsValue"]
-      }
-      if ("search_name" in data) {
-        this.wd = null
-        this.SearchCriteria.start_date = null
-        this.SearchCriteria.end_date = null
-        this.SearchCriteria.SearchType = data["search_value"]
-        if (!(this.SearchCriteria.SearchType).includes('time')) {
-          this.SearchCriteria.Operators = '='
+      },
+      m1_id: function(val, oldVal) {
+        this.pageNumber = 1
+      },
+      m2_id: function(val, oldVal) {
+        this.pageNumber = 1
+      },
+      visited_product_id: function(val, oldVal) {
+        if (this.visited_product_id) {
+          const ProductMembersData = this.$store.state.ProductMemberList
+          const isThisProduct = ProductMembersData.hasOwnProperty("product_id")
+            ? (ProductMembersData["product_id"] === this.visited_product_id ? true : false) : false
+          if (!isThisProduct){
+            this.$store.dispatch("getProductMembers",this.visited_product_id)
+          }
+        }
+      },
+      total: function() {
+        if (this.total === 0) {
+          this.img_src = require("static/images/happy.png")
+          this.Msg = "没找到数据"
+        } else {
+          this.Msg = ""
+        }
+      },
+      QueryBuilder: function(val, oldVal) {
+        if (JSON.stringify(val) != JSON.stringify(oldVal)) {
+          this.tableData = []
+          this.$route.query.product_id
+            ? this.$router.push({path: "/app/qa/bug",query: this.QueryBuilder})
+            : this.$router.replace({path: "/app/qa/bug",query: this.QueryBuilder})
+          this.wd
+            ? this.goSearch()
+            : (this.isShowAdSearch === 'yes' ?  this.getAdvancedSearch() : this.getBugList())
         }
       }
-      if ("lable" in data) {
-        this.modules_id[0] = data["value"]
-      }
-      this.pageNumber = 1
     },
 
-    /**
-     * 缺陷数据
-     */
-    getBugList() {
-      if (!this.visited_product_id) { return }
-      this.axios
-				.get("/api/qa/bug/list", { params: this.QueryBuilder })
-        .then(res => {
+    created() {
+      if (JSON.stringify(this.$store.state.BugProperty) === "{}") {
+        this.$store.dispatch("getBugProperty")
+      }
+    },
+
+    mounted() {
+      this.page_loading_status = false
+      this.wd && this.visited_product_id ? this.goSearch() : this.getBugList()
+      this.ScreenWidth = process.server ? 0 : document.body.clientWidth
+
+      // 页面表格字段过滤
+      this.SetTableFilterField('get')
+
+      // 监听快捷键
+      window.addEventListener("keypress", event => {
+        if (event.key === 'f' && event.ctrlKey) {
+          document.getElementById("id-title-search").focus()
+        }
+        if (event.key === 'n' && event.ctrlKey) {
+          document.getElementById("bug-create").focus()
+        }
+      })
+    },
+
+    methods: {
+
+      // 是否显示模块列表
+      getShowModules(isShowModules) {
+        this.isShowModules = isShowModules
+      },
+
+      // 模块列表
+      getM1M2: function(m1, m2) {
+        this.m1_id = m1
+        this.m2_id = m2
+      },
+
+      GetProductInfo (data)  {
+        this.visited_product_id = data.product_id
+        this.selected_release = data.release
+        if (Boolean(data.PageMsg)) {
+          this.Msg = data.PageMsg
+          this.img_src = require("static/images/happy.png")
+        }
+      },
+
+      // 分页
+      getPsPn: function(ps, pn) {
+        this.pageSize = ps
+        this.pageNumber = pn
+      },
+
+      /**
+       * 下拉相关操作
+       */
+      handleCommand(data) {
+        if ("order_name" in data) {
+          this.sort_field = data["order_value"]
+        }
+        if ("status_name" in data) {
+          this.operate = "no"
+          this.selected_status = data["status_value"]
+        }
+        if ("quick_name" in data) {
+          this.operate = data["quick_value"]
+          this.pageNumber = 1
+          this.selected_status = "all"
+          this.selected_priority = "all"
+        }
+        if ("OperatorsName" in data) {
+          this.SearchCriteria.start_date = null
+          this.SearchCriteria.end_date = null
+          this.wd = null
+          this.SearchCriteria.Operators = data["OperatorsValue"]
+        }
+        if ("search_name" in data) {
+          this.wd = null
+          this.SearchCriteria.start_date = null
+          this.SearchCriteria.end_date = null
+          this.SearchCriteria.SearchType = data["search_value"]
+          if (!(this.SearchCriteria.SearchType).includes('time')) {
+            this.SearchCriteria.Operators = '='
+          }
+        }
+        if ("lable" in data) {
+          this.modules_id[0] = data["value"]
+        }
+        this.pageNumber = 1
+      },
+
+      /**
+       * 缺陷数据
+       */
+      getBugList() {
+        if (!this.visited_product_id) { return }
+        this.axios
+          .get("/api/qa/bug/list", { params: this.QueryBuilder })
+          .then(res => {
+            if (res.data["status"] === 20000) {
+              this.tableData = res.data["data"]
+              this.total = res.data["total"]
+            } else {
+              this.total = 0
+              this.Msg = res.data["msg"]
+            }
+          })
+      },
+
+      /**
+       * 用于判断是否显示高级搜索区域
+       */
+      unfoldAdvancedSearch() {
+        if (this.isShowAdSearch == 'no') {
+          this.isShowAdSearch = 'yes'
+        } else {
+          this.isShowAdSearch = 'no'
+          this.wd = ""
+        }
+      },
+
+      /**
+       * 缺陷高级搜索条件重置
+       */
+      resetAdvancedSearch () {
+        this.advanced_search.sort = '-'
+        this.advanced_search.status_list = []
+        this.advanced_search.priority_list = []
+        this.advanced_search.severity_list = []
+        this.advanced_search.create_time = []
+        this.advanced_search.closed_time = []
+        this.advanced_search.fiexed_time = []
+        this.advanced_search.assignedTo_time = []
+        this.advanced_search.fixed_user = ''
+        this.advanced_search.creator = ''
+        this.advanced_search.closed_user = ''
+        this.advanced_search.assignedTo_user = ''
+      },
+
+      /**
+       * 缺陷高级搜索
+       */
+      getAdvancedSearch() {
+        this.wd = ""
+        let basic_query = {
+          "pageNumber": this.pageNumber,
+          "pageSize": this.pageSize,
+          "product_id": this.visited_product_id,
+          "release": this.selected_release,
+          "sort_field": this.sort_field,
+          "isShowAdSearch": 'yes'
+        }
+        if (JSON.stringify(this.advanced_search.status_list) !== '[]') {
+          this.selected_status = 'all'
+        }
+
+        // 搜索条件合并
+        let advanced_search = this.advanced_search
+        const merge_search = Object.assign(this.advanced_search, basic_query)
+
+        this.axios({
+          method: "POST",
+          url: "/api/qa/bug/search",
+          data: JSON.stringify(merge_search)
+        }).then(res => {
           if (res.data["status"] === 20000) {
             this.tableData = res.data["data"]
             this.total = res.data["total"]
           } else {
+            this.tableData = []
             this.total = 0
             this.Msg = res.data["msg"]
           }
         })
-    },
+      },
 
-		/**
-     * 用于判断是否显示高级搜索区域
-     */
-    unfoldAdvancedSearch() {
-      if (this.isShowAdSearch == 'no') {
-        this.isShowAdSearch = 'yes'
-      } else {
-        this.isShowAdSearch = 'no'
-        this.wd = ""
-      }
-    },
-
-    /**
-     * 缺陷高级搜索条件重置
-     */
-    resetAdvancedSearch () {
-      this.advanced_search.sort = '-'
-      this.advanced_search.status_list = []
-      this.advanced_search.priority_list = []
-      this.advanced_search.severity_list = []
-      this.advanced_search.create_time = []
-      this.advanced_search.closed_time = []
-      this.advanced_search.fiexed_time = []
-      this.advanced_search.assignedTo_time = []
-      this.advanced_search.fixed_user = ''
-      this.advanced_search.creator = ''
-      this.advanced_search.closed_user = ''
-      this.advanced_search.assignedTo_user = ''
-    },
-
-    /**
-     * 缺陷高级搜索
-     */
-		getAdvancedSearch() {
-      this.wd = ""
-      let basic_query = {
-        "pageNumber": this.pageNumber,
-        "pageSize": this.pageSize,
-        "product_id": this.visited_product_id,
-        "release": this.selected_release,
-        "sort_field": this.sort_field,
-        "isShowAdSearch": 'yes'
-      }
-      if (JSON.stringify(this.advanced_search.status_list) !== '[]') {
-        this.selected_status = 'all'
-      }
-
-      // 搜索条件合并
-      let advanced_search = this.advanced_search
-      const merge_search = Object.assign(this.advanced_search, basic_query)
-
-      this.axios({
-        method: "POST",
-        url: "/api/qa/bug/search",
-        data: JSON.stringify(merge_search)
-      }).then(res => {
-        if (res.data["status"] === 20000) {
-          this.tableData = res.data["data"]
-          this.total = res.data["total"]
-        } else {
-          this.tableData = []
-          this.total = 0
-          this.Msg = res.data["msg"]
+      /**
+       * 缺陷搜索，目前仅支持搜索：id、标签、标题、指派人员
+       */
+      goSearch() {
+        let data = this.QueryBuilder
+        if (!data.wd) {
+          this.$notify.error({title: "提示",message: "请输入搜索内容"})
+          return
         }
-      })
-    },
-
-		/**
-     * 缺陷搜索，目前仅支持搜索：id、标签、标题、指派人员
-     */
-    goSearch() {
-      let data = this.QueryBuilder
-      if (!data.wd) {
-        this.$notify.error({title: "提示",message: "请输入搜索内容"})
-        return
-      }
-      this.axios({
-        method: "POST",
-        url: "/api/qa/bug/search",
-        data: JSON.stringify(this.QueryBuilder)
-      }).then(res => {
-        if (res.data["status"] === 20000) {
-          this.tableData = res.data["data"]
-          this.total = res.data["total"]
-        } else {
-          this.tableData = []
-          this.total = 0
-          this.Msg = res.data["msg"]
-        }
-      })
-    },
-
-    /* Acction：bug change priority */
-    BugPriorityDialog(row) {
-      this.selectedBugId = row.bug_id
-      this.showModal = 'priority'
-    },
-
-    /* modal: bug assign */
-    skipAssign(row) {
-      this.selectedBugId = row.bug_id
-      this.showModal = 'assign'
-    },
-
-    /* modal: bug resolve */
-    skipResolve(row) {
-      this.selectedBugId = row.bug_id
-      this.showModal = 'resolve'
-    },
-
-    /* Modal: bug closed */
-    BugClosedDialog(row) {
-      this.selectedBugId = row.bug_id
-      this.showModal = 'closed'
-    },
-
-		/**
-     * 缺陷关闭
-     */
-    ClosedBug() {
-      let data = {"bug_id": this.selectedBugId}
-      this.axios({
-        method: "post",
-        url: "/api/qa/bug/close",
-        data: JSON.stringify(data)
-      }).then(res => {
-        if (res.data["status"] === 20000) {
-          this.showModal = false
-          this.getBugList()
-          this.$notify.success({title: "成功",message: res.data["msg"]})
-        } else {
-          this.$notify.error({title: "错误",message: res.data["msg"]})
-        }
-      })
-    },
-
-		/**
-     * 缺陷导出到excel
-     */
-    bug_export () {
-      if (!this.visited_product_id) { return }
-      this.axios
-				.get("/api/qa/bug/export", { params: this.QueryBuilder })
-        .then( res => {
+        this.axios({
+          method: "POST",
+          url: "/api/qa/bug/search",
+          data: JSON.stringify(this.QueryBuilder)
+        }).then(res => {
           if (res.data["status"] === 20000) {
-            this.BugExportFile = res.data
+            this.tableData = res.data["data"]
+            this.total = res.data["total"]
           } else {
-            this.$notify.warning({title: "提示",message: res.data["msg"]})
+            this.tableData = []
+            this.total = 0
+            this.Msg = res.data["msg"]
           }
-				})
-    },
+        })
+      },
 
-    /**
-     * 今日数据统计
-     */
-    myToday() {
-      this.showModal = 'count-today'
-      if (!this.visited_product_id) { return }
-      this.axios
-				.get("/api/analyze/bug/my_today?product_id=" + this.visited_product_id)
-				.then(res => {
-					if (res.data["status"] === 20000) {
-						this.MyTodayData = res.data
-					}
-				})
-    },
+      /* Acction：bug change priority */
+      BugPriorityDialog(row) {
+        this.selectedBugId = row.bug_id
+        this.showModal = 'priority'
+      },
 
-    /**
-     * 表格行：数据悬停
-     */
-    tableHover(row) {
-      this.HoverBugInfo = row
-      this.HoverBugIdCreatorBy = row.creator_id
-      this.HoverBugId = row.bug_id
-      this.visited_product_id = row.product_id
-    },
+      /* modal: bug assign */
+      skipAssign(row) {
+        this.selectedBugId = row.bug_id
+        this.showModal = 'assign'
+      },
 
-    tableLeave(row) {
-      this.HoverBugId = ""
-    },
+      /* modal: bug resolve */
+      skipResolve(row) {
+        this.selectedBugId = row.bug_id
+        this.showModal = 'resolve'
+      },
 
-    /**
-     * 页面样式切换: 表格、列表
-     */
-    switchStyle() {
-      let style = this.DataShowStyle == 'table' ? 'list' : 'table'
-      this.axios
-				.get('/api/userconfig?BUG_DATA_SHOW_STYPE=' + style)
-				.then(res => {
-					if (res.data["status"] === 20000) {
-						this.$store.dispatch('getUserInfo')
-					}
-				})
-    },
+      /* Modal: bug closed */
+      BugClosedDialog(row) {
+        this.selectedBugId = row.bug_id
+        this.showModal = 'closed'
+      },
 
-    /**
-     * 表格字段过滤
-     */
-    SetTableFilterField(type) {
-      if (process.client) {
-        if (type === 'set') {
-          window.localStorage.setItem("page_bug_table_filter_field", JSON.stringify(this.table_field))
-        }
-        if (type === 'get') {
-          let local_data = window.localStorage.page_bug_table_filter_field
-          local_data ? this.table_field = JSON.parse(local_data) : this.table_filter_field
+      /**
+       * 缺陷：关闭
+       */
+      ClosedBug() {
+        let data = {"bug_id": this.selectedBugId}
+        this.axios({
+          method: "post",
+          url: "/api/qa/bug/close",
+          data: JSON.stringify(data)
+        }).then(res => {
+          if (res.data["status"] === 20000) {
+            this.showModal = false
+            this.getBugList()
+            this.$notify.success({title: "成功",message: res.data["msg"]})
+          } else {
+            this.$notify.error({title: "错误",message: res.data["msg"]})
+          }
+        })
+      },
+
+      /**
+       * 缺陷：导出到excel
+       */
+      bug_export () {
+        if (!this.visited_product_id) { return }
+        this.axios
+          .get("/api/qa/bug/export", { params: this.QueryBuilder })
+          .then( res => {
+            if (res.data["status"] === 20000) {
+              this.BugExportFile = res.data
+            } else {
+              this.$notify.warning({title: "提示",message: res.data["msg"]})
+            }
+          })
+      },
+
+      /**
+       * 今日数据统计
+       */
+      myToday() {
+        this.showModal = 'count-today'
+        if (!this.visited_product_id) { return }
+        this.axios
+          .get("/api/analyze/bug/my_today?product_id=" + this.visited_product_id)
+          .then(res => {
+            if (res.data["status"] === 20000) {
+              this.MyTodayData = res.data
+            }
+          })
+      },
+
+      /**
+       * 表格行：数据悬停
+       */
+      tableHover(row) {
+        this.HoverBugInfo = row
+        this.HoverBugIdCreatorBy = row.creator_id
+        this.HoverBugId = row.bug_id
+        this.visited_product_id = row.product_id
+      },
+
+      /**
+       * 表格行：离开当前行
+       */
+      tableLeave(row) {
+        this.HoverBugId = ""
+      },
+
+      /**
+       * 页面样式切换: 表格、列表
+       */
+      switchStyle() {
+        let style = this.DataShowStyle == 'table' ? 'list' : 'table'
+        this.axios
+          .get('/api/userconfig?BUG_DATA_SHOW_STYPE=' + style)
+          .then(res => {
+            if (res.data["status"] === 20000) {
+              this.$store.dispatch('getUserInfo')
+            }
+          })
+      },
+
+      /**
+       * 表格字段过滤
+       */
+      SetTableFilterField(type) {
+        if (process.client) {
+          if (type === 'set') {
+            window.localStorage.setItem(
+              "page_bug_table_filter_field",
+              JSON.stringify(this.table_field)
+            )
+          }
+          if (type === 'get') {
+            let local_data = window.localStorage.page_bug_table_filter_field
+            local_data ? this.table_field = JSON.parse(local_data) : this.table_filter_field
+          }
         }
       }
-    }
 
+    }
   }
-}
 </script>
 
 <style scope>
   @import "~/assets/css/test.css";
+
   .sa-grid-item {
     line-height: 1.8rem;
     font-size:0.92rem;
