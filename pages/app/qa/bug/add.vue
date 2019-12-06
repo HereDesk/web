@@ -1,6 +1,6 @@
 <template>
   <div id="page-bug-add" v-if="PageShow">
-    <BaseNav :title="title"></BaseNav>
+    <BaseNav :title="title" :last_url="'/app/qa/bug'"></BaseNav>
     <div id="page-bug-add-input" class='container mt-5'>
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -27,7 +27,8 @@
                     placeholder="选择指派人" v-model="Bug.assignedTo_id">
                     <el-option value="" :disabled="true">请选择指派人</el-option>
                     <el-option
-                      v-for="item in developer_list" :key="item.id" :label="item.realname" :value="item.user_id">
+                      v-for="item in developer_list"
+                      :key="item.id" :label="item.realname" :value="item.user_id">
                     </el-option>
                   </el-select>
                   <el-select id="bug-priority" class="col"
@@ -91,7 +92,7 @@
               发现步骤<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 toolbars">
-              <no-ssr>
+              <client-only>
                 <mavon-editor placeholder="请输入发现步骤 ~"
                   :toolbars="mavon_md_base_toolbars"
                   :subfield="false"
@@ -99,7 +100,7 @@
                   :tabSize="2"
                   v-model.trim="Bug.steps">
                 </mavon-editor>
-              </no-ssr>
+              </client-only>
             </div>
           </div>
 
@@ -109,14 +110,14 @@
               实际结果<span class="text-red">*</span>
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <no-ssr>
+              <client-only>
                 <mavon-editor placeholder="请输入实际结果 ~"
                   :toolbarsFlag="false"
                   :subfield="false"
                   :autofocus="false"
                   v-model.trim="Bug.reality_result">
                 </mavon-editor>
-              </no-ssr>
+              </client-only>
             </div>
           </div>
 
@@ -126,14 +127,14 @@
               预期结果
             </label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <no-ssr>
+              <client-only>
                 <mavon-editor placeholder="请输入预期结果 ~"
                   :toolbarsFlag="false"
                   :subfield="false"
                   :autofocus="false"
                   v-model.trim="Bug.expected_result">
                 </mavon-editor>
-              </no-ssr>
+              </client-only>
             </div>
           </div>
 
@@ -156,14 +157,14 @@
           <div id="bug-remark" class="form-group row" v-if="isRemarkDisable">
             <label for="bug-remark" class="col-md-2 col-sm-12 bug-label">备注</label>
             <div class="col-lg-8 col-md-10 col-sm-12 no-toolbars">
-              <no-ssr>
+              <client-only>
                 <mavon-editor placeholder="请输入附加信息 ~"
                   :toolbarsFlag="false"
                   :subfield="false"
                   :autofocus="false"
                   v-model.trim="Bug.remark">
                 </mavon-editor>
-              </no-ssr>
+              </client-only>
             </div>
           </div>
 
@@ -252,7 +253,9 @@ export default {
      */
     auto_fill () {
       let login_user_id = this.$store.state.userInfo.user_id
-      let [assignedTo_id,bug_source] = ["","tester"]
+      let [assignedTo_id,bug_source,bug_type,priority,severity] = ["","tester","","",""]
+
+      // 根据角色，预定义缺陷来源
       if (this.developer_list) {
         for (let i of this.developer_list) {
           if (login_user_id === i["user_id"]) {
@@ -269,10 +272,34 @@ export default {
             if ( i["role"] === "manager" ) {
               bug_source = "leader-feedback"
             }
+            if ( i["role"] === "test" ) {
+              bug_source = "tester"
+            }
           }
         }
       }
-      return [assignedTo_id,bug_source]
+      // 自动填充指派人
+      if (process.client) {
+        let bug_last_assignedTo_id = window.localStorage.bug_last_assignedTo_id
+        if (bug_last_assignedTo_id) {
+          assignedTo_id = bug_last_assignedTo_id
+        }
+      }
+
+      // 缺陷类型
+      let tmp1 = this.Bug.title
+      if (tmp1.includes("UI") || tmp1.includes("界面")) {
+        bug_type = "UI"
+      }
+      if (tmp1.includes("崩溃") || tmp1.includes("闪退")) {
+        priority = "P1"
+        severity = "Fatal"
+      }
+      if (tmp1.includes("建议")) {
+        priority = "P5"
+        severity = "Suggestion"
+      }
+      return [assignedTo_id,bug_source,bug_type,priority,severity]
     }
   },
 
@@ -287,6 +314,7 @@ export default {
         }
       }
     },
+
     Bug: {
       handler: function(old,oldVal) {
         if (process.client) {
@@ -298,9 +326,19 @@ export default {
       },
       deep: true
     },
+
     auto_fill: function(old, oldVal) {
       this.Bug.assignedTo_id = this.auto_fill[0]
       this.Bug.bug_source = this.auto_fill[1]
+      if (this.auto_fill[2]) {
+        this.Bug.bug_type = this.auto_fill[2]
+      }
+      if (this.auto_fill[3]) {
+        this.Bug.priority = this.auto_fill[3]
+      }
+      if (this.auto_fill[4]) {
+        this.Bug.severity = this.auto_fill[4]
+      }
     }
   },
 
@@ -441,9 +479,12 @@ export default {
             title: "成功",
             message: res.data["msg"]
           })
-          // 提交成功后，清除本地草稿箱内容
           if (process.client) {
+            // 提交成功后，清除本地草稿箱内容
             window.localStorage.removeItem("bug_drafts")
+            // 缓存部分数据，用于下次自动填充
+            window.localStorage.setItem("bug_last_assignedTo_id", this.Bug.assignedTo_id)
+            window.localStorage.setItem("bug_last_module_id", this.Bug.module_id)
           }
           if (event.target.value === "only-once-commit") {
             this.$router.push({path: "/app/qa/bug"})

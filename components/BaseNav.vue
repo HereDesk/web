@@ -2,7 +2,7 @@
    <div id="page-nav-title" class="container-fluid">
     <div class="row">
       <div class="col text-center page-pure-title">
-        <span @click="$router.go(-1)">
+        <span @click="close_page()">
           <i class="iconfont icon-close-windows size-2 icon-8a8a8a"></i>
         </span>
         <h3>{{ title }}</h3>
@@ -15,16 +15,24 @@
 <script>
 export default {
   props: {
-    title: String
-  },
-  data () {
-    return {
-      last_url: false
+    title: String,
+    last_url: {
+      type: String,
+      default: ''
     }
   },
   created() {
     if (!this.$store.state.userInfo) {
       this.$store.dispatch("getUserInfo")
+    }
+  },
+  methods: {
+    close_page() {
+      if (this.last_url !== '') {
+        this.$router.push({path: this.last_url})
+      } else {
+        this.$router.go(-1)
+      }
     }
   }
 }
