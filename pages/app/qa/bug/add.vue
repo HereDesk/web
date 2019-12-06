@@ -291,6 +291,15 @@ export default {
       if (tmp1.includes("UI") || tmp1.includes("界面")) {
         bug_type = "UI"
       }
+      if (tmp1.includes("分辨率") || tmp1.includes("系统") || tmp1.includes("手机")) {
+        bug_type = "compatible"
+      }
+      if (tmp1.includes("卡顿") || tmp1.includes("性能")) {
+        bug_type = "Perfor"
+      }
+      if (tmp1.includes("接口") || tmp1.includes("api")) {
+        bug_type = "interface"
+      }
       if (tmp1.includes("崩溃") || tmp1.includes("闪退")) {
         priority = "P1"
         severity = "Fatal"
