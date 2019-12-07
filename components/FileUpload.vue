@@ -160,7 +160,6 @@
         })
       },
 
-
       /*
       * File Upload success
       */
@@ -185,7 +184,7 @@
       FileUploadError(error, file, fileList) {
         this.$notify.error({
           title: "上传失败",
-          "message":error
+          message:error
         })
       },
 
@@ -198,7 +197,8 @@
         const zip = ["zip","rar","tar","7z","bz2","gz"]
         const doc = ["docx","docx","xls","xlsx","ppt","pptx","pdf",
           "txt","log","md","json","ini","yaml"]
-        const code = ["html","js","css","py","less","scss","styl","java","cpp"]
+        const code = ["html","js","css","less","scss","styl","vue","nvue",
+          "java","cpp","py","sql"]
         const img = ["jpg","png","jpeg","gif","bmp","svg","psd","tif","tga","ai"]
         const allow_file_format_list = [...video,...zip,...doc,...img]
 
