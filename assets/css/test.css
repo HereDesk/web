@@ -1,6 +1,6 @@
 /*
 **
-** 移动端
+** 移动端: 下面的代码仅仅在移动端生效, PC端无效
 **
 */
 
@@ -17,20 +17,16 @@
   }
 }
 
-/* 搜索 */
+/**
+ * 缺陷/测试用例
+ *
+ * 主页面, 数据列表
+ */
 
+/* 测试/缺陷列表页面: 搜索输入框 */
 .input-group-text {
   border:1px solid #eee !important;
-  /* border-right: none !important; */
   background-color: #FFF !important;
-}
-
-.border-left-none {
-  border-left: none !important;
-}
-
-.border-right-none {
-  border-right: none !important;
 }
 
 .search-control {
@@ -44,55 +40,43 @@
   padding-left: 0.1rem !important;
 }
 
-/*
-** 页面：product modules
-*/
 
-.pg-modules {
-  border-right: 1px solid #eee;
+/* 缺陷/测试用例: 主页面, 列表数据样式 */
+.ul-none {
+  padding-left: 0 !important;
 }
 
-@media (max-width: 991.99px) {
-  .pg-modules {
-    display: none;
+.ul-none-2 .action {
+  visibility: hidden;
+}
+
+.ul-none-2 li {
+  list-style: none;
+  border-bottom: 1px solid #eee;
+}
+
+.ul-none-2 li:hover .action {
+  visibility: visible;
+  display: block !important;
+}
+
+@media (min-width: 768px) {
+  .data-liststyle-satellite span {
+    margin-right:3.5rem;
+    color: rgb(112, 112, 112);
+    font-size: 0.90rem;
   }
 }
 
-#product-modules:hover + div>i {
-  visibility: visible !important;
+@media (max-width: 767.98px) {
+  .data-liststyle-satellite span {
+    margin-right:1rem;
+    color: rgb(112, 112, 112);
+    font-size: 0.90rem;
+  }
 }
 
-#product-modules + div>i:hover {
-  visibility: visible !important;
-  z-index: 9;
-}
-
-.manage-modules {
-  float: right;
-  margin-right:2rem;
-}
-
-.t_module_second li {
-  line-height: 2rem;
-  text-overflow: ellipsis !important;
-  overflow: hidden !important;
-  white-space: nowrap !important;
-}
-
-.t_module_second li:hover {
-  color: #1E88E5 !important
-}
-
-/*
-  关于test统计的一些css
-*/
-.countdata-title {
-  font-size: 1.4rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
+/* 缺陷/测试用例: 主页面, 统计相关 */
 .countdata-num {
   font-size: 2.5rem;
   color: #2b2b2b;
@@ -104,65 +88,25 @@
   font-weight: 300;
 }
 
-/*
-  详情页面
-*/
-
-.satellite_info {
+/* 缺陷/测试用例: 详情页面 ul css*/
+.ul_satellite {
   font-size: 0.95rem !important;
   color: rgb(112, 112, 112) !important;
 }
 
-.satellite_info li {
+.ul_satellite li {
   list-style: none;
 }
-.satellite_info label {
+
+.ul_satellite label {
   line-height: 1.8rem;
   min-width: 5rem;
   text-align: left;
   margin-right: 1rem;
 }
 
-/*
-**
-**  以下是关于BUG相关页面的CSS
-**
-*/
 
-/* Add */
-
-@media (min-width: 576px) {
-  .bug-label {
-    text-align: right;
-  }
-}
-
-@media (max-width: 767.99px) {
-  .bug-label {
-    text-align: left !important;
-  }
-}
-
-/* bug index search */
-.hiddenSearch {
-  display: none;
-  visibility: hidden;
-}
-
-.showSearch {
-  display: flex;
-  visibility: visible;
-  border-bottom:1px solid #C5CAE9;
-}
-
-.searchIcon img {
-  height: 24px;
-  width: 24px;
-}
-
-
-/* bug_index_about opreate */
-
+/* 缺陷/测试: 数据列表页面, 控制操作icon css */
 .showDataOpreate {
   position: absolute;
   display: inline;
@@ -182,39 +126,15 @@
   padding-right: 0;
 }
 
-.bug-sort .sort_text {
-  text-decoration: underline;
+
+/* 缺陷: 数据列表页面: 搜索icon */
+.searchIcon img {
+  height: 24px;
+  width: 24px;
 }
 
-.bug-sort:hover .sort_text {
-  color: #17a2b8;
-}
-/*
-**
-** 缺陷详情：bug_details
-**
-*/
 
-.btn-op {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  line-height: 1.5;
-  border-radius: .25rem;
-  background-color: rgb(245, 245, 245);
-  border-color: rgb(189, 189, 189);
-  color: rgb(51, 51, 51);
-  padding: 5px 1rem;
-  margin: 0.4rem;
-  font-size: 0.95rem;
-}
-
+/* 缺陷/测试用例: 详情页面, 标题样式 */
 .details-title {
   font-size:1.35rem;
   font-weight: 400 !important;
@@ -235,9 +155,57 @@
   color:#333333;
 }
 
-/*
-** 背景块
-*/
+.standline {
+  height: 1.3rem;
+  width: 3px;
+  background-color: #673AB7;
+  float: left;
+}
+
+.redline {
+  height: 1.3rem;
+  width: 3px;
+  background-color: #F44336;
+  float: left;
+}
+
+.successline {
+  height: 1.3rem;
+  width: 3px;
+  background-color: #4CAF50;
+  float: left;
+}
+
+.grayline {
+  height: 1.3rem;
+  width: 3px;
+  background-color: #B1BEC6;
+  float: left;
+}
+
+/* 缺陷: 详情页面, 顶部按钮 */
+.btn-op {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  border-radius: .25rem;
+  background-color: rgb(245, 245, 245);
+  border-color: rgb(189, 189, 189);
+  color: rgb(51, 51, 51);
+  padding: 5px 1rem;
+  margin: 0.4rem;
+  font-size: 0.95rem;
+}
+
+
+/* 背景块: 用于缺陷/测试用例, 步骤、预期结果、实际结果 */
 .details-block {
   margin-top:1rem;
   line-height: 1.85rem;
@@ -249,7 +217,7 @@
 }
 
 .details-block pre {
-  margin: 0;
+  margin: 1.5rem 0;
 }
 
 .details-block a {
@@ -265,39 +233,19 @@
   margin-bottom: 0 !important;
 }
 
-/* .details-block img {
-  width:100%;
-} */
-
-/*
-**
-**  以下是关于testcase相关页面的CSS
-**
-*/
-
-/*
-** 增加测试用例页面
-*/
-.pg-test-edit > textarea {
-  background-color: #f5f5f5 !important;
+.details-block table {
+  margin: 1.5rem 0;
+  font-size: 0.9rem !important;
 }
 
-@media (min-width: 576px) {
-  .testcase-label {
-    text-align: right;
-  }
+.details-block strong {
+  color: #005CBF;
 }
 
-@media (max-width: 767.99px) {
-  .testcase-label {
-    text-align: left !important;
-  }
-}
+/* 测试用例: 详情页面, 部分情况下,需要显示表格, 因此不依赖与details-block */
 
-/*
-** 附件相关
-*/
 
+/* 缺陷/测试用例: 附件相关 */
 .annex {
   display:inline !important;
   margin-right: -20px;
@@ -325,18 +273,12 @@
   right: 90px;
 }
 
-/* .annex_delete > img {
-  height: 28px;
-  width:28px;
-} */
-
 .annex:hover .annex_delete {
   visibility: visible;
 }
 
-/*
-** 日志相关
-*/
+
+/* 测试用例: 详情页面, 日志相关 */
 .log-text-time {
   font-size:0.94rem;
 }
@@ -355,7 +297,6 @@
   text-align: left !important;
   line-height: 1.5rem;
   font-size:0.93rem;
-  /* white-space: pre-line; */
 }
 
 .log-text-remark .icon-edit {
@@ -367,42 +308,34 @@
   margin-bottom: 0;
 }
 
-/*
-** 列表数据样式
-*/
 
-.ul-none {
-  padding-left: 0 !important;
-}
-
-.ul-none-2 .action {
-  visibility: hidden;
-}
-
-.ul-none-2 li {
-  list-style: none;
-  border-bottom: 1px solid #eee;
-}
-
-.ul-none-2 li:hover .action {
-  visibility: visible;
-  display: block !important;
-  /* background-color: #FFF; */
-}
-
-@media (min-width: 768px) {
-  .data-liststyle-satellite span {
-    margin-right:3.5rem;
-    color: rgb(112, 112, 112);
-    font-size: 0.90rem;
+/* 缺陷/测试用例: 增加/编辑页面  */
+@media (min-width: 576px) {
+  .bug-label {
+    text-align: right;
   }
 }
 
-@media (max-width: 767.98px) {
-  .data-liststyle-satellite span {
-    margin-right:1rem;
-    color: rgb(112, 112, 112);
-    font-size: 0.90rem;
+@media (max-width: 767.99px) {
+  .bug-label {
+    text-align: left !important;
   }
 }
 
+
+/* 测试用例: 增加页面 */
+.pg-test-edit > textarea {
+  background-color: #f5f5f5 !important;
+}
+
+@media (min-width: 576px) {
+  .testcase-label {
+    text-align: right;
+  }
+}
+
+@media (max-width: 767.99px) {
+  .testcase-label {
+    text-align: left !important;
+  }
+}

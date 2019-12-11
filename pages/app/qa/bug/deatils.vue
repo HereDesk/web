@@ -39,46 +39,46 @@
 
         <div id="page-details-body-main" class="col-md-8 col-sm-12">
           <div id="bug-steps" class="height-7 mb-3" v-if="BugDetails.steps">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(BugDetails.steps)"></div>
           </div>
           <div id="bug-reality-result" class="height-7 mb-3" v-if="BugDetails.reality_result">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="redline"></span>&nbsp;&nbsp;实际结果
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(BugDetails.reality_result)"></div>
           </div>
           <div id="bug-expected-result" class="height-7 mb-3" v-if="BugDetails.expected_result">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="successline"></span>&nbsp;&nbsp;预期结果
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(BugDetails.expected_result)"></div>
           </div>
           <div id="bug-remark" class="height-7 mb-5" v-if="BugDetails.remark">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附加信息
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
             <div class="details-block" v-html="ConvertsMd(BugDetails.remark)"></div>
           </div>
 
           <!-- 图片附件 -->
           <div id="bug-annex" class="height-7" v-if="Annex.length > 0 || BtnRules.upload">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;附件
               <span id="icon-upload" @click="showModal = 'upload'" title="上传附件" >
                 <i class="iconfont icon-cloudupload size-1-3 mx-3 font-color-2973B7"></i>
               </span>
-            </h6>​
+            </h5>​
             <FileShow :Annex="Annex"></FileShow>
           </div>
 
           <div id="bug-details-history" class="height-7 mb-5 font-color-383838 font-size-93">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;活动记录
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
             <div id="bug-history-record" class="mt-3">
               <ol class="pl-3">
@@ -105,11 +105,11 @@
 
         <div id="page-details-body-minor" class="col-md-4 col-sm-12">
           <div id="bug-details-of-basic">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;详情
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
-            <ul class="mt-3 pl-3 satellite_info">
+            <ul class="mt-3 pl-3 ul_satellite">
               <li id="bug-desc-product-version">
                 <label>产品版本：</label>
                 <span>{{ BugDetails.product_code }} {{ BugDetails.release }}</span>
@@ -158,11 +158,11 @@
             </ul>
           </div>
           <div id="bug-details-of-person-date">
-            <h6 class="details-minor-title pt-3">
+            <h5 class="details-minor-title pt-3">
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
-            <ul class="mt-3 mb-5 pl-3 satellite_info">
+            <ul class="mt-3 mb-5 pl-3 ul_satellite">
               <li id="bug-last-time">
                 <label>最后操作：</label>
                 {{ BugDetails.last_operation_user }}
@@ -206,11 +206,11 @@
             </ul>
           </div>
           <div id="bug-details-of-testcase" class="pb-5" v-if="BugDetails.case_id">
-            <h6 class="details-minor-title">
+            <h5 class="details-minor-title">
               <span class="grayline"></span>&nbsp;&nbsp;关联的测试用例
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
-            <ul class="mt-3 pl-3 satellite_info">
+            <ul class="mt-3 pl-3 ul_satellite">
               <li>
                 <label>关联用例：</label>
                 <nuxt-link :to="{
@@ -535,7 +535,7 @@ export default {
   },
 
   methods: {
-    
+
     getBugDetails() {
       if (this.currentBugId) {
         this.axios

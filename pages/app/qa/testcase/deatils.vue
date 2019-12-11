@@ -33,50 +33,50 @@
 
         <div id="page-body-left" class='col-lg-8 col-md-7 col-sm-12'>
           <div id="case-precondition" class="height-7 mb-3" v-if="CaseDetails.precondition">
-            <h6>
+            <h5>
               <span class="grayline"></span>&nbsp;&nbsp;执行前置条件
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(CaseDetails.precondition)"></div>
           </div>
           <div id="case-steps" class="height-7 mb-4">
-            <h6>
+            <h5 class="mb-3">
               <span class="standline"></span>&nbsp;&nbsp;操作步骤
-            </h6>
-            <div class="details-block" v-html="ConvertsMd(CaseDetails.steps)"></div>
+            </h5>
+            <div class="details-block table" v-html="ConvertsMd(CaseDetails.steps)"></div>
           </div>
           <div id="case-input" class="height-7 mb-3" v-if="CaseDetails.DataInput">
-            <h6>
+            <h5>
               <span class="grayline"></span>&nbsp;&nbsp;测试输入数据
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(CaseDetails.DataInput)"></div>
           </div>
           <div id="case-expected-result" class="height-7 mb-3">
-            <h6>
+            <h5>
               <span class="successline"></span>&nbsp;&nbsp;预期结果
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(CaseDetails.expected_result)"></div>
           </div>
           <div id="case-remark" class="height-7 mb-3" v-if="CaseDetails.remark">
-            <h6>
+            <h5>
               <span class="grayline"></span>&nbsp;&nbsp;附加信息
-            </h6>
+            </h5>
             <div class="details-block" v-html="ConvertsMd(CaseDetails.remark)"></div>
           </div>
           <div id="case-annex" class="height-7 mb-5" v-if="Annex.length">
-            <h6>
+            <h5>
               <span class="grayline"></span>&nbsp;&nbsp;原型或设计图
-            </h6>
+            </h5>
             <FileShow :Annex="Annex"></FileShow>
           </div>
         </div>
 
         <div id="page-body-right" class='col-lg-4 col-md-5 col-sm-12'>
           <div id="case-base-info">
-            <h6>
+            <h5>
               <span class="grayline"></span>&nbsp;&nbsp;详情
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
-            <ul class="mt-3 pl-3 satellite_info">
+            <ul class="mt-3 pl-3 ul_satellite">
               <li id="case-product-code">
                 <label>产品：</label>{{ CaseDetails.product_code }}
               </li>
@@ -92,11 +92,11 @@
             </ul>
           </div>
           <div id="case-operate-info" class="mt-3">
-            <h6>
+            <h5>
               <span class="grayline"></span>&nbsp;&nbsp;人员/日期
-            </h6>
+            </h5>
             <div class="dropdown-divider"></div>
-            <ul class="mt-3 pl-3 satellite_info">
+            <ul class="mt-3 pl-3 ul_satellite">
               <li id="case-creator">
                 <label>创建者：</label>{{ CaseDetails.creator }}
               </li>
@@ -322,6 +322,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped="scoped">
   @import '~/assets/css/test.css'
 </style>

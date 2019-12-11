@@ -182,11 +182,44 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped="scoped">
+  
+  .pg-modules {
+    border-right: 1px solid #eee;
+  }
+
+  @media (max-width: 991.99px) {
+    .pg-modules {
+      display: none;
+    }
+  }
+
+  #product-modules:hover + div > i {
+    visibility: visible !important;
+  }
+
+  #product-modules + div > i:hover {
+    visibility: visible !important;
+    z-index: 9;
+  }
+
+
+  .t_module_second li {
+    line-height: 2rem;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+  }
+
+  .t_module_second li:hover {
+    color: #1E88E5 !important
+  }
+
   .dataModule {
     position: absolute;
     z-index: 9;
   }
+
   .isDisplay {
     display: block;
   }
@@ -198,6 +231,7 @@ export default {
   .el-active {
     color: rgb(21, 101, 192);
   }
+
   .badge_num {
     background-color: #eeeeee;
     padding: 2px 10px;

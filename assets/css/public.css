@@ -657,33 +657,6 @@ a:link {
   border-top: 1px solid rgb(233, 236, 239);
 }
 
-.standline {
-  height: 1.1rem;
-  width: 3px;
-  background-color: #673AB7;
-  float: left;
-}
-
-.redline {
-  height: 1.1rem;
-  width: 3px;
-  background-color: #F44336;
-  float: left;
-}
-
-.successline {
-  height: 1.1rem;
-  width: 3px;
-  background-color: #4CAF50;
-  float: left;
-}
-
-.grayline {
-  height: 1.1rem;
-  width: 3px;
-  background-color: #B1BEC6;
-  float: left;
-}
 
 /*
 **

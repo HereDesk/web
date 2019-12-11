@@ -134,6 +134,7 @@
                 </el-table>
               </div>
             </div>
+
             <!-- 展示样式：列表 -->
             <div id="case-list-style" class="row mt-3" v-if="DataShowStyle == 'list'">
               <div class="col">
@@ -272,6 +273,7 @@ export default {
       wd: this.$route.query.wd || null,
       isShowSearch: this.$route.query.wd ? true : false,
       // 控制显示
+      HoverTestcase: {},
       HoverTestcase_id: "",
       // 数据统计
       MyTodayData: {},
@@ -287,14 +289,7 @@ export default {
   computed: {
     // 权限控制
     CaseBtnRules: function() {
-      for (let i of this.tableData) {
-        if (i["case_id"] === this.HoverTestcase_id) {
-          return rules.TestCaseBtnRules(this.$store.state.userInfo,i)
-          break
-        } else {
-          return rules.TestCaseBtnRules(this.$store.state.userInfo,{})
-        }
-      }
+      return rules.TestCaseBtnRules(this.$store.state.userInfo,this.HoverTestcase)
     },
     Rules: function() {
       let userInfo = this.$store.state.userInfo
@@ -513,9 +508,11 @@ export default {
 
     // table line hover and leave
     tableHover(row) {
+      this.HoverTestcase = row
       this.HoverTestcase_id = row.case_id
     },
     tableLeave(row) {
+      this.HoverTestcase = {}
       this.HoverTestcase_id = ""
     },
 
