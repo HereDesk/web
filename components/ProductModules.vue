@@ -147,7 +147,7 @@ export default {
     /**
      * @param {String} m2_id 二级模块ID
      */
-    click_moudle_2(data) {
+    click_moudle_2(m2_id) {
       if (this.m2_id == m2_id) {
         this.m2_id = ""
       } else {
