@@ -38,7 +38,7 @@
     </div>
   </div>
 </template>
- 
+
 <script>
 export default {
   props: {
@@ -59,7 +59,9 @@ export default {
   computed: {
     person_list: function () {
       if (this.$store.state.ProductMemberList) {
-        return this.$store.state.ProductMemberList["data"];
+        let data = this.$store.state.ProductMemberList["data"]
+        let tmp =  data.filter( x => x["status"] == 0)
+        return tmp
       }
       return
     }
