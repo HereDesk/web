@@ -209,7 +209,9 @@ export default {
     	return this.$store.state.BugProperty
     },
     developer_list() {
-      return this.$store.state.ProductMemberList.data
+      let state = this.$store.state.ProductMemberList["data"]
+      let data =  data.length ? data.filter( x => x["status"] == 0) : []
+      return data
     }
   },
 

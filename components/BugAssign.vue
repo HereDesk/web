@@ -59,9 +59,9 @@ export default {
   computed: {
     person_list: function () {
       if (this.$store.state.ProductMemberList) {
-        let data = this.$store.state.ProductMemberList["data"]
-        let tmp =  data.filter( x => x["status"] == 0)
-        return tmp
+        let state = this.$store.state.ProductMemberList["data"]
+        let data =  data.length ? data.filter( x => x["status"] == 0) : []
+        return data
       }
       return
     }

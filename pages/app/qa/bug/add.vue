@@ -240,7 +240,9 @@ export default {
 
     // 项目成员列表
     developer_list () {
-      return this.$store.state.ProductMemberList.data
+      let state = this.$store.state.ProductMemberList["data"]
+      let data =  data.length ? data.filter( x => x["status"] == 0) : []
+      return data
     },
 
     // 缺陷属性
