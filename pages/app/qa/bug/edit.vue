@@ -210,7 +210,7 @@ export default {
     },
     developer_list() {
       let state = this.$store.state.ProductMemberList["data"]
-      let data =  data.length ? data.filter( x => x["status"] == 0) : []
+      let data =  state ? state.filter( x => x["status"] == 0) : []
       return data
     }
   },

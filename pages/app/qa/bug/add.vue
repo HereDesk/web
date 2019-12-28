@@ -241,7 +241,7 @@ export default {
     // 项目成员列表
     developer_list () {
       let state = this.$store.state.ProductMemberList["data"]
-      let data =  data.length ? data.filter( x => x["status"] == 0) : []
+      let data =  state ? state.filter( x => x["status"] == 0) : []
       return data
     },
 
@@ -271,9 +271,9 @@ export default {
             if ( i["role"] === "design" ) {
               bug_source = "designer"
             }
-            if ( i["role"] === "manager" ) {
-              bug_source = "leader-feedback"
-            }
+            // if ( i["role"] === "manager" ) {
+            //   bug_source = "leader-feedback"
+            // }
             if ( i["role"] === "test" ) {
               bug_source = "tester"
             }
