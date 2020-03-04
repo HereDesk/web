@@ -60,7 +60,7 @@ export default {
     person_list: function () {
       if (this.$store.state.ProductMemberList) {
         let state = this.$store.state.ProductMemberList["data"]
-        let data =  state.length ? state.filter( x => x["status"] == 0) : []
+        let data =  data.length ? data.filter( x => x["status"] == 0) : []
         return data
       }
       return

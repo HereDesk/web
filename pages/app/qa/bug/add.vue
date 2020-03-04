@@ -240,8 +240,8 @@ export default {
 
     // 项目成员列表
     developer_list () {
-      let state = this.$store.state.ProductMemberList["data"]
-      let data =  state ? state.filter( x => x["status"] == 0) : []
+      let member = this.$store.state.ProductMemberList["data"]
+      let data =  member ? member.filter( x => x["status"] == 0) : []
       return data
     },
 
@@ -271,9 +271,9 @@ export default {
             if ( i["role"] === "design" ) {
               bug_source = "designer"
             }
-            // if ( i["role"] === "manager" ) {
-            //   bug_source = "leader-feedback"
-            // }
+            if ( i["role"] === "manager" ) {
+              bug_source = "leader-feedback"
+            }
             if ( i["role"] === "test" ) {
               bug_source = "tester"
             }
@@ -330,8 +330,16 @@ export default {
       handler: function(old,oldVal) {
         if (process.client) {
           // 标题、步骤、预期结果、实际结果，只要有输入，就保存到草稿箱
-          if (this.Bug.title || this.Bug.steps || this.Bug.reality_result || this.Bug.expected_result) {
+          if (this.Bug.title ||
+              this.Bug.steps ||
+              this.Bug.reality_result ||
+              this.Bug.expected_result
+              ) {
             window.localStorage.setItem("bug_drafts", JSON.stringify(this.Bug))
+          }
+
+          if (this.Bug.assignedTo_id) {
+            window.localStorage.setItem("bug_last_assignedTo_id", this.Bug.assignedTo_id)
           }
         }
       },
@@ -494,7 +502,6 @@ export default {
             // 提交成功后，清除本地草稿箱内容
             window.localStorage.removeItem("bug_drafts")
             // 缓存部分数据，用于下次自动填充
-            window.localStorage.setItem("bug_last_assignedTo_id", this.Bug.assignedTo_id)
             window.localStorage.setItem("bug_last_module_id", this.Bug.module_id)
           }
           if (event.target.value === "only-once-commit") {
@@ -538,6 +545,7 @@ export default {
       })
       .then(() => {
         this.Bug = data
+        window.localStorage.removeItem("bug_drafts")
       })
     }
 
