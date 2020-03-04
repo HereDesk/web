@@ -200,7 +200,7 @@
         const code = ["html","js","css","less","scss","styl","vue","nvue",
           "java","cpp","py","sql"]
         const img = ["jpg","png","jpeg","gif","bmp","svg","psd","tif","tga","ai"]
-        const allow_file_format_list = [...video,...zip,...doc,...img]
+        const allow_file_format_list = [...video,...zip,...doc,...img,...code]
 
         let tmp = file.name.split(".")
         let FileSuffix = String(tmp[tmp.length-1]).toLocaleLowerCase()

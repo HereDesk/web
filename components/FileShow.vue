@@ -2,21 +2,21 @@
   <div id="components-annexs" class="container-fluid mb-3">
       <div class="row">
         <div class="col-lg-2 col-md-3 col-sm-4 images mb-3" v-for="(p,index) in Annex" :key="index" v-viewer>
-          <div id="file-type-other" class="file-card" 
-            v-if="['md','log','txt','json','html'].includes(p.suffix)">
+          <div id="file-type-other" class="file-card"
+            v-if="['md','log','txt','json','html','htm','js','css','less','styl','scss','sass'].includes(p.suffix)">
             <a class="file-link pt-2" :href="p.file_path || p.url" target="_blank">
               <i class="iconfont size-2"
-                :class="{ 
+                :class="{
                   'icon-markdown': p.suffix === 'md',
                   'icon-icon-rizhi font-color-1296db': p.suffix === 'log',
                   'icon-txt font-color-00BFA5': p.suffix === 'txt',
                   'icon-jsonfile': p.suffix === 'json',
-                  'icon-html font-color-00BFA5': p.suffix === 'html'}">
+                  'icon-html font-color-00BFA5': ['html','htm','js','css','less','styl','scss','sass'].includes(p.suffix)}">
                 </i>
-              <p class="file-float-text">查看文件</p>
+              <p class="file-float-text">{{ p.suffix }}文件</p>
             </a>
           </div>
-          <div id="file-type-doc" class="file-card" 
+          <div id="file-type-doc" class="file-card"
             v-else-if="['xls', 'xlsx','ppt','pptx','doc','docx','pdf'].includes(p.suffix)">
             <a class="file-link pt-2" :href="p.file_path || p.url" target="_blank">
               <i class="iconfont size-2 icon-zip"
@@ -29,14 +29,14 @@
               <p class="file-float-text">查看文档</p>
             </a>
           </div>
-          <div id="file-type-zip" class="file-card" 
+          <div id="file-type-zip" class="file-card"
             v-else-if="['zip','rar','tar','7z','bz2','gz'].includes(p.suffix)">
             <a class="file-link pt-2" :href="p.file_path || p.url" target="_blank">
               <i class="iconfont size-2 icon-zip"></i>
               <p class="file-float-text">下载压缩包</p>
             </a>
           </div>
-          <div id="file-type-video" class="file-card" 
+          <div id="file-type-video" class="file-card"
             v-else-if="['mp4','mov','mp3'].includes(p.suffix)">
             <a class="file-link pt-2" :href="p.file_path || p.url" target="_blank">
               <i class="iconfont size-2 icon-video"></i>
