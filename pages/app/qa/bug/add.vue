@@ -442,13 +442,13 @@ export default {
         })
         return
       }
-      if (!this.Bug.steps) {
-        this.$notify.error({
-          title: "提示",
-          message: "操作步骤不能为空哦"
-        })
-        return
-      }
+      // if (!this.Bug.steps) {
+      //   this.$notify.error({
+      //     title: "提示",
+      //     message: "操作步骤不能为空哦"
+      //   })
+      //   return
+      // }
       if ((this.Bug.steps.length < 10) | (this.Bug.steps.length > 100000)) {
         this.$notify.error({
           title: "提示",
