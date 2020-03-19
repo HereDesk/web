@@ -294,8 +294,13 @@
                   <el-table-column label="创建" prop="creator_user" align="center" width="85"
                     sortable  show-overflow-tooltip v-if="table_field.creator_user">
                   </el-table-column>
-                  <el-table-column label="指派" prop="assignedTo_user" align="center" width="85"
+                  <el-table-column label="指派" align="center" width="85"
                     sortable show-overflow-tooltip v-if="table_field.assignedTo_user">
+                    <template slot-scope="scope">
+                      <span @click="skipAssign(scope.row)">
+                        {{scope.row.assignedTo_user}}
+                      </span>
+                    </template>
                   </el-table-column>
                   <el-table-column label="解决者" prop="fixed_user" align="center" width="90"
                     show-overflow-tooltip v-if="table_field.fixed_user">
@@ -963,6 +968,10 @@
 
       /* modal: bug assign */
       skipAssign(row) {
+        let bug_status = row.status
+        if (bug_status == 'Closed') {
+          return;
+        }
         this.selectedBugId = row.bug_id
         this.showModal = 'assign'
       },
