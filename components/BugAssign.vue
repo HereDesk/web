@@ -43,9 +43,9 @@
 export default {
   props: {
     bug_id: String,
+    product_id: String,
     product_code: String,
     pageSource: String,
-    member_list: {}
   },
   data() {
     return {
@@ -58,14 +58,22 @@ export default {
   },
   computed: {
     person_list: function () {
-      if (this.$store.state.ProductMemberList) {
+      if (JSON.stringify(this.$store.state.ProductMemberList) !== "{}") {
         let state = this.$store.state.ProductMemberList["data"]
-        let data =  data.length ? data.filter( x => x["status"] == 0) : []
+        let data =  state ? state.filter( x => x["status"] == 0) : []
         return data
       }
       return
     }
   },
+
+  created() {
+    let person_list = this.$store.state.ProductMemberList
+    if (JSON.stringify(person_list) === "{}") {
+      this.$store.dispatch("getProductMembers",this.product_id)
+    }
+  },
+
   methods: {
     assign() {
       if (this.AssignData.assignedTo === "") {

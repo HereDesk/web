@@ -49,8 +49,7 @@ export default {
     bug_creator_id: String,
     product_id: String,
     scheme: String,
-    pageSource: String,
-    member_list: {}
+    pageSource: String
   },
   data() {
     return {
