@@ -70,23 +70,23 @@ module.exports = {
   /*
    ** Axios module configuration
    */
-  axios: {
-    proxy: true
-  },
-  proxy: {
-    '/api/': {
-      target: 'http://192.168.12.201/api',
-      pathRewrite: {
-        '^/api/': ''
-      }
-    },
-    '/media/': {
-      target: 'http://192.168.12.201/media',
-      pathRewrite: {
-        '^/media/': ''
-      }
-    }
-  },
+  // axios: {
+  //   proxy: true
+  // },
+  // proxy: {
+  //   '/api/': {
+  //     target: 'http://192.168.12.201/api',
+  //     pathRewrite: {
+  //       '^/api/': ''
+  //     }
+  //   },
+  //   '/media/': {
+  //     target: 'http://127.0.0.1:8000/media',
+  //     pathRewrite: {
+  //       '^/media/': ''
+  //     }
+  //   }
+  // },
 
   // cache: true,
 
