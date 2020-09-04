@@ -19,7 +19,7 @@
     "element-ui": "^2.4.11",
     "js-base64": "^2.5.1",
     "lodash": "^4.17.15",
-    "marked": "^0.5.2",
+    "marked": "^0.7.0",
     "mavon-editor": "^2.7.7",
     "nuxt": "^2.10.2",
     "v-viewer": "^1.4.2",
