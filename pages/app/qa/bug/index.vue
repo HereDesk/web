@@ -404,6 +404,7 @@
       @close="showModal = false"
       :bug_id="selectedBugId"
       :product_id="visited_product_id"
+      :bug_priority="HoverBugInfo.priority_name"
       :pageSource="pageSource"
       @refreshList="getBugList()">
     </BugAssign>

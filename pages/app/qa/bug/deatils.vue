@@ -236,6 +236,7 @@
       v-if="showModal == 'assign'"
       @close="showModal = false"
       :bug_id="currentBugId"
+      :bug_priority="BugDetails.priority_name"
       :product_code="product_code"
       :pageSource="pageSource">
     </BugAssign>

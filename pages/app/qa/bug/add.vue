@@ -168,6 +168,14 @@
             </div>
           </div>
 
+          <div id="bug-dingding" class="form-group row">
+            <label for="bug-dingding" class="col-lg-2 col-md-2 col-sm-12 bug-label">消息通知</label>
+            <div class="col-lg-8 col-md-10 col-sm-12 ml-4">
+              <input class="form-check-input mr-3" type="checkbox" id="dingding" v-model="Bug.is_dingding">
+              (推送钉钉消息给相关人员)
+            </div>
+          </div>
+
           <!-- bug: about button -->
           <div id="bug-btn" class="d-flex justify-content-center my-5">
             <button type="button" class="btn btn-accessories" @click="isShowRemark">添加备注</button>
@@ -213,6 +221,7 @@ export default {
       timestamp: '',
       PageShow: false,
       Bug: {
+        is_dingding: false,
         case_id: this.$route.query.case_id || null,
         cell_id: this.$route.query.cell_id || null,
         product_id: "",
@@ -280,12 +289,22 @@ export default {
           }
         }
       }
+
       // 自动填充指派人
       if (process.client) {
         let bug_last_assignedTo_id = window.localStorage.bug_last_assignedTo_id
         if (bug_last_assignedTo_id) {
           assignedTo_id = bug_last_assignedTo_id
         }
+      }
+
+      // P1和P2自动勾选钉钉消息推送
+      if (this.Bug.priority) {
+        if (['P1','P2','P3'].includes(this.Bug.priority)) {
+          this.Bug.is_dingding = true
+        } else {
+          this.Bug.is_dingding = false
+        };
       }
 
       // 缺陷类型
