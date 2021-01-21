@@ -271,20 +271,20 @@ export default {
         for (let i of this.developer_list) {
           if (login_user_id === i["user_id"]) {
             if ( i["role"] === "developer") {
-              assignedTo_id =  i["user_id"]
-              bug_source = "dev-self-test"
+              this.Bug.assignedTo_id =  i["user_id"]
+              this.Bug.bug_source = "dev-self-test"
             }
             if ( i["role"] === "pm") {
-              bug_source = "pm-feedback"
+              this.Bug.bug_source = "pm-feedback"
             }
             if ( i["role"] === "design" ) {
-              bug_source = "designer"
+              this.Bug.bug_source = "designer"
             }
             if ( i["role"] === "manager" ) {
-              bug_source = "leader-feedback"
+              this.Bug.bug_source = "leader-feedback"
             }
             if ( i["role"] === "test" ) {
-              bug_source = "tester"
+              this.Bug.bug_source = "tester"
             }
           }
         }
@@ -294,7 +294,7 @@ export default {
       if (process.client) {
         let bug_last_assignedTo_id = window.localStorage.bug_last_assignedTo_id
         if (bug_last_assignedTo_id) {
-          assignedTo_id = bug_last_assignedTo_id
+          this.Bug.assignedTo_id = bug_last_assignedTo_id
         }
       }
 
@@ -310,24 +310,24 @@ export default {
       // 缺陷类型
       let tmp1 = this.Bug.title
       if (tmp1.includes("UI") || tmp1.includes("界面")) {
-        bug_type = "UI"
+        this.Bug.bug_type = "UI"
       }
       if (tmp1.includes("分辨率") || tmp1.includes("系统") || tmp1.includes("手机")) {
-        bug_type = "compatible"
+        this.Bug.bug_type = "compatible"
       }
       if (tmp1.includes("卡顿") || tmp1.includes("性能")) {
-        bug_type = "Perfor"
+        this.Bug.bug_type = "Perfor"
       }
       if (tmp1.includes("接口") || tmp1.includes("api")) {
-        bug_type = "interface"
+        this.Bug.bug_type = "interface"
       }
       if (tmp1.includes("崩溃") || tmp1.includes("闪退")) {
-        priority = "P1"
-        severity = "Fatal"
+        this.Bug.priority = "P1"
+        this.Bug.severity = "Fatal"
       }
       if (tmp1.includes("建议")) {
-        priority = "P5"
-        severity = "Suggestion"
+        this.Bug.priority = "P5"
+        this.Bug.severity = "Suggestion"
       }
       return [assignedTo_id,bug_source,bug_type,priority,severity]
     }
@@ -363,20 +363,6 @@ export default {
         }
       },
       deep: true
-    },
-
-    auto_fill: function(old, oldVal) {
-      this.Bug.assignedTo_id = this.auto_fill[0]
-      this.Bug.bug_source = this.auto_fill[1]
-      if (this.auto_fill[2]) {
-        this.Bug.bug_type = this.auto_fill[2]
-      }
-      if (this.auto_fill[3]) {
-        this.Bug.priority = this.auto_fill[3]
-      }
-      if (this.auto_fill[4]) {
-        this.Bug.severity = this.auto_fill[4]
-      }
     }
   },
 
